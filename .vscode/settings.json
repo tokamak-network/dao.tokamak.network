@@ -1,0 +1,14 @@
+
+{
+  "eslint.autoFixOnSave": true,
+  "editor.tabSize": 2,
+  "eslint.validate": [
+    "html",
+    "javascript",
+    "vue"
+  ],
+  "vetur.validation.script": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
