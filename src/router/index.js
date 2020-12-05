@@ -1,9 +1,17 @@
-import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Vue from 'vue';
+
+import Wallet from '@/views/Wallet.vue';
 
 Vue.use(VueRouter);
 
-const routes = [];
+const routes = [
+  {
+    path: '/',
+    name: 'Wallet',
+    component: Wallet,
+  },
+];
 
 const router = new VueRouter({
   routes,

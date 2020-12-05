@@ -5,6 +5,7 @@ module.exports = {
   },
   globals: {
     NODE_ENV: 'readonly',
+    ethereum: 'readonly',
   },
   parserOptions: {
     parser: 'babel-eslint',
