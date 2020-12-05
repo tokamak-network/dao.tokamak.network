@@ -41,5 +41,6 @@ module.exports = {
     'quotes': ['error', 'single'],
     'semi': ['error', 'always'],
     'space-before-function-paren': ['error', 'always'],
+    'vue/html-self-closing': 'off',
   },
 };
