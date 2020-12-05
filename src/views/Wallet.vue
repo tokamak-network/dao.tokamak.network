@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import Web3 from 'web3';
+
 export default {
   data () {
     return {
@@ -13,6 +15,12 @@ export default {
   },
   async created () {
     await this.connectMetaMask();
+
+    const web3 = new Web3(ethereum);
+    this.$store.dispatch('setWeb3', web3);
+
+    console.log(web3.currentProvider);
+    console.log(this.$store.state.web3);
   },
   methods: {
     async connectMetaMask () {
