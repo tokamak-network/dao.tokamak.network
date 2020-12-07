@@ -1,15 +1,15 @@
 import VueRouter from 'vue-router';
 import Vue from 'vue';
 
-import Wallet from '@/views/Wallet.vue';
+import Root from '@/views/Root.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Wallet',
-    component: Wallet,
+    name: 'Root',
+    component: Root,
   },
 ];
 
