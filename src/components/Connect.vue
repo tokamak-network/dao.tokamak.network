@@ -43,7 +43,7 @@ export default {
           }
         };
         const handleNetworkChanged = () => {
-          this.$store.dispatch('disconnectEthereum', web3);
+          this.$store.dispatch('disconnectEthereum');
         };
         ethereum.on('accountsChanged', handleAccountsChanged);
         ethereum.on('networkChanged', handleNetworkChanged);
