@@ -75,36 +75,36 @@ export default {
       const balance = await contract.methods.getBalance(this.account).call();
       this.balance = balance;
 
-      // success transaction.
-      contract.methods.sendCoin('0xECcc0320875E446283bb32d5C7F8378dBA5dF451', '100').send({ from: this.account })
-        .on('transactionHash', async (hash) => {
-          console.log(hash);
-        })
-        .on('confirmation', (confirmationNumber, receipt) => {
-          console.log(confirmationNumber, receipt); // up to 24 confirms.
-        })
-        .on('receipt', (receipt) => {
-          console.log(receipt);
-        })
-        .on('error', (error) => {
-          console.log(error);
-        });
+      // // success transaction.
+      // contract.methods.sendCoin('0xECcc0320875E446283bb32d5C7F8378dBA5dF451', '100').send({ from: this.account })
+      //   .on('transactionHash', async (hash) => {
+      //     console.log(hash);
+      //   })
+      //   .on('confirmation', (confirmationNumber, receipt) => {
+      //     console.log(confirmationNumber, receipt); // up to 24 confirms.
+      //   })
+      //   .on('receipt', (receipt) => {
+      //     console.log(receipt);
+      //   })
+      //   .on('error', (error) => {
+      //     console.log(error);
+      //   });
 
-      // fail transaction
-      contract.methods.revert().send({ from: this.account })
-        .on('transactionHash', async (hash) => {
-          console.log(hash);
-        })
-        .on('confirmation', (confirmationNumber, receipt) => {
-          console.log(confirmationNumber, receipt); // up to 24 confirms.
-        })
-        .on('receipt', (receipt) => {
-          console.log(receipt);
-        })
-        .on('error', (error) => {
-          console.log(error.message);
-          // deny or revert
-        });
+      // // fail transaction
+      // contract.methods.revert().send({ from: this.account })
+      //   .on('transactionHash', async (hash) => {
+      //     console.log(hash);
+      //   })
+      //   .on('confirmation', (confirmationNumber, receipt) => {
+      //     console.log(confirmationNumber, receipt); // up to 24 confirms.
+      //   })
+      //   .on('receipt', (receipt) => {
+      //     console.log(receipt);
+      //   })
+      //   .on('error', (error) => {
+      //     console.log(error.message);
+      //     // deny or revert
+      //   });
     },
   },
 };
