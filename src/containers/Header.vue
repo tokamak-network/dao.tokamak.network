@@ -27,7 +27,7 @@ export default {
   display: flex;
   justify-content: space-between;
 
-  height: 76px;
+  height: 84px;
   background: #0062c2;
   padding-left: 40px;
   padding-right: 40px;
