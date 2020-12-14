@@ -1,18 +1,17 @@
 <template>
   <div class="main">
-    <connect-wallet />
+    Tokamak network
   </div>
 </template>
 
 <script>
-import Connect from '@/components/Connect.vue';
-
 export default {
-  components: {
-    'connect-wallet': Connect,
-  },
 };
 </script>
 
 <style scoped>
+.main {
+  /* all the `views` have to has this attribue  */
+  flex: 1;
+}
 </style>

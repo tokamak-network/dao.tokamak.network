@@ -1,30 +1,12 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img
-        src="@/assets/logo.png"
-        alt=""
-      >
+      <img src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <a
-        class="menu-item"
-        href=""
-      >
-        Eleciton
-      </a>
-      <a
-        class="menu-item"
-        href=""
-      >
-        Eleciton
-      </a>
-      <a
-        class="menu-item"
-        href=""
-      >
-        Eleciton
-      </a>
+      <a class="menu-item" href="">Eleciton</a>
+      <a class="menu-item" href="">Propose</a>
+      <a class="menu-item" href="">Committee</a>
       <connect-wallet />
     </div>
   </div>
@@ -79,5 +61,9 @@ export default {
   color: #ffffff;
 
   margin-right: 76px;
+}
+
+.menu a {
+  text-decoration: none;
 }
 </style>
