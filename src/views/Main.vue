@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <connect-wallet />
   </div>
 </template>

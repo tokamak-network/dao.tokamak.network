@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="connect">
     <button
       v-if="!web3"
       @click="connect"
     >
-      connect
+      Connect Wallet
     </button>
     <span v-else>
       account: {{ account }}
@@ -56,5 +56,25 @@ export default {
 </script>
 
 <style scoped>
+.connect button {
+  /* font styles */
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: normal;
+  text-align: center;
+  color: #a6c8e9;
 
+  width: 126px;
+  height: 35px;
+  padding: 7px 16px 9px;
+  border-radius: 19px;
+  border: solid 1px #6c9ed0;
+  background: #0062c2;
+
+  cursor: pointer;
+}
 </style>

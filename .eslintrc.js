@@ -43,5 +43,6 @@ module.exports = {
     'semi': ['error', 'always'],
     'space-before-function-paren': ['error', 'always'],
     'vue/html-self-closing': 'off',
+    'vue/max-attributes-per-line': 'off',
   },
 };
