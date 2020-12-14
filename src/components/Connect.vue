@@ -88,7 +88,6 @@ export default {
   text-align: center;
   color: #a6c8e9;
 
-  width: 126px;
   height: 35px;
   padding: 7px 16px 9px;
   border-radius: 19px;
