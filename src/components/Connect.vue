@@ -6,15 +6,19 @@
     >
       Connect Wallet
     </button>
-    <span v-else>
-      account: {{ account }}
-    </span>
+    <div v-else class="account">
+      <div ref="icon" class="icon"></div>
+      <div class="address">
+        {{ shortAddress }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Web3 from 'web3';
 import { mapState } from 'vuex';
+import jazzicon from '@metamask/jazzicon';
 
 export default {
   computed: {
@@ -22,6 +26,12 @@ export default {
       'web3',
       'account',
     ]),
+    shortAddress () {
+      return `${this.account.slice(0, 7)}...${this.account.slice(-4)}`;
+    },
+    iconNumber () {
+      return parseInt(this.account.slice(2, 10), 16);
+    },
   },
   methods: {
     async connect () {
@@ -30,16 +40,18 @@ export default {
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
-          this.$store.dispatch('connectEthereum', web3);
+          await this.$store.dispatch('connectEthereum', web3);
+          this.setIcon();
         } catch (e) {
           // User deny to connect MetaMask wallet.
         }
 
-        const handleAccountsChanged = (accounts) => {
+        const handleAccountsChanged = async (accounts) => {
           if (accounts.length === 0) {
             this.$store.dispatch('disconnectEthereum');
           } else {
-            this.$store.dispatch('connectEthereum', web3);
+            await this.$store.dispatch('connectEthereum', web3);
+            this.setIcon();
           }
         };
         const handleNetworkChanged = () => {
@@ -50,6 +62,14 @@ export default {
       } else {
         // MetaMask need to be installed.
       }
+    },
+    setIcon () {
+      const icon = jazzicon(25, this.iconNumber);
+      const iconEle = this.$refs.icon;
+      if (iconEle.childElementCount === 1) {
+        iconEle.removeChild(iconEle.lastElementChild);
+      }
+      iconEle.append(icon);
     },
   },
 };
@@ -76,5 +96,33 @@ export default {
   background: #0062c2;
 
   cursor: pointer;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+
+  padding: 5px 21px 5px 13px;
+  border-radius: 19px;
+  border: solid 1px #d7d9df;
+  background-color: #ffffff;
+}
+
+.address {
+  /* text styles */
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
+}
+
+.icon {
+  margin-right: 8px;
+  margin-bottom: -5px;
 }
 </style>
