@@ -2,9 +2,9 @@
   <div class="footer">
     <div class="menu">
       <span class="company">© 2021 Onther</span>
-      <span class="clause">Terms</span>
-      <span class="clause">Privacy Policy</span>
-      <span class="clause">Status</span>
+      <a href="" target="_blank" class="clause">Terms</a>
+      <a href="" target="_blank" class="clause">Privacy Policy</a>
+      <a href="" target="_blank" class="clause">Status</a>
     </div>
     <div class="menu">
       <a href="" target="_blank">
@@ -84,6 +84,7 @@ export default {
   color: #ffffff;
 
   margin-right: 50px;
+  text-decoration: none;
 }
 
 .clause {
@@ -99,6 +100,7 @@ export default {
   color: #a6c8e9;
 
   margin-right: 30px;
+  text-decoration: none;
 }
 
 .menu img {
@@ -106,5 +108,10 @@ export default {
   height: 20px;
   padding: 4px;
   margin-right: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #ffffff;
 }
 </style>
