@@ -4,9 +4,9 @@
       <img src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <a class="menu-item" href="">Eleciton</a>
-      <a class="menu-item" href="">Propose</a>
-      <a class="menu-item" href="">Committee</a>
+      <router-link :to="'election'" class="menu-item">Election</router-link>
+      <router-link :to="'propose'" class="menu-item">Propose</router-link>
+      <router-link :to="'committee'" class="menu-item">Committee</router-link>
       <connect-wallet />
     </div>
   </div>
