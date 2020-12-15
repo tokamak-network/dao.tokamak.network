@@ -4,7 +4,13 @@
       <img src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <a class="menu-item" href="">Eleciton</a>
+      <a
+        class="menu-item"
+        :class="{ 'menu-selected': $route.path === '/election'}"
+        @click="clickMenu('election')"
+      >
+        Election
+      </a>
       <a class="menu-item" href="">Propose</a>
       <a class="menu-item" href="">Committee</a>
       <connect-wallet />
@@ -18,6 +24,17 @@ import Connect from '@/components/Connect.vue';
 export default {
   components: {
     'connect-wallet': Connect,
+  },
+  methods: {
+    clickMenu (path) {
+      if (`/${path}` === this.$route.path) {
+        return;
+      }
+      this.$router.push({
+        path: `/${path}`,
+        query: { network: this.$route.query.network },
+      }).catch(err => { alert(err); });
+    },
   },
 };
 </script>
