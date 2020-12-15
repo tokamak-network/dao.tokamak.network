@@ -92,4 +92,18 @@ export default {
   text-align: center;
   color: #2a72e5;
 }
+
+@media all and (max-width: 360px) {
+}
+
+@media all and (min-width: 361px) and (max-width: 1024px) {
+  .header {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .menu-item {
+    margin-right: 50px;
+  }
+}
 </style>

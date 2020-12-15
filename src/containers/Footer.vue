@@ -121,4 +121,15 @@ a:hover {
   text-decoration: underline;
   color: #ffffff;
 }
+
+@media all and (min-width: 361px) and (max-width: 1024px) {
+  .footer {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .menu img {
+    margin-right: 12px;
+  }
+}
 </style>
