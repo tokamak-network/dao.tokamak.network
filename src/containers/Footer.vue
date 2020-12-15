@@ -85,6 +85,7 @@ export default {
 
   margin-right: 50px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .clause {
@@ -101,6 +102,7 @@ export default {
 
   margin-right: 30px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .menu img {
