@@ -3,19 +3,25 @@ import Vue from 'vue';
 
 import Root from '@/views/Root.vue';
 import Main from '@/views/Main.vue';
+import Election from '@/views/Election.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Main',
+    name: 'main',
     component: Main,
   },
   {
     path: '/root',
-    name: 'Root',
+    name: 'root',
     component: Root,
+  },
+  {
+    path: '/election',
+    name: 'election',
+    component: Election,
   },
 ];
 
