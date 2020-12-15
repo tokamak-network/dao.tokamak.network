@@ -11,7 +11,7 @@ export default {
 
 <style scoped>
 .main {
-  /* all the `views` have to has this attribue  */
+  /* All views must have this attribute.*/
   flex: 1;
 }
 </style>
