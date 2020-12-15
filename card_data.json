@@ -1,0 +1,242 @@
+{
+  "pollCards": [
+    {
+      "index": 1,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "ETH-B Debt Ceiling Instant Access Module - December 7, 2020",
+      "description": "Signal your support or opposition to using the Debt Ceiling Instant Access Module for ETH-B with the listed parameters.",
+      "startTime": "11455904",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 2,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11454672",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 3,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Accelerate the Peg Stability Module Launch - November 23, 2020",
+      "description": "Signal your support or opposition to accelerating the PSM launch.",
+      "startTime": "11453992",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 4,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Add UNI-V2-USDC-ETH (UniswapV2 USDC-ETH LP Token) as a Collateral Type - December 7, 2020",
+      "description": "This poll proposes system parameters which could be used to initialize UNI-V2-USDC-ETH (UniswapV2 USDC-ETH LP Token) as a new collateral type.",
+      "startTime": "11453978",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 5,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "ETH-B Debt Ceiling Instant Access Module - December 7, 2020",
+      "description": "Signal your support or opposition to using the Debt Ceiling Instant Access Module for ETH-B with the listed parameters.",
+      "startTime": "11450803",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 6,
+      "status": true,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "ETH-B Debt Ceiling Instant Access Module - December 7, 2020",
+      "description": "Signal your support or opposition to using the Debt Ceiling Instant Access Module for ETH-B with the listed parameters.",
+      "startTime": "15940505",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 7,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450792",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 8,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450784",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 9,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450779",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 10,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450768",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 11,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450758",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 12,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450719",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 13,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450696",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    },
+    {
+      "index": 14,
+      "status": false,
+      "cardType": {
+        "Type": "nominate",
+        "Status": "In progress",
+        "Candidate": "0xabcfe"
+      },
+      "subject": "Adjust YFI-A System Parameters - December 7, 2020",
+      "description": "Signal your support or opposition to adjusting the YFI-A System Parameters",
+      "startTime": "11450672",
+      "bottom": {
+        "voted": false,
+        "votingAnswer": "Yes",
+        "votingAmount": "20"
+      }
+    }
+  ]
+}

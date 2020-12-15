@@ -22,8 +22,8 @@
     <poll-card-bottom
       :status="status"
       :voted="bottom.votingStatus"
-      :votingAnswer="bottom.votingAnswer"
-      :votingAmount="bottom.votingAmount"
+      :voting-answer="bottom.votingAnswer"
+      :voting-amount="bottom.votingAmount"
     />
   </div>
 </template>

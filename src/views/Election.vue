@@ -12,10 +12,10 @@
     <div v-for="card in activeCards" :key="card.index" class="polls">
       <poll-card
         :status="card.status"
-        :cardType="card.cardType"
+        :card-type="card.cardType"
         :subject="card.subject"
         :description="card.description"
-        :startTime="card.startTime"
+        :start-time="card.startTime"
         :bottom="card.bottom"
       />
     </div>
@@ -34,15 +34,14 @@
       <div v-for="card in endedCards" :key="card.index" class="polls">
         <poll-card
           :status="card.status"
-          :cardType="card.cardType"
+          :card-type="card.cardType"
           :subject="card.subject"
           :description="card.description"
-          :startTime="card.startTime"
+          :start-time="card.startTime"
           :bottom="card.bottom"
         />
       </div>
     </div>
-
   </div>
 </template>
 
