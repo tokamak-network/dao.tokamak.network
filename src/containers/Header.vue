@@ -1,39 +1,31 @@
 <template>
-  <div class="header">
+  <div class="header" :class="{ 'header-sub': isSub }">
     <div class="logo">
-      <img src="@/assets/logo.png" alt="">
+      <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
+      <img v-else src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <a
-        class="menu-item"
-        :class="{ 'menu-selected': $route.path === '/election'}"
-        @click="clickMenu('election')"
-      >
-        Election
-      </a>
-      <a class="menu-item" href="">Propose</a>
-      <a class="menu-item" href="">Committee</a>
-      <connect-wallet />
+      <router-link :to="'election'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Election</router-link>
+      <router-link :to="'propose'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Propose</router-link>
+      <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Committee</router-link>
+      <ballot-counter v-show="isSub" :ballot="0" />
+      <connect-wallet :is-sub="isSub" />
     </div>
   </div>
 </template>
 
 <script>
+import BallotCounter from '@/components/BallotCounter.vue';
 import Connect from '@/components/Connect.vue';
 
 export default {
   components: {
+    'ballot-counter': BallotCounter,
     'connect-wallet': Connect,
   },
-  methods: {
-    clickMenu (path) {
-      if (`/${path}` === this.$route.path) {
-        return;
-      }
-      this.$router.push({
-        path: `/${path}`,
-        query: { network: this.$route.query.network },
-      }).catch(err => { alert(err); });
+  computed: {
+    isSub () {
+      return this.$route.path !== '/';
     },
   },
 };
@@ -48,6 +40,10 @@ export default {
   background: #0062c2;
   padding-left: 40px;
   padding-right: 40px;
+}
+
+.header-sub {
+  background: #fafbfc;
 }
 
 .logo {
@@ -78,9 +74,36 @@ export default {
   color: #ffffff;
 
   margin-right: 76px;
+  text-decoration: none;
 }
 
-.menu a {
-  text-decoration: none;
+.menu-item-sub {
+  color: #3e495c;
+}
+
+.menu-item-sub:hover {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.31;
+  letter-spacing: normal;
+  text-align: center;
+  color: #2a72e5;
+}
+
+@media all and (max-width: 360px) {
+}
+
+@media all and (min-width: 361px) and (max-width: 1024px) {
+  .header {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .menu-item {
+    margin-right: 50px;
+  }
 }
 </style>
