@@ -6,14 +6,14 @@
           View Details
         </div>
       </div>
-      <div v-if="!active" class="winning-option">
+      <div v-if="!status" class="winning-option">
         WINNING OPTION: YES
       </div>
       <div class="voting-status">
         You Have not voted
       </div>
     </div>
-    <div v-if="active" class="your-vote">
+    <div v-if="status" class="your-vote">
       <div class="your-vote-header">
         YOUR VOTE
       </div>
@@ -48,6 +48,23 @@
 
 <script>
 export default {
+  props: {
+    status: {
+      type: Boolean,
+    },
+    votingStatus: {
+      type: String,
+      default: '',
+    },
+    votingAnswer: {
+      type: String,
+      default: '',
+    },
+    votingAmount: {
+      type: String,
+      default: '',
+    },
+  },
   data () {
     return {
       active: true,
@@ -64,7 +81,7 @@ export default {
 }
 .winning-option {
   width: 127px;
-  height: 16px;
+  /* height: 16px; */
   margin: 33px 20px 9px;
   font-family: Roboto;
   font-size: 12px;
@@ -89,7 +106,7 @@ export default {
 }
 .Rectangle {
   width: 110px;
-  height: 33px;
+  /* height: 33px; */
   margin: 9px 10px 0 0;
   padding: 8px 22px 9px 22px;
   border-radius: 4px;
@@ -99,7 +116,7 @@ export default {
 }
 .Rectangle-content {
   width: 66px;
-  height: 16px;
+  /* height: 16px; */
   /* margin: 8px, 22px, 9px, 22px; */
   font-family: Roboto;
   font-size: 12px;
@@ -113,7 +130,7 @@ export default {
 }
 .voting-status {
   width: 101px;
-  height: 16px;
+  /* height: 16px; */
   margin: 17px 30px 9px 10px;
   font-family: Roboto;
   font-size: 12px;
@@ -129,8 +146,8 @@ export default {
 
 .your-vote-header {
   width: 53px;
-  height: 13px;
-  margin: 3px 97px 9px 0;
+  /* height: 13px; */
+  /* margin: 3px 97px 0 0; */
   font-family: Roboto;
   font-size: 10px;
   font-weight: normal;
@@ -143,7 +160,7 @@ export default {
 }
 .select {
   width: 140px;
-  height: 32px;
+  /* height: 32px; */
   /* margin: 10px 5px 0 73px; */
   /* padding: 8px 13px 8px 15px; */
   border-radius: 4px;
@@ -155,7 +172,7 @@ export default {
 }
 .label {
   width: 34px;
-  height: 16px;
+  /* height: 16px; */
   /* margin: 0 50px 0 0; */
   /* -webkit-filter: blur(10px);
   filter: blur(10px); */
@@ -171,8 +188,8 @@ export default {
 }
 .input-sector {
   width: 140px;
-  height: 32px;
-  margin: 10px 10px 0;
+  /* height: 32px; */
+  margin: 0 10px 0;
   padding: 8px 9px 8px 13px;
   border-radius: 4px;
   /* -webkit-filter: blur(8px);
@@ -183,7 +200,7 @@ export default {
 }
 .input-box {
   width: 41px;
-  height: 16px;
+  /* height: 16px; */
   /* margin: 0 37px 0 0; */
   /* -webkit-filter: blur(10px);
   filter: blur(10px); */
@@ -200,7 +217,7 @@ export default {
 }
 .input-value {
   width: 17px;
-  height: 16px;
+  /* height: 16px; */
   margin: 0 3px 0 37px;
   font-family: Roboto;
   font-size: 12px;
@@ -215,7 +232,7 @@ export default {
 }
 .vote-button {
   width: 124px;
-  height: 32px;
+  /* height: 32px; */
   /* margin: 0 0 0 10px; */
   padding: 8px 15px;
   border-radius: 4px;
@@ -226,7 +243,7 @@ export default {
 }
 .vote-button-inner {
   width: 94px;
-  height: 16px;
+  /* height: 16px; */
   font-family: Roboto;
   font-size: 12px;
   font-weight: normal;

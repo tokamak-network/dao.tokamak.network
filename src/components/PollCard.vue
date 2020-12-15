@@ -1,21 +1,30 @@
 <template>
   <div class="poll-card">
     <poll-card-type
-      :type="'nominate'"
-      :status="'In progress'"
-      :candidate="'0xabcfe…'"
+      :type="cardType.Type"
+      :status="cardType.Status"
+      :candidate="cardType.Candidate"
     />
     <div class="poll-card-title">
-      ETH-B Debt Ceiling Instant Access Module - December 7, 2020
+      {{ subject }}
     </div>
     <div class="poll-card-explain">
-      Signal your support or opposition to using the Debt Ceiling Instant Access Module for ETH-B with the listed parameters.
+      {{ description }}
     </div>
-
     <div class="time">
-      remain time
+      <img
+        src="@/assets/poll_time_active_icon.png"
+        srcset="img/poll-time-active-icon@2x.png 2x, img/poll-time-active-icon@3x.png 3x"
+        class="poll_time_active_icon"
+      />
+      {{ startTime }}
     </div>
-    <poll-card-bottom></poll-card-bottom>
+    <poll-card-bottom
+      :status="status"
+      :voted="bottom.votingStatus"
+      :votingAnswer="bottom.votingAnswer"
+      :votingAmount="bottom.votingAmount"
+    />
   </div>
 </template>
 
@@ -28,6 +37,31 @@ export default {
     'poll-card-type': PollCardType,
     'poll-card-bottom': PollCardBottom,
   },
+  props: {
+    status: {
+      type: Boolean,
+    },
+    cardType: {
+      type: Object,
+      default: () => {},
+    },
+    subject: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
+    startTime: {
+      type: String,
+      default: '',
+    },
+    bottom: {
+      type: Object,
+      default: () => {},
+    },
+  },
 };
 
 </script>
@@ -35,7 +69,6 @@ export default {
 <style>
 .poll-card {
   width: 786px;
-  height: 232px;
   padding: 25px 30px 25px 28px;
   border-radius: 10px;
   margin-bottom: 6px;
@@ -47,7 +80,6 @@ export default {
 
 .poll-card-title {
   width: 726px;
-  height: 26px;
   margin: 15px 0px 5px;
   font-family: Roboto;
   font-size: 20px;
@@ -61,7 +93,6 @@ export default {
 }
 .poll-card-explain {
   width: 726px;
-  height: 19px;
   margin: 5px 0 0;
   font-family: Roboto;
   font-size: 14px;
@@ -75,7 +106,6 @@ export default {
 }
 .time {
   width: 83px;
-  height: 13px;
   margin: 25px 0 0 7px;
   font-family: Roboto;
   font-size: 10px;
@@ -86,5 +116,11 @@ export default {
   letter-spacing: normal;
   text-align: left;
   color: #86929d;
+}
+.poll_time_active_icon {
+  width: 13px;
+  height: 13px;
+  margin: 0 7px 0 0;
+  object-fit: contain;
 }
 </style>
