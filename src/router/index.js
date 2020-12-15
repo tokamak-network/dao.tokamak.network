@@ -4,22 +4,27 @@ import Vue from 'vue';
 import Root from '@/views/Root.vue';
 import Main from '@/views/Main.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
+import Election from '@/views/Election.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Main',
+    name: 'main',
     component: Main,
   },
   {
     path: '/root',
-    name: 'Root',
+    name: 'root',
     component: Root,
   },
   { path: '*',
     component: PageNotFound,
+  {
+    path: '/election',
+    name: 'election',
+    component: Election,
   },
 ];
 
