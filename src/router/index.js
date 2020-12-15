@@ -19,12 +19,14 @@ const routes = [
     name: 'root',
     component: Root,
   },
-  { path: '*',
-    component: PageNotFound,
   {
     path: '/election',
     name: 'election',
     component: Election,
+  },
+  {
+    path: '*',
+    component: PageNotFound,
   },
 ];
 
