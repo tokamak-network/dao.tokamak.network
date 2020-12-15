@@ -70,8 +70,8 @@ button {
 
   border-radius: 4px;
 
-	border: none;
-	cursor: pointer;
+  border: none;
+  cursor: pointer;
 }
 .secondary {
   background-color: #257eee;
