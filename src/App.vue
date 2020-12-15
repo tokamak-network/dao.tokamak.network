@@ -21,6 +21,7 @@ export default {
 
 <style>
 body { margin: 0 !important; }
+
 #app {
   display: flex;
   flex-direction: column;

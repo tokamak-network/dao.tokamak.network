@@ -2,6 +2,7 @@
   <div class="connect">
     <button
       v-if="!web3"
+      :class="{ sub: isSub }"
       @click="connect"
     >
       Connect Wallet
@@ -21,6 +22,12 @@ import { mapState } from 'vuex';
 import jazzicon from '@metamask/jazzicon';
 
 export default {
+  props: {
+    isSub: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapState([
       'web3',
@@ -76,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-.connect button {
+button {
   /* font styles */
   font-family: Roboto;
   font-size: 14px;
@@ -95,6 +102,15 @@ export default {
   background: #0062c2;
 
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.sub {
+  color: #86929d;
+
+  border-radius: 19px;
+  border: solid 1px #d7d9df;
+  background: #ffffff;
 }
 
 .account {
