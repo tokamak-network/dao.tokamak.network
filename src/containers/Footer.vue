@@ -1,42 +1,31 @@
 <template>
-  <div class="footer">
+  <div class="footer" :class="{ 'footer-sub': isSub }">
     <div class="menu">
-      <span class="company">© 2021 Onther</span>
-      <a href="" target="_blank" class="clause">Terms</a>
-      <a href="" target="_blank" class="clause">Privacy Policy</a>
-      <a href="" target="_blank" class="clause">Status</a>
+      <span class="company" :class="{ 'company-sub': isSub }">© 2021 Onther</span>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Terms</a>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Privacy Policy</a>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Status</a>
     </div>
     <div class="menu">
-      <a href="" target="_blank">
-        <img src="@/assets/telegram.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/discord.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/github.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/facebook.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/youtube.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/twitter.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/linkedin.png" alt="">
-      </a>
-      <a href="" target="_blank">
-        <img src="@/assets/medium.png" alt="">
-      </a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/telegram.png" alt=""><img v-else src="@/assets/telegram-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/discord.png" alt=""><img v-else src="@/assets/discord-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/github.png" alt=""><img v-else src="@/assets/github-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/facebook.png" alt=""><img v-else src="@/assets/facebook-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/youtube.png" alt=""><img v-else src="@/assets/youtube-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/twitter.png" alt=""><img v-else src="@/assets/twitter-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/linkedin.png" alt=""><img v-else src="@/assets/linkedin-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/medium.png" alt=""><img v-else src="@/assets/medium-sub.png" alt=""></a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    isSub () {
+      return this.$route.path !== '/';
+    },
+  },
 };
 </script>
 
@@ -49,6 +38,10 @@ export default {
   background: #0062c2;
   padding-left: 40px;
   padding-right: 40px;
+}
+
+.footer-sub {
+  background: #fafbfc;
 }
 
 .menu {
@@ -88,6 +81,10 @@ export default {
   white-space: nowrap;
 }
 
+.company-sub {
+  color: #3e495c;
+}
+
 .clause {
   /* font styles */
   font-family: Roboto;
@@ -103,6 +100,14 @@ export default {
   margin-right: 30px;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.clause-sub {
+  color: #86929d;
+}
+
+.clause-sub:hover {
+  color: #000000;
 }
 
 .menu img {

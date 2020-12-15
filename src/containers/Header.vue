@@ -1,23 +1,32 @@
 <template>
-  <div class="header">
+  <div class="header" :class="{ 'header-sub': isSub }">
     <div class="logo">
-      <img src="@/assets/logo.png" alt="">
+      <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
+      <img v-else src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <router-link :to="'election'" class="menu-item">Election</router-link>
-      <router-link :to="'propose'" class="menu-item">Propose</router-link>
-      <router-link :to="'committee'" class="menu-item">Committee</router-link>
-      <connect-wallet />
+      <router-link :to="'election'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Election</router-link>
+      <router-link :to="'propose'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Propose</router-link>
+      <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Committee</router-link>
+      <ballot-counter v-show="isSub" :ballot="0" />
+      <connect-wallet :is-sub="isSub" />
     </div>
   </div>
 </template>
 
 <script>
+import BallotCounter from '@/components/BallotCounter.vue';
 import Connect from '@/components/Connect.vue';
 
 export default {
   components: {
+    'ballot-counter': BallotCounter,
     'connect-wallet': Connect,
+  },
+  computed: {
+    isSub () {
+      return this.$route.path !== '/';
+    },
   },
 };
 </script>
@@ -31,6 +40,10 @@ export default {
   background: #0062c2;
   padding-left: 40px;
   padding-right: 40px;
+}
+
+.header-sub {
+  background: #fafbfc;
 }
 
 .logo {
@@ -61,9 +74,22 @@ export default {
   color: #ffffff;
 
   margin-right: 76px;
+  text-decoration: none;
 }
 
-.menu a {
-  text-decoration: none;
+.menu-item-sub {
+  color: #3e495c;
+}
+
+.menu-item-sub:hover {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.31;
+  letter-spacing: normal;
+  text-align: center;
+  color: #2a72e5;
 }
 </style>

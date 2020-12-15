@@ -1,26 +1,20 @@
 <template>
   <div id="app">
-    <header-container v-if="$route.path === '/'" />
-    <sub-header-container v-else />
+    <header-container />
     <router-view></router-view>
-    <footer-container v-if="$route.path === '/'" />
-    <sub-footer-container v-else />
+    <footer-container />
   </div>
 </template>
 
 <script>
 import Header from '@/containers/Header.vue';
 import Footer from '@/containers/Footer.vue';
-import SubHeader from '@/containers/SubHeader.vue';
-import SubFooter from '@/containers/SubFooter.vue';
 
 export default {
   name: 'App',
   components: {
     'header-container': Header,
     'footer-container': Footer,
-    'sub-header-container': SubHeader,
-    'sub-footer-container': SubFooter,
   },
 };
 </script>
