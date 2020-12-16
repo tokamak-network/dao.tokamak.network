@@ -1,10 +1,12 @@
 <template>
   <div class="poll-card-bottom">
     <div class="detail">
-      <div class="Rectangle">
-        <div class="Rectangle-content">
-          View Details
-        </div>
+      <div class="detail-button">
+        <Button
+          :name="'View Details'"
+          :status="'running'"
+          :type="'secondary'"
+        />
       </div>
       <div v-if="!status" class="winning-option">
         WINNING OPTION: YES
@@ -38,16 +40,23 @@
         </div>
       </div>
       <div class="vote-button">
-        <div class="vote-button-inner">
-          Add vote to ballot
-        </div>
+        <Button
+          :name="'Add vote to ballot'"
+          :status="'running'"
+          :type="'vote'"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Button from '@/components/Button';
+
 export default {
+  components: {
+    'Button': Button,
+  },
   props: {
     status: {
       type: Boolean,
@@ -104,29 +113,8 @@ export default {
   float: right;
   /* width: 454px; */
 }
-.Rectangle {
-  width: 110px;
-  /* height: 33px; */
-  margin: 9px 10px 0 0;
-  padding: 8px 22px 9px 22px;
-  border-radius: 4px;
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
-  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
+.detail-button {
   display: inline-block;
-}
-.Rectangle-content {
-  width: 66px;
-  /* height: 16px; */
-  /* margin: 8px, 22px, 9px, 22px; */
-  font-family: Roboto;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.33;
-  letter-spacing: normal;
-  text-align: center;
-  color: #ffffff;
 }
 .voting-status {
   width: 101px;
@@ -160,22 +148,13 @@ export default {
 }
 .select {
   width: 140px;
-  /* height: 32px; */
-  /* margin: 10px 5px 0 73px; */
-  /* padding: 8px 13px 8px 15px; */
   border-radius: 4px;
-  /* -webkit-filter: blur(8px);
-  filter: blur(8px); */
   box-shadow: 0 2px 4px 0 rgba(96, 97, 112, 0.14);
   background-color: #ffffff;
   display: inline-block;
 }
 .label {
   width: 34px;
-  /* height: 16px; */
-  /* margin: 0 50px 0 0; */
-  /* -webkit-filter: blur(10px);
-  filter: blur(10px); */
   font-family: Roboto;
   font-size: 12px;
   font-weight: normal;
@@ -200,10 +179,6 @@ export default {
 }
 .input-box {
   width: 41px;
-  /* height: 16px; */
-  /* margin: 0 37px 0 0; */
-  /* -webkit-filter: blur(10px);
-  filter: blur(10px); */
   font-family: Roboto;
   font-size: 12px;
   font-weight: normal;
@@ -231,27 +206,7 @@ export default {
   display: inline-block;
 }
 .vote-button {
-  width: 124px;
-  /* height: 32px; */
-  /* margin: 0 0 0 10px; */
-  padding: 8px 15px;
-  border-radius: 4px;
-  border: solid 1px #2a72e5;
-  background-color: #ffffff;
-  /* display: inline-block; */
   display: inline-block;
-}
-.vote-button-inner {
-  width: 94px;
-  /* height: 16px; */
-  font-family: Roboto;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.33;
-  letter-spacing: normal;
-  text-align: center;
-  color: #2a72e5;
+  margin-right: 30px;
 }
 </style>

@@ -25,8 +25,16 @@
       </div>
     </div>
     <div style="margin-top:30px;">
-      <div v-if="!endedShow" class="card-header">
+      <div v-if="!endedShow" class="card-header" style="display: inline-block;">
         Ended Election Polls
+      </div>
+      <div class="hide-button">
+        <Button
+          :name="'Hide ended Polls'"
+          :status="'running'"
+          :type="'vote'"
+          @click="showEndedSection"
+        /> <!--Need to change to Hide button-->
       </div>
       <div class="num-cards">
         {{ getNumEndedCards() }} POLLS - POSTED DEC 7, 2020, 16:00 UTC
@@ -47,11 +55,14 @@
 
 <script>
 import PollCard from '@/components/PollCard.vue';
+import Button from '@/components/Button.vue';
+
 import dummy from '../../card_data.json';
 
 export default {
   components:{
     'poll-card': PollCard,
+    'Button': Button,
   },
   data () {
     return {
@@ -80,6 +91,7 @@ export default {
       return this.endedCards.length;
     },
     showEndedSection () {
+      console.log(this.endedShow);
       if (this.endedShow === true) {
         this.endedShow === false;
       } else {
@@ -95,9 +107,13 @@ export default {
   /* all the `views` have to has this attribue  */
   flex: 1;
   margin-left: 203px;
+  max-width: 846px;
   /* width: 846px;
   height: 865px;
   opacity: 0.5; */
+}
+.hide-button {
+  float: right;
 }
 .ended-polls {
   width: 786px;
