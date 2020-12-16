@@ -2,7 +2,10 @@
   <div class="dropdown">
     <div class="dropdown-btn-container" @mousedown="dropdown">
       <button class="dropdown-btn"
-              :class="{ 'dropdown-btn-hint': selectedItem === hint }"
+              :class="{
+                'dropdown-btn-hint': selectedItem === hint,
+                'dropdown-btn-unfolded': unfolded,
+              }"
       >
         {{ selectedItem }}
       </button>
@@ -130,6 +133,9 @@ export default {
 .dropdown-btn-hint {
   color: #86929d;
 }
+.dropdown-btn-unfolded {
+  color: #3e495c;
+}
 
 .dropdown-icon {
   position: absolute;
@@ -179,7 +185,7 @@ export default {
 }
 
 .dropdown-item:hover {
-  color: #86929d;
+  color: #2A72E5;
   cursor: pointer;
 }
 </style>

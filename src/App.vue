@@ -2,7 +2,7 @@
   <div id="app">
     <header-container />
     <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" @on-selected="select" />
-    <button-comp :name="'primary'" :status="''" :type="'primary'" style="margin-top:16px; margin-left: 16px;"></button-comp>
+    <button-comp :name="'primary'" :status="''" :type="'primary'" style="margin-top:120px; margin-left: 16px;"></button-comp>
     <button-comp :name="'primary'" :status="'running'" :type="'primary'" style="margin-top:16px; margin-left: 16px;"></button-comp>
     <button-comp :name="'primary disabled'" :status="'disabled'" :type="'primary'" style="margin-top:16px; margin-left: 16px;"></button-comp>
     <button-comp :name="'secondary'" :status="''" :type="'secondary'" style="margin-top:16px; margin-left: 16px;"></button-comp>
