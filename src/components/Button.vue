@@ -1,25 +1,29 @@
 <template>
   <div class="button">
-    <button
-      :class="{
-        secondary: type === 'secondary',
-        vote: type === 'vote'
-      }"
-      :disabled="status === 'disabled'"
-      @click="onClicked"
+    <button :class="{
+              primary: type === 'primary',
+              secondary: type === 'secondary',
+              vote: type === 'vote'
+            }"
+            :disabled="status === 'disabled'"
+            @click="onClicked"
     >
-      <!-- <div v-if="status === 'running'" class="loader" /> -->
-      <span
-        :disabled="status === 'disabled'"
-        :class="{
-          'secondary-name-disabled': type === 'secondary' && status === 'disabled',
-          'secondary-name': type === 'secondary',
-          'vote-name-disabled': type === 'vote' && status === 'disabled',
-          'vote-name': type === 'vote',
-        }"
+      <span v-show="status !== 'running'"
+            :disabled="status === 'disabled'"
+            :class="{
+              'primary-name-disabled': type === 'primary' && status === 'disabled',
+              'primary-name': type === 'primary',
+              'secondary-name-disabled': type === 'secondary' && status === 'disabled',
+              'secondary-name': type === 'secondary',
+              'vote-name-disabled': type === 'vote' && status === 'disabled',
+              'vote-name': type === 'vote',
+            }"
       >
         {{ name }}
       </span>
+      <div v-if="status === 'running'"
+           class="loader"
+      />
     </button>
   </div>
 </template>
@@ -65,25 +69,45 @@ export default {
 
 <style scoped>
 button {
-  min-width: 124px;
-  min-height: 32px;
+  width: 110px;
+  height: 32px;
 
   border-radius: 4px;
-
-  border: none;
   cursor: pointer;
+
+  outline: none;
 }
+.button {
+  width: 110px;
+  position: relative;
+}
+
+.primary {
+  background-color: #257eee;
+  border: none;
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+}
+.primary:hover {
+  background-color: #2a72e5;
+  box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
+}
+.primary:disabled {
+  background-color: #e9edf1;
+  cursor: not-allowed;
+}
+.primary:disabled:hover {
+  background-color: #e9edf1;
+}
+
 .secondary {
   background-color: #257eee;
-  outline: none;
+  border: none;
 }
 .secondary:hover {
   background-color: #2a72e5;
 }
 .secondary:disabled {
-  border: solid 1px #dfe4ee;
   background-color: #e9edf1;
-
   cursor: not-allowed;
 }
 .secondary:disabled:hover {
@@ -120,6 +144,12 @@ span {
 
   white-space: nowrap;
 }
+.primary-name {
+  color: #ffffff;
+}
+.primary-name-disabled {
+  color: #86929d;
+}
 .secondary-name {
   color: #ffffff;
 }
@@ -135,12 +165,16 @@ span {
 }
 
 .loader {
-  border: 3px solid #bdd8fc;
-  border-top: 3px solid #1e6ee8;
+  border: 2px solid #bdd8fc;
+  border-top: 2px solid #1e6ee8;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   animation: spin 2s linear infinite;
+
+  position: absolute;
+  top: 0; bottom: 0; right: 0; left: 0;
+  margin: auto;
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
