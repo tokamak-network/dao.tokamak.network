@@ -1,9 +1,8 @@
 <template>
   <div class="dropdown">
-    <div style="position: relative;">
+    <div class="dropdown-btn-container" @mousedown="dropdown">
       <button class="dropdown-btn"
               :class="{ 'dropdown-btn-hint': selectedItem === hint }"
-              @mousedown="dropdown"
       >
         {{ selectedItem }}
       </button>
@@ -95,6 +94,10 @@ export default {
 }
 .dropdown:hover .dropdown-btn {
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
+  cursor: pointer;
+}
+.dropdown:hover .dropdown-btn-container {
+  cursor: pointer;
 }
 
 .dropdown-btn {
@@ -177,5 +180,6 @@ export default {
 
 .dropdown-item:hover {
   color: #86929d;
+  cursor: pointer;
 }
 </style>
