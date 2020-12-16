@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-    Tokamak network
   </div>
 </template>
 
