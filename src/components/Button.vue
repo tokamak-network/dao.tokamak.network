@@ -3,7 +3,9 @@
     <button :class="{
               primary: type === 'primary',
               secondary: type === 'secondary',
-              vote: type === 'vote'
+              vote: type === 'vote',
+
+              running: status === 'running'
             }"
             :disabled="status === 'disabled'"
             @click="onClicked"
@@ -61,7 +63,8 @@ export default {
   },
   methods: {
     onClicked () {
-      this.$emit('on-clicked');
+      if (this.status !== 'running')
+        this.$emit('on-clicked');
     },
   },
 };
@@ -162,6 +165,10 @@ span {
 }
 .vote-name-disabled {
   color: #86929d;
+}
+
+.running {
+  cursor: not-allowed;
 }
 
 .loader {
