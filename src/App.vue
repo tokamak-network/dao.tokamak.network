@@ -3,16 +3,19 @@
     <header-container />
     <router-view></router-view>
     <footer-container />
+    <text-input />
   </div>
 </template>
 
 <script>
 import Header from '@/containers/Header.vue';
 import Footer from '@/containers/Footer.vue';
+import TextInput from '@/components/TextInput.vue';
 
 export default {
   name: 'App',
   components: {
+    'text-input': TextInput,
     'header-container': Header,
     'footer-container': Footer,
   },
