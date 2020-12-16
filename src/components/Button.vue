@@ -86,20 +86,21 @@ button {
 }
 
 .primary {
-  background-color: #257eee;
+  background: #257eee;
   border: none;
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
 }
 .primary:hover {
   background-color: #2a72e5;
   box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
 }
 .primary:disabled {
-  background-color: #e9edf1;
+  background: #e9edf1;
   cursor: not-allowed;
 }
 .primary:disabled:hover {
   background-color: #e9edf1;
+  box-shadow: none;
 }
 
 .secondary {
