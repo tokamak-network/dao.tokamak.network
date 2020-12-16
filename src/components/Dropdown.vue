@@ -110,7 +110,7 @@ export default {
   line-height: 1.33;
   letter-spacing: 0.2px;
   text-align: left;
-  color: #3e495c;
+  color: #86929d;
 
   border-radius: 4px;
   box-shadow: 0 2px 4px 0 rgba(96, 97, 112, 0.14);
