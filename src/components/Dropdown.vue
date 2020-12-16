@@ -47,7 +47,7 @@ export default {
   },
   data () {
     return {
-      selectedItem: 'test',
+      selectedItem: '',
       unfolded: false,
     };
   },
