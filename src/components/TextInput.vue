@@ -1,16 +1,21 @@
 <template>
   <div>
     <input
+      v-if="required===true"
       :value="value"
-      :type="type"
+      :disabled="status === 'disabled'"
+      required
+      @input="updateAmount($event.target.value)"
+    >
+    <input
+      v-if="required===false"
+      :value="value"
       :disabled="status === 'disabled'"
       @input="updateAmount($event.target.value)"
     >
     <div v-if="tooltip!==''" class="tooltip">
       <span class="tooltiptext" :style="`margin-left: 10px;`">{{ tooltip }}</span>
     </div>
-    <div v-if="tooltip==='' && status==='invalid'" class="invalid" />
-    <div v-if="tooltip==='' && status==='valid'" class="valid" />
   </div>
 </template>
 
@@ -34,16 +39,20 @@ export default {
         ].indexOf(value) !== -1;
       },
     },
-    type: {
-      type: String,
-      default: '',
-      validator: (value) => {
-        return [
-          'text',
-          'number',
-        ].indexOf(value) !== -1;
-      },
+    required: {
+      type: Boolean,
+      default: false,
     },
+    // type: {
+    //   type: String,
+    //   default: '',
+    //   validator: (value) => {
+    //     return [
+    //       'text',
+    //       'number',
+    //     ].indexOf(value) !== -1;
+    //   },
+    // },
     tooltip: {
       type: String,
       default: '',
@@ -108,29 +117,24 @@ input:disabled {
   border: solid 1px #dfe4ee;
   background-color: #e9edf1;
 }
-input:invalid {
-  border-radius: 4px;
-  border: solid 1px #ff3b3b;
-  background-color: #ffffff;
-}
-/* input:valid {
-  border-radius: 4px;
-  border: solid 1px #2a72e5;
-  background-color: #ffffff;
-} */
-input:required {
+input:focus:valid {
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
+  background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
+  background-size: 14px;
 }
-input:invalid .invalid {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
-  display: inline-block;
-  position: relative;
-  right: 20px;
-  top: 2px;
-  background: url('../assets/input-icon-error.svg')
+input:required:valid {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+  background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
+  background-size: 14px;
+}
+input:focus:required:invalid {
+  border: solid 1px #ff3b3b;
+  background-color: #ffffff;
+  background: url('../assets/input-icon-error.svg') no-repeat 95% 50%;
+  background-size: 14px;
+  z-index: 1;
 }
 .valid {
   width: 14px;
@@ -151,6 +155,7 @@ input:invalid .invalid {
 .tooltip {
   transition: all 0.8s;
   background: url('../assets/input-question-icon.svg');
+  background-color: #ffffff;
   width: 14px;
   height: 14px;
   object-fit: contain;
@@ -158,6 +163,8 @@ input:invalid .invalid {
   position: relative;
   right: 20px;
   top: 2px;
+  opacity: 1;
+  z-index: 2;
 }
 /* Tooltip text */
 .tooltip .tooltiptext {
