@@ -24,7 +24,7 @@
         {{ name }}
       </span>
       <div v-if="status === 'running'"
-           class="loader"
+           class="loader" :class="{ 'loader-secondary': type === 'secondary' }"
       />
     </button>
   </div>
@@ -187,5 +187,10 @@ span {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.loader-secondary {
+  border: 2px solid #86b3f1;
+  border-top: 2px solid #ffffff;
 }
 </style>
