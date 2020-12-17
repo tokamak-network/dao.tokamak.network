@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <header-container />
+    <mobile-header-container v-if="$mq === 'mobile'" />
+    <header-container v-else />
     <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" @on-selected="select" />
     <button-comp :name="'primary'" :status="''" :type="'primary'" style="margin-top:120px; margin-left: 16px;"></button-comp>
     <button-comp :name="'primary'" :status="'running'" :type="'primary'" style="margin-top:16px; margin-left: 16px;"></button-comp>
@@ -11,14 +12,17 @@
     <button-comp :name="'vote'" :status="''" :type="'vote'" style="margin-top:16px; margin-left: 16px;"></button-comp>
     <button-comp :name="'vote'" :status="'running'" :type="'vote'" style="margin-top:16px; margin-left: 16px;"></button-comp>
     <button-comp :name="'vote disabled'" :status="'disabled'" :type="'vote'" style="margin-top:16px; margin-left: 16px;"></button-comp>
-    <router-view></router-view>
-    <footer-container />
+    <router-view />
+    <mobile-footer-container v-if="$mq === 'mobile'" />
+    <footer-container v-else />
   </div>
 </template>
 
 <script>
 import Header from '@/containers/Header.vue';
 import Footer from '@/containers/Footer.vue';
+import MobileHeader from '@/containers/MobileHeader.vue';
+import MobileFooter from '@/containers/MobileFooter.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 
@@ -27,6 +31,8 @@ export default {
   components: {
     'header-container': Header,
     'footer-container': Footer,
+    'mobile-header-container': MobileHeader,
+    'mobile-footer-container': MobileFooter,
     'dropdown': Dropdown,
     'button-comp': Button,
   },

@@ -40,6 +40,9 @@ export default {
       return parseInt(this.account.slice(2, 10), 16);
     },
   },
+  mounted () {
+    this.setIcon();
+  },
   methods: {
     async connect () {
       if (typeof window.ethereum !== 'undefined') {
@@ -73,10 +76,12 @@ export default {
     setIcon () {
       const icon = jazzicon(25, this.iconNumber);
       const iconEle = this.$refs.icon;
-      if (iconEle.childElementCount === 1) {
-        iconEle.removeChild(iconEle.lastElementChild);
+      if (iconEle) {
+        if (iconEle.childElementCount === 1) {
+          iconEle.removeChild(iconEle.lastElementChild);
+        }
+        iconEle.append(icon);
       }
-      iconEle.append(icon);
     },
   },
 };
