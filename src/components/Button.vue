@@ -4,6 +4,7 @@
               primary: type === 'primary',
               secondary: type === 'secondary',
               vote: type === 'vote',
+              hide: type === 'hide',
 
               running: status === 'running'
             }"
@@ -19,6 +20,7 @@
               'secondary-name': type === 'secondary',
               'vote-name-disabled': type === 'vote' && status === 'disabled',
               'vote-name': type === 'vote',
+              'hide-name': type === 'hide',
             }"
       >
         {{ name }}
@@ -57,6 +59,7 @@ export default {
           'primary',
           'secondary',
           'vote',
+          'hide',
         ].indexOf(value) !== -1;
       },
     },
@@ -135,6 +138,14 @@ button {
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
 }
+.hide {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+}
+.hide:hover {
+  border: solid 1px #3e495c;
+  background-color: #ffffff;
+}
 
 span {
   font-family: Roboto;
@@ -162,10 +173,12 @@ span {
 }
 .vote-name {
   color: #2a72e5;
-
 }
 .vote-name-disabled {
   color: #86929d;
+}
+.hide-name {
+  color: #3e495c;
 }
 
 .running {
