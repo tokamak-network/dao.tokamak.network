@@ -6,8 +6,9 @@
                 'dropdown-btn-hint': selectedItem === hint,
                 'dropdown-btn-unfolded': unfolded,
 
-                'dropdown-btn-a': !disabled && type === 'a',
-                'dropdown-btn-b': !disabled && type === 'b',
+                'dropdown-btn-a': !disabled && buttonType === 'a',
+                'dropdown-btn-b': !disabled && buttonType === 'b',
+                'dropdown-btn-unfolded-b': unfolded && buttonType === 'b',
                 'dropdown-btn-disabled': disabled
               }"
       >
@@ -33,8 +34,8 @@
       <button v-for="(item, index) in items" :key="index"
               class="dropdown-item"
               :class="{
-                'dropdown-item-a': type === 'a',
-                'dropdown-item-b': type === 'b'
+                'dropdown-item-a': selectorType === 'a',
+                'dropdown-item-b': selectorType === 'b'
               }"
               @click="select(item)"
       >
@@ -57,7 +58,17 @@ export default {
       default: '',
       required: true,
     },
-    type: {
+    buttonType: {
+      type: String,
+      default: () => '',
+      validator: (value) => {
+        return [
+          'a',
+          'b',
+        ].indexOf(value) !== -1;
+      },
+    },
+    selectorType: {
       type: String,
       default: () => '',
       validator: (value) => {
@@ -259,5 +270,11 @@ export default {
 .dropdown-item-b:hover {
   background-color: #2a72e5;
   color: #ffffff;
+}
+.dropdown-btn-unfolded-b {
+  border: solid 1px #2a72e5;
+}
+.dropdown-btn-unfolded-b:hover {
+  border: solid 1px #2a72e5;
 }
 </style>
