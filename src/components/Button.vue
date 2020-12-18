@@ -110,9 +110,11 @@ button {
 .primary:disabled {
   background: #e9edf1;
   cursor: not-allowed;
+  box-shadow: none;
 }
 .primary:disabled:hover {
   background-color: #e9edf1;
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
   box-shadow: none;
 }
 
