@@ -4,6 +4,7 @@
       v-if="required===true"
       :value="value"
       :disabled="status === 'disabled'"
+      :type="type"
       required
       @input="updateAmount($event.target.value)"
     >
@@ -11,6 +12,7 @@
       v-if="required===false"
       :value="value"
       :disabled="status === 'disabled'"
+      :type="type"
       @input="updateAmount($event.target.value)"
     >
     <div v-if="tooltip!==''" class="tooltip">
@@ -43,16 +45,17 @@ export default {
       type: Boolean,
       default: false,
     },
-    // type: {
-    //   type: String,
-    //   default: '',
-    //   validator: (value) => {
-    //     return [
-    //       'text',
-    //       'number',
-    //     ].indexOf(value) !== -1;
-    //   },
-    // },
+    type: {
+      type: String,
+      default: '',
+      // validator: (value) => {
+      //   return [
+      //     'text',
+      //     'number',
+      //     'email',
+      //   ].indexOf(value) !== -1;
+      // },
+    },
     tooltip: {
       type: String,
       default: '',
@@ -96,7 +99,7 @@ input {
   max-width: 170px;
   border-radius: 4px;
   position: relative;
-  margin: 0 0 6px 10px;
+  margin: 5px 0 6px 5px;
   padding-left: 10px;
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
@@ -130,6 +133,13 @@ input:required:valid {
   background-size: 14px;
 }
 input:focus:required:invalid {
+  border: solid 1px #ff3b3b;
+  background-color: #ffffff;
+  background: url('../assets/input-icon-error.svg') no-repeat 95% 50%;
+  background-size: 14px;
+  z-index: 1;
+}
+input:required:invalid {
   border: solid 1px #ff3b3b;
   background-color: #ffffff;
   background: url('../assets/input-icon-error.svg') no-repeat 95% 50%;
