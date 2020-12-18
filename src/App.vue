@@ -2,7 +2,16 @@
   <div id="app">
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
-    <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" @on-selected="select" />
+    <div style="display: flex; margin-top: 60px;">
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :button-type="'a'" :selector-type="'a'" @on-selected="select" />
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :button-type="'a'" :selector-type="'b'" @on-selected="select" />
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :type="'a'" :disabled="true" @on-selected="select" />
+    </div>
+    <div>
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-top: 120px; margin-left: 60px;" :button-type="'b'" :selector-type="'a'" @on-selected="select" />
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-top: 120px; margin-left: 60px;" :button-type="'b'" :selector-type="'b'" @on-selected="select" />
+      <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-top: 120px; margin-left: 60px;" :type="'b'" :disabled="true" @on-selected="select" />
+    </div>
     <button-comp-step :name="'PREV NAME'" :status="''" :type="'prev'" style="margin-top: 120px; margin-left: 16px;"></button-comp-step>
     <button-comp-step :name="'NEXT NAME'" :status="''" :type="'next'" style="margin-top: 16px; margin-left: 16px;"></button-comp-step>
     <button-comp :name="'primary'" :status="''" :type="'primary'" style="margin-top: 16px; margin-left: 16px;"></button-comp>
