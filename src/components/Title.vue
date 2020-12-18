@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style>
-title {
+.title {
   height: 32px;
   margin: 0 0px 12px 0;
   font-family: Roboto;
