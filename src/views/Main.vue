@@ -4,6 +4,7 @@
     <text-input :type="'email'" :required="true" />
     <text-input :type="'email'" tooltip="'hi'" />
     <text-input :status="'disabled'" />
+    <text-input :ton="true" />
   </div>
 </template>
 
