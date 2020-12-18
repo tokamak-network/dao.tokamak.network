@@ -8,8 +8,7 @@
 
                 'dropdown-btn-a': !disabled && type === 'a',
                 'dropdown-btn-b': !disabled && type === 'b',
-                'dropdown-btn-disabled': disabled,
-                'dropdown-btn-disabled': disabled,
+                'dropdown-btn-disabled': disabled
               }"
       >
         {{ selectedItem }}
