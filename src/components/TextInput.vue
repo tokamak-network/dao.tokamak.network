@@ -1,7 +1,7 @@
 <template>
   <div>
     <input
-      v-if="required===true && ton===false"
+      v-if="required === true && ton === false"
       :value="value"
       :disabled="status === 'disabled'"
       :type="type"
@@ -10,7 +10,7 @@
       @input="updateAmount($event.target.value)"
     >
     <input
-      v-if="required===false && ton===false"
+      v-if="required === true && ton === false"
       :value="value"
       :placeholder="placeholder"
       :disabled="status === 'disabled'"
@@ -18,7 +18,7 @@
       @input="updateAmount($event.target.value)"
     >
     <input
-      v-if="ton===true"
+      v-if="ton === true"
       value="0"
       style="text-align: right; padding-right:40px; padding-left:0px; "
       :disabled="status === 'disabled'"
@@ -27,10 +27,10 @@
       @keypress="isNumber"
       @input="updateAmount($event.target.value)"
     >
-    <div v-if="tooltip!=='' && ton===false" class="tooltip">
+    <div v-if="tooltip !== '' && ton === false" class="tooltip">
       <span class="tooltiptext" :style="`margin-left: 10px;`">{{ tooltip }}</span>
     </div>
-    <div v-if="ton===true" class="ton">TON</div>
+    <div v-if="ton === true" class="ton">TON</div>
   </div>
 </template>
 
@@ -69,13 +69,6 @@ export default {
     type: {
       type: String,
       default: '',
-      // validator: (value) => {
-      //   return [
-      //     'text',
-      //     'number',
-      //     'email',
-      //   ].indexOf(value) !== -1;
-      // },
     },
     tooltip: {
       type: String,
@@ -91,11 +84,6 @@ export default {
       valid: this.status,
     };
   },
-  computed: {
-    currencyAmount () {
-      return amount => this.$options.filters.currencyAmount(amount);
-    },
-  },
   methods: {
     isNumber (evt) {
       evt = (evt) ? evt : window.event;
@@ -107,7 +95,7 @@ export default {
       }
     },
     updateAmount (amount) {
-      this.$emit('input', amount);
+      this.$emit('on-input', amount);
     },
   },
 };
@@ -140,25 +128,6 @@ input:disabled {
   border: solid 1px #dfe4ee;
   background-color: #e9edf1;
 }
-/* input:focus:valid {
-  border: solid 1px #dfe4ee;
-  background-color: #ffffff;
-  background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
-  background-size: 14px;
-} */
-/* input:required:valid {
-  border: solid 1px #dfe4ee;
-  background-color: #ffffff;
-  background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
-  background-size: 14px;
-} */
-/* input:required:invalid:focus {
-  border: solid 1px #ff3b3b;
-  background-color: #ffffff;
-  color: #ff3b3b;
-  background-size: 14px;
-  z-index: 1;
-} */
 input:focus:required:valid {
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
