@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="progress">
-      <div v-if="remain===true" class="background-text" style="position: relative; " :style="backTextStyle">{{ 100-pct }}%</div>
-      <div class="progress-bar" :style="barStyle">
+      <div v-if="remain === true"
+           class="background-text"
+           :style="backTextStyle"
+      >
+        {{ 100-pct }}%
+      </div>
+      <div class="progress-bar"
+           :style="barStyle"
+      >
         <div class="text">{{ pct }}%</div>
       </div>
     </div>
@@ -68,6 +75,8 @@ export default {
   padding-top: 2px;
 }
 .background-text {
+  position: relative;
+
   color: #3e495c;
   font-size: 10px;
   text-align: center;
