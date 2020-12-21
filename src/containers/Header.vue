@@ -5,9 +5,15 @@
       <img v-else src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <router-link :to="'election'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Election</router-link>
-      <router-link :to="'propose'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Propose</router-link>
-      <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">Committee</router-link>
+      <router-link :to="'election'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+        Election
+      </router-link>
+      <router-link :to="'propose'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+        Propose
+      </router-link>
+      <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+        Committee
+      </router-link>
       <ballot-counter v-show="isSub" :ballot="0" />
       <connect-wallet :is-sub="isSub" />
     </div>
