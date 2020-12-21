@@ -1,17 +1,43 @@
 <template>
   <div class="election">
+    <vote-card :title="'Your Vote'"></vote-card>
+    <stat-card :title="'Your Stats'" :data="your" />
+    <stat-card :title="'Committee Stats'" :data="committee" />
+    <resource-card :title="'Resources'" />
   </div>
 </template>
 
 <script>
-export default {
+import VoteCard from '@/components/VoteCard.vue';
+import StatsCard from '@/components/StatsCard.vue';
+import ResourceCard from '@/components/ResourceCard.vue';
 
+export default {
+  components: {
+    'vote-card': VoteCard,
+    'stat-card': StatsCard,
+    'resource-card': ResourceCard,
+  },
+  data () {
+    return {
+      your: [
+        { 'title': 'Claimable TON', 'content': '100 TON' },
+        { 'title': '# of Voted', 'content': '7 Polls' },
+      ],
+      committee: [
+        { 'title': 'Claimable TON', 'content': '100 TON' },
+        { 'title': '# of Voted', 'content': '7 Polls' },
+        { 'title': '% of winning vote lottery', 'content': '1.5 %' },
+      ],
+    };
+  },
 };
 </script>
 
 <style scoped>
 .election {
   /* all the `views` have to has this attribue  */
+  background: #fafbfc;
   flex: 1;
 }
 </style>

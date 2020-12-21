@@ -18,7 +18,7 @@ export default {
 <style>
 .title {
   height: 32px;
-  margin: 0 0px 12px 0;
+  margin: 30px 0px 12px 0;
   font-family: Roboto;
   font-size: 24px;
   font-weight: normal;
