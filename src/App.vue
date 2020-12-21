@@ -22,11 +22,6 @@ export default {
     'mobile-header-container': MobileHeader,
     'mobile-footer-container': MobileFooter,
   },
-  data () {
-    return {
-      showModal: false,
-    };
-  },
   methods: {
     select (item) {
       alert(item);
