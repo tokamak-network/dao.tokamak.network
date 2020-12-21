@@ -4,8 +4,12 @@
               primary: type === 'primary',
               secondary: type === 'secondary',
               vote: type === 'vote',
+              hide: type === 'hide',
 
-              running: status === 'running'
+              running: status === 'running',
+              'primary-running': status === 'running' && type === 'primary',
+              'secondary-running': status === 'running' && type === 'secondary',
+              'vote-running': status === 'running' && type === 'vote'
             }"
             :disabled="status === 'disabled'"
             @click="onClicked"
@@ -19,12 +23,13 @@
               'secondary-name': type === 'secondary',
               'vote-name-disabled': type === 'vote' && status === 'disabled',
               'vote-name': type === 'vote',
+              'hide-name': type === 'hide',
             }"
       >
         {{ name }}
       </span>
       <div v-if="status === 'running'"
-           class="loader" :class="{ 'loader-secondary': type === 'secondary' }"
+           class="loader" :class="{ 'loader-vote': type === 'vote' }"
       />
     </button>
   </div>
@@ -57,6 +62,7 @@ export default {
           'primary',
           'secondary',
           'vote',
+          'hide',
         ].indexOf(value) !== -1;
       },
     },
@@ -85,30 +91,43 @@ button {
   position: relative;
 }
 
-.primary {
+.primary, primary-running {
   background: #257eee;
   border: none;
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
   background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
 }
 .primary:hover {
   background-color: #2a72e5;
   box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
 }
+.primary-running:hover {
+  background: #257eee;
+  border: none;
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
+}
 .primary:disabled {
   background: #e9edf1;
   cursor: not-allowed;
+  box-shadow: none;
 }
 .primary:disabled:hover {
   background-color: #e9edf1;
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
   box-shadow: none;
 }
 
-.secondary {
+.secondary, secondary-running {
   background-color: #257eee;
   border: none;
 }
 .secondary:hover {
   background-color: #2a72e5;
+}
+.secondary-running:hover {
+  background-color: #257eee;
+  border: none;
 }
 .secondary:disabled {
   background-color: #e9edf1;
@@ -118,12 +137,16 @@ button {
   background-color: #e9edf1;
 }
 
-.vote {
+.vote, vote-running {
   border: solid 1px #2a72e5;
   background-color: #ffffff;
 }
 .vote:hover {
   background-color: #f1f6fd;
+}
+.vote-running:hover {
+  border: solid 1px #2a72e5;
+  background-color: #ffffff;
 }
 .vote:disabled {
   border: solid 1px #dfe4ee;
@@ -133,6 +156,14 @@ button {
 }
 .vote:disabled:hover {
   border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+}
+.hide {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+}
+.hide:hover {
+  border: solid 1px #3e495c;
   background-color: #ffffff;
 }
 
@@ -162,10 +193,12 @@ span {
 }
 .vote-name {
   color: #2a72e5;
-
 }
 .vote-name-disabled {
   color: #86929d;
+}
+.hide-name {
+  color: #3e495c;
 }
 
 .running {
@@ -173,8 +206,8 @@ span {
 }
 
 .loader {
-  border: 2px solid #bdd8fc;
-  border-top: 2px solid #1e6ee8;
+  border: 2px solid #82b3f4;
+  border-top: 2px solid #ffffff;
   border-radius: 50%;
   width: 18px;
   height: 18px;
@@ -189,8 +222,8 @@ span {
   100% { transform: rotate(360deg); }
 }
 
-.loader-secondary {
-  border: 2px solid #86b3f1;
-  border-top: 2px solid #ffffff;
+.loader-vote {
+  border: 2px solid #c0d8fc;
+  border-top: 2px solid #2770e5;
 }
 </style>
