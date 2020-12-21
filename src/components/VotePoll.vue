@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="vue-simple-progress" :style="progressStyle">
-      <div v-if="remain===true" style="position: relative; " :style="backTextStyle">{{ 100-pct }}%</div>
-      <div class="vue-simple-progress-bar" :style="barStyle">
-        <div :style="textStyle">{{ pct }}%</div>
+    <div class="progress">
+      <div v-if="remain===true" class="background-text" style="position: relative; " :style="backTextStyle">{{ 100-pct }}%</div>
+      <div class="progress-bar" :style="barStyle">
+        <div class="text">{{ pct }}%</div>
       </div>
     </div>
   </div>
@@ -22,58 +22,57 @@ export default {
     },
   },
   computed: {
-    progressStyle () {
-      const style = {
-        'background': '#dfe4ee',
-      };
-      style.position = 'relative';
-      style['min-height'] = '15px';
-      style['z-index'] = '-2';
-      style['margin-top'] = '10px';
-      style['border-radius'] = '100px';
-
-      return style;
-    },
     barStyle () {
       const style = {
-        'background': '#1f8efa',
         'width': this.pct+'%',
-        'height': '15px',
-        'font-weight': '500',
       };
-      style['border-radius'] = '100px';
-      style.position = 'absolute';
-      style.top = '0';
-      style.height = '100%';
-      style['min-height'] = '15px';
-      style['z-index'] = '-1';
-
-      return style;
-    },
-    textStyle () {
-      const style = {
-        'color': '#ffffff',
-        'font-size': '10px',
-        'text-align': 'center',
-        'font-family': 'Roboto',
-        'font-weight': '500',
-      };
-      style['padding-bottom'] = '1px';
-      style['padding-top'] = '2px';
       return style;
     },
     backTextStyle () {
       const style = {
-        'color': '#3e495c',
-        'font-size': '10px',
-        'text-align': 'center',
-        'font-family': 'Roboto',
+        'padding-left': this.pct + '%',
       };
-      style['padding-left'] = this.pct + '%';
-      style['padding-bottom'] = '1px';
-      style['padding-top'] = '2px';
       return style;
     },
   },
 };
 </script>
+
+<style>
+.progress {
+  background: #dfe4ee;
+  position: relative;
+  min-height: 15px;
+  z-index: -2;
+  margin-top: 10px;
+  border-radius: 100px;
+}
+.progress-bar {
+  background: #1f8efa;
+  max-height: 15px;
+  font-weight: 500;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  min-height: 15px;
+  z-index: -1;
+}
+.text {
+  color: #ffffff;
+  font-size: 10px;
+  text-align: center;
+  font-family: Roboto;
+  font-weight: 500;
+  padding-bottom: 1px;
+  padding-top: 2px;
+}
+.background-text {
+  color: #3e495c;
+  font-size: 10px;
+  text-align: center;
+  font-family: Roboto;
+  padding-bottom: 1px;
+  padding-top: 2px;
+}
+</style>

@@ -3,7 +3,7 @@
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
     <vote-poll :pct="10" :remain="true"></vote-poll>
-    <vote-poll :pct="30"></vote-poll>
+    <vote-poll :pct="30" :remain="true"></vote-poll>
 
     <div style="display: flex; margin-top: 60px;">
       <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :button-type="'a'" :selector-type="'a'" @on-selected="select" />
