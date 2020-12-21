@@ -1,6 +1,5 @@
 <template>
   <div class="election">
-    election
   </div>
 </template>
 
