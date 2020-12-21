@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <text-input :type="'email'" />
-    <text-input :type="'email'" :required="true" />
+    <text-input :type="'email'" :placeholder="'hihi@hihi'" />
+    <text-input :type="'email'" :required="true" :placeholder="'hihi@hihi'" />
     <text-input :type="'email'" tooltip="'hi'" />
     <text-input :status="'disabled'" />
     <text-input :ton="true" />

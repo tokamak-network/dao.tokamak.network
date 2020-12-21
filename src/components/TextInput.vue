@@ -5,12 +5,14 @@
       :value="value"
       :disabled="status === 'disabled'"
       :type="type"
+      :placeholder="placeholder"
       required
       @input="updateAmount($event.target.value)"
     >
     <input
       v-if="required===false && ton===false"
       :value="value"
+      :placeholder="placeholder"
       :disabled="status === 'disabled'"
       :type="type"
       @input="updateAmount($event.target.value)"
@@ -20,6 +22,7 @@
       value="0"
       style="text-align: right; padding-right:40px; padding-left:0px; "
       :disabled="status === 'disabled'"
+      :placeholder="placeholder"
       :type="type"
       @keypress="isNumber"
       @input="updateAmount($event.target.value)"
@@ -58,6 +61,10 @@ export default {
     ton: {
       type: Boolean,
       default: false,
+    },
+    placeholder: {
+      type:String,
+      default: '',
     },
     type: {
       type: String,
@@ -145,19 +152,18 @@ input:disabled {
   background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
   background-size: 14px;
 } */
+/* input:required:invalid:focus {
+  border: solid 1px #ff3b3b;
+  background-color: #ffffff;
+  color: #ff3b3b;
+  background-size: 14px;
+  z-index: 1;
+} */
 input:focus:required:valid {
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
   background: url('../assets/input-icon-check.svg') no-repeat 95% 50%;
   background-size: 14px;
-}
-input:required:invalid:focus {
-  border: solid 1px #ff3b3b;
-  background-color: #ffffff;
-  color: #ff3b3b;
-  background: url('../assets/input-icon-error.svg') no-repeat 95% 50%;
-  background-size: 14px;
-  z-index: 1;
 }
 input:required:invalid {
   border: solid 1px #ff3b3b;
