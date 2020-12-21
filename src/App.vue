@@ -2,6 +2,9 @@
   <div id="app">
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
+    <vote-poll :pct="10" :remain="true"></vote-poll>
+    <vote-poll :pct="30"></vote-poll>
+
     <div style="display: flex; margin-top: 60px;">
       <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :button-type="'a'" :selector-type="'a'" @on-selected="select" />
       <dropdown :items="['Abstain', 'Yes', 'No']" :hint="'Your choice'" style="margin-left: 60px;" :button-type="'a'" :selector-type="'b'" @on-selected="select" />
@@ -38,6 +41,7 @@ import MobileFooter from '@/containers/MobileFooter.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 import ButtonStep from '@/components/ButtonStep.vue';
+import VotePoll from '@/components/VotePoll.vue';
 
 export default {
   name: 'App',
@@ -49,6 +53,7 @@ export default {
     'dropdown': Dropdown,
     'button-comp': Button,
     'button-comp-step': ButtonStep,
+    'vote-poll': VotePoll,
   },
   methods: {
     select (item) {
