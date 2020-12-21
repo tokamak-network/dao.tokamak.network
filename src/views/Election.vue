@@ -4,6 +4,7 @@
     <stat-card :title="'Your Stats'" :data="your" />
     <stat-card :title="'Committee Stats'" :data="committee" />
     <resource-card :title="'Resources'" />
+    <button-pagination style="margin-left: 16px;" />
   </div>
 </template>
 
@@ -11,12 +12,14 @@
 import VoteCard from '@/components/VoteCard.vue';
 import StatsCard from '@/components/StatsCard.vue';
 import ResourceCard from '@/components/ResourceCard.vue';
+import ButtonPagination from '@/components/ButtonPagination.vue';
 
 export default {
   components: {
     'vote-card': VoteCard,
     'stat-card': StatsCard,
     'resource-card': ResourceCard,
+    'button-pagination': ButtonPagination,
   },
   data () {
     return {
