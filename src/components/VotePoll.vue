@@ -39,7 +39,6 @@ export default {
         'background': '#1f8efa',
         'width': this.pct+'%',
         'height': '15px',
-        'transition': this.barTransition,
         'font-weight': '500',
       };
       style['border-radius'] = '100px';
@@ -78,14 +77,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* .vue-simple-progress-bar {
-  background-color: #1f8efa;
-  position: absolute;
-  width: 30%;
-  height: 100%;
-  top: 0;
-  z-index: -1;
-} */
-</style>
