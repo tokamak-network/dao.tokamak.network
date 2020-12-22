@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="progress">
+    <div class="progress" :style="progressStyle">
       <div v-if="remain === true"
            class="background-text"
            :style="backTextStyle"
@@ -27,6 +27,10 @@ export default {
       default: false,
       type: Boolean,
     },
+    'margin': {
+      default: 0,
+      type: Number,
+    },
   },
   computed: {
     barStyle () {
@@ -41,6 +45,13 @@ export default {
       };
       return style;
     },
+    progressStyle () {
+      const style = {
+        'margin-left': this.margin + 'px',
+        'margin-right': this.margin + 'px',
+      };
+      return style;
+    },
   },
 };
 </script>
@@ -50,8 +61,7 @@ export default {
   background: #dfe4ee;
   position: relative;
   min-height: 15px;
-  z-index: -2;
-  margin-top: 10px;
+  z-index: 1;
   border-radius: 100px;
 }
 .progress-bar {
@@ -63,7 +73,7 @@ export default {
   top: 0;
   height: 100%;
   min-height: 15px;
-  z-index: -1;
+  z-index: 2;
 }
 .text {
   color: #ffffff;
@@ -76,7 +86,6 @@ export default {
 }
 .background-text {
   position: relative;
-
   color: #3e495c;
   font-size: 10px;
   text-align: center;
