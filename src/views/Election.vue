@@ -1,7 +1,7 @@
 <template>
   <div class="election">
     <div class="committee-container">
-      <committee />
+      <committee-slot />
     </div>
     <div class="card-container">
       <card-rank :title="'Your Votes'" />
@@ -14,13 +14,13 @@
 <script>
 import CardResource from '@/containers/CardResource.vue';
 import CardRank from '@/containers/CardRank.vue';
-import Committee from '@/containers/Committee';
+import CommitteeSlot from '@/containers/CommitteeSlot';
 
 export default {
   components: {
     'card-rank': CardRank,
     'card-resource': CardResource,
-    'committee': Committee,
+    'committee-slot': CommitteeSlot,
   },
 };
 </script>
