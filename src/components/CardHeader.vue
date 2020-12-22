@@ -19,7 +19,12 @@
       :
     </div>
     <div class="content">
-      {{ elected }}
+      <a
+        class="link"
+        target="_blank"
+        rel="noopener noreferrer"
+        :href="href(elected)"
+      >{{ shortAddress(elected) }}</a>
     </div>
     <div class="colon">
       |
@@ -52,12 +57,20 @@ export default {
       default: '',
     },
   },
+  methods: {
+    href (address) {
+      return 'https://etherscan.io/address/' + address;
+    },
+    shortAddress (account) {
+      return `${account.slice(0, 7)}...`;
+    },
+  },
 };
 </script>
 
 <style>
 .card-header {
-  width: 249px;
+  /* width: 249px; */
   height: 11px;
   margin: 0 0 12px 0;
   font-family: Roboto;
@@ -84,5 +97,9 @@ export default {
   color: #3e495c;
   display: inline-block;
   margin-right: 2px;
+}
+.card-header .content .link {
+  text-decoration: underline;
+  color: #3e495c;
 }
 </style>

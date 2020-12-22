@@ -11,7 +11,7 @@
             <card-header
               :status="operator.header.status"
               :elected="operator.header.elected"
-              :votes="operator.header.votes"
+              :votes="operator.header.voted"
               class="card-header"
             />
             <div class="slot-number">
@@ -36,7 +36,7 @@
               v-if="login!==false"
               :name="'Challenge'"
               :type="'secondary'"
-              style="display: inline-block; margin-left:506px;"
+              style="float: right; margin-right:30px;"
             />
           </div>
         </template>
@@ -125,11 +125,12 @@ export default {
 }
 .card-header {
   display: inline-block;
+  /* float:left; */
 }
 .slot-number {
   width: 38px;
   height: 16px;
-  margin: 0 0 1px 421px;
+  margin: 0 30px 1px 0px;
   font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
@@ -138,7 +139,8 @@ export default {
   letter-spacing: normal;
   text-align: right;
   color: #3e495c;
-  display: inline-block;
+  /* display: inline-block; */
+  float: right;
 }
 .slot-info {
   margin-bottom: 12px;

@@ -46,7 +46,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-right: 30px;
 }
 .committee-container {
   width: 786px;
