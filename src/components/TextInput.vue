@@ -108,6 +108,7 @@ input {
   border-radius: 4px;
   position: relative;
   margin: 5px 0 6px 5px;
+  font-size: 13px;
   padding-left: 10px;
   padding-right: 30px;
   border: solid 1px #dfe4ee;
@@ -160,7 +161,7 @@ input:required:invalid {
 }
 .ton {
   font-family: Roboto;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
