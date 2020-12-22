@@ -76,6 +76,9 @@ export default {
 
   text-decoration: none;
 }
+.resource a:hover {
+  color: #0062C2
+}
 .resource:first-child {
   padding-top: 16px;
 }

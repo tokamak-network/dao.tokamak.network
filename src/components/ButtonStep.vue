@@ -61,7 +61,7 @@ button:hover img {
 
 span {
   font-family: Roboto;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
