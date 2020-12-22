@@ -62,7 +62,6 @@ export default {
   position: relative;
   min-height: 15px;
   z-index: 1;
-  margin-top: 10px;
   border-radius: 100px;
 }
 .progress-bar {

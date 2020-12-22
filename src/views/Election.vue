@@ -1,22 +1,26 @@
 <template>
   <div class="election">
-    <vote-card :title="'Your Vote'"></vote-card>
-    <stat-card :title="'Your Stats'" :data="your" />
-    <stat-card :title="'Committee Stats'" :data="committee" />
-    <resource-card :title="'Resources'" />
+    <div class="committee-container">
+      <committee />
+    </div>
+    <div class="card-container">
+      <card-rank :title="'Your Votes'" />
+      <card-rank :title="'Rank'" />
+      <card-resource />
+    </div>
   </div>
 </template>
 
 <script>
-import VoteCard from '@/components/VoteCard.vue';
-import StatsCard from '@/components/StatsCard.vue';
-import ResourceCard from '@/components/ResourceCard.vue';
+import CardResource from '@/containers/CardResource.vue';
+import CardRank from '@/containers/CardRank.vue';
+import Committee from '@/containers/Committee';
 
 export default {
   components: {
-    'vote-card': VoteCard,
-    'stat-card': StatsCard,
-    'resource-card': ResourceCard,
+    'card-rank': CardRank,
+    'card-resource': CardResource,
+    'committee': Committee,
   },
   data () {
     return {
@@ -34,10 +38,26 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .election {
   /* all the `views` have to has this attribue  */
   background: #fafbfc;
   flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-right: 30px;
+}
+.committee-container {
+  width: 786px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px;
+}
+.card-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  width: 378px;
 }
 </style>

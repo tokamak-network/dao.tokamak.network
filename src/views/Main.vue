@@ -22,7 +22,6 @@ export default {
 .main {
   /* All views must have this attribute.*/
   flex: 1;
-
   display: flex;
   justify-content: center;
   background: #0062c2;
