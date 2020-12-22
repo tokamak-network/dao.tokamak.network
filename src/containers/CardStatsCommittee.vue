@@ -1,0 +1,80 @@
+<template>
+  <div class="card-stats-committee">
+    <card-container :title="'Committee Stats'">
+      <template #body>
+        <div class="stats-committee">
+          <div class="title">Claimable TON</div>
+          <div class="content">100 TON</div>
+        </div>
+        <div class="stats-committee">
+          <div class="title">Claimable TON</div>
+          <div class="content">100 TON</div>
+        </div>
+        <div class="stats-committee">
+          <div class="title">Claimable TON</div>
+          <div class="content">100 TON</div>
+        </div>
+      </template>
+    </card-container>
+  </div>
+</template>
+
+<script>
+import Card from '@/components/Card.vue';
+
+export default {
+  components: {
+    'card-container': Card,
+  },
+};
+</script>
+
+<style scoped>
+.card-stats-committee{
+}
+
+.stats-committee {
+  display: flex;
+  align-items: center;
+}
+.stats-committee:first-child {
+  padding-top: 16px;
+}
+.stats-committee:last-child {
+  padding-bottom: 16px;
+}
+.stats-committee:nth-child(2) {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.stats-committee .title {
+  flex: 1;
+
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.73;
+  letter-spacing: normal;
+  text-align: left;
+  color: #86929d;
+
+  padding-left: 16px;
+
+}
+.stats-committee .content {
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.73;
+  letter-spacing: normal;
+  text-align: right;
+  color: #2a72e5;
+
+  padding-right: 16px;
+}
+</style>
