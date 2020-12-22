@@ -15,9 +15,7 @@
     <div class="subject">
       Elected
     </div>
-    <div class="colon">
-      :
-    </div>
+    <div class="colon">:</div>
     <div class="content">
       <a
         class="link"
