@@ -22,19 +22,6 @@ export default {
     'card-resource': CardResource,
     'committee': Committee,
   },
-  data () {
-    return {
-      your: [
-        { 'title': 'Claimable TON', 'content': '100 TON' },
-        { 'title': '# of Voted', 'content': '7 Polls' },
-      ],
-      committee: [
-        { 'title': 'Claimable TON', 'content': '100 TON' },
-        { 'title': '# of Voted', 'content': '7 Polls' },
-        { 'title': '% of winning vote lottery', 'content': '1.5 %' },
-      ],
-    };
-  },
 };
 </script>
 
