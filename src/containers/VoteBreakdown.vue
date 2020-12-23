@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .vote-breakdown {
   display: flex;
   flex-direction: column;

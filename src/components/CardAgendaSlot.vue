@@ -193,7 +193,7 @@ export default {
   float: right;
   margin-right: 30px;
 }
-.right-side > div{
+.right-side > div {
   display: inline-block;
 }
 .right-side .dropdown {
