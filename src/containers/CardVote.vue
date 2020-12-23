@@ -42,7 +42,6 @@ export default {
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
-  line-height: 2;
   letter-spacing: normal;
   text-align: left;
   color: #3e495c;

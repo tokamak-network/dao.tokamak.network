@@ -165,7 +165,6 @@ input:required:invalid {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
   letter-spacing: 0.2px;
   position: relative;
   display: inline-block;

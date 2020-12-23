@@ -146,7 +146,6 @@ export default {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
   letter-spacing: 0.2px;
   text-align: left;
   color: #3E495C;
@@ -239,7 +238,6 @@ export default {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
   letter-spacing: 0.2px;
   text-align: left;
   color: #3e495c;
