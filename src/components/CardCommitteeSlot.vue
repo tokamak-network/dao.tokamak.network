@@ -2,25 +2,25 @@
   <div class="card-committee-slot">
     <div>
       <div class="card-header">
-        <div class="subject">Status</div>
-        <div class="colon">:</div>
-        <div class="content">{{ operator.status }}</div>
-        <div class="colon">|</div>
-        <div class="subject">Elected</div>
-        <div class="colon">:</div>
-        <div class="content">
+        <span class="subject">Status</span>
+        <span class="colon">:</span>
+        <span class="content">{{ operator.status }}</span>
+        <span class="colon">|</span>
+        <span class="subject">Elected</span>
+        <span class="colon">:</span>
+        <span class="content">
           <a class="link" target="_blank" rel="noopener noreferrer" :href="href(operator.address)">
             {{ shortAddress(operator.address) }}
           </a>
-        </div>
-        <div class="colon">|</div>
-        <div class="subject"># of Votes</div>
-        <div class="colon">:</div>
-        <div class="content">{{ operator.votes }}</div>
+        </span>
+        <span class="colon">|</span>
+        <span class="subject"># of Votes</span>
+        <span class="colon">:</span>
+        <span class="content">{{ operator.votes }}</span>
       </div>
-      <div class="slot-number">
-        <div style="display: inline-block;">Slot </div>
-        <div style="display: inline-block; color: #2a72e5; margin-left: 3px;">#{{ operator.index }}</div>
+      <div class="slot">
+        <div class="slot-title">Slot </div>
+        <div class="slot-number">#{{ operator.index }}</div>
       </div>
     </div>
     <div class="card-title">
@@ -29,32 +29,30 @@
     <div class="operator-name">
       {{ operator.name }}
     </div>
-    <time-comp :time="fromNow(operator.date)" class="time-comp" />
+    <div class="time-comp">{{ fromNow(operator.date) }}</div>
     <div class="button-section">
       <button-comp
         :name="'View Details'"
         :type="'primary'"
-        style="display: inline-block;"
+        class="button-left"
       />
       <button-comp
         v-if="login!==false"
         :name="'Challenge'"
         :type="'secondary'"
-        style="float: right; margin-right:30px;"
+        class="button-right"
       />
     </div>
   </div>
 </template>
 
 <script>
-import Time from '@/components/Time.vue';
 import Button from '@/components/Button.vue';
 
 import moment from 'moment';
 
 export default {
-  components:{
-    'time-comp': Time,
+  components: {
     'button-comp': Button,
   },
   props: {
@@ -102,16 +100,17 @@ export default {
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
   background-color: #ffffff;
 }
-.card-header {
-  height: 11px;
-  margin: 0 0 12px 0;
+.card-committee-slot > div {
   font-family: Roboto;
-  font-size: 9px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 2.89;
   letter-spacing: normal;
+}
+.card-header {
+  height: 11px;
+  margin: 0 0 11px 0;
+  font-size: 9px;
   text-align: left;
   color: #3e495c;
 }
@@ -136,57 +135,59 @@ export default {
 }
 .card-title {
   height: 26px;
-  margin: 6px 0 5px;
-  font-family: Roboto;
+  margin: 0 0 5px;
   font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   text-align: left;
   color: #3e495c;
 }
 .operator-name {
-  font-family: Roboto;
   font-size: 14px;
   height: 19px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   text-align: left;
   color: #86929d;
 }
 .card-header {
   display: inline-block;
 }
-.slot-number {
+.slot {
   width: 38px;
   height: 16px;
   margin: 0 30px 1px 0px;
-  font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   text-align: right;
   color: #3e495c;
   float: right;
 }
+.slot .slot-title {
+  display: inline-block;
+}
+.slot .slot-number {
+  display: inline-block;
+  color: #2a72e5;
+  margin-left: 3px;
+}
 .time-comp {
-  margin: 18px 0 19px;
+  margin: 18px 0 19px 7px;;
+  font-size: 10px;
+  padding-left: 18px;
+  text-align: left;
+  color: #86929d;
+  background: url('../assets/poll-time-active-icon.svg') no-repeat 0% 45%;
+  background-size: 13px;
 }
 .title {
   height: 32px;
   margin: 0px 0px 12px 0;
-  font-family: Roboto;
   font-size: 24px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   text-align: left;
   color: #3e495c;
+}
+.button-left {
+  display: inline-block;
+}
+.button-right {
+  float: right;
+  margin-right: 30px;
 }
 </style>

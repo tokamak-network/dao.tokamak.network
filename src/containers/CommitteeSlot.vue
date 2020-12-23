@@ -2,7 +2,7 @@
   <div class="committee-slot">
     <div class="title">Elected Operator</div>
     <div class="slot-info">
-      {{ getNumSlot }} SLOT - POSTED DEC 7, 2020, 16:00 UTC
+      {{ numSlot }} SLOT - POSTED DEC 7, 2020, 16:00 UTC
     </div>
     <card-committee-slot v-for="operator in operators" :key="operator.index" :operator="operator" />
   </div>
@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    getNumSlot (){
+    numSlot (){
       return this.operators.length;
     },
   },
