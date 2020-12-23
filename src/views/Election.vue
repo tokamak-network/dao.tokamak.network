@@ -1,7 +1,7 @@
 <template>
   <div class="election">
     <div style="width: 500px;">
-      here
+      <vote-breakdown />
     </div>
     <div class="card-container">
       <card-supporters />
@@ -16,12 +16,14 @@
 import CardResource from '@/containers/CardResource.vue';
 import CardSupporters from '@/containers/CardSupporters.vue';
 import CardRank from '@/containers/CardRank.vue';
+import VoteBreakdown from '@/containers/VoteBreakdown.vue';
 
 export default {
   components: {
     'card-rank': CardRank,
     'card-resource': CardResource,
     'card-supporters': CardSupporters,
+    'vote-breakdown': VoteBreakdown,
   },
 };
 </script>
