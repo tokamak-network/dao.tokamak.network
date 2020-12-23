@@ -1,38 +1,28 @@
 <template>
-  <div class="button">
-    <button :class="{
-              primary: type === 'primary',
-              secondary: type === 'secondary',
-              vote: type === 'vote',
-              hide: type === 'hide',
+  <button :class="{
+            primary: type === 'primary',
+            secondary: type === 'secondary',
+            vote: type === 'vote',
+            voteV2: type === 'voteV2',
+            hide: type === 'hide',
 
-              running: status === 'running',
-              'primary-running': status === 'running' && type === 'primary',
-              'secondary-running': status === 'running' && type === 'secondary',
-              'vote-running': status === 'running' && type === 'vote'
-            }"
-            :disabled="status === 'disabled'"
-            @click="onClicked"
-    >
-      <span v-show="status !== 'running'"
-            :disabled="status === 'disabled'"
-            :class="{
-              'primary-name-disabled': type === 'primary' && status === 'disabled',
-              'primary-name': type === 'primary',
-              'secondary-name-disabled': type === 'secondary' && status === 'disabled',
-              'secondary-name': type === 'secondary',
-              'vote-name-disabled': type === 'vote' && status === 'disabled',
-              'vote-name': type === 'vote',
-              'hide-name': type === 'hide',
-            }"
-      >
-        {{ name }}
-      </span>
-      <div v-if="status === 'running'"
-           class="loader" :class="{ 'loader-vote': type === 'vote' }"
-      />
-    </button>
-  </div>
+            'primary-running': type === 'primary' && status === 'running',
+            'secondary-running': type === 'secondary' && status === 'running',
+            'vote-running': type === 'vote' && status === 'running',
+            'voteV2-running': type === 'voteV2' && status === 'running',
+
+            'primary-disabled': type === 'primary' && status === 'disabled',
+            'secondary-disabled': type === 'secondary' && status === 'disabled',
+            'vote-disabled': type === 'vote' && status === 'disabled',
+            'voteV2-disabled': type === 'voteV2' && status === 'disabled',
+          }"
+          :disabled="status === 'disabled'"
+  >
+    <div v-if="status === 'running'"
+         class="loader" :class="{ 'loader-vote': type === 'vote' }"
+    />
+    <div v-else>{{ name }}</div>
+  </button>
 </template>
 
 <script>
@@ -68,7 +58,7 @@ export default {
     },
   },
   methods: {
-    onClicked () {
+    click () {
       if (this.status !== 'running')
         this.$emit('on-clicked');
     },
@@ -78,151 +68,156 @@ export default {
 
 <style scoped>
 button {
-  width: 110px;
+  width: 100%;
   height: 32px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
   border-radius: 4px;
-  cursor: pointer;
-
   outline: none;
-}
-.button {
-  width: 110px;
-  position: relative;
-}
 
-.primary, primary-running {
-  background: #257eee;
-  border: none;
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
-  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
-}
-.primary:hover {
-  background-color: #2a72e5;
-  box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
-}
-.primary-running:hover {
-  background: #257eee;
-  border: none;
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
-  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
-}
-.primary:disabled {
-  background: #e9edf1;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-.primary:disabled:hover {
-  background-color: #e9edf1;
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
-  box-shadow: none;
-}
-
-.secondary, secondary-running {
-  background-color: #257eee;
-  border: none;
-}
-.secondary:hover {
-  background-color: #2a72e5;
-}
-.secondary-running:hover {
-  background-color: #257eee;
-  border: none;
-}
-.secondary:disabled {
-  background-color: #e9edf1;
-  cursor: not-allowed;
-}
-.secondary:disabled:hover {
-  background-color: #e9edf1;
-}
-
-.vote, vote-running {
-  border: solid 1px #2a72e5;
-  background-color: #ffffff;
-}
-.vote:hover {
-  background-color: #f1f6fd;
-}
-.vote-running:hover {
-  border: solid 1px #2a72e5;
-  background-color: #ffffff;
-}
-.vote:disabled {
-  border: solid 1px #dfe4ee;
-  background-color: #ffffff;
-
-  cursor: not-allowed;
-}
-.vote:disabled:hover {
-  border: solid 1px #dfe4ee;
-  background-color: #ffffff;
-}
-.hide {
-  border: solid 1px #dfe4ee;
-  background-color: #ffffff;
-}
-.hide:hover {
-  border: solid 1px #3e495c;
-  background-color: #ffffff;
-}
-
-span {
   font-family: Roboto;
   font-size: 13px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  text-align: center;
+}
+button:hover {
+  cursor: pointer;
+}
 
-  white-space: nowrap;
-}
-.primary-name {
+.primary, .primary-running {
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
+
   color: #ffffff;
 }
-.primary-name-disabled {
-  color: #86929d;
+.primary:hover {
+  box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
 }
-.secondary-name {
+.primary:active {
+  background: #2a72e5;
+  box-shadow: 0 1px 4px 0 rgba(49, 127, 203, 0.25);
+}
+.primary:disabled {
+  background: #e9edf1;
+  cursor: not-allowed;
+  box-shadow: none;
+
+  color: #86929d
+}
+.primary-running:hover {
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
+
   color: #ffffff;
 }
-.secondary-name-disabled {
-  color: #86929d;
+
+.secondary, .secondary-running {
+  background: #257eee;
+
+  color: #ffffff;
 }
-.vote-name {
+.secondary:hover {
+  background: #2a72e5;
+}
+.secondary:active {
+  background: #2a72e5;
+}
+.secondary:disabled {
+  background: #e9edf1;
+  cursor: not-allowed;
+
+  color: #86929d
+}
+.secondary-running:hover {
+  background: #257eee;
+
+  color: #ffffff;
+}
+
+.vote, .vote-running {
+  border: solid 1px #a9c6f4;
+  background: #ffffff;
+
+  color: #a9c6f4;
+}
+.vote:hover {
+  border: solid 1px #2a72e5;
   color: #2a72e5;
 }
-.vote-name-disabled {
-  color: #86929d;
+.vote:active {
+  border: solid 1px #2a72e5;
+  background: #f1f6fd;
 }
-.hide-name {
-  color: #3e495c;
+.vote:disabled {
+  border: solid 1px #dfe4ee;
+  cursor: not-allowed;
+
+  color: #86929d
+}
+.vote-running:hover {
+  border: solid 1px #a9c6f4;
+  background: #ffffff;
+
+  color: #a9c6f4;
 }
 
-.running {
+.voteV2, .voteV2-running {
+  height: 42px;
+
+  background: #257eee;
+
+  color: #ffffff;
+}
+.voteV2:hover {
+  background: #2a72e5;
+}
+.voteV2:active {
+  background: #2a72e5;
+}
+.voteV2:disabled {
+  background: #d9e7f9;
   cursor: not-allowed;
+}
+.voteV2-running:hover {
+  height: 42px;
+
+  background: #257eee;
+
+  color: #ffffff;
+}
+
+.hide {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+
+  color: #3e495c;
+}
+.hide:hover {
+  border: solid 1px #3e495c;
 }
 
 .loader {
+  width: 18px;
+  height: 18px;
+
   border: 2px solid #82b3f4;
   border-top: 2px solid #ffffff;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  animation: spin 2s linear infinite;
 
-  position: absolute;
-  top: 0; bottom: 0; right: 0; left: 0;
-  margin: auto;
+  animation: spin 2s linear infinite;
+}
+.loader-vote {
+  border: 2px solid #c0d8fc;
+  border-top: 2px solid #2770e5;
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-.loader-vote {
-  border: 2px solid #c0d8fc;
-  border-top: 2px solid #2770e5;
 }
 </style>
