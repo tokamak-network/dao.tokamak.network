@@ -74,12 +74,6 @@ export default {
   letter-spacing: 0.22px;
   color: #3e495c;
 
-  /* TODO */
-  /* https://binarydiver.github.io/blog/programming/180716-input_box */
-  /* https://stackoverflow.com/questions/16907518/css-input-with-width-100-goes-outside-parents-bound */
-  padding: 0;
-  padding-left: 16px;
-
   border: solid 1px #dfe4ee;
   border-radius: 4px;
 
