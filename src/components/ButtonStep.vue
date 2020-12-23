@@ -1,6 +1,6 @@
 <template>
   <div class="button-step">
-    <button @click="onClicked">
+    <button @click="click">
       <img v-if="type === 'prev'"
            class="prev"
            src="@/assets/arrow-prev.png" alt="" width="8" height="9"
