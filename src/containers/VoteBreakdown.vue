@@ -4,14 +4,20 @@
       <div class="container-title">Review</div>
       <div v-for="(voter, index) in ranks" :key="index" class="voted-account">
         <div class="account-info">
-          <div style="display: inline-block;">{{ shortAddress(voter.address) }}</div>
-          <div style="float: right;">{{ voter.tonVoted }} TON Voted</div>
+          <div>{{ shortAddress(voter.address) }}</div>
+          <div>{{ voter.tonVoted }} TON Voted</div>
         </div>
-        <vote-poll class="vote-poll" :pct="calcPct(voter.tonVoted, voter.tonBalance)" :margin="0" />
+        <vote-poll class="vote-poll"
+                   :pct="calcPct(voter.tonVoted, voter.tonBalance)"
+                   :margin="0"
+        />
       </div>
-      <button-pagination class="button-pagination" :datas="voters" @on-selected="set" />
     </div>
-    <hr class="line">
+    <button-pagination class="vote-breakdown-pagination"
+                       :datas="voters"
+                       @on-selected="set"
+    />
+    <div class="line" />
     <div class="voting-stats">
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
@@ -95,6 +101,8 @@ export default {
   margin: 0 0 15px;
 }
 .account-info {
+  display: flex;
+
   font-family: Roboto;
   font-size: 13px;
   font-weight: 500;
@@ -104,22 +112,24 @@ export default {
   color: #818992;
   margin-bottom: 7px;
 }
+.account-info > div:nth-child(2) {
+  flex: 1;
+
+  display: flex;
+  justify-content: flex-end;
+}
 .vote-poll {
   width: 100%;
 }
-.button-pagination {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
-}
+
 .line {
-  width: 726px;
+  width: 100%;
   height: 1px;
   margin: 20px 1px 25px 0;
   background-color: #dfe4ee;
 }
 .voting-stat-item {
-  margin: 15px 35px 15px 0;
+  margin-bottom: 15px;
   height: 19px;
   font-family: Roboto;
   font-size: 14px;
@@ -135,6 +145,10 @@ export default {
 .voting-stat-item .voting-stat-content {
   color: #3e495c;
   float: right;
-  margin-right: 30px;
+}
+
+.vote-breakdown-pagination {
+  display: flex;
+  justify-content: center;
 }
 </style>
