@@ -52,14 +52,14 @@ export default {
       };
       return style;
     },
-  },
-  methods: {
-    roundNumber (pct) {
-      if(isNaN (pct) === false && Number.isInteger(pct) === false) {
-        return pct.toFixed(2);
-      } else {
-        return pct;
-      }
+    roundNumber () {
+      return pct => {
+        if(isNaN (pct) === false && Number.isInteger(pct) === false) {
+          return pct.toFixed(2);
+        } else {
+          return pct;
+        }
+      };
     },
   },
 };

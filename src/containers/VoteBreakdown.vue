@@ -61,16 +61,18 @@ export default {
       ranks: [],
     };
   },
+  computed: {
+    shortAddress () {
+      return account => `${account.slice(0, 5)}...`;
+    },
+    calcPct () {
+      return (voted, balance) => Number(voted * 100 / balance);
+    },
+  },
   created () {
     this.ranks = this.voters.slice(0, 4);
   },
   methods: {
-    shortAddress (account) {
-      return `${account.slice(0, 5)}...`;
-    },
-    calcPct (voted, balance) {
-      return Number(voted * 100 / balance);
-    },
     set (page) {
       const first = page * 4;
       this.ranks = this.voters.slice(first, first+4);
