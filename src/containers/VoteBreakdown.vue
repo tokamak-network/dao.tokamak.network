@@ -57,7 +57,6 @@ export default {
   },
   created () {
     this.ranks = this.voters.slice(0, 4);
-    console.log(this.ranks);
   },
   methods: {
     shortAddress (account) {
