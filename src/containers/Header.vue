@@ -5,13 +5,19 @@
       <img v-else src="@/assets/logo.png" alt="">
     </div>
     <div class="menu">
-      <router-link :to="'election'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+      <router-link :to="'/election'"
+                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('election') }"
+      >
         Election
       </router-link>
-      <router-link :to="'propose'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+      <router-link :to="'/propose'"
+                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('propose') }"
+      >
         Propose
       </router-link>
-      <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
+      <router-link :to="'/committee'"
+                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('committee') }"
+      >
         Committee
       </router-link>
       <connect-wallet :is-sub="isSub" />
@@ -91,6 +97,10 @@ export default {
   font-style: normal;
   letter-spacing: normal;
   text-align: center;
+  color: #2a72e5;
+}
+
+.selected {
   color: #2a72e5;
 }
 
