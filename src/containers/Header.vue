@@ -14,19 +14,16 @@
       <router-link :to="'committee'" class="menu-item" :class="{ 'menu-item-sub': isSub }">
         Committee
       </router-link>
-      <ballot-counter v-show="isSub" :ballot="0" />
       <connect-wallet :is-sub="isSub" />
     </div>
   </div>
 </template>
 
 <script>
-import BallotCounter from '@/components/BallotCounter.vue';
 import Connect from '@/components/Connect.vue';
 
 export default {
   components: {
-    'ballot-counter': BallotCounter,
     'connect-wallet': Connect,
   },
   computed: {
