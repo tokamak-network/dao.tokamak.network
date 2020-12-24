@@ -6,34 +6,43 @@
     <div class="description">
       {{ agenda.name }}
     </div>
-    <div class="time-comp">{{ fromNow(agenda.date) }}</div>
-    <div class="button-section">
-      <button-comp
-        :name="'View Details'"
-        :type="'primary'"
-        class="button-left"
-      />
-      <div class="vote-status">
-        <div v-if="voted !== true">You have not voted</div>
-        <div v-else-if="voted === true" class="vote-selected">You have voted to {{ choice }}</div>
-      </div>
-      <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div>
-      <div class="right-side">
-        <dropdown
-          v-if="agenda.voted!==true"
-          :items="['Yes', 'No']"
-          :hint="'Your choice'"
-          :button-type="'a'"
-          :selector-type="'a'"
-          class="dropdown"
-          @on-selected="select"
+    <div class="info-time">
+      <img src="@/assets/poll-time-active-icon.svg" alt=""
+           width="14" height="14"
+      >
+      <span>{{ fromNow(agenda.date) }}</span>
+    </div>
+    <div class="bottom">
+      <div class="left-side">
+        <button-comp
+          :name="'View Details'"
+          :type="'primary'"
+          class="left"
         />
+        <div class="vote-status">
+          <div v-if="voted !== true">You have not voted</div>
+          <div v-else-if="voted === true" class="vote-selected">You have voted to {{ choice }}</div>
+        </div>
+        <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div>
+      </div>
+      <div class="right-side">
+        <div v-if="agenda.voted!==true" class="dropdown-section">
+          <div class="your-vote">YOUR VOTE</div>
+          <dropdown
+            :items="['Yes', 'No']"
+            :hint="'Your choice'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="select"
+          />
+        </div>
         <button-comp
           v-if="login!==false"
           :name="buttonClass.buttonName"
           :type="buttonClass.buttonType"
           :status="buttonClass.buttonStatus"
-          class="button-right"
+          class="right"
           @on-clicked="click"
         />
       </div>
@@ -71,30 +80,35 @@ export default {
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
+  computed: {
+    shortAddress () {
+      return account => `${account.slice(0, 7)}...`;
+    },
+    href () {
+      return address => 'https://etherscan.io/address/' + address;
+    },
+    deployedDate () {
+      return (timestamp) => {
+        const date = new Date(timestamp * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+      };
+    },
+    fromNow () {
+      return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
+    },
+  },
   created () {
     this.changeButtonProperty();
   },
   methods: {
-    shortAddress (account) {
-      return `${account.slice(0, 7)}...`;
-    },
     select (item) {
       this.choice = item;
       this.voted = true;
       this.buttonClass.buttonStatus = '';
-    },
-    href (address) {
-      return 'https://etherscan.io/address/' + address;
-    },
-    deployedDate (timestamp) {
-      const date = new Date(timestamp * 1000);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
-      return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
-    },
-    fromNow (timestamp, suffix) {
-      return moment.unix(timestamp).fromNow(suffix);
     },
     changeButtonProperty () {
       if (this.agenda.executed === false && this.agenda.voted === true) {
@@ -158,43 +172,66 @@ export default {
   text-align: left;
   color: #86929d;
 }
-.time-comp {
-  margin: 18px 0 19px 7px;
-  height: 13px;
+
+.info-time {
+  display: flex;
+  align-items: center;
+
+  margin-top: 24px;
+  margin-bottom: 3px;
+}
+.info-time > span {
+  font-family: Roboto;
   font-size: 10px;
-  padding-left: 18px;
-  text-align: left;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
   color: #86929d;
-  background: url('../assets/poll-time-active-icon.svg') no-repeat 0% 45%;
-  background-size: 13px;
+
+  margin-left: 7px;
 }
-.button-selection > div:first-child {
-  display: inline-block;
+
+.card-agenda-slot > .bottom {
+  display: flex;
+  justify-content: space-between;
 }
-.button-left {
-  display: inline-block;
+.card-agenda-slot > .bottom > .left-side {
+  display: flex;
+  align-self: flex-end;
+  justify-content: flex-start;
 }
-.vote-status {
-  display: inline-block;
+.card-agenda-slot > .bottom > .left-side > .left {
+  width: 110px;
+}
+.card-agenda-slot > .bottom > .left-side > .vote-status {
   color: #c9d1d8;
   font-size: 12px;
   margin-left: 20px;
+  align-self: center;
 }
 .vote-status .vote-selected {
   color: #2a72e5;
 }
-.claimable {
+.card-agenda-slot > .bottom > .left-side > .claimable {
   font-size: 10px;
   color: #3e495c;
-  display: inline-block;
   margin-left: 15px;
+  align-self: center;
 }
-.right-side {
-  float: right;
+.card-agenda-slot > .bottom > .right-side {
+  display: flex;
+  justify-content: flex-end;
+}
+.card-agenda-slot > .bottom > .right-side > .right {
+  width: 110px;
   margin-right: 30px;
+  align-self: flex-end;
 }
-.right-side > div{
-  display: inline-block;
+.card-agenda-slot > .bottom > .right-side > .dropdown-section > .your-vote{
+  margin: 3px 0px 10px 0px;
+  font-size: 10px;
+  color: #3e495c;
 }
 .right-side .dropdown {
   width: 140px;
