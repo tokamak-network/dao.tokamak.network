@@ -101,7 +101,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 input {
   min-height: 32px;
   max-width: 170px;

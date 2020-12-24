@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .election {
   /* all the `views` have to has this attribue  */
   background: #fafbfc;

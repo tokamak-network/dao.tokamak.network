@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .progress {
   background: #dfe4ee;
   position: relative;
