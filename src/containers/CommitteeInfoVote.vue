@@ -1,5 +1,5 @@
 <template>
-  <div class="vote-breakdown">
+  <div class="committee-info-vote">
     <div class="review">
       <div class="container-title">Review</div>
       <div v-for="(voter, index) in ranks" :key="index" class="voted-account">
@@ -13,7 +13,7 @@
         />
       </div>
     </div>
-    <button-pagination class="vote-breakdown-pagination"
+    <button-pagination class="committee-info-vote-pagination"
                        :datas="voters"
                        @on-selected="set"
     />
@@ -82,10 +82,11 @@ export default {
 </script>
 
 <style>
-.vote-breakdown {
+.committee-info-vote {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+
+  height: 440px;
 }
 .container-title {
   font-family: Roboto;
@@ -149,7 +150,7 @@ export default {
   float: right;
 }
 
-.vote-breakdown-pagination {
+.committee-info-vote-pagination {
   display: flex;
   justify-content: center;
 }
