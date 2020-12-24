@@ -17,6 +17,7 @@
             'voteV2-disabled': type === 'voteV2' && status === 'disabled',
           }"
           :disabled="status === 'disabled'"
+          @click="click"
   >
     <div v-if="status === 'running'"
          class="loader" :class="{ 'loader-vote': type === 'vote' }"
