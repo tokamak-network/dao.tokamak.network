@@ -221,9 +221,8 @@ export default {
 .card-agenda-slot > .bottom > .left-side > .vote-status {
   color: #c9d1d8;
   font-size: 12px;
-  margin-left: 20px;
+  margin: 0 0 8px 20px;
   align-self: flex-end;
-  height: 32px;
 }
 .vote-status .vote-selected {
   color: #2a72e5;
@@ -231,8 +230,7 @@ export default {
 .card-agenda-slot > .bottom > .left-side > .claimable {
   font-size: 10px;
   color: #3e495c;
-  margin-left: 15px;
-  height: 32px;
+  margin: 0 0 10px 15px;
   align-self: flex-end;
 }
 .card-agenda-slot > .bottom > .right-side {
