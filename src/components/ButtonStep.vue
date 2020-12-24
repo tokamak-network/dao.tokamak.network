@@ -1,6 +1,6 @@
 <template>
   <div class="button-step">
-    <button @click="onClicked">
+    <button @click="click">
       <img v-if="type === 'prev'"
            class="prev"
            src="@/assets/arrow-prev.png" alt="" width="8" height="9"
@@ -65,7 +65,6 @@ span {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
   letter-spacing: normal;
   text-align: right;
   color: #86929d;

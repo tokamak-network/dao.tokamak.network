@@ -56,6 +56,7 @@ export default {
 <style scoped>
 table {
   width: 100%;
+  margin-top: 10px;
 }
 table td, table th {
   overflow-wrap: anywhere;
@@ -71,6 +72,8 @@ table td, table th {
   align-items: center;
 
   white-space: nowrap;
+
+  margin-bottom: 10px;
 }
 .table-content > div:nth-child(1), .table-content > div:nth-child(2) {
   font-family: Roboto;
@@ -78,7 +81,6 @@ table td, table th {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 2.17;
   letter-spacing: normal;
   text-align: left;
   color: #86929d;
@@ -104,7 +106,6 @@ table td, table th {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.73;
   letter-spacing: normal;
   text-align: right;
   color: #2a72e5;

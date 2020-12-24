@@ -34,6 +34,14 @@ export default {
 </script>
 
 <style>
+/* https://stackoverflow.com/questions/16907518/css-input-with-width-100-goes-outside-parents-bound */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body { margin: 0 !important; }
 
 #app {

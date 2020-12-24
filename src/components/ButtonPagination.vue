@@ -142,7 +142,6 @@ export default {
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 2;
   letter-spacing: normal;
   text-align: center;
   color: #c9d1d8;
