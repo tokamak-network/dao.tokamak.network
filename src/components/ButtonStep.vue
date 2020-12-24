@@ -35,8 +35,11 @@ export default {
 </script>
 
 <style scoped>
+.button-step {
+  width: 100%;
+}
 button {
-  width: 110px;
+  width: 100%;
   height: 32px;
 
   border-radius: 4px;
@@ -54,9 +57,6 @@ button:hover span {
 }
 button:hover img {
   filter: brightness(50%);
-}
-.button-step {
-  width: 110px;
 }
 
 span {

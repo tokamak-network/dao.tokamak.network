@@ -34,6 +34,7 @@
       <button-comp :name="'View Details'"
                    :type="'primary'"
                    class="left"
+                   @on-clicked="detail(operator.address)"
       />
       <button-comp v-if="login!==false"
                    :name="'Challenge'"
@@ -92,6 +93,11 @@ export default {
     etherscan (address) {
       window.open('https://etherscan.io/address/' + address, '_blank'); // eslint-disable-line
     },
+    detail (address) {
+      this.$router.push({
+        path: `/election/${address}`,
+      });
+    },
   },
 };
 </script>
@@ -143,7 +149,6 @@ export default {
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
   letter-spacing: normal;
   text-align: right;
   color: #3e495c;
