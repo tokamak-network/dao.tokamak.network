@@ -5,40 +5,35 @@
         <tr>
           <div class="table-content">
             <div>56.3%</div>
-            <div>(40 TON, 22.5 weight)</div>
-            <div>Abstain</div>
+            <div>(40 TON)</div>
             <div>0x56a1...8a73</div>
           </div>
         </tr>
         <tr>
           <div class="table-content">
             <div>56.3%</div>
-            <div>(40 TON, 22.5 weight)</div>
-            <div>Abstain</div>
+            <div>(40 TON)</div>
             <div>0x56a1...8a73</div>
           </div>
         </tr>
         <tr>
           <div class="table-content">
             <div>56.3%</div>
-            <div>(40 TON, 22.5 weight)</div>
-            <div>Abstain</div>
+            <div>(40 TON)</div>
             <div>0x56a1...8a73</div>
           </div>
         </tr>
         <tr>
           <div class="table-content">
             <div>56.3%</div>
-            <div>(40 TON, 22.5 weight)</div>
-            <div>Abstain</div>
+            <div>(40 TON)</div>
             <div>0x56a1...8a73</div>
           </div>
         </tr>
         <tr>
           <div class="table-content">
             <div>56.3%</div>
-            <div>(40 TON, 22.5 weight)</div>
-            <div>Abstain</div>
+            <div>(40 TON)</div>
             <div>0x56a1...8a73</div>
           </div>
         </tr>
@@ -93,14 +88,8 @@ table td, table th {
   margin-left: 4px;
 }
 .table-content > div:nth-child(3) {
-  font-size: 12px;
-  color: #3e495c;
-
   flex: 1;
 
-  margin-left: 8px;
-}
-.table-content > div:nth-child(4) {
   font-family: Roboto;
   font-size: 15px;
   font-weight: normal;

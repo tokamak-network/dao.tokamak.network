@@ -82,7 +82,7 @@ export default {
 
 <style scoped>
 .committee-vote {
-  height: 440px;
+  height: 410px;
 
   display: flex;
   flex-direction: column;

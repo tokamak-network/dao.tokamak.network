@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <div class="main-logo">
-      <div class="main-btn">
+      <div class="main-btn" @click="$router.push({ path: 'committee' })">
         <div class="count">5</div>
-        <span>New Election Votes</span>
+        <span>Committee activities</span>
         <img src="@/assets/arrow-next-main.png" alt=""
              width="4" height="8"
         >
