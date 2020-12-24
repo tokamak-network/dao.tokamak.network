@@ -80,7 +80,4 @@ export default {
   text-align: left;
   color: #86929d;
 }
-.committee-slot {
-  width: 786px;
-}
 </style>

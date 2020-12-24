@@ -33,6 +33,9 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 .committee-container {
   width: 786px;

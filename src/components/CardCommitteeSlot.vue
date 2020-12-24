@@ -1,46 +1,44 @@
 <template>
   <div class="card-committee-slot">
-    <div>
-      <div class="card-header">
-        <span class="subject">Status</span>
-        <span class="colon">:</span>
-        <span class="content">{{ operator.status }}</span>
-        <span class="colon">|</span>
-        <span class="subject">Elected</span>
-        <span class="colon">:</span>
-        <span class="content">
-          <a class="link" target="_blank" rel="noopener noreferrer" :href="href(operator.address)">
-            {{ shortAddress(operator.address) }}
-          </a>
-        </span>
-        <span class="colon">|</span>
-        <span class="subject"># of Votes</span>
-        <span class="colon">:</span>
-        <span class="content">{{ operator.votes }}</span>
+    <div class="info-committee">
+      <span class="title">Status</span>
+      <span> : </span>
+      <span class="content">{{ operator.status }}</span>
+
+      <span> | </span>
+
+      <span class="title">Elected</span>
+      <span> : </span>
+      <span class="content link" @click="etherscan(operator.address)">{{ shortAddress(operator.address) }}</span>
+
+      <span> | </span>
+
+      <span class="title"># of Votes</span>
+      <span> : </span>
+      <span class="content">{{ operator.voted }}</span>
+
+      <div class="info-slot">
+        <span>Slot </span>
+        <span class="slot">#{{ operator.index }}</span>
       </div>
-      <div class="slot">
-        <div class="slot-title">Slot </div>
-        <div class="slot-number">#{{ operator.index }}</div>
-      </div>
     </div>
-    <div class="card-title">
-      {{ shortAddress(operator.address) }} is elected to Committee member since {{ deployedDate(operator.date) }}
+    <div class="card-title">{{ shortAddress(operator.address) }} is elected to Committee member since {{ deployedDate(operator.date) }}</div>
+    <div class="operator-name">{{ operator.name }}</div>
+    <div class="info-time">
+      <img src="@/assets/poll-time-active-icon.svg" alt=""
+           width="14" height="14"
+      >
+      <span class="time-comp">{{ fromNow(operator.date) }}</span>
     </div>
-    <div class="operator-name">
-      {{ operator.name }}
-    </div>
-    <div class="time-comp">{{ fromNow(operator.date) }}</div>
-    <div class="button-section">
-      <button-comp
-        :name="'View Details'"
-        :type="'primary'"
-        class="button-left"
+    <div class="button">
+      <button-comp :name="'View Details'"
+                   :type="'primary'"
+                   class="left"
       />
-      <button-comp
-        v-if="login!==false"
-        :name="'Challenge'"
-        :type="'secondary'"
-        class="button-right"
+      <button-comp v-if="login!==false"
+                   :name="'Challenge'"
+                   :type="'secondary'"
+                   class="right"
       />
     </div>
   </div>
@@ -76,7 +74,7 @@ export default {
     href () {
       return address => 'https://etherscan.io/address/' + address;
     },
-    deployDate () {
+    deployedDate () {
       return (timestamp) => {
         const date = new Date(timestamp * 1000);
         const year = date.getFullYear();
@@ -90,106 +88,124 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
   },
+  methods: {
+    etherscan (address) {
+      window.open('https://etherscan.io/address/' + address, '_blank'); // eslint-disable-line
+    },
+  },
 };
 </script>
 
 <style scoped>
 .card-committee-slot {
-  flex: 1;
-  padding: 25px 0 25px 30px;
-  margin-bottom: 20px;
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
   background-color: #ffffff;
+
+  padding: 25px 30px;
+
+  margin-bottom: 20px;
 }
-.card-committee-slot > div {
+.info-committee {
+  display: flex;
+}
+.info-committee > span {
   font-family: Roboto;
+  font-size: 9px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-}
-.card-header {
-  height: 11px;
-  margin: 0 0 11px 0;
-  font-size: 9px;
-  text-align: left;
-  color: #3e495c;
-}
-.card-header .subject {
-  color: #2a72e5;
-  display: inline-block;
-  margin-right: 2px;
-}
-.card-header .colon {
   color: #cfd7db;
-  display: inline-block;
-  margin-right: 2px;
+
+  white-space: pre-wrap;
 }
-.card-header .content {
+.info-committee > .title {
+  color: #2a72e5;
+}
+.info-committee > .content {
   color: #3e495c;
-  display: inline-block;
-  margin-right: 2px;
 }
-.card-header .content .link {
+.info-committee > .link {
   text-decoration: underline;
-  color: #3e495c;
+  cursor: pointer;
 }
-.card-title {
-  height: 26px;
-  margin: 0 0 5px;
-  font-size: 20px;
-  text-align: left;
-  color: #3e495c;
+
+.info-slot {
+  flex: 1;
+
+  display: flex;
+  justify-content: flex-end;
 }
-.operator-name {
-  font-size: 14px;
-  height: 19px;
-  text-align: left;
-  color: #86929d;
-}
-.card-header {
-  display: inline-block;
-}
-.slot {
-  width: 38px;
-  height: 16px;
-  margin: 0 30px 1px 0px;
+.info-slot > span {
+  font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
   text-align: right;
   color: #3e495c;
-  float: right;
+
+  white-space: pre-wrap;
 }
-.slot .slot-title {
-  display: inline-block;
-}
-.slot .slot-number {
-  display: inline-block;
+.info-slot > .slot {
   color: #2a72e5;
-  margin-left: 3px;
 }
-.time-comp {
-  margin: 18px 0 19px 7px;;
+
+.info-time {
+  display: flex;
+  align-items: center;
+
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.info-time > span {
+  font-family: Roboto;
   font-size: 10px;
-  padding-left: 18px;
-  text-align: left;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
   color: #86929d;
-  background: url('../assets/poll-time-active-icon.svg') no-repeat 0% 45%;
-  background-size: 13px;
+
+  margin-left: 7px;
 }
-.title {
-  height: 32px;
-  margin: 0px 0px 12px 0;
-  font-size: 24px;
+
+.card-title {
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
   text-align: left;
   color: #3e495c;
+
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
-.button-left {
-  display: inline-block;
+
+.operator-name {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #86929d;
 }
-.button-right {
-  float: right;
-  margin-right: 30px;
+
+.card-committee-slot > .button {
+  display: flex;
+  justify-content: space-between;
+}
+.card-committee-slot > .button > .left {
+  width: 110px;
+}
+.card-committee-slot > .button > .right {
+  width: 110px;
 }
 </style>
