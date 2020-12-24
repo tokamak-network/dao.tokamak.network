@@ -63,7 +63,7 @@ table td, table th {
 }
 
 .table {
-  height: 140px;
+  height: 180px;
   overflow-y: auto;
   background: #ffffff;
 }

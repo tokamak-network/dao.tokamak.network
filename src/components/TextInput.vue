@@ -2,7 +2,10 @@
   <div class="text-input">
     <input :placeholder="hint"
            :style="inputPadding"
-           :class="{ 'with-unit': unit !== '' }"
+           :class="{
+             'with-unit': unit !== '',
+             'big': big,
+           }"
            @keypress="keypress"
     >
     <div v-if="unit !== ''" ref="unit">{{ unit }}</div>
@@ -20,10 +23,13 @@ export default {
       type: String,
       default: '',
     },
+    big: {
+      type: Boolean,
+      default: false,
+    },
   },
   data () {
     return {
-      valid: this.status,
       unitWidth: 0,
     };
   },
@@ -104,5 +110,8 @@ export default {
 
 .with-unit {
   text-align: right;
+}
+.big {
+  min-height: 43px;
 }
 </style>
