@@ -55,8 +55,6 @@ export default {
   },
 };
 </script>
-
-<style>
 .text-input {
   display: flex;
   align-items: center;

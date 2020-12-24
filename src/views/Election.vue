@@ -1,10 +1,9 @@
 <template>
   <div class="election">
-    <div style="width: 500px;">
-      <vote-breakdown />
+    <div class="committee-container">
+      <committee-slot />
     </div>
     <div class="card-container">
-      <card-supporters />
       <card-rank :title="'Your Votes'" />
       <card-rank :title="'Rank'" />
       <card-resource />
@@ -14,16 +13,14 @@
 
 <script>
 import CardResource from '@/containers/CardResource.vue';
-import CardSupporters from '@/containers/CardSupporters.vue';
 import CardRank from '@/containers/CardRank.vue';
-import VoteBreakdown from '@/containers/VoteBreakdown.vue';
+import CommitteeSlot from '@/containers/CommitteeSlot';
 
 export default {
   components: {
     'card-rank': CardRank,
     'card-resource': CardResource,
-    'card-supporters': CardSupporters,
-    'vote-breakdown': VoteBreakdown,
+    'committee-slot': CommitteeSlot,
   },
 };
 </script>
@@ -31,19 +28,21 @@ export default {
 <style scoped>
 .election {
   /* all the `views` have to has this attribue  */
+  background: #fafbfc;
   flex: 1;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
-
-  background: #fafbfc;
 }
-
+.committee-container {
+  width: 786px;
+  display: flex;
+  flex-direction: column;
+}
 .card-container {
   display: flex;
   flex-direction: column;
-
+  margin-left: 30px;
   width: 378px;
 }
 </style>
