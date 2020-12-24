@@ -17,12 +17,22 @@ export default {
   data (){
     return {
       agendas: [
-        { 'index': 0, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Not yet', 'voted': false, 'executed': false, 'claim': false, 'expired': false },
-        { 'index': 1, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Yes', 'voted': false, 'executed': false, 'claim': false, 'expired': false },
-        { 'index': 2, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': false, 'claim': false, 'expired': false },
-        { 'index': 3, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': false, 'expired': false },
-        { 'index': 4, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': false },
-        { 'index': 5, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'date': 1599790760, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 0, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Not yet', 'voted': false, 'executed': false, 'claim': false, 'expired': false },
+        { 'index': 1, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Yes', 'voted': false, 'executed': false, 'claim': false, 'expired': false },
+        { 'index': 2, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': false, 'claim': false, 'expired': false },
+        { 'index': 3, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': false, 'expired': false },
+        { 'index': 4, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': false },
+        { 'index': 5, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1608693812, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 6, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 7, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 8, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 9, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 10, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 11, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 12, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 13, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 14, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
+        { 'index': 15, 'address': '0xEA8e2eC08dCf4971bdcdfFFe21439995378B44F3', 'name': '1000 TON to 0xaaabc', 'timestamp': 1606793012, 'claimableTon': 1000, 'choice': 'Yes', 'voted': true, 'executed': true, 'claim': true, 'expired': true },
       ],
     };
   },

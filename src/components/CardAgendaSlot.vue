@@ -1,7 +1,7 @@
 <template>
   <div class="card-agenda-slot">
     <div class="card-title">
-      DAO Vault is Foward Fund to 0xabcd…… - {{ deployedDate(agenda.date) }}
+      DAO Vault is Foward Fund to 0xabcd…… - {{ deployedDate(agenda.timestamp) }}
     </div>
     <div class="description">
       {{ agenda.name }}
@@ -10,7 +10,7 @@
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ fromNow(agenda.date) }}</span>
+      <span>{{ dDay(agenda.timestamp) }}</span>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -97,8 +97,20 @@ export default {
         return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
       };
     },
-    fromNow () {
-      return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
+    dDay () {
+      return (timestamp) => {
+        const dDay = new Date(moment.unix(timestamp).add(14, 'days'));
+        const now = new Date();
+        const gap = dDay.getTime() - now.getTime();
+        if (gap < 0) {
+          return 'ENDED POLL';
+        } else {
+          const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((gap - days * 86400000) / 3600000);
+
+          return days + 'D ' + hours + 'H REMAINING';
+        }
+      };
     },
   },
   created () {
@@ -200,15 +212,18 @@ export default {
   display: flex;
   align-self: flex-end;
   justify-content: flex-start;
+  height: 55px;
 }
 .card-agenda-slot > .bottom > .left-side > .left {
   width: 110px;
+  align-self: flex-end;
 }
 .card-agenda-slot > .bottom > .left-side > .vote-status {
   color: #c9d1d8;
   font-size: 12px;
   margin-left: 20px;
-  align-self: center;
+  align-self: flex-end;
+  height: 32px;
 }
 .vote-status .vote-selected {
   color: #2a72e5;
@@ -217,7 +232,8 @@ export default {
   font-size: 10px;
   color: #3e495c;
   margin-left: 15px;
-  align-self: center;
+  height: 32px;
+  align-self: flex-end;
 }
 .card-agenda-slot > .bottom > .right-side {
   display: flex;
