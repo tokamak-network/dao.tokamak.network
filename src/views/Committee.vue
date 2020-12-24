@@ -1,9 +1,9 @@
 <template>
   <div class="committee">
-    <div style="width: 786px;">
+    <div>
       <agenda-slot />
     </div>
-    <div class="card-container">
+    <div>
       <card-vote />
       <card-stats />
       <card-stats-committee />
@@ -40,12 +40,20 @@ export default {
   justify-content: center;
 
   background: #fafbfc;
+
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
-.card-container {
+.committee > div:nth-child(1) {
+  width: 786px;
+}
+.committee > div:nth-child(2) {
+  width: 378px;
+
   display: flex;
   flex-direction: column;
+
   margin-left: 30px;
-  width: 378px;
 }
 </style>

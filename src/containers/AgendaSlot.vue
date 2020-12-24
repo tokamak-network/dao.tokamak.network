@@ -5,8 +5,8 @@
       {{ numAgenda }} Agendas - POSTED DEC 7, 2020, 16:00 UTC
     </div>
     <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.timestamp" :agenda="agenda" />
-    <button-comp v-if="hide===false" :name="hideButton" :type="'hide'" @on-clicked="hideSection"></button-comp>
-    <div v-if="hide===true">
+    <button-comp v-if="hide === false" :name="hideButton" :type="'hide'" @on-clicked="hideSection"></button-comp>
+    <div v-if="hide === true">
       <card-agenda-slot v-for="agenda in hideAgendas" :key="agenda.timestamp" :agenda="agenda" />
     </div>
   </div>
@@ -60,17 +60,13 @@ export default {
       if (this.agendas.length > 5) {
         this.openAgendas = this.agendas.slice(0, 5);
         this.hideAgendas = this.agendas.slice(5, this.agendas.length);
-        this.hideButton = 'View more Committee (' + this.hideAgendas.length + ')';
+        this.hideButton = 'View more agenda (' + this.hideAgendas.length + ')';
       } else {
         this.openAgendas = this.agendas;
       }
     },
     hideSection () {
-      if (this.hide === false) {
-        this.hide = true;
-      } else {
-        this.hide = false;
-      }
+      this.hide = this.hide ? false : true;
     },
   },
 };
