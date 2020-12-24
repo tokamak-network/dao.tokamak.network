@@ -10,7 +10,7 @@
       <div class="progress-bar"
            :style="barStyle"
       >
-        <div class="text">{{ pct }}%</div>
+        <div class="text">{{ roundNumber(pct) }}%</div>
       </div>
     </div>
   </div>
@@ -52,11 +52,20 @@ export default {
       };
       return style;
     },
+    roundNumber () {
+      return pct => {
+        if(isNaN (pct) === false && Number.isInteger(pct) === false) {
+          return pct.toFixed(2);
+        } else {
+          return pct;
+        }
+      };
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .progress {
   background: #dfe4ee;
   position: relative;

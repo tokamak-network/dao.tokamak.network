@@ -41,7 +41,6 @@ span {
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.36;
   letter-spacing: normal;
   text-align: center;
   color: #c9d1d8;
