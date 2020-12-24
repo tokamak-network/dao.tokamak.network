@@ -69,23 +69,25 @@ export default {
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
-  methods: {
-    shortAddress (account) {
-      return `${account.slice(0, 7)}...`;
+  computed: {
+    shortAddress () {
+      return account => `${account.slice(0, 7)}...`;
     },
-    href (address) {
-      return 'https://etherscan.io/address/' + address;
+    href () {
+      return address => 'https://etherscan.io/address/' + address;
     },
-    deployedDate (timestamp) {
-      const date = new Date(timestamp * 1000);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+    deployDate () {
+      return (timestamp) => {
+        const date = new Date(timestamp * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
 
-      return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+      };
     },
-    fromNow (timestamp, suffix) {
-      return moment.unix(timestamp).fromNow(suffix);
+    fromNow () {
+      return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
   },
 };
