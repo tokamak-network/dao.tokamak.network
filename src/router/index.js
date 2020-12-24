@@ -5,6 +5,7 @@ import Root from '@/views/Root.vue';
 import Main from '@/views/Main.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import Election from '@/views/Election.vue';
+import CommitteeDetail from '@/views/CommitteeDetail.vue';
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,11 @@ const routes = [
     path: '/election',
     name: 'election',
     component: Election,
+  },
+  {
+    path: '/election/:address',
+    name: 'committee',
+    component: CommitteeDetail,
   },
   {
     path: '*',
