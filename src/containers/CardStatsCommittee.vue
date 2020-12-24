@@ -3,16 +3,16 @@
     <card-container :title="'Committee Stats'">
       <template #body>
         <div class="stats-committee">
-          <div class="title">Claimable TON</div>
-          <div class="content">100 TON</div>
+          <div class="title">Total Agendas</div>
+          <div class="content">10</div>
         </div>
         <div class="stats-committee">
-          <div class="title">Claimable TON</div>
-          <div class="content">100 TON</div>
+          <div class="title">Total Executed Agendas</div>
+          <div class="content">5</div>
         </div>
         <div class="stats-committee">
-          <div class="title">Claimable TON</div>
-          <div class="content">100 TON</div>
+          <div class="title">Total Denied Agendas</div>
+          <div class="content">3</div>
         </div>
       </template>
     </card-container>
