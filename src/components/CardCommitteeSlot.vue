@@ -28,7 +28,7 @@
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span class="time-comp">{{ fromNow(operator.date) }}</span>
+      <span>{{ fromNow(operator.date) }}</span>
     </div>
     <div class="button">
       <button-comp :name="'View Details'"
