@@ -58,6 +58,8 @@ export default {
 .logo {
   display: flex;
   align-items: center;
+
+  z-index: 1;
 }
 
 .logo img {
@@ -68,6 +70,8 @@ export default {
 .menu {
   display: flex;
   align-items: center;
+
+  z-index: 1;
 }
 
 .menu-item {
