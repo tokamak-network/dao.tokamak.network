@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+    <defs>
+        <style>
+            .cls-2{fill:none;stroke:#dfe4ee;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}
+        </style>
+    </defs>
+    <g id="propose_main_inactive_icon-01" transform="translate(-58 -60)">
+        <path id="Base" fill="none" d="M0 0H50V50H0z" transform="translate(58 60)"/>
+        <g id="그룹_5382" transform="translate(56.4 68)">
+            <path id="선_6" d="M0 33.6L33.6 0" class="cls-2" transform="translate(9.6)"/>
+            <path id="패스_45" d="M112.8 97.8V69H84" class="cls-2" transform="translate(-69.6 -69)"/>
+        </g>
+    </g>
+</svg>
