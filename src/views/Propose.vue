@@ -1,5 +1,13 @@
 <template>
   <div class="propose">
+    <modal v-if="showModal"
+           :width="786"
+           @on-closed="showModal=false"
+    >
+      <template #body>
+        <modal-propose @on-closed="showModal=false" />
+      </template>
+    </modal>
     <div class="header">
       Propose Contract
       <div>
@@ -29,9 +37,11 @@
         </div>
       </div>
     </div>
-    <div class="box-container">
+    <div v-if="index !== -1" class="box-container">
       <div>
-        <box />
+        <div @click="showModal=true">
+          <box />
+        </div>
         <box />
         <box />
         <box />
@@ -58,15 +68,25 @@
 
 <script>
 import Box from '@/components/Box.vue';
+import Modal from '@/components/Modal.vue';
+import ModalPropose from '@/containers/ModalPropose.vue';
 
 export default {
   components: {
     'box': Box,
+    'modal': Modal,
+    'modal-propose': ModalPropose,
   },
   data () {
     return {
       index : -1,
+      showModal: false,
     };
+  },
+  methods: {
+    showModal2 () {
+      alert('1');
+    },
   },
 };
 </script>
