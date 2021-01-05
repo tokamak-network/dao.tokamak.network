@@ -34,11 +34,13 @@
       <button-comp :name="'View Details'"
                    :type="'primary'"
                    class="left"
+                   :width="'118px'"
                    @on-clicked="detail(operator.address)"
       />
       <button-comp v-if="login!==false"
                    :name="'Challenge'"
                    :type="'secondary'"
+                   :width="'118px'"
                    class="right"
       />
     </div>

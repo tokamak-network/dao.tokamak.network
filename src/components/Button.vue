@@ -16,6 +16,7 @@
             'vote-disabled': type === 'vote' && status === 'disabled',
             'voteV2-disabled': type === 'voteV2' && status === 'disabled',
           }"
+          :style="{ width: width }"
           :disabled="status === 'disabled'"
           @click="click"
   >
@@ -56,6 +57,10 @@ export default {
           'hide',
         ].indexOf(value) !== -1;
       },
+    },
+    width: {
+      type: String,
+      default: '100%',
     },
   },
   methods: {

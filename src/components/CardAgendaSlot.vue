@@ -18,6 +18,7 @@
           :name="'View Details'"
           :type="'primary'"
           class="left"
+          :width="'118px'"
         />
         <div class="vote-status">
           <div v-if="voted !== true">You have not voted</div>
@@ -43,6 +44,7 @@
           :type="buttonClass.buttonType"
           :status="buttonClass.buttonStatus"
           class="right"
+          :width="'124px'"
           @on-clicked="click"
         />
       </div>

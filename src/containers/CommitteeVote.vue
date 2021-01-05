@@ -17,6 +17,7 @@
           <custom-button class="vote-max"
                          :name="'MAX'"
                          :type="'vote'"
+                         :width="'100px'"
           />
         </div>
         <custom-button :type="'secondary'"
@@ -43,6 +44,7 @@
           <custom-button class="unvote-max"
                          :name="'MAX'"
                          :type="'vote'"
+                         :width="'100px'"
           />
         </div>
         <custom-button :type="'secondary'"

@@ -17,7 +17,7 @@
 export default {
   data () {
     return {
-      selected: 'normal',
+      status: 'normal',
     };
   },
 };
