@@ -26,10 +26,8 @@ module.exports.getContracts = function (web3, account, want='') {
     daoCommitteeProxy,
   };
 
-  if (want && contracts.hasOwnProperty(want)) {         // eslint-disable-line
-    return contracts[want];                             // eslint-disable-line
-  } else if (want && !contracts.hasOwnProperty(want)) { // eslint-disable-line
-    return null;
+  if (want) {
+    return contracts.hasOwnProperty(want) ? contracts[want] : null; // eslint-disable-line
   } else {
     return contracts;
   }
