@@ -1,49 +1,28 @@
 <template>
-  <div class="main">
+  <div class="main"
+       :style="[datas.length > 0 ? { 'margin-top': '-84px' } : {}]"
+  >
     <div class="main-logo">
-      <div class="main-btn" @click="$router.push({ path: 'committee' })">
-        <div class="count">5</div>
+      <div v-if="datas.length > 0"
+           class="main-btn"
+           @click="$router.push({ path: 'agenda' })"
+      >
+        <div class="count">{{ datas.length }}</div>
         <span>Committee activities</span>
         <img src="@/assets/arrow-next-main.png" alt=""
              width="4" height="8"
         >
       </div>
     </div>
-    <div class="recent-committee-activities">
+    <div v-if="datas.length > 0"
+         class="recent-committee-activities"
+    >
       <div class="header">Recent Committee Activities</div>
-      <div class="content">
+      <div v-for="i in datas" :key="i" class="content">
         <div>
           Tx
         </div>
-        <div>
-          0x08abcd...
-        </div>
-        <div>
-          ETH-B Debt Ceiling Instant Access Module - December 7, 2020
-        </div>
-        <div>
-          1 Days Ago
-        </div>
-      </div>
-      <div class="content">
-        <div>
-          Tx
-        </div>
-        <div>
-          0x08abcd...
-        </div>
-        <div>
-          ETH-B Debt Ceiling Instant Access Module - December 7, 2020
-        </div>
-        <div>
-          1 Days Ago
-        </div>
-      </div>
-      <div class="content">
-        <div>
-          Tx
-        </div>
-        <div>
+        <div @click="newtab">
           0x08abcd...
         </div>
         <div>
@@ -58,8 +37,17 @@
 </template>
 
 <script>
-
 export default {
+  data () {
+    return {
+      datas: new Array(3),
+    };
+  },
+  methods: {
+    newtab (link) {
+      window.open(link, '_blank'); // eslint-disable-line
+    },
+  },
 };
 </script>
 
@@ -73,8 +61,6 @@ export default {
   align-items: center;
 
   background: #0062c2;
-
-  margin-top: -84px;
 }
 
 .main-logo {

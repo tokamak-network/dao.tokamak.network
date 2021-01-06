@@ -1,7 +1,7 @@
 <template>
   <div class="connect">
     <button
-      v-if="!web3"
+      v-if="!account"
       :class="{ sub: isSub }"
       @click="connect"
     >

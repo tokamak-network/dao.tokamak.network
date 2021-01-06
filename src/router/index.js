@@ -33,8 +33,8 @@ const routes = [
     component: CommitteeDetail,
   },
   {
-    path: '/committee',
-    name: 'committee',
+    path: '/agenda',
+    name: 'agenda',
     component: Committee,
   },
   {

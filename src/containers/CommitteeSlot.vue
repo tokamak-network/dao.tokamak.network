@@ -1,8 +1,9 @@
 <template>
   <div class="committee-slot">
-    <div class="title">Elected Operator</div>
+    <div class="title">Elected Candidate</div>
     <div class="slot-info">
-      {{ numSlot }} SLOT - POSTED DEC 7, 2020, 16:00 UTC
+      <!-- TODO: message -->
+      {{ numSlot }} SLOT
     </div>
     <card-committee-slot v-for="operator in operators" :key="operator.index" :operator="operator" />
   </div>
@@ -48,7 +49,7 @@ export default {
     };
   },
   computed: {
-    numSlot (){
+    numSlot () {
       return this.operators.length;
     },
   },

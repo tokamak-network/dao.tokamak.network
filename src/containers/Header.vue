@@ -15,10 +15,10 @@
       >
         Propose
       </router-link>
-      <router-link :to="'/committee'"
-                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('committee') }"
+      <router-link :to="'/agenda'"
+                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('agenda') }"
       >
-        Committee
+        Agenda
       </router-link>
       <connect-wallet :is-sub="isSub" />
     </div>

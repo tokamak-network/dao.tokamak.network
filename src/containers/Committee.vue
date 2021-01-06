@@ -1,10 +1,10 @@
 <template>
   <div class="card-committee-info">
     <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL POLLS'" class="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS POLL'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT POLL'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" />
+        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" />
       </div>
     </div>
     <div class="content">
@@ -21,7 +21,7 @@
       </div>
       <div class="title">0xabc.. is nominated to Commmittee member Add UNI-V2-USDC-ETH  as a Collateral Type - December 7, 2020</div>
       <div class="selector">
-        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Poll Details</div>
+        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
         <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
       </div>
@@ -163,12 +163,12 @@ export default {
   display: flex;
 }
 .button .back {
-  width: 155px;
+  width: 195px;
 }
 .button .prev {
-  width: 132px;
+  width: 165px;
 }
 .button .next {
-  width: 106px;
+  width: 165px;
 }
 </style>
