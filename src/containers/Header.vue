@@ -1,6 +1,6 @@
 <template>
   <div class="header" :class="{ 'header-sub': isSub }">
-    <div class="logo">
+    <div class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
       <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
       <img v-else src="@/assets/logo.png" alt="">
     </div>
@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
   display: flex;
   justify-content: space-between;
@@ -60,6 +60,10 @@ export default {
   align-items: center;
 
   z-index: 1;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .logo img {

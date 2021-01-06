@@ -107,6 +107,8 @@ button {
 
   cursor: pointer;
   white-space: nowrap;
+
+  padding-top: 9px;
 }
 
 .sub {
