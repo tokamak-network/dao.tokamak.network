@@ -18,7 +18,7 @@
 
 <script>
 import Web3 from 'web3';
-import MetaCoinABI from '@/contracts/abi/MetaCoin.json';
+import MetaCoin from '@/contracts/MetaCoin.json';
 
 import { mapState } from 'vuex';
 
@@ -70,7 +70,7 @@ export default {
       }
     },
     async sendTx () {
-      const contract = new this.web3.eth.Contract(MetaCoinABI, '0x6bABDD82F21D43C1a6253ca01278482BcbB9cb45');
+      const contract = new this.web3.eth.Contract(MetaCoin.abi, '0x17a492b2f997C78c49721b4b4e4cfb7E2E92882c');
 
       const balance = await contract.methods.getBalance(this.account).call();
       this.balance = balance;
