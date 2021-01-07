@@ -4,7 +4,7 @@
       <committee />
     </div>
     <div class="card-container">
-      <card-vote-count />
+      <card-vote-count v-if="account !== ''" />
       <card-supporters />
       <card-resource />
     </div>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Committee from '@/containers/Committee';
 import CardResource from '@/containers/CardResource.vue';
 import CardSupporters from '@/containers/CardSupporters';
@@ -23,6 +25,11 @@ export default {
     'card-resource': CardResource,
     'card-supporters': CardSupporters,
     'card-vote-count': CardVoteCount,
+  },
+  computed: {
+    ...mapState([
+      'account',
+    ]),
   },
 };
 </script>

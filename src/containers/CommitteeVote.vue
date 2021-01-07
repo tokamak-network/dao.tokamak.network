@@ -17,6 +17,7 @@
           <custom-button class="vote-max"
                          :name="'MAX'"
                          :type="'vote'"
+                         :width="'100px'"
           />
         </div>
         <custom-button :type="'secondary'"
@@ -43,6 +44,7 @@
           <custom-button class="unvote-max"
                          :name="'MAX'"
                          :type="'vote'"
+                         :width="'100px'"
           />
         </div>
         <custom-button :type="'secondary'"
@@ -82,7 +84,7 @@ export default {
 
 <style scoped>
 .committee-vote {
-  height: 440px;
+  height: 410px;
 
   display: flex;
   flex-direction: column;

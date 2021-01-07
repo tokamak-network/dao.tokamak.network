@@ -1,6 +1,6 @@
 <template>
   <div class="header" :class="{ 'header-sub': isSub }">
-    <div class="logo">
+    <div class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
       <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
       <img v-else src="@/assets/logo.png" alt="">
     </div>
@@ -15,10 +15,10 @@
       >
         Propose
       </router-link>
-      <router-link :to="'/committee'"
-                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('committee') }"
+      <router-link :to="'/agenda'"
+                   class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('agenda') }"
       >
-        Committee
+        Agenda
       </router-link>
       <connect-wallet :is-sub="isSub" />
     </div>
@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
   display: flex;
   justify-content: space-between;
@@ -58,6 +58,12 @@ export default {
 .logo {
   display: flex;
   align-items: center;
+
+  z-index: 1;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .logo img {
@@ -68,6 +74,8 @@ export default {
 .menu {
   display: flex;
   align-items: center;
+
+  z-index: 1;
 }
 
 .menu-item {

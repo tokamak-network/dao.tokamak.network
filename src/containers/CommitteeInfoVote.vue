@@ -21,16 +21,12 @@
     <div class="voting-stats">
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
-        <div class="voting-stat-title">Total Votes</div>
-        <div class="voting-stat-content">100 TON</div>
+        <span class="voting-stat-title">Total Votes</span>
+        <span class="voting-stat-content">100 TON</span>
       </div>
       <div class="voting-stat-item">
-        <div class="voting-stat-title">Unique Voters</div>
-        <div class="voting-stat-content">32</div>
-      </div>
-      <div class="voting-stat-item">
-        <div class="voting-stat-title">Quorum</div>
-        <div class="voting-stat-content">11</div>
+        <span class="voting-stat-title">Unique Voters</span>
+        <span class="voting-stat-content">32</span>
       </div>
     </div>
   </div>
@@ -86,7 +82,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  height: 440px;
+  height: 410px;
 }
 .container-title {
   font-family: Roboto;

@@ -1,19 +1,27 @@
 <template>
   <div class="committee-slot">
-    <div class="title">Elected Operator</div>
+    <div class="title">Elected Candidate</div>
     <div class="slot-info">
-      {{ numSlot }} SLOT - POSTED DEC 7, 2020, 16:00 UTC
+      <!-- TODO: message -->
+      {{ numSlot }} SLOT
     </div>
     <card-committee-slot v-for="operator in operators" :key="operator.index" :operator="operator" />
+
+    <div class="title" style="margin-top: 30px; margin-bottom: 20px;">Candidates</div>
+    <candidate />
+    <candidate />
+    <candidate />
   </div>
 </template>
 
 <script>
 import CardCommitteeSlot from '@/components/CardCommitteeSlot.vue';
+import Candidate from '@/components/Candidate.vue';
 
 export default {
   components: {
     'card-committee-slot': CardCommitteeSlot,
+    'candidate': Candidate,
   },
   data (){
     return {
@@ -48,36 +56,42 @@ export default {
     };
   },
   computed: {
-    numSlot (){
+    numSlot () {
       return this.operators.length;
     },
   },
 };
 </script>
 
-<style scoped>
-.title {
-  font-family: Roboto;
-  font-size: 24px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #3e495c;
-  margin-bottom: 12px;
-}
-.slot-info {
-  margin-bottom: 12px;
-  width: 204px;
-  height: 15px;
-  font-family: Roboto;
-  font-size: 11px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #86929d;
+<style lang="scss" scoped>
+.committee-slot{
+  > .title {
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+
+    margin-bottom: 12px;
+  }
+  .slot-info {
+    width: 204px;
+    height: 15px;
+
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #86929d;
+
+    margin-bottom: 12px;
+  }
+
 }
 </style>
