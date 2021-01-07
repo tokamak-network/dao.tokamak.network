@@ -22,8 +22,8 @@
         <span class="slot">#{{ operator.index }}</span>
       </div>
     </div>
-    <div class="card-title">{{ shortAddress(operator.address) }} is elected to Committee member since {{ deployedDate(operator.date) }}</div>
     <div class="operator-name">{{ operator.name }}</div>
+    <div class="card-title">{{ shortAddress(operator.address) }} is elected to Committee member since {{ deployedDate(operator.date) }}</div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
@@ -180,7 +180,7 @@ export default {
   margin-left: 7px;
 }
 
-.card-title {
+.operator-name {
   font-family: Roboto;
   font-size: 20px;
   font-weight: normal;
@@ -194,7 +194,7 @@ export default {
   margin-bottom: 6px;
 }
 
-.operator-name {
+.card-title {
   font-family: Roboto;
   font-size: 14px;
   font-weight: normal;
