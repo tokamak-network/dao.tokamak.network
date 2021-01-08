@@ -19,6 +19,7 @@
           :type="'primary'"
           class="left"
           :width="'118px'"
+          @on-clicked="detail(agenda.index)"
         />
         <div class="vote-status">
           <div v-if="voted !== true">You have not voted</div>
@@ -152,6 +153,11 @@ export default {
       } else if (this.buttonClass.buttonName === 'Claim') {
         this.buttonClass.buttonStatus = 'disabled';
       }
+    },
+    detail (address) {
+      this.$router.push({
+        path: `/agenda/${address}`,
+      });
     },
   },
 };

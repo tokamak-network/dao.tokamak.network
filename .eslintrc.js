@@ -3,18 +3,9 @@ module.exports = {
   env: {
     node: true,
   },
-  globals: {
-    NODE_ENV: 'readonly',
-    ethereum: 'readonly',
-  },
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
-  plugins: ['security'],
-  extends: [
-    'eslint:recommended',
+  'extends': [
     'plugin:vue/recommended',
-    'plugin:security/recommended',
+    'eslint:recommended',
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -42,8 +33,29 @@ module.exports = {
     'quotes': ['error', 'single'],
     'semi': ['error', 'always'],
     'space-before-function-paren': ['error', 'always'],
-    'vue/html-self-closing': 'off',
-    'vue/max-attributes-per-line': 'off',
+    'promise/always-return': 'off',
+    'promise/avoid-new': 'off',
+    'no-unused-vars': 'off',
+    'max-len': 'off',
+    'vue/attribute-hyphenation': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/require-prop-types': 'off',
     'vue/singleline-html-element-content-newline': 'off',
+    'vue/max-attributes-per-line': 'off',
+    'vue/prop-name-casing': 'off',
   },
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
+  overrides: [
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
+      ],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };
