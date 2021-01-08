@@ -83,8 +83,8 @@ export default new Vuex.Store({
       const infos = await Promise.all(getInfos);
 
       for (let i = 0; i < candidates.length; i++) {
-        candidates[i].vote = votes[i];
-        candidates[i].info = infos[i];
+        candidates[i].vote = votes[i]; // eslint-disable-line
+        candidates[i].info = infos[i]; // eslint-disable-line
       }
       commit('SET_CANDIDATES', candidates);
 
