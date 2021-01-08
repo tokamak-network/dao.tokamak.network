@@ -3,8 +3,8 @@
     <div class="button">
       <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS AGENDAS'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT AGENDAS'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" />
+        <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" />
       </div>
     </div>
     <div class="content">
