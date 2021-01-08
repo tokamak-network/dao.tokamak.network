@@ -2,15 +2,14 @@
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const account = '0x62d4A3ba02649f849326a1c6Dce40dFB084c6713';
 
 const { getContracts } = require('./contracts.js');
 
-const contracts = getContracts(web3, account);
+const contracts = getContracts();
 console.log(contracts);
 
-const singleContract = getContracts(web3, account, 'daoAgendaManager');
+const singleContract = getContracts('daoAgendaManager', web3);
 console.log(singleContract);
 
-const strangeContract = getContracts(web3, account, 'stranger');
+const strangeContract = getContracts('stranger', web3);
 console.log(strangeContract);

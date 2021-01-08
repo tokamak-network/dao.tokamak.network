@@ -1,3 +1,6 @@
+import { getCandidates } from '@/api';
+import { getContracts } from '@/utils/contracts';
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -8,6 +11,10 @@ export default new Vuex.Store({
     web3: null,
     account: '',
     chainId: '',
+
+    candidates: [],
+    members: [],
+    nonmembers: [],
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -18,6 +25,16 @@ export default new Vuex.Store({
     },
     SET_CHAIN_ID (state, chainId) {
       state.chainId = chainId;
+    },
+
+    SET_CANDIDATES (state, candidates) {
+      state.candidates = candidates;
+    },
+    SET_MEMBERS (state, members) {
+      state.members = members;
+    },
+    SET_NONMEMBERS (state, nonmembers) {
+      state.nonmembers = nonmembers;
     },
   },
   actions: {
@@ -39,6 +56,45 @@ export default new Vuex.Store({
       commit('SET_WEB3', null);
       commit('SET_ACCOUNT', '');
       commit('SET_CHAIN_ID', '');
+    },
+    async setMembersAndNonmembers ({ commit }) {
+      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      const daoCommitteeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const [
+        candidates, maxMember,
+      ] = await Promise.all([
+        await getCandidates(),
+        await daoCommitteeProxy.methods.maxMember().call(),
+      ]);
+
+      const getMembers = [];
+      for (let i = 0; i < maxMember; i++) {
+        getMembers.push(daoCommitteeProxy.methods.members(i).call());
+      }
+      const addressMembers = (await Promise.all(getMembers)).map(member => member.toLowerCase());
+
+      const getVotes = [];
+      candidates.forEach(async candidate => getVotes.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call()));
+      const votes = await Promise.all(getVotes);
+
+      const getInfos = [];
+      candidates.forEach(async candidate => getInfos.push(daoCommittee.methods.candidateInfos(candidate.operator).call()));
+      const infos = await Promise.all(getInfos);
+
+      for (let i = 0; i < candidates.length; i++) {
+        candidates[i].vote = votes[i]; // eslint-disable-line
+        candidates[i].info = infos[i]; // eslint-disable-line
+      }
+      commit('SET_CANDIDATES', candidates);
+
+      const members = [];
+      const nonmembers = [];
+      candidates.forEach(
+        candidate => (addressMembers.includes(candidate.operator.toLowerCase()) ? members : nonmembers).push(candidate),
+      );
+      commit('SET_MEMBERS', members);
+      commit('SET_NONMEMBERS', nonmembers);
     },
   },
 });

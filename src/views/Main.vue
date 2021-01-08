@@ -1,29 +1,29 @@
 <template>
   <div class="main"
-       :style="[datas.length > 0 ? { 'margin-top': '-84px' } : {}]"
+       :style="[events.length > 0 ? { 'margin-top': '-84px' } : {}]"
   >
     <div class="main-logo">
-      <div v-if="datas.length > 0"
+      <div v-if="events.length > 0"
            class="main-btn"
            @click="$router.push({ path: 'agenda' })"
       >
-        <div class="count">{{ datas.length }}</div>
+        <div class="count">{{ events.length }}</div>
         <span>Committee activities</span>
         <img src="@/assets/arrow-next-main.png" alt=""
              width="4" height="8"
         >
       </div>
     </div>
-    <div v-if="datas.length > 0"
+    <div v-if="events.length > 0"
          class="recent-committee-activities"
     >
       <div class="header">Recent Committee Activities</div>
-      <div v-for="i in datas" :key="i" class="content">
+      <div v-for="event in events" :key="event.data.transactionHash" class="content">
         <div>
           Tx
         </div>
         <div @click="newtab">
-          0x08abcd...
+          {{ event.transactionHash | hexSlicer }}
         </div>
         <div>
           ETH-B Debt Ceiling Instant Access Module - December 7, 2020
@@ -37,11 +37,16 @@
 </template>
 
 <script>
+import { getEvents } from '@/api';
+
 export default {
   data () {
     return {
-      datas: new Array(3),
+      events: [],
     };
+  },
+  async created () {
+    this.events = await getEvents('AgendaVoteCasted,AgendaExecuted,AgendaCreated');
   },
   methods: {
     newtab (link) {

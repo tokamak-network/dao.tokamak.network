@@ -1,5 +1,8 @@
-const DAOAgendaManager = require('../contracts/DAOAgendaManager.json');
-const DAOCommitteeProxy = require('../contracts/DAOCommitteeProxy.json');
+const Web3 = require('web3');
+
+const manager = require('../contracts/DAOAgendaManager.json');
+const proxy = require('../contracts/DAOCommitteeProxy.json');
+const committee = require('../contracts/DAOCommittee.json');
 
 const deployed = {
   'TON'              : '0x8AE57549880d13D81295F0Acb1EDFA6910087E14',
@@ -17,13 +20,18 @@ const deployed = {
   'DAOCommitteeProxy': '0xDa82db146327fafb4837DB8c23aC17fd7d4E2e1F',
 };
 
-module.exports.getContracts = function (web3, account, want='') {
-  const daoAgendaManager = new web3.eth.Contract(DAOAgendaManager.abi, deployed.DAOAgendaManager, { from: account });
-  const daoCommitteeProxy = new web3.eth.Contract(DAOCommitteeProxy.abi, deployed.DAOCommitteeProxy, { from: account });
+module.exports.getContracts = function (want, web3) {
+  if (!web3) {
+    web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+  }
+  const DAOAgendaManager = new web3.eth.Contract(manager.abi, deployed.DAOAgendaManager);
+  const DAOCommitteeProxy = new web3.eth.Contract(proxy.abi, deployed.DAOCommitteeProxy);
+  const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
 
   const contracts = {
-    daoAgendaManager,
-    daoCommitteeProxy,
+    DAOAgendaManager,
+    DAOCommitteeProxy,
+    DAOCommittee,
   };
 
   if (want) {
