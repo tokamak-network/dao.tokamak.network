@@ -1,5 +1,13 @@
 <template>
   <div class="committee-vote">
+    <modal v-if="showModal"
+           :width="390"
+           @on-closed="showModal=false"
+    >
+      <template #body>
+        <modal-claim @on-closed="showModal=false" />
+      </template>
+    </modal>
     <div class="header">
       <div :class="{ selected: currentSelector === 0 }" @click="currentSelector = 0">Vote</div>
       <div :class="{ selected: currentSelector === 1 }" @click="currentSelector = 1">Revote</div>
@@ -59,6 +67,7 @@
         />
         <custom-button :type="'secondary'"
                        :name="'Withdraw'"
+                       :on-clicked="showModal=true"
         />
       </div>
     </div>
@@ -68,15 +77,20 @@
 <script>
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
+import Modal from '@/components/Modal.vue';
+import ModalClaim from '@/containers/ModalClaim.vue';
 
 export default {
   components: {
     'text-input': TextInput,
     'custom-button': Button,
+    'modal': Modal,
+    'modal-claim': ModalClaim,
   },
   data () {
     return {
       currentSelector: 0,
+      showModal: false,
     };
   },
 };
