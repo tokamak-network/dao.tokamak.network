@@ -1,15 +1,35 @@
 <template>
   <div class="candidate">
     <div class="label"># of Votes</div>
-    <div class="amount">90,000 TON</div>
-    <div class="name">TOKAMAK</div>
-    <div class="detail">View Details</div>
+    <div class="amount">{{ candidate.vote }} TON</div>
+    <div class="name">{{ candidate.name }}</div>
+    <div class="detail" @click="detail()">View Details</div>
   </div>
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex';
 
+export default {
+  props: {
+    candidate: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  computed: {
+    ...mapState([
+      // 'nonmembers', // TODO: use nonmembers
+      'members',
+    ]),
+  },
+  methods: {
+    detail () {
+      this.$router.push({
+        path: `/election/${this.candidate.operator}`,
+      });
+    },
+  },
 };
 </script>
 
