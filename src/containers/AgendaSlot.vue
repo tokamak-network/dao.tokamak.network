@@ -5,7 +5,7 @@
       {{ numAgenda }} Agendas - POSTED DEC 7, 2020, 16:00 UTC
     </div>
     <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.timestamp" :agenda="agenda" />
-    <button-comp v-if="hide === false" :name="hideButton" :type="'hide'" @on-clicked="hideSection"></button-comp>
+    <button-comp v-if="hide === false" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
     <div v-if="hide === true">
       <card-agenda-slot v-for="agenda in hideAgendas" :key="agenda.timestamp" :agenda="agenda" />
     </div>
