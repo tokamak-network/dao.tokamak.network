@@ -22,6 +22,9 @@ export default {
     'mobile-header-container': MobileHeader,
     'mobile-footer-container': MobileFooter,
   },
+  created () {
+    this.$store.dispatch('setMembersAndNonmembers');
+  },
 };
 </script>
 

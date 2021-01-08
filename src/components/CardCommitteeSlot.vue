@@ -3,39 +3,45 @@
     <div class="info-committee">
       <span class="title">Status</span>
       <span> : </span>
-      <span class="content">{{ operator.status }}</span>
-
+      <span class="content">{{ occupied() ? 'Occupied' : 'Empty' }}</span>
       <span> | </span>
 
       <span class="title">Elected</span>
       <span> : </span>
-      <span class="content link" @click="etherscan(operator.address)">{{ shortAddress(operator.address) }}</span>
-
+      <span class="content"
+            :class="{ 'link': occupied() }"
+            @click="etherscan()"
+      >
+        {{ (occupied() ? members[slotnumber].operator : '-') | hexSlicer }}
+      </span>
       <span> | </span>
 
       <span class="title"># of Votes</span>
       <span> : </span>
-      <span class="content">{{ operator.voted }}</span>
+      <span class="content">{{ occupied() ? members[slotnumber].vote : '-' }}</span>
 
       <div class="info-slot">
         <span>Slot </span>
-        <span class="slot">#{{ operator.index }}</span>
+        <span class="slot">#{{ slotnumber }}</span>
       </div>
     </div>
-    <div class="operator-name">{{ operator.name }}</div>
-    <div class="card-title">{{ shortAddress(operator.address) }} is elected to Committee member since {{ deployedDate(operator.date) }}</div>
+    <div class="operator-name">{{ occupied() ? members[slotnumber].name : '-' }}</div>
+    <div class="card-title">
+      {{ occupied() ? desc : '-' }}
+    </div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ fromNow(operator.date) }}</span>
+      <span>{{ occupied() ? fromNow(members[slotnumber].info.memberJoinedTime) : '-' }}</span>
     </div>
     <div class="button">
       <button-comp :name="'View Details'"
                    :type="'primary'"
+                   :status="occupied() ? '' : 'disabled'"
                    class="left"
                    :width="'118px'"
-                   @on-clicked="detail(operator.address)"
+                   @on-clicked="detail()"
       />
       <button-comp v-if="login!==false"
                    :name="'Challenge'"
@@ -48,57 +54,70 @@
 </template>
 
 <script>
-import Button from '@/components/Button.vue';
-
 import moment from 'moment';
+
+import { mapState } from 'vuex';
+import Button from '@/components/Button.vue';
 
 export default {
   components: {
     'button-comp': Button,
   },
   props: {
-    operator: {
-      type: Object,
-      default: () => {},
+    slotnumber: {
+      type: Number,
+      default: 0,
     },
   },
   data () {
     return {
-      electedOperators: [],
-      endedShow: false,
       login: true,
-      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
   computed: {
+    ...mapState([
+      'members',
+    ]),
+    deployedDate () {
+      return (timestamp) => {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const date = new Date(timestamp * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        return monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+      };
+    },
+    fromNow () {
+      return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
+    },
+    desc () {
+      return `${this.members[this.slotnumber].layer2} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
+    },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
       return address => 'https://etherscan.io/address/' + address;
     },
-    deployedDate () {
-      return (timestamp) => {
-        const date = new Date(timestamp * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-
-        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
-      };
-    },
-    fromNow () {
-      return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
-    },
   },
   methods: {
-    etherscan (address) {
-      window.open('https://etherscan.io/address/' + address, '_blank'); // eslint-disable-line
+    occupied () {
+      return this.members[this.slotnumber];
     },
-    detail (address) {
-      this.$router.push({
-        path: `/election/${address}`,
-      });
+    etherscan (address) {
+      address ?
+        window.open('https://etherscan.io/address/' + address, '_blank') : // eslint-disable-line
+        window.open('https://etherscan.io/address/' + this.members[this.slotnumber].operator, '_blank');  // eslint-disable-line
+    },
+    detail () {
+      if (this.occupied()) {
+        this.$router.push({
+          path: `/election/${this.members[this.slotnumber].operator}`,
+        });
+      }
     },
   },
 };
