@@ -2,19 +2,19 @@
   <div class="committee-info-vote">
     <div class="review">
       <div class="container-title">Review</div>
-      <div v-for="(voter, index) in ranks" :key="index" class="voted-account">
+      <div v-for="voter in voters" :key="voter.account" class="voted-account">
         <div class="account-info">
-          <div>{{ shortAddress(voter.address) }}</div>
-          <div>{{ voter.tonVoted }} TON Voted</div>
+          <div>{{ voter.account }}</div>
+          <div>{{ voter.balance | WTON }} TON Voted</div>
         </div>
         <vote-poll class="vote-poll"
-                   :pct="calcPct(voter.tonVoted, voter.tonBalance)"
+                   :pct="calcPct(voter.balance, totalVotesByCandidate('0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd'))"
                    :margin="0"
         />
       </div>
     </div>
     <button-pagination class="committee-info-vote-pagination"
-                       :datas="voters"
+                       :datas="allVoters"
                        @on-selected="set"
     />
     <div class="line" />
@@ -22,17 +22,18 @@
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Votes</span>
-        <span class="voting-stat-content">100 TON</span>
+        <span class="voting-stat-content">{{ totalVotesByCandidate('0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd') | WTON }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
-        <span class="voting-stat-content">32</span>
+        <span class="voting-stat-content">{{ votersByCandidate['0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd'].length }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
 import VotePoll from '@/components/VotePoll.vue';
 import ButtonPagination from '@/components/ButtonPagination.vue';
 
@@ -43,35 +44,36 @@ export default {
   },
   data () {
     return {
-      voters: [
-        { index: 0, address: '0xabccscscsccscsc', tonBalance: 100, tonVoted: 60 },
-        { index: 1, address: '0xabccscscsccscsc', tonBalance: 100, tonVoted: 50 },
-        { index: 2, address: '0xabccscscsccscsc', tonBalance: 100, tonVoted: 40 },
-        { index: 3, address: '0xabccscscsccscsc', tonBalance: 100, tonVoted: 30 },
-        { index: 4, address: '0xabccscscsccscsc', tonBalance: 100, tonVoted: 20 },
-        { index: 5, address: '0xabccscscsccscsc', tonBalance: 95, tonVoted: 10 },
-        { index: 6, address: '0xabccscscsccscsc', tonBalance: 95, tonVoted: 10 },
-        { index: 7, address: '0xabccscscsccscsc', tonBalance: 95, tonVoted: 10 },
-        { index: 8, address: '0xabccscscsccscsc', tonBalance: 95, tonVoted: 10 },
-      ],
-      ranks: [],
+      allVoters: [],
+      voters: [],
     };
   },
   computed: {
+    ...mapState([
+      'votersByCandidate',
+    ]),
+    ...mapGetters([
+      'candidate',
+      'totalVotesByCandidate',
+    ]),
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;
     },
     calcPct () {
-      return (voted, balance) => Number(voted * 100 / balance);
+      return (vote, totalVotes) => Number(vote * 100 / totalVotes);
     },
   },
   created () {
-    this.ranks = this.voters.slice(0, 4);
+    // const address = this.$route.params.address;
+    const address = '0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd';
+
+    this.allVoters = this.votersByCandidate[address];
+    this.voters = this.allVoters.slice(0, 4);
   },
   methods: {
     set (page) {
       const first = page * 4;
-      this.ranks = this.voters.slice(first, first+4);
+      this.voters = this.allVoters.slice(first, first+4);
     },
   },
 };

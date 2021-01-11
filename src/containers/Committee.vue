@@ -9,17 +9,19 @@
     </div>
     <div class="content">
       <div class="timeline">
-        <div class="date">Posted 2020 / 12 / 07 / 16:00 UTC</div>
+        <div class="date">
+          Elected at {{ candidate(address) ? electedAt(candidate(address).info.memberJoinedTime) : '-' }}
+        </div>
         <div>
           <img src="@/assets/poll-time-active-icon.svg" alt=""
                width="14" height="14"
           >
-          <span class="black">Slot </span>
-          <span class="blue">#0</span>
-          <span> in Office 12D 13H</span>
+          <span class="black">Slot</span>
+          <span class="blue"> #0 </span>
+          <span>in Office {{ candidate(address) ? fromNow(candidate(address).info.memberJoinedTime) : '-' }}</span>
         </div>
       </div>
-      <div class="title">0xabc.. is nominated to Commmittee member Add UNI-V2-USDC-ETH  as a Collateral Type - December 7, 2020</div>
+      <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
       <div class="selector">
         <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
@@ -34,6 +36,9 @@
 </template>
 
 <script>
+import { date1, fromNow } from '@/utils/helpers';
+
+import { mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
@@ -49,7 +54,24 @@ export default {
   data () {
     return {
       currentSelector: 0,
+      address: '',
     };
+  },
+  computed: {
+    ...mapGetters([
+      'candidate',
+    ]),
+  },
+  created () {
+    this.address = this.$route.params.address;
+  },
+  methods: {
+    electedAt (timestamp) {
+      return date1(timestamp);
+    },
+    fromNow (timestamp) {
+      return fromNow(timestamp, true);
+    },
   },
 };
 </script>

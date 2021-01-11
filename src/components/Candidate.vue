@@ -26,7 +26,7 @@ export default {
   methods: {
     detail () {
       this.$router.push({
-        path: `/election/${this.candidate.operator}`,
+        path: `/election/${this.candidate.layer2}`,
       });
     },
   },

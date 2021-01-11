@@ -1,12 +1,17 @@
 <template>
   <div class="text-input">
-    <input :placeholder="hint"
+    <input ref="input"
+           :placeholder="hint"
            :style="inputPadding"
            :class="{
              'with-unit': unit !== '',
              'big': big,
+             'clickable': clickable,
            }"
+           :readonly="readonly"
+           :value="value"
            @keypress="keypress"
+           @click="click"
     >
     <div v-if="unit !== ''" ref="unit">{{ unit }}</div>
   </div>
@@ -27,10 +32,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    clickable: {
+      type: Boolean,
+      default: false,
+    },
+    datas: {
+      type: Array,
+      default: () => [],
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
   },
   data () {
     return {
       unitWidth: 0,
+      value: undefined,
+      index: 0,
     };
   },
   computed: {
@@ -39,6 +58,12 @@ export default {
         'padding-right': this.unit !== '' ? (7+this.unitWidth+16)+'px' : 0,
       };
     },
+  },
+  created () {
+    if (this.datas.length > 0) {
+      this.index = this.datas.length - 1;
+      this.value = this.datas[this.index];
+    }
   },
   mounted () {
     if (this.unit !== '') {
@@ -57,6 +82,15 @@ export default {
         }
       }
       return true;
+    },
+    click () {
+      if (this.clickable && this.datas.length > 0) {
+        this.index--;
+        if (this.index === -1) {
+          this.index = this.datas.length - 1;
+        }
+        this.value = this.datas[this.index];
+      }
     },
   },
 };
@@ -115,5 +149,9 @@ export default {
 }
 .big {
   min-height: 43px;
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>

@@ -2,39 +2,11 @@
   <div class="table">
     <table>
       <tbody>
-        <tr>
+        <tr v-for="supporter in voters" :key="supporter.account">
           <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
+            <div>{{ calcPct(supporter.balance, totalVotes) }}%</div>
+            <div>({{ supporter.balance | WTON }} TON)</div>
+            <div>{{ supporter.account | hexSlicer }}</div>
           </div>
         </tr>
       </tbody>
@@ -43,8 +15,35 @@
 </template>
 
 <script>
-export default {
+import { getVotersByCandidate } from '@/api';
 
+import { mapGetters } from 'vuex';
+
+export default {
+  data () {
+    return {
+      address: '',
+      voters: [],
+      totalVotes: 0,
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'totalVotesByCandidate',
+    ]),
+    calcPct () {
+      return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);
+    },
+  },
+  async created () {
+    // const address = this.$route.params.address;
+    // this.voters = await getVotersByCandidate(address);
+    this.voters = await getVotersByCandidate('0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd');
+
+    const initialAmount = 0;
+    const reducer = (amount, voter) => amount + voter.balance;
+    this.totalVotes = this.voters.reduce(reducer, initialAmount);
+  },
 };
 </script>
 

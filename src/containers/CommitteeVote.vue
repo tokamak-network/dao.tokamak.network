@@ -8,27 +8,34 @@
     </div>
     <div class="body">
       <div v-if="currentSelector === 0" class="vote-container">
-        <div>Available Balance 00 TON</div>
+        <div>Available Balance {{ tonBalance | TON }} TON</div>
         <div>
-          <text-input class="vote-input"
+          <text-input ref="tonvote"
+                      class="vote-input"
                       :unit="'TON'"
-                      :hint="'0'"
+                      :hint="'0.00'"
           />
           <custom-button class="vote-max"
                          :name="'MAX'"
                          :type="'vote'"
                          :width="'100px'"
+                         @on-clicked="tonMax"
           />
         </div>
         <custom-button :type="'secondary'"
                        :name="'Vote'"
+                       @on-clicked="vote"
         />
       </div>
       <div v-if="currentSelector === 1">
-        <text-input class="revote-input"
+        <text-input ref="tonrevote"
+                    class="revote-input"
                     :unit="'TON'"
-                    :hint="'0'"
+                    :hint="'0.00'"
                     :big="true"
+                    :clickable="true"
+                    :datas="[1, 2, 3]"
+                    :readonly="true"
         />
         <custom-button :type="'secondary'"
                        :name="'Revote'"
@@ -37,7 +44,8 @@
       <div v-if="currentSelector === 2" class="unvote-container">
         <div>Available Balance 00 TON</div>
         <div>
-          <text-input class="unvote-input"
+          <text-input ref="tonunvote"
+                      class="unvote-input"
                       :unit="'TON'"
                       :hint="'0'"
           />
@@ -45,6 +53,7 @@
                          :name="'MAX'"
                          :type="'vote'"
                          :width="'100px'"
+                         @on-clicked="wtonMax"
           />
         </div>
         <custom-button :type="'secondary'"
@@ -52,10 +61,14 @@
         />
       </div>
       <div v-if="currentSelector === 3">
-        <text-input class="withdraw-input"
+        <text-input ref="tonwithdraw"
+                    class="withdraw-input"
                     :unit="'TON'"
-                    :hint="'0'"
+                    :hint="'0.00'"
                     :big="true"
+                    :clickable="true"
+                    :datas="[1, 2, 3]"
+                    :readonly="true"
         />
         <custom-button :type="'secondary'"
                        :name="'Withdraw'"
@@ -66,6 +79,9 @@
 </template>
 
 <script>
+import { TON } from '@/utils/helpers';
+
+import { mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
 
@@ -78,6 +94,27 @@ export default {
     return {
       currentSelector: 0,
     };
+  },
+  computed: {
+    ...mapState([
+      'account',
+      'web3',
+      'tonBalance',
+      'requestsByCandidate',
+    ]),
+  },
+  methods: {
+    tonMax () {
+      this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);
+    },
+    wtonMax () {
+      this.$refs.tonunvote.$refs.input.value = TON(this.tonBalance);
+    },
+    vote () {
+      alert(this.tonBalance);
+    },
+    unvote () {
+    },
   },
 };
 </script>
