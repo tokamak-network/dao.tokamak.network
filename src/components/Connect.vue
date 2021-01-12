@@ -40,9 +40,6 @@ export default {
       return parseInt(this.account.slice(2, 10), 16);
     },
   },
-  mounted () {
-    this.setIcon();
-  },
   methods: {
     async connect () {
       if (typeof window.ethereum !== 'undefined') {

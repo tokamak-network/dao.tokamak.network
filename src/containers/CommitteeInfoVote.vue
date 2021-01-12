@@ -68,7 +68,7 @@ export default {
     const address = '0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd';
 
     this.allVoters = this.votersByCandidate[address];
-    this.voters = this.allVoters.slice(0, 4);
+    this.allVoters ? this.voters = this.allVoters.slice(0, 4) : this.voters = [];
   },
   methods: {
     set (page) {

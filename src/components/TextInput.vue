@@ -1,17 +1,21 @@
 <template>
-  <div class="text-input">
+  <div class="text-input"
+       :class="{
+         'clickable': clickable,
+       }"
+       @click="click()"
+  >
+    <span v-if="label !== ''" class="label">{{ label }}</span>
     <input ref="input"
            :placeholder="hint"
            :style="inputPadding"
            :class="{
              'with-unit': unit !== '',
              'big': big,
-             'clickable': clickable,
            }"
            :readonly="readonly"
            :value="value"
            @keypress="keypress"
-           @click="click"
     >
     <div v-if="unit !== ''" ref="unit">{{ unit }}</div>
   </div>
@@ -36,19 +40,22 @@ export default {
       type: Boolean,
       default: false,
     },
-    datas: {
-      type: Array,
-      default: () => [],
-    },
     readonly: {
       type: Boolean,
       default: false,
+    },
+    value: {
+      type: String,
+      default: undefined,
+    },
+    label: {
+      type: String,
+      default: '',
     },
   },
   data () {
     return {
       unitWidth: 0,
-      value: undefined,
       index: 0,
     };
   },
@@ -58,12 +65,6 @@ export default {
         'padding-right': this.unit !== '' ? (7+this.unitWidth+16)+'px' : 0,
       };
     },
-  },
-  created () {
-    if (this.datas.length > 0) {
-      this.index = this.datas.length - 1;
-      this.value = this.datas[this.index];
-    }
   },
   mounted () {
     if (this.unit !== '') {
@@ -84,12 +85,8 @@ export default {
       return true;
     },
     click () {
-      if (this.clickable && this.datas.length > 0) {
-        this.index--;
-        if (this.index === -1) {
-          this.index = this.datas.length - 1;
-        }
-        this.value = this.datas[this.index];
+      if (this.clickable) {
+        this.$emit('on-clicked');
       }
     },
   },
@@ -153,5 +150,26 @@ export default {
 
 .clickable {
   cursor: pointer;
+}
+
+.label {
+  width: 100%;
+  height: 42px;
+
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: 0.22px;
+  text-align: left;
+  color: #3e495c;
+
+  left: 16px;
 }
 </style>

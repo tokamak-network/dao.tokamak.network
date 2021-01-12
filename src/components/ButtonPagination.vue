@@ -34,22 +34,23 @@ export default {
   data () {
     return {
       currentPage: 0,
-      pageSize: 0,
-      pageMax: 0,
+      pageSize: 4,
       pages: [],
     };
+  },
+  computed: {
+    pageMax () {
+      return parseInt(((this.datas.length) - 1) / 4 + 1);
+    },
   },
   watch: {
     currentPage (page) {
       this.$emit('on-selected', page);
     },
-  },
-  created () {
-    this.pageSize = 4;
-    this.pageMax = parseInt(((this.datas.length) - 1) / 4 + 1);
-
-    const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
-    this.pages = Array.from(Array(num).keys());
+    pageMax () {
+      const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
+      this.pages = Array.from(Array(num).keys());
+    },
   },
   methods: {
     prev () {
