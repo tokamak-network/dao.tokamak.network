@@ -1,4 +1,5 @@
 import moment from 'moment';
+import web3Utils from 'web3-utils';
 import { createCurrency } from '@makerdao/currency';
 const _TON = createCurrency('TON');
 const _WTON = createCurrency('WTON');
@@ -40,4 +41,22 @@ export function WTON (amount) {
 
   const index = wtonAmount.indexOf('.');
   return index > -1 ? `${wtonAmount.slice(0, index + 3)}` : wtonAmount + '.00';
+}
+
+export function marshalString (str) {
+  if (str.slice(0, 2) === '0x') return str;
+  return '0x'.concat(str);
+}
+
+export function unmarshalString (str) {
+  if (str.slice(0, 2) === '0x') return str.slice(2);
+  return str;
+}
+
+export function padLeft (str, characterAmount) {
+  return web3Utils.padLeft(str, characterAmount);
+}
+
+export function toWei (amount) {
+  return _TON(amount).toFixed('wei');
 }

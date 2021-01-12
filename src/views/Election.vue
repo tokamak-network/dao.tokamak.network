@@ -4,7 +4,7 @@
       <committee-slot />
     </div>
     <div class="card-container">
-      <card-rank v-if="account !== ''" :title="'Your Votes'" />
+      <card-my-vote v-if="account !== ''" :title="'Your Votes'" />
       <card-rank :title="'Rank'" />
       <card-resource />
     </div>
@@ -14,12 +14,14 @@
 <script>
 import { mapState } from 'vuex';
 
+import CardMyVote from '@/containers/CardMyVote.vue';
 import CardResource from '@/containers/CardResource.vue';
 import CardRank from '@/containers/CardRank.vue';
 import CommitteeSlot from '@/containers/CommitteeSlot';
 
 export default {
   components: {
+    'card-my-vote': CardMyVote,
     'card-rank': CardRank,
     'card-resource': CardResource,
     'committee-slot': CommitteeSlot,

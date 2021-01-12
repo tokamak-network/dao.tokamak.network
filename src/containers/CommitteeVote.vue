@@ -33,9 +33,11 @@
                     :unit="'TON'"
                     :hint="'0.00'"
                     :big="true"
-                    :clickable="true"
-                    :datas="[1, 2, 3]"
                     :readonly="true"
+                    :clickable="true"
+                    :value="String(canRevote)"
+                    :label="'Available Amount'"
+                    @on-clicked="setRevoteAmount"
         />
         <custom-button :type="'secondary'"
                        :name="'Revote'"
@@ -60,15 +62,15 @@
                        :name="'Unvote'"
         />
       </div>
-      <div v-if="currentSelector === 3">
+      <div v-if="currentSelector === 3" class="unvote-container">
+        <div>Not Withdrawable Amount {{ tonBalance | TON }} TON</div>
         <text-input ref="tonwithdraw"
                     class="withdraw-input"
                     :unit="'TON'"
                     :hint="'0.00'"
-                    :big="true"
                     :clickable="true"
-                    :datas="[1, 2, 3]"
                     :readonly="true"
+                    :label="'Withdrawable Amount'"
         />
         <custom-button :type="'secondary'"
                        :name="'Withdraw'"
@@ -79,9 +81,10 @@
 </template>
 
 <script>
-import { TON } from '@/utils/helpers';
+import { TON, marshalString, unmarshalString, padLeft, toWei } from '@/utils/helpers';
+import { getContracts } from '@/utils/contracts';
 
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
 
@@ -93,15 +96,50 @@ export default {
   data () {
     return {
       currentSelector: 0,
+
+      requests: [],
+      address: '',
+
+      // revote
+      numCanRevote: 0,
+      canRevote: 0,
     };
   },
   computed: {
     ...mapState([
+      'candidates',
       'account',
       'web3',
       'tonBalance',
       'requestsByCandidate',
     ]),
+    ...mapGetters([
+      'candidate',
+    ]),
+  },
+  created () {
+    // revote amount
+    this.address = this.$route.params.address;
+    this.requests = this.requestsByCandidate[this.address];
+    this.requests = [
+      {
+        withdrawableBlockNumber: 10,
+        amount: 100,
+        processed: false,
+      },
+      {
+        withdrawableBlockNumber: 20,
+        amount: 200,
+        processed: false,
+      },
+      {
+        withdrawableBlockNumber: 30,
+        amount: 300,
+        processed: false,
+      },
+    ];
+    this.numCanRevote = this.requests.length;
+    this.canRevote = this.requests.reduce((prev, cur) => prev + cur.amount, 0);
   },
   methods: {
     tonMax () {
@@ -110,16 +148,59 @@ export default {
     wtonMax () {
       this.$refs.tonunvote.$refs.input.value = TON(this.tonBalance);
     },
-    vote () {
-      alert(this.tonBalance);
+    setRevoteAmount () {
+      this.numCanRevote--;
+      if (this.numCanRevote === 0) {
+        this.numCanRevote = this.requests.length;
+      }
+
+      let canRevote = 0;
+      for (let i = 0; i < this.numCanRevote; i++) {
+        canRevote += this.requests[i].amount;
+      }
+      this.canRevote = canRevote;
+      this.$refs.tonrevote.$refs.input.value = TON(this.canRevote);
+    },
+    async vote () {
+      const ton = getContracts('TON', this.web3);
+      const wton = getContracts('WTON', this.web3);
+
+      const amount = toWei(this.$refs.tonvote.$refs.input.value);
+      const bytecode = await this.bytecodeForDeposit();
+
+      await ton.methods.approveAndCall(wton._address, amount, bytecode)
+        .send({ from: this.account })
+        .on('transactionHash', async (hash) => {
+          alert(hash);
+        })
+        .on('receipt', (receipt) => {
+          alert(receipt);
+        });
     },
     unvote () {
+    },
+    revote () {
+      this.numCanRevote = this.requestsByCandidate.length;
+    },
+    async bytecodeForDeposit () {
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const depositManager = getContracts('DepositManager', this.web3);
+
+      const candidate = await committeeProxy.methods.candidateContract(this.address).call();
+
+      const bytecode = marshalString(
+        [depositManager._address, candidate]
+          .map(unmarshalString)
+          .map(str => padLeft(str, 64))
+          .join(''),
+      );
+      return bytecode;
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .committee-vote {
   height: 410px;
 

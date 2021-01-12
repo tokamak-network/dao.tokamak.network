@@ -10,7 +10,7 @@
         <div class="divide" />
         <div class="content">
           <span>Voted</span>
-          <span>40.0 TON</span>
+          <span>{{ vote | WTON }} TON</span>
         </div>
       </template>
     </card-container>
@@ -18,11 +18,37 @@
 </template>
 
 <script>
+import { getContracts } from '@/utils/contracts';
+
+import { mapState } from 'vuex';
 import Card from '@/components/Card.vue';
 
 export default {
   components: {
     'card-container': Card,
+  },
+  data () {
+    return {
+      vote: 0,
+    };
+  },
+  computed: {
+    ...mapState([
+      'account',
+      'web3',
+    ]),
+  },
+  async created () {
+    const address = this.$route.params.address;
+    const daoCommittee = getContracts('DAOCommittee', this.web3);
+
+    // TODO: fix
+    try {
+      this.vote = await daoCommittee.methods.balanceOfOnCandidate(address, this.account).call();
+    } catch (err) {
+      err;
+      this.vote = 100;
+    }
   },
 };
 </script>

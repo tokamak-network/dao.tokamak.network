@@ -9,14 +9,14 @@
             <div>Total Voted</div>
           </div>
           <div class="divide"></div>
-          <div v-for="(data, index) in candidateRankByVotes" :key="data._id"
+          <div v-for="(data, index) in ranks" :key="data.operator"
                class="body"
           >
             <div>{{ index + 1 }}</div>
-            <div>{{ data._id | hexSlicer }}</div>
+            <div>{{ data.account | hexSlicer }}</div>
             <div>{{ data.balance | WTON }}</div>
           </div>
-          <button-pagination class="button-pagination" :datas="candidateRankByVotes" @on-selected="set" />
+          <button-pagination class="button-pagination" :datas="myVotes" @on-selected="set" />
         </div>
       </template>
     </card-container>
@@ -47,18 +47,18 @@ export default {
   },
   computed: {
     ...mapState([
-      'candidateRankByVotes',
+      'myVotes',
     ]),
   },
   watch: {
-    candidateRankByVotes () {
-      this.ranks = this.candidateRankByVotes.slice(0, 4);
+    myVotes () {
+      this.ranks = this.myVotes.slice(0, 4);
     },
   },
   methods: {
     set (page) {
       const first = page * 4;
-      this.ranks = this.candidateRankByVotes.slice(first, first+4);
+      this.ranks = this.myVotes.slice(first, first+4);
     },
   },
 };

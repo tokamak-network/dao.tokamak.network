@@ -5,8 +5,8 @@
                     :width="'300'"
     /> -->
     <info-committee :title="'Description'" :content="'tokamak netwokr operator1'" :type="'description'" />
-    <info-committee :title="'Candidate Address'" :content="'0x1234'" :type="'address'" />
-    <info-committee :title="'Candidate Contract'" :content="'0x1234'" :type="'address'" />
+    <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).operator : '-'" :type="'address'" />
+    <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).layer2 : '-'" :type="'address'" />
     <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
     <info-committee :title="'Commit Count'" :content="'66'" />
     <info-committee :title="'Recent Commit'" :content="'4시간 전'" />
@@ -20,8 +20,8 @@
                     :width="'317'"
     />
     <info-committee :title="'Reward'" :content="`${amount} TON`" />
-    <info-committee :title="'Total Stake'" :content="'0.00 TON'" />
-    <info-committee :title="'My Staked'" :content="'0.00 TON'" />
+    <info-committee :title="'Total Voted'" :content="'0.00 TON'" />
+    <info-committee :title="'My Voted'" :content="'0.00 TON'" />
     <info-committee :title="'Not Withdrawable'" :content="'0.00 TON'" />
     <info-committee :title="'Withdrawable'" :content="'0.00 TON'" />
     <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" />
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getContracts } from '@/utils/contracts';
 
 import InfoCommittee from '@/components/InfoCommittee.vue';
@@ -42,13 +43,19 @@ export default {
   data () {
     return {
       amount: 1,
+      address: '',
     };
   },
+  computed: {
+    ...mapGetters([
+      'candidate',
+    ]),
+  },
   async created () {
-    const address = this.$route.params.address;
+    this.address = this.$route.params.address;
     const daoCommittee = getContracts('DAOCommittee', this.web3);
 
-    this.amount = await daoCommittee.methods.totalSupplyOnCandidate(address).call();
+    this.amount = await daoCommittee.methods.totalSupplyOnCandidate(this.address).call();
   },
 };
 </script>
