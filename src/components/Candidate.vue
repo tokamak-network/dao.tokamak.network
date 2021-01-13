@@ -101,6 +101,7 @@ export default {
     &:hover {
       text-decoration: underline;
       cursor: pointer;
+      color: #0062c2;
     }
   }
 }

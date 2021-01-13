@@ -26,7 +26,9 @@
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
-        <span class="voting-stat-content">{{ votersByCandidate['0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd'].length }}</span>
+        <span class="voting-stat-content">
+          {{ votersByCandidate['0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd'] ? votersByCandidate['0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd'].length : 0 }}
+        </span>
       </div>
     </div>
   </div>
@@ -63,12 +65,19 @@ export default {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
     },
   },
-  created () {
-    // const address = this.$route.params.address;
+  mounted () {
     const address = '0x7c53b3a01c9307f3dbdb6c1816b49e76fd2544bd';
 
-    this.allVoters = this.votersByCandidate[address];
-    this.allVoters ? this.voters = this.allVoters.slice(0, 4) : this.voters = [];
+    if (this.votersByCandidate[address]) {
+      this.allVoters = this.votersByCandidate[address];
+      this.allVoters ? this.voters = this.allVoters.slice(0, 4) : this.voters = [];
+    } else {
+      Promise.all([this.$store.dispatch('setMembersAndNonmembers'), this.$store.dispatch('setVotersByCandidate')])
+        .then(() => {
+          this.allVoters = this.votersByCandidate[address];
+          this.allVoters ? this.voters = this.allVoters.slice(0, 4) : this.voters = [];
+        });
+    }
   },
   methods: {
     set (page) {

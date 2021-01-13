@@ -217,6 +217,7 @@ export default new Vuex.Store({
     },
     totalVotesByCandidate: (state) => (candidate) => {
       const voters = state.votersByCandidate[candidate];
+      if (!voters) return 0;
 
       const initialAmount = 0;
       const reducer = (amount, voter) => amount + voter.balance;

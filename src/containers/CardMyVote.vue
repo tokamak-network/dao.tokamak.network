@@ -55,6 +55,11 @@ export default {
       this.ranks = this.myVotes.slice(0, 4);
     },
   },
+  created () {
+    if (this.myVotes) {
+      this.ranks = this.myVotes.slice(0, 4);
+    }
+  },
   methods: {
     set (page) {
       const first = page * 4;
