@@ -35,21 +35,22 @@
                     :big="true"
                     :readonly="true"
                     :clickable="true"
-                    :value="String(canRevote)"
+                    :value="canRevote ? String(canRevote) : undefined"
                     :label="'Available Amount'"
                     @on-clicked="setRevoteAmount"
         />
         <custom-button :type="'secondary'"
                        :name="'Revote'"
+                       @on-clicked="revote"
         />
       </div>
       <div v-if="currentSelector === 2" class="unvote-container">
-        <div>Available Balance 00 TON</div>
+        <div>Available Balance {{ votesByCandidate[address] ? votesByCandidate[address] : '0.00' | WTON }} TON</div>
         <div>
           <text-input ref="tonunvote"
                       class="unvote-input"
                       :unit="'TON'"
-                      :hint="'0'"
+                      :hint="'0.00'"
           />
           <custom-button class="unvote-max"
                          :name="'MAX'"
@@ -60,20 +61,24 @@
         </div>
         <custom-button :type="'secondary'"
                        :name="'Unvote'"
+                       @on-clicked="unvote"
         />
       </div>
       <div v-if="currentSelector === 3" class="unvote-container">
-        <div>Not Withdrawable Amount {{ tonBalance | TON }} TON</div>
+        <div>Not Withdrawable Amount {{ cannotWithdraw | WTON }} TON</div>
         <text-input ref="tonwithdraw"
                     class="withdraw-input"
                     :unit="'TON'"
                     :hint="'0.00'"
-                    :clickable="true"
                     :readonly="true"
+                    :clickable="true"
+                    :value="canWithdraw ? String(canWithdraw) : undefined"
                     :label="'Withdrawable Amount'"
+                    @on-clicked="setWithdrawableAmount"
         />
         <custom-button :type="'secondary'"
                        :name="'Withdraw'"
+                       @on-clicked="withdraw"
         />
       </div>
     </div>
@@ -102,7 +107,12 @@ export default {
 
       // revote
       numCanRevote: 0,
-      canRevote: 0,
+      canRevote: undefined,
+
+      numCanWithdraw: 0,
+      canWithdraw: undefined,
+
+      cannotWithdraw: undefined,
     };
   },
   computed: {
@@ -112,9 +122,13 @@ export default {
       'web3',
       'tonBalance',
       'requestsByCandidate',
+      'votesByCandidate',
     ]),
     ...mapGetters([
       'candidate',
+      'maxUnvote',
+      'notWithdrawableRequests',
+      'withdrawableRequests',
     ]),
   },
   created () {
@@ -140,6 +154,14 @@ export default {
     ];
     this.numCanRevote = this.requests.length;
     this.canRevote = this.requests.reduce((prev, cur) => prev + cur.amount, 0);
+
+    // this.numCanWithdraw = this.withdrawableRequests.length;
+    // this.canWithdraw = this.withdrawableRequests.reduce((prev, cur) => prev + cur.amount, 0);
+    this.numCanWithdraw = this.requests.length;
+    this.canWithdraw = this.requests.reduce((prev, cur) => prev + cur.amount, 0);
+
+    // TODO: requests -> notWithdrwableRequests
+    this.cannotWithdraw = this.requests.reduce((prev, cur) => prev + cur.amount, 0);
   },
   methods: {
     tonMax () {
@@ -149,6 +171,8 @@ export default {
       this.$refs.tonunvote.$refs.input.value = TON(this.tonBalance);
     },
     setRevoteAmount () {
+      if (this.requests.length === 0) return;
+
       this.numCanRevote--;
       if (this.numCanRevote === 0) {
         this.numCanRevote = this.requests.length;
@@ -161,15 +185,41 @@ export default {
       this.canRevote = canRevote;
       this.$refs.tonrevote.$refs.input.value = TON(this.canRevote);
     },
+    setWithdrawableAmount () {
+      // TODO: requests -> withdrawableRequests
+      if (this.requests.length === 0) return;
+
+      this.numCanWithdraw--;
+      if (this.numCanWithdraw === 0) {
+        this.numCanWithdraw = this.requests.length;
+      }
+
+      let canWithdraw = 0;
+      for (let i = 0; i < this.numCanWithdraw; i++) {
+        canWithdraw += this.requests[i].amount;
+      }
+      this.canWithdraw = canWithdraw;
+      this.$refs.tonwithdraw.$refs.input.value = TON(this.canWithdraw);
+    },
     async vote () {
+      if (!this.account) return;
+
       const ton = getContracts('TON', this.web3);
       const wton = getContracts('WTON', this.web3);
 
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
       const bytecode = await this.bytecodeForDeposit();
 
+      const gasLimit = await ton.methods.approveAndCall(wton._address, amount, bytecode)
+        .estimateGas({
+          from: this.account,
+        });
+
       await ton.methods.approveAndCall(wton._address, amount, bytecode)
-        .send({ from: this.account })
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
         .on('transactionHash', async (hash) => {
           alert(hash);
         })
@@ -177,10 +227,70 @@ export default {
           alert(receipt);
         });
     },
-    unvote () {
+    async unvote () {
+      if (!this.account) return;
+      const amount = 0;
+
+      const depositManager = getContracts('DepositManager', this.web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const candidate = await committeeProxy.methods.candidateContract(this.address).call();
+
+      const gasLimit = await depositManager.methods.requestWithdrawal(candidate, amount)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.requestWithdrawal(candidate, amount)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', async (hash) => {
+          hash;
+        });
     },
-    revote () {
-      this.numCanRevote = this.requestsByCandidate.length;
+    async revote () {
+      if (!this.account) return;
+
+      const depositManager = getContracts('DepositManager', this.web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const candidate = await committeeProxy.methods.candidateContract(this.address).call();
+
+      const gasLimit = await depositManager.methods.redepositMulti(candidate, this.numCanRevote)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.redepositMulti(candidate, this.numCanRevote)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        }).on('transactionHash', async (hash) => {
+          hash;
+        });
+    },
+    async withdraw () {
+      if (!this.account) return;
+
+      const depositManager = getContracts('DepositManager', this.web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const candidate = await committeeProxy.methods.candidateContract(this.address).call();
+
+      const gasLimit = await depositManager.methods.processRequests(candidate, this.numCanWithdraw, true)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.processRequests(candidate, this.numCanWithdraw, true)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        }).on('transactionHash', async (hash) => {
+          hash;
+        });
     },
     async bytecodeForDeposit () {
       const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);

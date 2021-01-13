@@ -14,6 +14,7 @@ export default new Vuex.Store({
     blockNumber: 0,
 
     tonBalance: 0,
+    votesByCandidate: 0,
 
     candidates: [],
     members: [],
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     },
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
+    },
+    SET_VOTES_BY_CANDIDATE (state, votesByCandidate) {
+      state.votesByCandidate = votesByCandidate;
     },
 
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
@@ -96,9 +100,16 @@ export default new Vuex.Store({
     },
     async setBalance ({ state, commit }) {
       const ton = getContracts('TON', state.web3);
+      const daoCommittee = getContracts('DAOCommittee', state.web3);
 
       const tonBalance = await ton.methods.balanceOf(state.account).call();
       commit('SET_TON_BALANCE', tonBalance);
+
+      const votesByCandidate = {};
+      state.candidates.forEach(async candidate => {
+        votesByCandidate[candidate.layer2] = await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
+      });
+      commit('SET_VOTES_BY_CANDIDATE', votesByCandidate);
     },
     async setRequests ({ state, commit }) {
       const requestsByCandidate = {};
