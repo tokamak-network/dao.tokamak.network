@@ -4,15 +4,15 @@
       <template #body>
         <div class="stats-committee">
           <div class="title">Total Agendas</div>
-          <div class="content">10</div>
+          <div class="content">{{ agendas.length }}</div>
         </div>
         <div class="stats-committee">
           <div class="title">Total Executed Agendas</div>
-          <div class="content">5</div>
+          <div class="content">{{ executed.length }}</div>
         </div>
         <div class="stats-committee">
           <div class="title">Total Denied Agendas</div>
-          <div class="content">3</div>
+          <div class="content">{{ denided.length }}</div>
         </div>
       </template>
     </card-container>
@@ -21,10 +21,37 @@
 
 <script>
 import Card from '@/components/Card.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     'card-container': Card,
+  },
+  data () {
+    return {
+      executed: [],
+      denided: [],
+    };
+  },
+  computed: {
+    ...mapState([
+      'agendas',
+    ]),
+    calculate () {
+      return () => {
+        for (const agenda of this.agendas) {
+          if (agenda.executed === true) {
+            this.executed.push(agenda);
+          }
+          if (agenda.result === 2) {
+            this.denided.push(agenda);
+          }
+        }
+      };
+    },
+  },
+  created () {
+    this.calculate();
   },
 };
 </script>

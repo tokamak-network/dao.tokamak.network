@@ -1,4 +1,4 @@
-import { getCandidates } from '@/api';
+import { getCandidates, getAgendas, getAgendaVoteCasted } from '@/api';
 import { getContracts } from '@/utils/contracts';
 
 import Vue from 'vue';
@@ -15,6 +15,9 @@ export default new Vuex.Store({
     candidates: [],
     members: [],
     nonmembers: [],
+
+    agendas: [],
+    voteCasted: [],
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -36,6 +39,12 @@ export default new Vuex.Store({
     SET_NONMEMBERS (state, nonmembers) {
       state.nonmembers = nonmembers;
     },
+    SET_AGENDAS (state, agendas) {
+      state.agendas = agendas;
+    },
+    SET_AGENDA_VOTE_CASTED (state, voteCasted) {
+      state.voteCasted = voteCasted;
+    },
   },
   actions: {
     async connectEthereum ({ commit }, web3) {
@@ -51,6 +60,14 @@ export default new Vuex.Store({
 
       const chainId = await web3.eth.getChainId();
       commit('SET_CHAIN_ID', chainId);
+
+      const blockNumber = await web3.eth.getBlockNumber();
+      commit('SET_BLOCK_NUMBER', blockNumber);
+
+      // TODO: await?
+      // await dispatch('setBalance');
+      // await dispatch('setRequests');
+      // await dispatch('setMyVotes');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -67,7 +84,6 @@ export default new Vuex.Store({
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-
       const getMembers = [];
       for (let i = 0; i < maxMember; i++) {
         getMembers.push(daoCommitteeProxy.methods.members(i).call());
@@ -95,6 +111,23 @@ export default new Vuex.Store({
       );
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
+    },
+    async setAgendas ({ commit }) {
+      const [
+        agendas,
+      ] = await Promise.all([
+        await getAgendas(),
+      ]);
+
+      commit('SET_AGENDAS', agendas);
+    },
+    async setAgendaVoteCasted ({ commit }) {
+      const [events] = await Promise.all([await getAgendaVoteCasted()]);
+      const voteCasted = [];
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0));
+      // events.forEach(event => (if (event.eventName === )))
+      console.log(voteCasted);
+      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
     },
   },
 });
