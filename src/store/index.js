@@ -138,10 +138,6 @@ export default new Vuex.Store({
       const myVote = [];
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
 
-      for (const cast of myVote) {
-        console.log(cast);
-      }
-
       const voteRate = (myVote.length / agendas.length) * 100;
       context.commit('SET_MY_VOTE', myVote);
       context.commit('SET_VOTE_RATE', voteRate);
