@@ -108,8 +108,11 @@ export default {
         // gasLimit: Math.floor(gasLimit * 1.2),
       }).on('transactionHash', async (hash) => {
         alert(hash);
+        this.close();
       }).on('receipt', (receipt) => {
         alert(receipt);
+        this.$store.dispatch('setAgendas');
+        this.close();
       });
       // .on('receipt', (receipt) => {
       //   if (receipt.status) {

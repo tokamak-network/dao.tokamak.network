@@ -35,8 +35,8 @@
         </div>
         <!-- <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div> -->
       </div>
-      <div class="right-side">
-        <div v-if="agenda.status < 3" class="dropdown-section">
+      <div v-if="agenda.executed === false" class="right-side">
+        <!-- <div v-if="agenda.status < 3" class="dropdown-section">
           <div class="your-vote">YOUR VOTE</div>
           <dropdown
             :items="['Yes', 'No']"
@@ -46,7 +46,7 @@
             class="dropdown"
             @on-selected="select"
           />
-        </div>
+        </div> -->
         <button-comp
           v-if="login!==false"
           :name="buttonClass.buttonName"
@@ -63,7 +63,7 @@
 
 <script>
 import Button from '@/components/Button.vue';
-import Dropdown from '@/components/Dropdown.vue';
+// import Dropdown from '@/components/Dropdown.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
@@ -75,7 +75,7 @@ import moment from 'moment';
 export default {
   components: {
     'button-comp': Button,
-    'dropdown': Dropdown,
+    // 'dropdown': Dropdown,
     'modal': Modal,
     'modal-vote': ModalVote,
   },
@@ -94,8 +94,8 @@ export default {
         'buttonType': 'vote',
         'buttonStatus': '',
       },
-      choice: this.agenda.choice,
-      voted: this.agenda.voted,
+      choice: '',
+      voted: false,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       showModal: false,
     };
@@ -105,6 +105,7 @@ export default {
       'web3',
       'account',
       'members',
+      'myVote',
     ]),
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
@@ -140,6 +141,7 @@ export default {
   },
   created () {
     this.changeButtonProperty();
+    this.myVoteResult();
   },
   methods: {
     select (item) {
@@ -147,31 +149,41 @@ export default {
       this.voted = true;
       this.buttonClass.buttonStatus = '';
     },
+    myVoteResult () { // check
+      for (const vote of this.myVote) {
+        // console.log(vote);
+        if (Number(vote[1]) === this.agenda.agendaid) {
+          if (vote[2] === '0') {
+            this.choice = 'Abstain';
+          } else if (vote[2] === '1') {
+            this.choice = 'Yes';
+          } else {
+            this.choice = 'No';
+          }
+          this.voted = true;
+        }
+      }
+    },
     async changeButtonProperty () {
-      // const agendaManager = getContracts('DAOAgendaManager', this.web3);
-      // const a = await agendaManager.methods.getVoters(5).call();
-      // console.log(a[11]);
-      // console.log(a[10]);
-      // console.log(a);
       if (this.agenda.voters.includes(this.account) || this.agenda.status === 3) {
         this.buttonClass.buttonName = 'Execute';
         this.buttonClass.buttonType = 'secondary';
-      } else if (this.agenda.status === 5) {
-        this.buttonClass.buttonName = 'Claim';
-        this.buttonClass.buttonType = 'vote';
-      } else if (this.agenda.status === 4 && this.agenda.executed === true) {
-        this.buttonClass.buttonName = 'Claim';
-        this.buttonClass.buttonStatus = 'disabled';
-      } else if (this.agenda.status === 0) {
-        this.buttonClass.buttonName = 'voting start';
-        this.buttonClass.buttonStatus = 'disabled';
-      } else if (this.agenda.status === 1) {
-        this.buttonClass.buttonName = 'voting start';
-        this.buttonClass.buttonStatus = '';
+      // } else if (this.agenda.status === 0) {
+      //   this.buttonClass.buttonName = 'voting start';
+      //   this.buttonClass.buttonStatus = 'disabled';
+      // } else if (this.agenda.status === 1) {
+      //   this.buttonClass.buttonName = 'voting start';
+      //   this.buttonClass.buttonStatus = '';
       } else {
         this.buttonClass.buttonName = 'Vote';
         this.buttonClass.buttonStatus = '';
       }
+      // const AGENDA_STATUS_NONE = 0;
+      // const AGENDA_STATUS_NOTICE = 1;
+      // const AGENDA_STATUS_VOTING = 2;
+      // const AGENDA_STATUS_WAITING_EXEC = 3;
+      // const AGENDA_STATUS_EXECUTED = 4;
+      // const AGENDA_STATUS_ENDED = 5;
       return this.buttonClass;
     },
     click () {
@@ -181,11 +193,10 @@ export default {
         (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);
       } else if (this.buttonClass.buttonName === 'Execute') {
         this.execute();
-      } else if (this.buttonClass.buttonName === 'Claim') {
-        this.buttonClass.buttonStatus = 'disabled';
       } else if (this.buttonClass.buttonName === 'voting start') {
         this.start();
       }
+      this.$store.dispatch('setAgendas');
     },
     async start () {
       const agendaManager = getContracts('DAOAgendaManager', this.web3);

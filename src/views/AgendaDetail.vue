@@ -5,7 +5,7 @@
     </div>
     <div class="card-container">
       <card-vote-for-agenda />
-      <card-voters />
+      <card-voters :voters="comments" />
       <card-resource />
     </div>
   </div>
@@ -26,10 +26,29 @@ export default {
     'card-voters': CardVoters,
     'card-vote-for-agenda': CardVoteForAgenda,
   },
+  data () {
+    return {
+      comments : [],
+    };
+  },
   computed: {
     ...mapState([
       'account',
+      'voteCasted',
     ]),
+    classify () {
+      return () => {
+        this.voteCasted.forEach(async casted => casted.data.id === this.$route.params.address ? this.comments.push(casted.data) : 0);
+      };
+    },
+    shortAddress () {
+      return (address) => {
+        return `${address.slice(0, 7)}...${address.slice(-4)}`;
+      };
+    },
+  },
+  created () {
+    this.classify();
   },
 };
 </script>

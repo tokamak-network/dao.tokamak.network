@@ -1,10 +1,10 @@
 <template>
   <div class="card-agenda-info">
     <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
@@ -24,9 +24,9 @@
         <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Comments</div>
       </div>
       <div class="divider" />
-      <agen-info v-if="currentSelector === 0" />
-      <agen-info-vote v-else-if="currentSelector === 1" />
-      <agen-vote v-else-if="currentSelector === 2" />
+      <agenda-info v-if="currentSelector === 0" />
+      <agenda-info-vote v-else-if="currentSelector === 1" />
+      <agenda-vote v-else-if="currentSelector === 2" />
     </div>
   </div>
 </template>
@@ -36,18 +36,39 @@ import ButtonStep from '@/components/ButtonStep.vue';
 import AgendaComments from '@/containers/AgendaComments.vue';
 import AgendaInfo from '@/containers/AgendaInfo.vue';
 import AgendaOnChain from '@/containers/AgendaOnChain.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     'button-step': ButtonStep,
-    'agen-info': AgendaInfo,
-    'agen-info-vote': AgendaOnChain,
-    'agen-vote': AgendaComments,
+    'agenda-info': AgendaInfo,
+    'agenda-info-vote': AgendaOnChain,
+    'agenda-vote': AgendaComments,
   },
   data () {
     return {
       currentSelector: 0,
     };
+  },
+  computed: {
+    ...mapState([
+      'agendas',
+    ]),
+  },
+  methods: {
+    back () {
+      this.$router.push({
+        path: '/agenda/',
+      });
+    },
+    prev () {
+      let index = Number(this.$route.params.address) + 1;
+      if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
+    },
+    next () {
+      let index = Number(this.$route.params.address) -1 ;
+      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
+    },
   },
 };
 </script>

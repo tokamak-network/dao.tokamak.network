@@ -18,6 +18,8 @@ export default new Vuex.Store({
 
     agendas: [],
     voteCasted: [],
+    voteRate: 0,
+    myVote: [],
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -44,6 +46,12 @@ export default new Vuex.Store({
     },
     SET_AGENDA_VOTE_CASTED (state, voteCasted) {
       state.voteCasted = voteCasted;
+    },
+    SET_VOTE_RATE (state, voteRate) {
+      state.voteRate = voteRate;
+    },
+    SET_MY_VOTE (state, myVote) {
+      state.myVote = myVote;
     },
   },
   actions: {
@@ -79,7 +87,8 @@ export default new Vuex.Store({
       const daoCommitteeProxy = getContracts('DAOCommitteeProxy', this.web3);
 
       const [
-        candidates, maxMember,
+        candidates,
+        maxMember,
       ] = await Promise.all([
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
@@ -112,22 +121,32 @@ export default new Vuex.Store({
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
-    async setAgendas ({ commit }) {
+    async setAgendas (context) {
+      const account = context.state.account;
       const [
         agendas,
+        events,
       ] = await Promise.all([
         await getAgendas(),
+        await getAgendaVoteCasted(),
       ]);
 
-      commit('SET_AGENDAS', agendas);
-    },
-    async setAgendaVoteCasted ({ commit }) {
-      const [events] = await Promise.all([await getAgendaVoteCasted()]);
       const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0));
-      // events.forEach(event => (if (event.eventName === )))
-      console.log(voteCasted);
-      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
+      context.commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+
+      const myVote = [];
+      voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
+
+      for (const cast of myVote) {
+        console.log(cast);
+      }
+
+      const voteRate = (myVote.length / agendas.length) * 100;
+      context.commit('SET_MY_VOTE', myVote);
+      context.commit('SET_VOTE_RATE', voteRate);
+
+      context.commit('SET_AGENDAS', agendas);
     },
   },
 });

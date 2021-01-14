@@ -5,7 +5,7 @@
            @on-closed="showModal=false"
     >
       <template #body>
-        <modal-vote @on-closed="showModal=false" />
+        <modal-vote :id="id" @on-closed="showModal=false" />
       </template>
     </modal>
     <card-container :title="'Your Vote'">
@@ -42,6 +42,7 @@ export default {
   data () {
     return {
       showModal: false,
+      id: Number(this.$route.params.address),
     };
   },
   computed: {

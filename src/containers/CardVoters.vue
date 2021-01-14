@@ -5,22 +5,10 @@
         <div class="table">
           <table>
             <tbody>
-              <tr>
+              <tr v-for="(data, index) in voters" :key="index">
                 <div class="table-content">
-                  <div>Yes</div>
-                  <div>0x56a1...8a73</div>
-                </div>
-              </tr>
-              <tr>
-                <div class="table-content">
-                  <div>Yes</div>
-                  <div>0x56a1...8a73</div>
-                </div>
-              </tr>
-              <tr>
-                <div class="table-content">
-                  <div>No</div>
-                  <div>0x56a1...8a73</div>
+                  <div>{{ toResult(data[2]) }}</div>
+                  <div>{{ shortAddress(data[0]) }}</div>
                 </div>
               </tr>
             </tbody>
@@ -37,6 +25,35 @@ import Card from '@/components/Card.vue';
 export default {
   components: {
     'card-container': Card,
+  },
+  props: {
+    voters: {
+      type: Array,
+      default: ()=>[],
+    },
+  },
+  data () {
+    return {
+      comments : [],
+    };
+  },
+  computed: {
+    toResult () {
+      return (result) => {
+        if (result === '0') {
+          return 'Abstain';
+        } else if (result === '1') {
+          return 'Yes';
+        } else {
+          return 'No';
+        }
+      };
+    },
+    shortAddress () {
+      return (address) => {
+        return `${address.slice(0, 7)}...${address.slice(-4)}`;
+      };
+    },
   },
 };
 </script>

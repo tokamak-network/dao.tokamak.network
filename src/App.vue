@@ -25,7 +25,7 @@ export default {
   created () {
     this.$store.dispatch('setMembersAndNonmembers');
     this.$store.dispatch('setAgendas');
-    this.$store.dispatch('setAgendaVoteCasted');
+    // this.$store.dispatch('setAgendaVoteCasted');
   },
 };
 </script>
