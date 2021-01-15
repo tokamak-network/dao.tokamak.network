@@ -14,8 +14,10 @@
           >
             <div>{{ index + 1 }}</div>
             <div>{{ data._id | hexSlicer }}</div>
-            <div>{{ data.balance | WTON }}</div>
+            <div>{{ data.balance | WTON }} TON</div>
           </div>
+        </div>
+        <div class="button-container">
           <button-pagination class="button-pagination" :datas="candidateRankByVotes" @on-selected="set" />
         </div>
       </template>
@@ -50,10 +52,8 @@ export default {
       'candidateRankByVotes',
     ]),
   },
-  watch: {
-    candidateRankByVotes () {
-      this.ranks = this.candidateRankByVotes.slice(0, 4);
-    },
+  mounted () {
+    this.ranks = this.candidateRankByVotes.slice(0, 4);
   },
   methods: {
     set (page) {
@@ -69,6 +69,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  min-height: 162px;
 }
 .rank-container .header {
   display: flex;
@@ -134,5 +136,10 @@ export default {
 .button-pagination {
   margin-top: 10px;
   padding-bottom: 16px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 </style>

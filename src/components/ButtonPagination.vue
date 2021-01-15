@@ -7,7 +7,8 @@
            width="9" height="9"
       >
     </div>
-    <div v-for="(page, index) in pages" :key="index"
+    <div v-if="!pages || pages.length === 0" class="page">1</div>
+    <div v-for="(page, index) in pages" v-else :key="index"
          class="page" :class="{ 'page-selected': page === currentPage }"
          @click="select(page)"
     >
@@ -51,6 +52,10 @@ export default {
       const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
       this.pages = Array.from(Array(num).keys());
     },
+  },
+  mounted () {
+    const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
+    this.pages = Array.from(Array(num).keys());
   },
   methods: {
     prev () {

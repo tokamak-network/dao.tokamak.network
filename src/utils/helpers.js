@@ -29,18 +29,18 @@ export function fromNow (timestamp, suffix=false) {
 
 export function TON (amount) {
   const ton = _TON.wei(amount);
-  const tonAmount = ton.toBigNumber().toString();
+  const value = ton.toString();
+  const length = value.length;
 
-  const index = tonAmount.indexOf('.');
-  return index > -1 ? `${tonAmount.slice(0, index + 3)}` : tonAmount + '.00';
+  return value.substring(0, length - 3);
 }
 
 export function WTON (amount) {
-  const wton = _WTON.ray(amount);
-  const wtonAmount = wton.toBigNumber().toString();
+  const wton = _WTON.ray(String(amount));
+  const value = wton.toString();
+  const length = value.length;
 
-  const index = wtonAmount.indexOf('.');
-  return index > -1 ? `${wtonAmount.slice(0, index + 3)}` : wtonAmount + '.00';
+  return value.substring(0, length - 4);
 }
 
 export function marshalString (str) {
@@ -59,4 +59,8 @@ export function padLeft (str, characterAmount) {
 
 export function toWei (amount) {
   return _TON(amount).toFixed('wei');
+}
+
+export function toRay (amount) {
+  return _WTON(amount).toFixed('ray');
 }

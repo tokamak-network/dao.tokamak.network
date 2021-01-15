@@ -14,8 +14,10 @@
           >
             <div>{{ index + 1 }}</div>
             <div>{{ data.account | hexSlicer }}</div>
-            <div>{{ data.balance | WTON }}</div>
+            <div>{{ data.balance | WTON }} TON</div>
           </div>
+        </div>
+        <div class="button-container">
           <button-pagination class="button-pagination" :datas="myVotes" @on-selected="set" />
         </div>
       </template>
@@ -74,6 +76,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  min-height: 162px;
 }
 .rank-container .header {
   display: flex;
@@ -135,6 +139,10 @@ export default {
   background: #dfe4ee;
 
   margin-bottom: 10px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 .button-pagination {
   margin-top: 10px;

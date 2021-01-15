@@ -1,10 +1,12 @@
 <template>
   <div class="card-committee-info">
     <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
+                   @on-clicked="$router.push({ path: '/election' })"
+      />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
@@ -38,7 +40,7 @@
 <script>
 import { date1, fromNow } from '@/utils/helpers';
 
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
@@ -58,6 +60,9 @@ export default {
     };
   },
   computed: {
+    ...mapState([
+      'candidates',
+    ]),
     ...mapGetters([
       'candidate',
     ]),
@@ -71,6 +76,27 @@ export default {
     },
     fromNow (timestamp) {
       return fromNow(timestamp, true);
+    },
+    prev () {
+      let index = this.candidates.map(candidate => candidate.operator.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === 0) {
+        return;
+      }
+      index--;
+
+      this.$router.push(({ path: `/election/${this.candidates[index].operator}` }));
+      this.address = this.$route.params.address;
+    },
+    next () {
+      const max = this.candidates.length;
+      let index = this.candidates.map(candidate => candidate.operator.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === max - 1) {
+        return;
+      }
+      index++;
+
+      this.$router.push(({ path: `/election/${this.candidates[index].operator}` }));
+      this.address = this.$route.params.address;
     },
   },
 };

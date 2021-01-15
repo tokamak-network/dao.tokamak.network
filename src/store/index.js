@@ -1,5 +1,6 @@
 import { getCandidates, getVotersByCandidate, getCandidateRankByVotes } from '@/api';
 import { getContracts } from '@/utils/contracts';
+import { WTON } from '@/utils/helpers';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -14,17 +15,19 @@ export default new Vuex.Store({
     blockNumber: 0,
 
     tonBalance: 0,
-    votesByCandidate: 0,
 
     candidates: [],
     members: [],
     nonmembers: [],
 
-    votersByCandidate: {},
+    myVotesByCandidate: [],
+    votersByCandidate: [],
     requestsByCandidate: [],
-
     candidateRankByVotes: [],
+
     myVotes: [],
+
+    pendingTx: '',
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -56,10 +59,10 @@ export default new Vuex.Store({
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
-    SET_VOTES_BY_CANDIDATE (state, votesByCandidate) {
-      state.votesByCandidate = votesByCandidate;
-    },
 
+    SET_MY_VOTES_BY_CANDIDATE (state, myVotesByCandidate) {
+      state.myVotesByCandidate = myVotesByCandidate;
+    },
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
     },
@@ -68,6 +71,10 @@ export default new Vuex.Store({
     },
     SET_MY_VOTES (state, myVotes) {
       state.myVotes = myVotes;
+    },
+
+    SET_PENDING_TX (state, pendingTx) {
+      state.pendingTx = pendingTx;
     },
   },
   actions: {
@@ -105,14 +112,16 @@ export default new Vuex.Store({
       const tonBalance = await ton.methods.balanceOf(state.account).call();
       commit('SET_TON_BALANCE', tonBalance);
 
-      const votesByCandidate = {};
+      const myVotesByCandidate = [];
       state.candidates.forEach(async candidate => {
-        votesByCandidate[candidate.layer2] = await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
+        const myVotes = await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
+        candidate.myVotes = myVotes;
+        myVotesByCandidate.push(candidate);
       });
-      commit('SET_VOTES_BY_CANDIDATE', votesByCandidate);
+      commit('SET_MY_VOTES_BY_CANDIDATE', myVotesByCandidate);
     },
     async setRequests ({ state, commit }) {
-      const requestsByCandidate = {};
+      const requestsByCandidate = [];
 
       const depositManager = getContracts('DepositManager', state.web3);
       state.candidates.forEach(async candidate => {
@@ -130,9 +139,9 @@ export default new Vuex.Store({
           requestIndex++;
         }
         const requests = await Promise.all(pendingRequests);
-        requestsByCandidate[candidate.layer2] = requests;
+        candidate.requests = requests;
+        requestsByCandidate.push(candidate);
       });
-
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
     async setMyVotes ({ state, commit }) {
@@ -207,11 +216,11 @@ export default new Vuex.Store({
       commit('SET_NONMEMBERS', nonmembers);
     },
     async setVotersByCandidate ({ state, commit }) {
-      const votersByCandidate = {};
+      const votersByCandidate = [];
 
-      const candidates = state.candidates.map(candidate => candidate.layer2);
-      candidates.forEach(async candidate => {
-        votersByCandidate[candidate] = await getVotersByCandidate(candidate);
+      state.candidates.forEach(async candidate => {
+        candidate.voters = await getVotersByCandidate(candidate);
+        votersByCandidate.push(candidate);
       });
 
       commit('SET_VOTERS_BY_CANDIDATE', votersByCandidate);
@@ -223,11 +232,27 @@ export default new Vuex.Store({
   },
   getters: {
     candidate: (state) => (address) => {
-      const index = state.candidates.map(candidate => candidate.operator.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
       return index !== -1 ? state.candidates[index] : null;
     },
-    totalVotesByCandidate: (state) => (candidate) => {
-      const voters = state.votersByCandidate[candidate];
+    requests: (state) => (address) => {
+      const index = state.requestsByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      return index > -1 ? state.requestsByCandidate[index].requests : [];
+    },
+    voters: (state) => (address) => {
+      const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      return index > -1 ? state.votersByCandidate[index].voters : [];
+    },
+    myVotes: (state) => (address) => {
+      console.log(address);
+      const index = state.myVotesByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
+    },
+    totalVotesByCandidate: (state) => (address) => {
+      const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const candidate = state.votersByCandidate[index];
+      const voters = candidate.voters;
+
       if (!voters) return 0;
 
       const initialAmount = 0;
@@ -236,11 +261,34 @@ export default new Vuex.Store({
     },
     notWithdrawableRequests: (state) => (candidate) => {
       const requests = state.requestsByCandidate[candidate];
+      if (!requests || requests.length === 0) {
+        return [];
+      }
       return requests.filter(request => parseInt(request.withdrawableBlockNumber) > state.blockNumber);
     },
     withdrawableRequests: (state) => (candidate) => {
       const requests = state.requestsByCandidate[candidate];
+      if (!requests || requests.length === 0) {
+        return [];
+      }
       return requests.filter(request => parseInt(request.withdrawableBlockNumber) <= state.blockNumber);
+    },
+    numCanRevote: (_, getters) => (address, revoteIndex) => {
+      const requests = getters.requests(address);
+      if (!requests) {
+        return 0;
+      }
+      return requests.length - revoteIndex;
+    },
+    canRevote: (_, getters) => (address, revoteIndex) => {
+      const requests = getters.requests(address);
+      if (!requests) {
+        return WTON(0);
+      }
+
+      const voteRequests = requests.slice(0, requests.length - revoteIndex);
+      const amount = voteRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
+      return WTON(amount);
     },
   },
 });
