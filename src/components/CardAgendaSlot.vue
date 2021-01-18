@@ -31,7 +31,7 @@
         />
         <div class="vote-status">
           <div v-if="voted !== true">You have not voted</div>
-          <div v-else-if="voted === true" class="vote-selected">You have voted to {{ choice }}</div>
+          <div v-else-if="voted === true" class="vote-selected">{{ votedResult }}</div>
         </div>
         <!-- <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div> -->
       </div>
@@ -49,9 +49,9 @@
         </div> -->
         <button-comp
           v-if="login!==false"
-          :name="buttonClass.buttonName"
-          :type="buttonClass.buttonType"
-          :status="buttonClass.buttonStatus"
+          :name="buttonName"
+          :type="buttonType"
+          :status="buttonStatus"
           class="right"
           :width="'124px'"
           @on-clicked="click"
@@ -92,7 +92,7 @@ export default {
       buttonClass: {
         'buttonName': 'Vote',
         'buttonType': 'vote',
-        'buttonStatus': '',
+        'buttonStatus': 'disabled',
       },
       choice: '',
       voted: false,
@@ -138,10 +138,52 @@ export default {
         }
       };
     },
+    // const AGENDA_STATUS_NONE = 0;
+    // const AGENDA_STATUS_NOTICE = 1;
+    // const AGENDA_STATUS_VOTING = 2;
+    // const AGENDA_STATUS_WAITING_EXEC = 3;
+    // const AGENDA_STATUS_EXECUTED = 4;
+    // const AGENDA_STATUS_ENDED = 5;
+    buttonName () {
+      switch (this.agenda.status) {
+      case 3: return 'Execute';
+      case 4: return 'Execute';
+      case 5: return 'Execute';
+      }
+      return 'Vote';
+    },
+    buttonType () {
+      switch (this.agenda.status) {
+      case 4: return 'secondary';
+      case 5: return 'secondary';
+      }
+      return 'vote';
+    },
+    buttonStatus () {
+      switch (this.agenda.status) {
+      case 2: return '';
+      case 3: return '';
+      case 4: return 'disabled';
+      case 5: return 'disabled';
+      }
+      return 'disabled';
+    },
+    votedResult () {
+      for (const vote of this.myVote) {
+        if (Number(vote[1]) === this.agenda.agendaid) {
+          switch (vote[2]) {
+          case '0': return 'You have voted to Abstain';
+          case '1': return 'You have voted Yes';
+          case '2': return 'You have voted No';
+          }
+        }
+      }
+      return 'You have not voted';
+    },
   },
   created () {
-    this.changeButtonProperty();
-    this.myVoteResult();
+    // this.changeButtonProperty();
+    // this.myVoteResult();
   },
   methods: {
     select (item) {
@@ -149,52 +191,13 @@ export default {
       this.voted = true;
       this.buttonClass.buttonStatus = '';
     },
-    myVoteResult () { // check
-      for (const vote of this.myVote) {
-        // console.log(vote);
-        if (Number(vote[1]) === this.agenda.agendaid) {
-          if (vote[2] === '0') {
-            this.choice = 'Abstain';
-          } else if (vote[2] === '1') {
-            this.choice = 'Yes';
-          } else {
-            this.choice = 'No';
-          }
-          this.voted = true;
-        }
-      }
-    },
-    async changeButtonProperty () {
-      if (this.agenda.voters.includes(this.account) || this.agenda.status === 3) {
-        this.buttonClass.buttonName = 'Execute';
-        this.buttonClass.buttonType = 'secondary';
-      // } else if (this.agenda.status === 0) {
-      //   this.buttonClass.buttonName = 'voting start';
-      //   this.buttonClass.buttonStatus = 'disabled';
-      // } else if (this.agenda.status === 1) {
-      //   this.buttonClass.buttonName = 'voting start';
-      //   this.buttonClass.buttonStatus = '';
-      } else {
-        this.buttonClass.buttonName = 'Vote';
-        this.buttonClass.buttonStatus = '';
-      }
-      // const AGENDA_STATUS_NONE = 0;
-      // const AGENDA_STATUS_NOTICE = 1;
-      // const AGENDA_STATUS_VOTING = 2;
-      // const AGENDA_STATUS_WAITING_EXEC = 3;
-      // const AGENDA_STATUS_EXECUTED = 4;
-      // const AGENDA_STATUS_ENDED = 5;
-      return this.buttonClass;
-    },
     click () {
-      if (this.buttonClass.buttonName === 'Vote') {
+      if (this.agenda.status === 2) {
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));
         (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);
-      } else if (this.buttonClass.buttonName === 'Execute') {
+      } else if (this.agenda.status === 3) {
         this.execute();
-      } else if (this.buttonClass.buttonName === 'voting start') {
-        this.start();
       }
       this.$store.dispatch('setAgendas');
     },
