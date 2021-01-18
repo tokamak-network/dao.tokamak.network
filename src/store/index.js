@@ -243,31 +243,34 @@ export default new Vuex.Store({
       const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.votersByCandidate[index].voters : [];
     },
+    selectedVoters: (_, getters) => (address, page) => {
+      const first = page * 4;
+      return getters.voters(address) ? getters.voters(address).slice(first, first+4) : [];
+    },
     myVotes: (state) => (address) => {
-      console.log(address);
       const index = state.myVotesByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
     },
     totalVotesByCandidate: (state) => (address) => {
       const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
       const candidate = state.votersByCandidate[index];
-      const voters = candidate.voters;
 
-      if (!voters) return 0;
+      if (!candidate) return 0;
+      const voters = candidate.voters;
 
       const initialAmount = 0;
       const reducer = (amount, voter) => amount + voter.balance;
       return voters.reduce(reducer, initialAmount);
     },
-    notWithdrawableRequests: (state) => (candidate) => {
-      const requests = state.requestsByCandidate[candidate];
+    notWithdrawableRequests: (state, getters) => (candidate) => {
+      const requests = getters.requests(candidate);
       if (!requests || requests.length === 0) {
         return [];
       }
       return requests.filter(request => parseInt(request.withdrawableBlockNumber) > state.blockNumber);
     },
-    withdrawableRequests: (state) => (candidate) => {
-      const requests = state.requestsByCandidate[candidate];
+    withdrawableRequests: (state, getters) => (candidate) => {
+      const requests = getters.requests(candidate);
       if (!requests || requests.length === 0) {
         return [];
       }
@@ -288,6 +291,23 @@ export default new Vuex.Store({
 
       const voteRequests = requests.slice(0, requests.length - revoteIndex);
       const amount = voteRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
+      return WTON(amount);
+    },
+    numCanWithdraw: (_, getters) => (address, withdrawIndex) => {
+      const requests = getters.withdrawableRequests(address);
+      if (!requests) {
+        return 0;
+      }
+      return requests.length - withdrawIndex;
+    },
+    canWithdraw: (_, getters) => (address, withdrawIndex) => {
+      const requests = getters.withdrawableRequests(address);
+      if (!requests) {
+        return WTON(0);
+      }
+
+      const withdrawableRequests = requests.slice(0, requests.length - withdrawIndex);
+      const amount = withdrawableRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
       return WTON(amount);
     },
   },

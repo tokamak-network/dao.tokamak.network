@@ -2,7 +2,7 @@
   <div class="committee-info-vote">
     <div class="review">
       <div class="container-title">Review</div>
-      <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
+      <div v-for="voter in selectedVoters(address, page)" :key="voter.account" class="voted-account">
         <div class="account-info">
           <div>{{ voter.account }}</div>
           <div>{{ voter.balance | WTON }} TON Voted</div>
@@ -14,7 +14,7 @@
       </div>
     </div>
     <button-pagination class="committee-info-vote-pagination"
-                       :datas="voters(address)"
+                       :datas="voters(address) ? voters(address) : []"
                        @on-selected="set"
     />
     <div class="line" />
@@ -22,12 +22,12 @@
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Votes</span>
-        <span class="voting-stat-content">{{ totalVotesByCandidate(address) | WTON }} TON</span>
+        <span class="voting-stat-content">{{ totalVotesByCandidate(address) ? totalVotesByCandidate(address) : 0 | WTON }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
         <span class="voting-stat-content">
-          {{ voters(address).length }}
+          {{ voters(address) ? voters(address).length : 0 }}
         </span>
       </div>
     </div>
@@ -47,7 +47,7 @@ export default {
   data () {
     return {
       address: '',
-      selectedVoters: [],
+      page: 0,
     };
   },
   computed: {
@@ -58,6 +58,7 @@ export default {
       'candidate',
       'totalVotesByCandidate',
       'voters',
+      'selectedVoters',
     ]),
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;
@@ -66,16 +67,18 @@ export default {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
     },
   },
-  created () {
-    this.address = this.$route.params.address;
-  },
-  mounted () {
-    this.selectedVoters = this.voters(this.address).slice(0, 4);
+  watch: {
+    '$route.params.address': {
+      handler: async function () {
+        this.address = this.$route.params.address;
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
     set (page) {
-      const first = page * 4;
-      this.selectedVoters = this.voters(this.address).slice(first, first+4);
+      this.page = page;
     },
   },
 };

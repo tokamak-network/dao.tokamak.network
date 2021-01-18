@@ -32,7 +32,7 @@ export function TON (amount) {
   const value = ton.toString();
   const length = value.length;
 
-  return value.substring(0, length - 3);
+  return value.substring(0, length - 4);
 }
 
 export function WTON (amount) {
@@ -40,7 +40,7 @@ export function WTON (amount) {
   const value = wton.toString();
   const length = value.length;
 
-  return value.substring(0, length - 4);
+  return value.substring(0, length - 5);
 }
 
 export function marshalString (str) {
