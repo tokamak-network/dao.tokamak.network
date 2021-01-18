@@ -8,11 +8,11 @@
         </div>
         <div class="stats-committee">
           <div class="title">Total Executed Agendas</div>
-          <div class="content">{{ executed.length }}</div>
+          <div class="content">{{ executedAgenda() }}</div>
         </div>
         <div class="stats-committee">
           <div class="title">Total Denied Agendas</div>
-          <div class="content">{{ denided.length }}</div>
+          <div class="content">{{ denidedAgenda() }}</div>
         </div>
       </template>
     </card-container>
@@ -27,31 +27,32 @@ export default {
   components: {
     'card-container': Card,
   },
-  data () {
-    return {
-      executed: [],
-      denided: [],
-    };
-  },
   computed: {
     ...mapState([
       'agendas',
     ]),
-    calculate () {
+    executedAgenda () {
       return () => {
+        const executed = [];
         for (const agenda of this.agendas) {
           if (agenda.executed === true) {
-            this.executed.push(agenda);
-          }
-          if (agenda.result === 2) {
-            this.denided.push(agenda);
+            executed.push(agenda);
           }
         }
+        return executed.length;
       };
     },
-  },
-  created () {
-    this.calculate();
+    denidedAgenda () {
+      return () => {
+        const denied = [];
+        for (const agenda of this.agendas) {
+          if (agenda.result === 2) {
+            denied.push(agenda);
+          }
+        }
+        return denied.length;
+      };
+    },
   },
 };
 </script>

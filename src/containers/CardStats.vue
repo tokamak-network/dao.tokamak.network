@@ -4,11 +4,11 @@
       <template #body>
         <div class="stats">
           <div class="title">Claimable TON</div>
-          <div class="content">100 TON</div>
+          <div class="content">{{ activityReward }}</div>
         </div>
         <div class="stats">
-          <div class="title"># of Voted</div>
-          <div class="content">7 Polls</div>
+          <div class="title"># of Agendas</div>
+          <!-- <div class="content">{{ myVote.length }} Agendas</div> -->
         </div>
       </template>
     </card-container>
@@ -17,11 +17,39 @@
 
 <script>
 import Card from '@/components/Card.vue';
+import { mapState } from 'vuex';
+// import { getContracts } from '@/utils/contracts';
 
 export default {
   components: {
     'card-container': Card,
   },
+  asyncComputed: {
+    ...mapState([
+      'account',
+      'web3',
+      'myVote',
+      'activityReward',
+    ]),
+    // claimableTON () {
+    //   return async () => {
+    //     const daoCommittee = getContracts('DAOCommittee', this.web3);
+    //     const a = await daoCommittee.methods.getClaimableActivityReward(this.account).call();
+    //     // console.log(a);
+    //     return a;
+    //   };
+    // },
+  },
+  created () {
+    // this.claimableTON();
+  },
+  // methods: {
+  //   async claimableTON () {
+  //     const daoCommittee = getContracts('DAOCommittee', this.web3);
+  //     const a = await daoCommittee.methods.getClaimableActivityReward(this.account).call();
+  //     return a;
+  //   },
+  // },
 };
 </script>
 

@@ -18,7 +18,7 @@
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ dDay(agenda.tCreationDate) }}</span>
+      <span>{{ dDay() }}</span>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -70,7 +70,7 @@ import ModalVote from '@/containers/ModalVote.vue';
 import { mapState } from 'vuex';
 import { getContracts } from '@/utils/contracts';
 
-import moment from 'moment';
+// import moment from 'moment';
 
 export default {
   components: {
@@ -95,7 +95,7 @@ export default {
         'buttonStatus': 'disabled',
       },
       choice: '',
-      voted: false,
+      voted: true,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       showModal: false,
     };
@@ -106,6 +106,7 @@ export default {
       'account',
       'members',
       'myVote',
+      'voteCasted',
     ]),
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
@@ -124,17 +125,21 @@ export default {
       };
     },
     dDay () {
-      return (timestamp) => {
-        const dDay = new Date(moment.unix(timestamp).add(14, 'days'));
-        const now = new Date();
-        const gap = dDay.getTime() - now.getTime();
-        if (gap < 0) {
-          return 'ENDED POLL';
+      return () => {
+        if (this.agenda.tNoticeEndTime * 1000 > new Date().getTime() || this.agenda.tVotingEndTime === 0) {
+          return 'VOTE IS NOT STARTED';
         } else {
-          const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((gap - days * 86400000) / 3600000);
+          const dDay = new Date(this.agenda.tVotingEndTime);
+          const now = new Date();
+          const gap = dDay.getTime() * 1000 - now.getTime();
+          if (gap < 0) {
+            return 'ENDED POLL';
+          } else {
+            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((gap - days * 86400000) / 3600000);
 
-          return days + 'D ' + hours + 'H REMAINING';
+            return days + 'D ' + hours + 'H REMAINING';
+          }
         }
       };
     },
@@ -161,6 +166,7 @@ export default {
     },
     buttonStatus () {
       switch (this.agenda.status) {
+      case 1: return '';
       case 2: return '';
       case 3: return '';
       case 4: return 'disabled';
@@ -180,8 +186,14 @@ export default {
       }
       return 'You have not voted';
     },
+    classify () {
+      return () => {
+        this.voteCasted.forEach(async casted => Number(casted.data.id) === this.agenda.agendaid ? this.voted = true : this.voted = false);
+      };
+    },
   },
   created () {
+    // this.classify();
     // this.changeButtonProperty();
     // this.myVoteResult();
   },
@@ -192,7 +204,7 @@ export default {
       this.buttonClass.buttonStatus = '';
     },
     click () {
-      if (this.agenda.status === 2) {
+      if (this.agenda.status === 2 || this.agenda.status === 1) {
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));
         (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);

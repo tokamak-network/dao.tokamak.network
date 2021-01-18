@@ -1,8 +1,11 @@
 import { getCandidates, getAgendas, getAgendaVoteCasted } from '@/api';
 import { getContracts } from '@/utils/contracts';
+import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+
+const _TON = createCurrency('TON');
 
 Vue.use(Vuex);
 
@@ -20,6 +23,7 @@ export default new Vuex.Store({
     voteCasted: [],
     voteRate: 0,
     myVote: [],
+    activityReward: [],
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -52,6 +56,9 @@ export default new Vuex.Store({
     },
     SET_MY_VOTE (state, myVote) {
       state.myVote = myVote;
+    },
+    SET_ACTIVITY_REWARD (state, activityReward) {
+      state.activityReward = activityReward;
     },
   },
   actions: {
@@ -122,6 +129,7 @@ export default new Vuex.Store({
       commit('SET_NONMEMBERS', nonmembers);
     },
     async setAgendas (context) {
+      const daoCommittee = getContracts('DAOCommittee', this.web3);
       const account = context.state.account;
       const [
         agendas,
@@ -131,13 +139,24 @@ export default new Vuex.Store({
         await getAgendaVoteCasted(),
       ]);
 
+      let activityReward;
+
+      if (account) {
+        activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
+        console.log(_TON(activityReward, 'wei'));
+        context.commit('SET_ACTIVITY_REWARD', _TON(activityReward, 'wei'));
+      } else {
+        console.log('a');
+        context.commit('SET_ACTIVITY_REWARD', '0 TON');
+      }
+
       const voteCasted = [];
       events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
       context.commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
       const myVote = [];
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
-
+      // console.log(myVote);
       const voteRate = (myVote.length / agendas.length) * 100;
       context.commit('SET_MY_VOTE', myVote);
       context.commit('SET_VOTE_RATE', voteRate);
