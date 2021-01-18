@@ -78,24 +78,24 @@ export default {
       return fromNow(timestamp, true);
     },
     prev () {
-      let index = this.candidates.map(candidate => candidate.operator.toLowerCase()).indexOf(this.address.toLowerCase());
-      if (index === 0) {
+      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === -1 || index === 0) {
         return;
       }
       index--;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].operator}` }));
+      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
       this.address = this.$route.params.address;
     },
     next () {
       const max = this.candidates.length;
-      let index = this.candidates.map(candidate => candidate.operator.toLowerCase()).indexOf(this.address.toLowerCase());
-      if (index === max - 1) {
+      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === -1 || index === max - 1) {
         return;
       }
       index++;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].operator}` }));
+      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
       this.address = this.$route.params.address;
     },
   },
