@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="timeline">
+      <div v-if="isMember" class="timeline">
         <div class="date">
           Elected at {{ candidate(address) ? electedAt(candidate(address).info.memberJoinedTime) : '-' }}
         </div>
@@ -62,10 +62,14 @@ export default {
   computed: {
     ...mapState([
       'candidates',
+      'members',
     ]),
     ...mapGetters([
       'candidate',
     ]),
+    isMember () {
+      return this.members.find(member => member.layer2.toLowerCase() === this.candidate(this.address).layer2.toLowerCase());
+    },
   },
   created () {
     this.address = this.$route.params.address;

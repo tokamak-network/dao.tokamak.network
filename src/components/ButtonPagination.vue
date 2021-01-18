@@ -72,7 +72,7 @@ export default {
       this.currentPage--;
     },
     next () {
-      if (this.currentPage === this.pageMax - 1) {
+      if (this.pageMax === 0 || this.currentPage === this.pageMax - 1) {
         return;
       }
       if (this.currentPage % this.pageSize === this.pageSize - 1) {
