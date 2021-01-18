@@ -32,9 +32,8 @@ export async function getCandidates () {
 }
 
 export async function getVotersByCandidate (layer2) {
-  layer2;
-  // const res = await instance.get(`balances/stakeof?layer2=${layer2}`);
-  const res = await instance.get('balances/stakeof?layer2=0xbc8896ebb2e3939b1849298ef8da59e09946cf66');
+  const res = await instance.get(`balances/stakeof?layer2=${layer2}`);
+  // const res = await instance.get('balances/stakeof?layer2=0xbc8896ebb2e3939b1849298ef8da59e09946cf66');
   return res.data.datas;
 }
 

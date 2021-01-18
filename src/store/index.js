@@ -219,7 +219,7 @@ export default new Vuex.Store({
       const votersByCandidate = [];
 
       state.candidates.forEach(async candidate => {
-        candidate.voters = await getVotersByCandidate(candidate);
+        candidate.voters = await getVotersByCandidate(candidate.layer2);
         votersByCandidate.push(candidate);
       });
 
