@@ -6,7 +6,7 @@
           <div class="header">
             <div>Rank</div>
             <div>Operators</div>
-            <div>Total Voted</div>
+            <div>Total Vote</div>
           </div>
           <div class="divide"></div>
           <div v-for="(data, index) in candidateRankByVotes" :key="data._id"

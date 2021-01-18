@@ -6,21 +6,22 @@ const committee = require('../contracts/DAOCommittee.json');
 const deposit = require('../contracts/DepositManager.json');
 const ton = require('../contracts/TON.json');
 const wton = require('../contracts/WTON.json');
+const seigManager = require('../contracts/SeigManager.json');
 
 const deployed = {
-  'TON': '0x0f44b55e6cDb2a068cFB720b7DDE609327820b22',
-  'WTON': '0xaCF52733c8746761Fcf06D922048A6Fb46F98bA9',
-  'Layer2Registry': '0x8865b3F27E0c07A98dc4ad23989461cBE9bd32db',
-  'DepositManager': '0xa923ad9b00d13C1f71Af7786154A8aF597ea1ba1',
-  'CoinageFactory': '0x99409d4d5593C5B9300e3685E8711Bd268411ABa',
-  'DaoVault': '0x8029C97619Ef0b437D14aDff3e093b0383E935b6',
-  'SeigManager': '0x49A32342726BcD769A2141df230B1D4f2CED0102',
-  'PowerTON': '0x0713f81CDd1c9c82214995f888da45c0b6bF8114',
-  'DAOVault2': '0x11D755d3A6fb4945dE68550AAbF47a852Ec3eb55',
-  'DAOAgendaManager': '0xdF03CC7e2502Cbc3dF91795Ed054952a0974BA4d',
-  'CandidateFactory': '0xDfd85cA63F466A6Ec946D7aBF23DeCF28fBFec41',
-  'DAOCommittee': '0x5EEfdd208A38e51A2E0825d452785Ad525fdcc03',
-  'DAOCommitteeProxy': '0xb52efEBd68c9633F7DF9d601bD1F4e285B041d7a',
+  'TON': '0xE755219E15D4d972f09C59d3a1F26528C6B0C08f',
+  'WTON': '0xc648D756599Dc768Db8A7452467bb88A3D3FF68b',
+  'Layer2Registry': '0x78a72e5b2a04F3171324b6142Ba9839744573294',
+  'DepositManager': '0x77e2c0c5C66D3bc303a84ee90481f9C7e7444F14',
+  'CoinageFactory': '0x4b4962E524D411E47b623Dd9D3198CD8c7ecA85e',
+  'DaoVault': '0xbfD599168dDEBA0dcBA7eF987436c3f3139B26bf',
+  'SeigManager': '0x679F73279D59D408919DbDA4e524C0086581Cfa7',
+  'PowerTON': '0x9Af0465efC117F0693D6dd9602B80b979C3af52B',
+  'DAOVault2': '0x8e90c958B542ea5c0374e8197C575AbD1d121223',
+  'DAOAgendaManager': '0x73996fea9c25e1462b610392DE82A5f524187a57',
+  'CandidateFactory': '0x9fDc894dD7367Fb60Fb295f7AB666fd13de4967D',
+  'DAOCommittee': '0x2eb14720c1b14D70e95EC83C4BC967B5cE0F61Ca',
+  'DAOCommitteeProxy': '0x8d01ed892A609206B17600e75C204E342DF71eCf',
 };
 
 module.exports.getContracts = function (want, web3) {
@@ -33,6 +34,7 @@ module.exports.getContracts = function (want, web3) {
   const DepositManager = new web3.eth.Contract(deposit.abi, deployed.DepositManager);
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
+  const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
 
   const contracts = {
     DAOAgendaManager,
@@ -41,6 +43,7 @@ module.exports.getContracts = function (want, web3) {
     DepositManager,
     TON,
     WTON,
+    SeigManager,
   };
 
   if (want) {

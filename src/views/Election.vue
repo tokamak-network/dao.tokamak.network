@@ -4,7 +4,7 @@
       <committee-slot />
     </div>
     <div class="card-container">
-      <card-my-vote v-if="account !== ''" :title="'Your Votes'" />
+      <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
       <card-rank :title="'Rank'" />
       <card-resource />
     </div>

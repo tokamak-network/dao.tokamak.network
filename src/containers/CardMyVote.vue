@@ -6,15 +6,15 @@
           <div class="header">
             <div>Rank</div>
             <div>Operators</div>
-            <div>Total Voted</div>
+            <div>Total Vote</div>
           </div>
           <div class="divide"></div>
           <div v-for="(data, index) in ranks" :key="data.operator"
                class="body"
           >
             <div>{{ index + 1 }}</div>
-            <div>{{ data.account | hexSlicer }}</div>
-            <div>{{ data.balance | WTON }} TON</div>
+            <div>{{ data.layer2 | hexSlicer }}</div>
+            <div>{{ data.myVotes | WTON }} TON</div>
           </div>
         </div>
         <div class="button-container">
@@ -44,28 +44,26 @@ export default {
   },
   data () {
     return {
-      ranks: [],
+      page: 0,
     };
   },
   computed: {
     ...mapState([
-      'myVotes',
+      'myVotesByCandidate',
     ]),
-  },
-  watch: {
     myVotes () {
-      this.ranks = this.myVotes.slice(0, 4);
+      return this.myVotesByCandidate ? this.myVotesByCandidate.filter(candidate => candidate.myVotes > 0) : [];
     },
-  },
-  created () {
-    if (this.myVotes) {
-      this.ranks = this.myVotes.slice(0, 4);
-    }
+    ranks () {
+      const first = this.page * 4;
+      return this.myVotes ? this.myVotes.slice(first, first+4) : [];
+    },
   },
   methods: {
     set (page) {
-      const first = page * 4;
-      this.ranks = this.myVotes.slice(first, first+4);
+      this.page = page;
+      // const first = page * 4;
+      // this.ranks = this.myVotes.slice(first, first+4);
     },
   },
 };

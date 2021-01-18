@@ -21,7 +21,7 @@
     <div class="voting-stats">
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
-        <span class="voting-stat-title">Total Votes</span>
+        <span class="voting-stat-title">Total Vote</span>
         <span class="voting-stat-content">{{ totalVotesByCandidate(address) ? totalVotesByCandidate(address) : 0 | WTON }} TON</span>
       </div>
       <div class="voting-stat-item">

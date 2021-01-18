@@ -25,8 +25,6 @@ export default new Vuex.Store({
     requestsByCandidate: [],
     candidateRankByVotes: [],
 
-    myVotes: [],
-
     pendingTx: '',
   },
   mutations: {
@@ -69,9 +67,6 @@ export default new Vuex.Store({
     SET_CANDIDATE_RANK_BY_VOTES (state, candidateRankByVotes) {
       state.candidateRankByVotes = candidateRankByVotes;
     },
-    SET_MY_VOTES (state, myVotes) {
-      state.myVotes = myVotes;
-    },
 
     SET_PENDING_TX (state, pendingTx) {
       state.pendingTx = pendingTx;
@@ -98,7 +93,7 @@ export default new Vuex.Store({
       // TODO: await?
       await dispatch('setBalance');
       await dispatch('setRequests');
-      await dispatch('setMyVotes');
+      // await dispatch('setMyVotes');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -144,25 +139,6 @@ export default new Vuex.Store({
       });
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
-    async setMyVotes ({ state, commit }) {
-      // const daoCommittee = getContracts('DAOCommittee', state.web3);
-
-      const myVotes = [];
-      state.candidates.forEach(async candidate => {
-        // const balance = await daoCommittee.methods.balanceOfOnCandidate(candidate.operator, state.account);
-        // if (balance > 0) {
-        //   myVotes.push({
-        //     account: candidate.operator,
-        //     balance: balance,
-        //   });
-        // }
-        myVotes.push({
-          account: candidate.operator,
-          balance: 120,
-        });
-      });
-      commit('SET_MY_VOTES', myVotes);
-    },
     async launch ({ dispatch }) {
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersByCandidate');
@@ -185,14 +161,6 @@ export default new Vuex.Store({
       }
       const addressMembers = (await Promise.all(getMembers)).map(member => member.toLowerCase());
 
-      // candidates.forEach(async candidate => {
-      //   console.log(candidate.operator);
-      //   try {
-      //     await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
-      //   } catch (err) {
-      //     console.log(err.message);
-      //   }
-      // });
       const getVotes = [];
       candidates.forEach(candidate => getVotes.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call()));
       const votes = await Promise.all(getVotes);

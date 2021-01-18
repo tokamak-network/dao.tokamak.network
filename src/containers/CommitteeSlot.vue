@@ -1,10 +1,9 @@
 <template>
   <div class="committee-slot">
     <div class="title">Elected Candidates</div>
-    <div class="slot-info">
-      <!-- TODO: message -->
+    <!-- <div class="slot-info">
       3 slot
-    </div>
+    </div> -->
     <card-committee-slot :slotnumber="0" />
     <card-committee-slot :slotnumber="1" />
     <card-committee-slot :slotnumber="2" />
