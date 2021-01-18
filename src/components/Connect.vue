@@ -20,8 +20,8 @@
            :style="[!pendingTx ? { 'visibility': 'hidden' } : {}]"
            @click="etherscan()"
       >
-        <div ref="noticon" class="loader" />
-        <div ref="noticon" class="label">Tx PENDING</div>
+        <div class="loader" />
+        <div class="label">Tx PENDING</div>
       </div>
     </div>
   </div>
@@ -141,6 +141,9 @@ button {
 }
 
 .account {
+  width: 165px;
+  height: 35px;
+
   display: flex;
   align-items: center;
 

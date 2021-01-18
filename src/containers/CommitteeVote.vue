@@ -171,7 +171,6 @@ export default {
     },
     setRevoteAmount () {
       const requests = this.requests(this.address);
-      console.log(requests, this.revoteIndex, requests.length);
       this.revoteIndex + 1 === requests.length ? this.revoteIndex = 0 : this.revoteIndex++;
     },
     setWithdrawableAmount () {
@@ -258,7 +257,6 @@ export default {
         })
         .on('receipt', async () => {
           await this.update();
-          console.log('update');
 
           this.revoteIndex = 0;
           this.$store.commit('SET_PENDING_TX', '');
