@@ -6,17 +6,19 @@
           <div class="header">
             <div>Rank</div>
             <div>Operators</div>
-            <div>Total Voted</div>
+            <div>Total Vote</div>
           </div>
           <div class="divide"></div>
-          <div v-for="(data, index) in ranks" :key="index"
+          <div v-for="(data, index) in candidateRankByVotes" :key="data._id"
                class="body"
           >
-            <div>{{ data.rank }}</div>
-            <div>{{ data.operaotr }}</div>
-            <div>{{ data.voted }}</div>
+            <div>{{ index + 1 }}</div>
+            <div>{{ data._id | hexSlicer }}</div>
+            <div>{{ data.balance | WTON }} TON</div>
           </div>
-          <button-pagination class="button-pagination" :datas="datas" @on-selected="set" />
+        </div>
+        <div class="button-container">
+          <button-pagination class="button-pagination" :datas="candidateRankByVotes" @on-selected="set" />
         </div>
       </template>
     </card-container>
@@ -24,6 +26,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import ButtonPagination from '@/components/ButtonPagination.vue';
 import Card from '@/components/Card.vue';
 
@@ -41,23 +44,21 @@ export default {
   },
   data () {
     return {
-      datas: [{ rank: 1, operaotr: '0x1234...1234', voted: '145,000' }, { rank: 2, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 3, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 4, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 5, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 6, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 7, operaotr: '0x1234...1234', voted: '145,000' },
-        { rank: 8, operaotr: '0x1234...1234', voted: '145,000' } ],
       ranks: [],
     };
   },
-  created () {
-    this.ranks = this.datas.slice(0, 4);
+  computed: {
+    ...mapState([
+      'candidateRankByVotes',
+    ]),
+  },
+  mounted () {
+    this.ranks = this.candidateRankByVotes.slice(0, 4);
   },
   methods: {
     set (page) {
       const first = page * 4;
-      this.ranks = this.datas.slice(first, first+4);
+      this.ranks = this.candidateRankByVotes.slice(first, first+4);
     },
   },
 };
@@ -68,6 +69,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  min-height: 162px;
 }
 .rank-container .header {
   display: flex;
@@ -133,5 +136,10 @@ export default {
 .button-pagination {
   margin-top: 10px;
   padding-bottom: 16px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 </style>

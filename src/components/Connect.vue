@@ -7,10 +7,21 @@
     >
       Connect Wallet
     </button>
-    <div v-else class="account">
-      <div ref="icon" class="icon"></div>
-      <div class="address">
-        {{ shortAddress }}
+    <div v-else style="position: relative;">
+      <div class="account"
+           :style="[pendingTx ? { 'visibility': 'hidden' } : {}]"
+      >
+        <div ref="icon" class="icon" />
+        <div class="address">
+          {{ shortAddress }}
+        </div>
+      </div>
+      <div class="pending"
+           :style="[!pendingTx ? { 'visibility': 'hidden' } : {}]"
+           @click="etherscan()"
+      >
+        <div class="loader" />
+        <div class="label">Tx PENDING</div>
       </div>
     </div>
   </div>
@@ -32,6 +43,7 @@ export default {
     ...mapState([
       'web3',
       'account',
+      'pendingTx',
     ]),
     shortAddress () {
       return `${this.account.slice(0, 7)}...${this.account.slice(-4)}`;
@@ -40,8 +52,10 @@ export default {
       return parseInt(this.account.slice(2, 10), 16);
     },
   },
-  mounted () {
-    this.setIcon();
+  watch: {
+    pendingTx (tx) {
+      tx ? this.deleteIcon() : this.setIcon();
+    },
   },
   methods: {
     async connect () {
@@ -83,11 +97,20 @@ export default {
         iconEle.append(icon);
       }
     },
+    deleteIcon () {
+      const iconEle = this.$refs.icon;
+      if (iconEle) {
+        iconEle.removeChild(iconEle.lastElementChild);
+      }
+    },
+    etherscan () {
+      window.open('https://rinkeby.etherscan.io/tx/' + this.pendingTx, '_blank'); // eslint-disable-line
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 button {
   /* font styles */
   font-family: Roboto;
@@ -118,6 +141,9 @@ button {
 }
 
 .account {
+  width: 165px;
+  height: 35px;
+
   display: flex;
   align-items: center;
 
@@ -125,6 +151,8 @@ button {
   border-radius: 19px;
   border: solid 1px #d7d9df;
   background-color: #ffffff;
+
+  position: relative;
 }
 
 .address {
@@ -142,5 +170,57 @@ button {
 .icon {
   margin-right: 8px;
   margin-bottom: -5px;
+}
+
+.pending {
+  width: 165px;
+  height: 35px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 19px;
+  border: solid 1px #2a72e5;
+  background-color: #ffffff;
+
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid #d9e6fb;
+  border-top: 2px solid #2a72e5;
+  border-radius: 50%;
+
+  animation: spin 2s linear infinite;
+
+  margin-right: 16px;
+  margin-left: -12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.label {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: normal;
+  text-align: left;
+  color: #2a72e5;
 }
 </style>

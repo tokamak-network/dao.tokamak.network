@@ -17,7 +17,6 @@ export async function getEvents (eventsnames) {
       eventNames: 'Deposited,CandidateContractCreated',
     },
   });
-  // TODO: considering fail condition
   return res.data.datas;
 }
 
@@ -27,5 +26,15 @@ export async function getCandidates () {
       chainId: 4,
     },
   });
+  return res.data.datas;
+}
+
+export async function getVotersByCandidate (layer2) {
+  const res = await instance.get(`balances/stakeof?layer2=${layer2}`);
+  return res.data.datas;
+}
+
+export async function getCandidateRankByVotes () {
+  const res = await instance.get('balances/sums');
   return res.data.datas;
 }

@@ -3,21 +3,25 @@ const Web3 = require('web3');
 const manager = require('../contracts/DAOAgendaManager.json');
 const proxy = require('../contracts/DAOCommitteeProxy.json');
 const committee = require('../contracts/DAOCommittee.json');
+const deposit = require('../contracts/DepositManager.json');
+const ton = require('../contracts/TON.json');
+const wton = require('../contracts/WTON.json');
+const seigManager = require('../contracts/SeigManager.json');
 
 const deployed = {
-  'TON'              : '0x8AE57549880d13D81295F0Acb1EDFA6910087E14',
-  'WTON'             : '0x1d35a9ac97f8ae430f3A361F70296fe549d947B5',
-  'Layer2Registry'   : '0xA57D3dc7c7F05269F65bF73B9bb5e291712Bada9',
-  'DepositManager'   : '0xd69E04AF075300bF6C8468dED8170F6dFa84F1Ef',
-  'CoinageFactory'   : '0xB1551155D98E799258E5405e8152d8EBF37c615E',
-  'DaoVault'         : '0x95F915908eF6128f2dC747271E5FB16fd3f2397E',
-  'SeigManager'      : '0x53440df24DF7A99dBd1f121d26153368AE09e781',
-  'PowerTON'         : '0x37baE31351616F14d451915dC07E85a5A4A8de64',
-  'DAOVault2'        : '0x94cad8DB5b44bCEd4621299E3605129318802ef8',
-  'DAOAgendaManager' : '0x616C08d08450C11CF3CBfA8565ca5a73A11d3e55',
-  'CandidateFactory' : '0x67B51fa5B0a58AA8c49239751456c112A1F6554d',
-  'DAOCommittee'     : '0x2C019b66d41998388e83E7dcc5BA32F565B691cA',
-  'DAOCommitteeProxy': '0xDa82db146327fafb4837DB8c23aC17fd7d4E2e1F',
+  'TON': '0xE755219E15D4d972f09C59d3a1F26528C6B0C08f',
+  'WTON': '0xc648D756599Dc768Db8A7452467bb88A3D3FF68b',
+  'Layer2Registry': '0x78a72e5b2a04F3171324b6142Ba9839744573294',
+  'DepositManager': '0x77e2c0c5C66D3bc303a84ee90481f9C7e7444F14',
+  'CoinageFactory': '0x4b4962E524D411E47b623Dd9D3198CD8c7ecA85e',
+  'DaoVault': '0xbfD599168dDEBA0dcBA7eF987436c3f3139B26bf',
+  'SeigManager': '0x679F73279D59D408919DbDA4e524C0086581Cfa7',
+  'PowerTON': '0x9Af0465efC117F0693D6dd9602B80b979C3af52B',
+  'DAOVault2': '0x8e90c958B542ea5c0374e8197C575AbD1d121223',
+  'DAOAgendaManager': '0x73996fea9c25e1462b610392DE82A5f524187a57',
+  'CandidateFactory': '0x9fDc894dD7367Fb60Fb295f7AB666fd13de4967D',
+  'DAOCommittee': '0x2eb14720c1b14D70e95EC83C4BC967B5cE0F61Ca',
+  'DAOCommitteeProxy': '0x8d01ed892A609206B17600e75C204E342DF71eCf',
 };
 
 module.exports.getContracts = function (want, web3) {
@@ -27,11 +31,19 @@ module.exports.getContracts = function (want, web3) {
   const DAOAgendaManager = new web3.eth.Contract(manager.abi, deployed.DAOAgendaManager);
   const DAOCommitteeProxy = new web3.eth.Contract(proxy.abi, deployed.DAOCommitteeProxy);
   const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
+  const DepositManager = new web3.eth.Contract(deposit.abi, deployed.DepositManager);
+  const TON = new web3.eth.Contract(ton.abi, deployed.TON);
+  const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
+  const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
 
   const contracts = {
     DAOAgendaManager,
     DAOCommitteeProxy,
     DAOCommittee,
+    DepositManager,
+    TON,
+    WTON,
+    SeigManager,
   };
 
   if (want) {

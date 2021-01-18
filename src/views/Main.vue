@@ -22,14 +22,14 @@
         <div>
           Tx
         </div>
-        <div @click="newtab">
+        <div @click="newtab(event.transactionHash)">
           {{ event.transactionHash | hexSlicer }}
         </div>
         <div>
           ETH-B Debt Ceiling Instant Access Module - December 7, 2020
         </div>
         <div>
-          1 Days Ago
+          {{ event.blockTimestamp | fromNow }}
         </div>
       </div>
     </div>
@@ -49,8 +49,8 @@ export default {
     this.events = await getEvents('AgendaVoteCasted,AgendaExecuted,AgendaCreated');
   },
   methods: {
-    newtab (link) {
-      window.open(link, '_blank'); // eslint-disable-line
+    newtab (txhash) {
+      window.open(`https://etherscan.io/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
   },
 };

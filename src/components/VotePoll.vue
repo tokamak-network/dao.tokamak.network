@@ -19,15 +19,15 @@
 <script>
 export default {
   props: {
-    'pct': {
+    pct: {
       default: 0,
       type: Number,
     },
-    'remain': {
+    remain: {
       default: false,
       type: Boolean,
     },
-    'margin': {
+    margin: {
       default: 0,
       type: Number,
     },

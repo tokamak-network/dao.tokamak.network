@@ -2,39 +2,11 @@
   <div class="table">
     <table>
       <tbody>
-        <tr>
+        <tr v-for="supporter in voters(address)" :key="supporter.account">
           <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
-          </div>
-        </tr>
-        <tr>
-          <div class="table-content">
-            <div>56.3%</div>
-            <div>(40 TON)</div>
-            <div>0x56a1...8a73</div>
+            <div>{{ calcPct(supporter.balance, totalVotes(voters(address))) }}%</div>
+            <div>({{ supporter.balance | WTON }} TON)</div>
+            <div>{{ supporter.account | hexSlicer }}</div>
           </div>
         </tr>
       </tbody>
@@ -43,8 +15,41 @@
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex';
 
+export default {
+  data () {
+    return {
+      address: '',
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'voters',
+    ]),
+    calcPct () {
+      return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);
+    },
+  },
+  watch: {
+    '$route.params.address': {
+      handler: async function () {
+        this.address = this.$route.params.address;
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  mounted () {
+    this.address = this.$route.params.address;
+  },
+  methods: {
+    totalVotes (voters) {
+      const initialAmount = 0;
+      const reducer = (amount, voter) => amount + voter.balance;
+      return voters.reduce(reducer, initialAmount);
+    },
+  },
 };
 </script>
 

@@ -7,14 +7,14 @@
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Status</a>
     </div>
     <div class="menu">
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/telegram.png" alt=""><img v-else src="@/assets/telegram-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/discord.png" alt=""><img v-else src="@/assets/discord-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/github.png" alt=""><img v-else src="@/assets/github-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/facebook.png" alt=""><img v-else src="@/assets/facebook-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/youtube.png" alt=""><img v-else src="@/assets/youtube-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/twitter.png" alt=""><img v-else src="@/assets/twitter-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/linkedin.png" alt=""><img v-else src="@/assets/linkedin-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/medium.png" alt=""><img v-else src="@/assets/medium-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/telegram.svg" alt=""><img v-else src="@/assets/telegram-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/discord.svg" alt=""><img v-else src="@/assets/discord-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/github.svg" alt=""><img v-else src="@/assets/github-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/facebook.svg" alt=""><img v-else src="@/assets/facebook-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/youtube.svg" alt=""><img v-else src="@/assets/youtube-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/twitter.svg" alt=""><img v-else src="@/assets/twitter-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/linkedin.svg" alt=""><img v-else src="@/assets/linkedin-sub.png" alt=""></a>
+      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/medium.svg" alt=""><img v-else src="@/assets/medium-sub.png" alt=""></a>
     </div>
   </div>
 </template>
