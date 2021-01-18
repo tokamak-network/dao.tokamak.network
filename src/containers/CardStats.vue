@@ -31,23 +31,13 @@ export default {
       'myVote',
       'activityReward',
     ]),
-    // claimableTON () {
-    //   return async () => {
-    //     const daoCommittee = getContracts('DAOCommittee', this.web3);
-    //     const a = await daoCommittee.methods.getClaimableActivityReward(this.account).call();
-    //     // console.log(a);
-    //     return a;
-    //   };
-    // },
   },
-  created () {
-    // this.claimableTON();
-  },
+  // created () {
+  //   this.claimableTON();
+  // },
   // methods: {
   //   async claimableTON () {
-  //     const daoCommittee = getContracts('DAOCommittee', this.web3);
-  //     const a = await daoCommittee.methods.getClaimableActivityReward(this.account).call();
-  //     return a;
+  //     console.log(this.myVote);
   //   },
   // },
 };

@@ -2,7 +2,7 @@
   <div class="committee-slot">
     <div class="title">Agenda</div>
     <div class="agenda-info">
-      {{ numAgenda }} Agendas - POSTED DEC 7, 2020, 16:00 UTC
+      {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
     </div>
     <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
     <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
@@ -28,6 +28,7 @@ export default {
       hideAgendas: [],
       hideButton: '',
       hide: false,
+      monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
   computed: {
@@ -36,6 +37,19 @@ export default {
     ]),
     numAgenda (){
       return this.agendas.length;
+    },
+    deployedDate () {
+      return () => {
+        const latest = this.agendas[0];
+        const date = new Date(latest.tCreationDate * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const hour = date.getHours();
+        const minutes = date.getMinutes();
+
+        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year + ', ' + hour + ':' + minutes;
+      };
     },
   },
   created () {

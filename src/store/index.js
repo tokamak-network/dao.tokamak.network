@@ -76,8 +76,8 @@ export default new Vuex.Store({
       const chainId = await web3.eth.getChainId();
       commit('SET_CHAIN_ID', chainId);
 
-      const blockNumber = await web3.eth.getBlockNumber();
-      commit('SET_BLOCK_NUMBER', blockNumber);
+      // const blockNumber = await web3.eth.getBlockNumber();
+      // commit('SET_BLOCK_NUMBER', blockNumber);
 
       // TODO: await?
       // await dispatch('setBalance');
@@ -143,12 +143,12 @@ export default new Vuex.Store({
 
       if (account) {
         activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
-        console.log(_TON(activityReward, 'wei'));
-        context.commit('SET_ACTIVITY_REWARD', _TON(activityReward, 'wei'));
+        activityReward = _TON(activityReward, 'wei').toString();
       } else {
-        console.log('a');
-        context.commit('SET_ACTIVITY_REWARD', '0 TON');
+        activityReward = '0 TON';
       }
+
+      context.commit('SET_ACTIVITY_REWARD', activityReward);
 
       const voteCasted = [];
       events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
@@ -156,12 +156,23 @@ export default new Vuex.Store({
 
       const myVote = [];
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
-      // console.log(myVote);
       const voteRate = (myVote.length / agendas.length) * 100;
+
       context.commit('SET_MY_VOTE', myVote);
       context.commit('SET_VOTE_RATE', voteRate);
 
       context.commit('SET_AGENDAS', agendas);
+    },
+  },
+  getters: {
+    getAgendaByID: (state) => (agendaId) => {
+      const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
+      return index > -1 ? state.agendas[index] : '';
+    },
+    getVotedListByID: (state) => (agendaId) => {
+      const voted = [];
+      state.voteCasted.forEach(async casted => casted.data.id === agendaId ? voted.push(casted.data) : '');
+      return voted;
     },
   },
 });

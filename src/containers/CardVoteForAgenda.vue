@@ -12,7 +12,7 @@
       <template #body>
         <div style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
-            DAO Vault is Foward Fund to 0xabcd… - December 7, 2020
+            DAO Vault is Foward Fund to 0xabcd… - {{ deployDate(agenda) }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
                        :type="'secondary'"
@@ -30,7 +30,7 @@ import Card from '@/components/Card.vue';
 import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -43,12 +43,29 @@ export default {
     return {
       showModal: false,
       id: Number(this.$route.params.address),
+      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
   computed: {
     ...mapState([
       'account',
     ]),
+    ...mapGetters([
+      'getAgendaByID',
+    ]),
+    agenda () {
+      return this.getAgendaByID(this.$route.params.address);
+    },
+    deployDate () {
+      return (agenda) => {
+        const date = new Date(agenda.tCreationDate * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+      };
+    },
   },
   methods: {
     vote (index, address) {
