@@ -9,7 +9,7 @@
           {{ shortAddress }}
         </span> voted
         <span class="blue">
-          {{ contents.vote }}
+          {{ result }}
         </span>
       </span>
     </div>
@@ -28,10 +28,29 @@ export default {
       default: () => {},
     },
   },
+  data () {
+    return {
+      result : '',
+    };
+  },
   computed: {
     shortAddress () {
-      return `${this.contents.account.slice(0, 7)}...${this.contents.account.slice(-4)}`;
+      return `${this.contents[0].slice(0, 7)}...${this.contents[0].slice(-4)}`;
     },
+    toResult () {
+      return () => {
+        if (this.contents.voting === '0') {
+          this.result = 'Abstain';
+        } else if (this.contents.voting === '1') {
+          this.result = 'Yes';
+        } else {
+          this.result = 'No';
+        }
+      };
+    },
+  },
+  created () {
+    this.toResult();
   },
 };
 </script>

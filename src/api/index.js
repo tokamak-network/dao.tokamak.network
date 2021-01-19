@@ -29,6 +29,27 @@ export async function getCandidates () {
   return res.data.datas;
 }
 
+export async function getAgendaVoteCasted () {
+  const res = await instance.get('/events', {
+    params: {
+      chainId: 4,
+      page: 1,
+      pagesize: 100,
+      eventNames: 'AgendaVoteCasted',
+    },
+  });
+  return res.data.datas;
+}
+
+export async function getAgendas () {
+  const res = await instance.get('/agendas', {
+    params: {
+      chainId: 4,
+    },
+  });
+  return res.data.datas;
+}
+
 export async function getVotersByCandidate (layer2) {
   const res = await instance.get(`balances/stakeof?layer2=${layer2}`);
   return res.data.datas;

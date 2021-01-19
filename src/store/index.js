@@ -1,9 +1,12 @@
-import { getCandidates, getVotersByCandidate, getCandidateRankByVotes } from '@/api';
+import { getCandidates, getAgendas, getAgendaVoteCasted, getVotersByCandidate, getCandidateRankByVotes } from '@/api';
 import { getContracts } from '@/utils/contracts';
+import { createCurrency } from '@makerdao/currency';
 import { WTON } from '@/utils/helpers';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+
+const _TON = createCurrency('TON');
 
 Vue.use(Vuex);
 
@@ -20,6 +23,11 @@ export default new Vuex.Store({
     members: [],
     nonmembers: [],
 
+    agendas: [],
+    voteCasted: [],
+    voteRate: 0,
+    myVote: [],
+    activityReward: [],
     myVotesByCandidate: [],
     votersByCandidate: [],
     requestsByCandidate: [],
@@ -50,7 +58,21 @@ export default new Vuex.Store({
     SET_NONMEMBERS (state, nonmembers) {
       state.nonmembers = nonmembers;
     },
-
+    SET_AGENDAS (state, agendas) {
+      state.agendas = agendas;
+    },
+    SET_AGENDA_VOTE_CASTED (state, voteCasted) {
+      state.voteCasted = voteCasted;
+    },
+    SET_VOTE_RATE (state, voteRate) {
+      state.voteRate = voteRate;
+    },
+    SET_MY_VOTE (state, myVote) {
+      state.myVote = myVote;
+    },
+    SET_ACTIVITY_REWARD (state, activityReward) {
+      state.activityReward = activityReward;
+    },
     SET_VOTERS_BY_CANDIDATE (state, voters) {
       state.votersByCandidate = voters;
     },
@@ -149,12 +171,12 @@ export default new Vuex.Store({
       const daoCommitteeProxy = getContracts('DAOCommitteeProxy', state.web3);
 
       const [
-        candidates, maxMember,
+        candidates,
+        maxMember,
       ] = await Promise.all([
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-
       const getMembers = [];
       for (let i = 0; i < maxMember; i++) {
         getMembers.push(daoCommitteeProxy.methods.members(i).call());
@@ -183,6 +205,41 @@ export default new Vuex.Store({
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
+    async setAgendas (context) {
+      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      const account = context.state.account;
+      const [
+        agendas,
+        events,
+      ] = await Promise.all([
+        await getAgendas(),
+        await getAgendaVoteCasted(),
+      ]);
+
+      let activityReward;
+
+      if (account) {
+        activityReward = await Promise.all(await daoCommittee.methods.getClaimableActivityReward(account).call());
+        activityReward = _TON(activityReward, 'wei').toString();
+      } else {
+        activityReward = '0 TON';
+      }
+
+      context.commit('SET_ACTIVITY_REWARD', activityReward);
+
+      const voteCasted = [];
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
+      context.commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+
+      const myVote = [];
+      voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
+      const voteRate = (myVote.length / agendas.length) * 100;
+
+      context.commit('SET_MY_VOTE', myVote);
+      context.commit('SET_VOTE_RATE', voteRate);
+
+      context.commit('SET_AGENDAS', agendas);
+    },
     async setVotersByCandidate ({ state, commit }) {
       const votersByCandidate = [];
 
@@ -199,6 +256,15 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    getAgendaByID: (state) => (agendaId) => {
+      const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
+      return index > -1 ? state.agendas[index] : '';
+    },
+    getVotedListByID: (state) => (agendaId) => {
+      const voted = [];
+      state.voteCasted.forEach(async casted => casted.data.id === agendaId ? voted.push(casted.data) : '');
+      return voted;
+    },
     candidate: (state) => (address) => {
       const index = state.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
       return index !== -1 ? state.candidates[index] : null;

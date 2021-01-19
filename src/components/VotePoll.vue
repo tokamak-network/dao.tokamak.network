@@ -5,9 +5,10 @@
            class="background-text"
            :style="backTextStyle"
       >
-        {{ 100-pct }}%
+        0%
       </div>
-      <div class="progress-bar"
+      <div v-if="remain === false"
+           class="progress-bar"
            :style="barStyle"
       >
         <div class="text">{{ roundNumber(pct) }}%</div>

@@ -1,16 +1,24 @@
 <template>
   <div class="card-agenda-slot">
+    <modal v-if="showModal"
+           :width="786"
+           @on-closed="showModal=false"
+    >
+      <template #body>
+        <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
+      </template>
+    </modal>
     <div class="card-title">
-      DAO Vault is Foward Fund to 0xabcd…… - {{ deployedDate(agenda.timestamp) }}
+      DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
     </div>
     <div class="description">
-      {{ agenda.name }}
+      {{ agenda.target }}
     </div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ dDay(agenda.timestamp) }}</span>
+      <span>{{ dDay() }}</span>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -19,16 +27,16 @@
           :type="'primary'"
           class="left"
           :width="'118px'"
-          @on-clicked="detail(agenda.index)"
+          @on-clicked="detail(agenda.agendaid)"
         />
         <div class="vote-status">
           <div v-if="voted !== true">You have not voted</div>
-          <div v-else-if="voted === true" class="vote-selected">You have voted to {{ choice }}</div>
+          <div v-else-if="voted === true" class="vote-selected">{{ votedResult }}</div>
         </div>
-        <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div>
+        <!-- <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div> -->
       </div>
-      <div class="right-side">
-        <div v-if="agenda.voted!==true" class="dropdown-section">
+      <div v-if="agenda.executed === false" class="right-side">
+        <!-- <div v-if="agenda.status < 3" class="dropdown-section">
           <div class="your-vote">YOUR VOTE</div>
           <dropdown
             :items="['Yes', 'No']"
@@ -38,12 +46,12 @@
             class="dropdown"
             @on-selected="select"
           />
-        </div>
+        </div> -->
         <button-comp
           v-if="login!==false"
-          :name="buttonClass.buttonName"
-          :type="buttonClass.buttonType"
-          :status="buttonClass.buttonStatus"
+          :name="buttonName"
+          :type="buttonType"
+          :status="buttonStatus"
           class="right"
           :width="'124px'"
           @on-clicked="click"
@@ -55,13 +63,21 @@
 
 <script>
 import Button from '@/components/Button.vue';
-import Dropdown from '@/components/Dropdown.vue';
-import moment from 'moment';
+// import Dropdown from '@/components/Dropdown.vue';
+import Modal from '@/components/Modal.vue';
+import ModalVote from '@/containers/ModalVote.vue';
+
+import { mapState } from 'vuex';
+import { getContracts } from '@/utils/contracts';
+
+// import moment from 'moment';
 
 export default {
   components: {
     'button-comp': Button,
-    'dropdown': Dropdown,
+    // 'dropdown': Dropdown,
+    'modal': Modal,
+    'modal-vote': ModalVote,
   },
   props: {
     agenda: {
@@ -76,14 +92,22 @@ export default {
       buttonClass: {
         'buttonName': 'Vote',
         'buttonType': 'vote',
-        'buttonStatus': '',
+        'buttonStatus': 'disabled',
       },
-      choice: this.agenda.choice,
-      voted: this.agenda.voted,
+      choice: '',
+      voted: true,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      showModal: false,
     };
   },
   computed: {
+    ...mapState([
+      'web3',
+      'account',
+      'members',
+      'myVote',
+      'voteCasted',
+    ]),
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
     },
@@ -101,23 +125,60 @@ export default {
       };
     },
     dDay () {
-      return (timestamp) => {
-        const dDay = new Date(moment.unix(timestamp).add(14, 'days'));
-        const now = new Date();
-        const gap = dDay.getTime() - now.getTime();
-        if (gap < 0) {
-          return 'ENDED POLL';
+      return () => {
+        if (this.agenda.tNoticeEndTime * 1000 > new Date().getTime() || this.agenda.tVotingEndTime === 0) {
+          return 'VOTE IS NOT STARTED';
         } else {
-          const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((gap - days * 86400000) / 3600000);
+          const dDay = new Date(this.agenda.tVotingEndTime);
+          const now = new Date();
+          const gap = dDay.getTime() * 1000 - now.getTime();
+          if (gap < 0) {
+            return 'ENDED POLL';
+          } else {
+            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((gap - days * 86400000) / 3600000);
 
-          return days + 'D ' + hours + 'H REMAINING';
+            return days + 'D ' + hours + 'H REMAINING';
+          }
         }
       };
     },
-  },
-  created () {
-    this.changeButtonProperty();
+    buttonName () {
+      switch (this.agenda.status) {
+      case 3: return 'Execute';
+      case 4: return 'Execute';
+      case 5: return 'Execute';
+      }
+      return 'Vote';
+    },
+    buttonType () {
+      switch (this.agenda.status) {
+      case 4: return 'secondary';
+      case 5: return 'secondary';
+      }
+      return 'vote';
+    },
+    buttonStatus () {
+      switch (this.agenda.status) {
+      case 1: return '';
+      case 2: return '';
+      case 3: return '';
+      }
+      return 'disabled';
+    },
+    votedResult () {
+      for (const vote of this.myVote) {
+        if (Number(vote[1]) === this.agenda.agendaid) {
+          switch (vote[2]) {
+          case '0': return 'You have voted to Abstain';
+          case '1': return 'You have voted Yes';
+          case '2': return 'You have voted No';
+          }
+        }
+      }
+      this.comment();
+      return 'You have not voted';
+    },
   },
   methods: {
     select (item) {
@@ -125,38 +186,42 @@ export default {
       this.voted = true;
       this.buttonClass.buttonStatus = '';
     },
-    changeButtonProperty () {
-      if (this.agenda.executed === false && this.agenda.voted === true) {
-        this.buttonClass.buttonName = 'Execute';
-        this.buttonClass.buttonType = 'secondary';
-      } else if (this.agenda.executed === true && this.agenda.claim === false) {
-        this.buttonClass.buttonName = 'Claim';
-        this.buttonClass.buttonType = 'vote';
-      } else if (this.agenda.claim === true) {
-        this.buttonClass.buttonName = 'Claim';
-        this.buttonClass.buttonStatus = 'disabled';
-      } else if (this.agenda.choice === 'Not yet') {
-        this.buttonClass.buttonName = 'Vote';
-        this.buttonClass.buttonStatus = 'disabled';
-      } else {
-        this.buttonClass.buttonName = 'Vote';
-      }
-      return this.buttonClass;
+    comment () {
+      this.voted = false;
     },
     click () {
-      if (this.buttonClass.buttonName === 'Vote') {
-        this.buttonClass.buttonName = 'Execute';
-        this.buttonClass.buttonType = 'secondary';
-      } else if (this.buttonClass.buttonName === 'Execute') {
-        this.buttonClass.buttonName = 'Claim';
-        this.buttonClass.buttonType = 'vote';
-      } else if (this.buttonClass.buttonName === 'Claim') {
-        this.buttonClass.buttonStatus = 'disabled';
+      if (this.agenda.status === 2 || this.agenda.status === 1) {
+        const operator = [];
+        this.members.forEach(async member => operator.push(member.operator));
+        (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);
+      } else if (this.agenda.status === 3) {
+        this.execute();
       }
+      this.$store.dispatch('setAgendas');
     },
-    detail (address) {
+    async start () {
+      const agendaManager = getContracts('DAOAgendaManager', this.web3);
+
+      agendaManager.methods.startVoting(this.agenda.agendaid).send({ from:this.account });
+    },
+    async execute () {
+      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      const gasLimit = await daoCommittee.methods.executeAgenda(
+        this.agenda.agendaid,
+      ).send({
+        from: this.account,
+      });
+
+      await daoCommittee.methods.executeAgenda(
+        this.agenda.agendaid,
+      ).send({
+        from: this.account,
+        gasLimit: Math.floor(gasLimit * 1.2),
+      });
+    },
+    detail (id) {
       this.$router.push({
-        path: `/agenda/${address}`,
+        path: `/agenda/${id}`,
       });
     },
   },

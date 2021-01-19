@@ -12,6 +12,14 @@ export function hexSlicer (address = '') {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
+export function shortAddress (address = '') {
+  if (address.length < 11) {
+    return address;
+  }
+
+  return `${address.slice(0, 6)}......`;
+}
+
 export function date1 (timestamp) {
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

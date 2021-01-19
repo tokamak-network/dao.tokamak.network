@@ -1,32 +1,32 @@
 <template>
   <div class="card-agenda-info">
     <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS AGENDAS'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT AGENDAS'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
       <div class="timeline">
-        <div class="date">Posted 2020 / 12 / 07 / 16:00 UTC</div>
+        <div class="date">Posted {{ deployedDate(creationTime) }}</div>
         <div>
           <img src="@/assets/poll-time-active-icon.svg" alt=""
                width="14" height="14"
           >
-          <span> 1D 2H REMAINING</span>
+          <span> {{ dDay(creationTime) }}</span>
         </div>
       </div>
-      <div class="title">DAO Vault is Foward Fund to 0xabcd… - December 7, 2020</div>
+      <div class="title">DAO Vault is Foward Fund to 0xabcd… - {{ deployDate(creationTime) }}</div>
       <div class="selector">
         <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">On-Chain Effect</div>
-        <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Comments</div>
+        <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Comments ({{ voted }})</div>
       </div>
       <div class="divider" />
-      <agen-info v-if="currentSelector === 0" />
-      <agen-info-vote v-else-if="currentSelector === 1" />
-      <agen-vote v-else-if="currentSelector === 2" />
+      <agenda-info v-if="currentSelector === 0" />
+      <agenda-info-vote v-else-if="currentSelector === 1" />
+      <agenda-vote v-else-if="currentSelector === 2" />
     </div>
   </div>
 </template>
@@ -36,18 +36,91 @@ import ButtonStep from '@/components/ButtonStep.vue';
 import AgendaComments from '@/containers/AgendaComments.vue';
 import AgendaInfo from '@/containers/AgendaInfo.vue';
 import AgendaOnChain from '@/containers/AgendaOnChain.vue';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
     'button-step': ButtonStep,
-    'agen-info': AgendaInfo,
-    'agen-info-vote': AgendaOnChain,
-    'agen-vote': AgendaComments,
+    'agenda-info': AgendaInfo,
+    'agenda-info-vote': AgendaOnChain,
+    'agenda-vote': AgendaComments,
   },
   data () {
     return {
       currentSelector: 0,
+      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
+  },
+  computed: {
+    ...mapState([
+      'agendas',
+    ]),
+    ...mapGetters([
+      'getAgendaByID',
+      'getVotedListByID',
+    ]),
+    voted () {
+      return this.getVotedListByID(this.$route.params.address).length;
+    },
+    creationTime () {
+      return this.getAgendaByID(this.$route.params.address);
+    },
+    deployedDate () {
+      return (agenda) => {
+        const date = new Date(agenda.tCreationDate * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const hour = date.getHours();
+        const minutes = date.getMinutes();
+
+        return year + ' / ' + month + ' / ' + day + ' / ' + hour + ':' + minutes;
+      };
+    },
+    deployDate () {
+      return (agenda) => {
+        const date = new Date(agenda.tCreationDate * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+      };
+    },
+    dDay () {
+      return (agenda) => {
+        if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
+          return 'VOTE IS NOT STARTED';
+        } else {
+          const dDay = new Date(agenda.tVotingEndTime);
+          const now = new Date();
+          const gap = dDay.getTime() * 1000 - now.getTime();
+          if (gap < 0) {
+            return 'ENDED POLL';
+          } else {
+            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((gap - days * 86400000) / 3600000);
+
+            return days + 'D ' + hours + 'H REMAINING';
+          }
+        }
+      };
+    },
+  },
+  methods: {
+    back () {
+      this.$router.push({
+        path: '/agenda/',
+      });
+    },
+    prev () {
+      let index = Number(this.$route.params.address) -1 ;
+      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
+    },
+    next () {
+      let index = Number(this.$route.params.address) + 1;
+      if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
+    },
   },
 };
 </script>

@@ -5,14 +5,14 @@
     </div>
     <div class="card-container">
       <card-vote-for-agenda />
-      <card-voters />
+      <card-voters :voters="voted" />
       <card-resource />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import Agenda from '@/containers/Agenda';
 import CardResource from '@/containers/CardResource.vue';
@@ -26,10 +26,22 @@ export default {
     'card-voters': CardVoters,
     'card-vote-for-agenda': CardVoteForAgenda,
   },
+  data () {
+    return {
+      comments : [],
+    };
+  },
   computed: {
     ...mapState([
       'account',
+      'voteCasted',
     ]),
+    ...mapGetters([
+      'getVotedListByID',
+    ]),
+    voted () {
+      return this.getVotedListByID(this.$route.params.address);
+    },
   },
 };
 </script>

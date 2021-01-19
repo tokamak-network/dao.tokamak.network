@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import AgendaComment from '@/components/AgendaCommentComponent.vue';
 // import Dropdown from '@/components/Dropdown.vue';
 
@@ -28,17 +29,24 @@ export default {
   },
   data () {
     return {
-      comments : [
-        { date: 'DEC 21, 2020, 22:04 UTC', account: '0x69b023373737caa6', vote: 'Yes', comment: 'hello world!' },
-        { date: 'DEC 21, 2020, 22:04 UTC', account: '0x69b023373737caa6', vote: 'Yes', comment: 'hello world!' },
-        { date: 'DEC 21, 2020, 22:04 UTC', account: '0x69b023373737caa6', vote: 'Yes', comment: 'hello world!' },
-      ],
+      comments : [],
     };
   },
   computed: {
+    ...mapState([
+      'voteCasted',
+    ]),
     numComments () {
       return this.comments.length;
     },
+    classify () {
+      return () => {
+        this.voteCasted.forEach(async casted => casted.data.id === this.$route.params.address ? this.comments.push(casted.data) : 0);
+      };
+    },
+  },
+  created () {
+    this.classify();
   },
 };
 </script>

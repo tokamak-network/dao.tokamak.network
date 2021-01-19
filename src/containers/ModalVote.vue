@@ -29,13 +29,19 @@
                 :button-type="'a'"
                 :selector-type="'a'"
                 class="dropdown"
+                @on-selected="select"
       />
     </div>
     <div class="comment">
       <div class="reason">Why are you voting for this poll?</div>
-      <textarea id="" name="" cols="30" rows="5" style="width: 100%;" class="textarea" />
+      <textarea v-model="comment" name="" cols="30" rows="5" style="width: 100%;" class="textarea" />
     </div>
-    <button-comp :name="'Vote'" :type="'secondary'" style="margin-top: 25px;" />
+    <button-comp
+      :name="'Vote'"
+      :type="'secondary'"
+      style="margin-top: 25px;"
+      @on-clicked="vote"
+    />
   </div>
 </template>
 
@@ -43,14 +49,89 @@
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 
+import { mapState } from 'vuex';
+import { getContracts } from '@/utils/contracts';
+
 export default {
   components: {
     'dropdown': Dropdown,
     'button-comp': Button,
   },
+  props: {
+    id: {
+      required: true,
+      type: Number,
+    },
+  },
+  data () {
+    return {
+      choice: 1,
+      comment: '',
+    };
+  },
+  computed: {
+    ...mapState([
+      'account', // TODO: use nonmembers
+      'web3',
+      'members',
+    ]),
+  },
   methods: {
     close () {
       this.$emit('on-closed');
+    },
+    select (item) {
+      if (item === 'Yes') {
+        this.choice = 1;
+      } else if (item === 'No') {
+        this.choice = 2;
+      } else {
+        this.choice = 0;
+      }
+    },
+    async vote () {
+      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      // const gasLimit = await daoCommittee.methods.castVote(
+      //   this.id,
+      //   this.choice,
+      //   this.comment,
+      // ).estimateGas({
+      //   from: this.account,
+      // });
+
+      await daoCommittee.methods.castVote(
+        this.id,
+        this.choice,
+        this.comment,
+      ).send({
+        from: this.account,
+        // gasLimit: Math.floor(gasLimit * 1.2),
+      }).on('transactionHash', async (hash) => {
+        alert(hash);
+        this.close();
+      }).on('receipt', (receipt) => {
+        alert(receipt);
+        this.$store.dispatch('setAgendas');
+        this.close();
+      });
+      // .on('receipt', (receipt) => {
+      //   if (receipt.status) {
+      //     this.$notify({
+      //       group: 'confirmed',
+      //       title: 'Transaction is confirmed',
+      //       type: 'success',
+      //       duration: 10000,
+      //     });
+      //   } else {
+      //     this.$notify({
+      //       group: 'reverted',
+      //       title: 'Transaction is reverted',
+      //       type: 'error',
+      //       duration: 10000,
+      //     });
+      //   }
+      // });
+      this.close();
     },
   },
 };
