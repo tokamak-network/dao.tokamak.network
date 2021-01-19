@@ -1,11 +1,20 @@
 <template>
-  <div class="text-input">
-    <input :placeholder="hint"
+  <div class="text-input"
+       :class="{
+         'clickable': clickable,
+       }"
+       @click="click()"
+  >
+    <span v-if="label !== ''" class="label">{{ label }}</span>
+    <input ref="input"
+           :placeholder="hint"
            :style="inputPadding"
            :class="{
              'with-unit': unit !== '',
              'big': big,
            }"
+           :readonly="readonly"
+           :value="value"
            @keypress="keypress"
     >
     <div v-if="unit !== ''" ref="unit">{{ unit }}</div>
@@ -27,10 +36,27 @@ export default {
       type: Boolean,
       default: false,
     },
+    clickable: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    value: {
+      type: String,
+      default: undefined,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
   },
   data () {
     return {
       unitWidth: 0,
+      index: 0,
     };
   },
   computed: {
@@ -57,6 +83,11 @@ export default {
         }
       }
       return true;
+    },
+    click () {
+      if (this.clickable) {
+        this.$emit('on-clicked');
+      }
     },
   },
 };
@@ -115,5 +146,30 @@ export default {
 }
 .big {
   min-height: 43px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.label {
+  width: 100%;
+  height: 42px;
+
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: 0.22px;
+  text-align: left;
+  color: #3e495c;
+
+  left: 16px;
 }
 </style>

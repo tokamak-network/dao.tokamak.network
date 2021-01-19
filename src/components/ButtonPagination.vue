@@ -7,7 +7,8 @@
            width="9" height="9"
       >
     </div>
-    <div v-for="(page, index) in pages" :key="index"
+    <div v-if="!pages || pages.length === 0" class="page">1</div>
+    <div v-for="(page, index) in pages" v-else :key="index"
          class="page" :class="{ 'page-selected': page === currentPage }"
          @click="select(page)"
     >
@@ -34,20 +35,25 @@ export default {
   data () {
     return {
       currentPage: 0,
-      pageSize: 0,
-      pageMax: 0,
+      pageSize: 4,
       pages: [],
     };
+  },
+  computed: {
+    pageMax () {
+      return parseInt(((this.datas.length) - 1) / 4 + 1);
+    },
   },
   watch: {
     currentPage (page) {
       this.$emit('on-selected', page);
     },
+    pageMax () {
+      const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
+      this.pages = Array.from(Array(num).keys());
+    },
   },
-  created () {
-    this.pageSize = 4;
-    this.pageMax = parseInt(((this.datas.length) - 1) / 4 + 1);
-
+  mounted () {
     const num = this.pageMax > 4 ? this.pageSize : this.pageMax;
     this.pages = Array.from(Array(num).keys());
   },
@@ -66,7 +72,7 @@ export default {
       this.currentPage--;
     },
     next () {
-      if (this.currentPage === this.pageMax - 1) {
+      if (this.pageMax === 0 || this.currentPage === this.pageMax - 1) {
         return;
       }
       if (this.currentPage % this.pageSize === this.pageSize - 1) {

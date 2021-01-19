@@ -23,9 +23,7 @@ export default {
     'mobile-footer-container': MobileFooter,
   },
   created () {
-    this.$store.dispatch('setMembersAndNonmembers');
-    this.$store.dispatch('setAgendas');
-    // this.$store.dispatch('setAgendaVoteCasted');
+    this.$store.dispatch('launch');
   },
 };
 </script>

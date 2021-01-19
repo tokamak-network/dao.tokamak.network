@@ -10,7 +10,7 @@
         <div class="divide" />
         <div class="content">
           <span>Voted</span>
-          <span>40.0 TON</span>
+          <span>{{ myVotes(address) | WTON }} TON</span>
         </div>
       </template>
     </card-container>
@@ -18,11 +18,32 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Card from '@/components/Card.vue';
 
 export default {
   components: {
     'card-container': Card,
+  },
+  data () {
+    return {
+      address: '',
+      vote: 0,
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'myVotes',
+    ]),
+  },
+  watch: {
+    '$route.params.address': {
+      handler: async function () {
+        this.address = this.$route.params.address;
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 };
 </script>

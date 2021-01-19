@@ -8,9 +8,8 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://tokamak.network"
           >
-            Tokamak Forum
+            Tokamak Forum (In ready)
           </a>
         </div>
         <div class="resource">
@@ -19,9 +18,8 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://tokamak.network"
           >
-            Governance FAQs
+            Governance FAQs (In ready)
           </a>
         </div>
         <div class="resource">

@@ -78,26 +78,26 @@
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "85:1124:18:-:0;;;328:66;;;;;;;;;-1:-1:-1;353:34:18;376:10;353:22;:34::i;:::-;85:1124;;883:155;951:33;976:7;951:20;:24;;;;;;:33;;;;:::i;:::-;999:32;;-1:-1:-1;;;;;999:32:18;;;;;;;;883:155;:::o;374:130:17:-;447:18;451:4;457:7;447:3;:18::i;:::-;446:19;438:28;;;;;;-1:-1:-1;;;;;472:20:17;:11;:20;;;;;;;;;;;:27;;-1:-1:-1;;472:27:17;495:4;472:27;;;374:130::o;783:152::-;855:4;-1:-1:-1;;;;;875:21:17;;867:30;;;;;;-1:-1:-1;;;;;;910:20:17;:11;:20;;;;;;;;;;;;;;;783:152::o;85:1124:18:-;;;;;;;",
-  "deployedSourceMap": "85:1124:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;778:99;;;:::i;:::-;;509:131;;;;;;;;;;;;;;;;-1:-1:-1;509:131:18;-1:-1:-1;;;;;509:131:18;;:::i;:::-;;;;;;;;;;;;;;;;;;646:126;;;;;;;;;;;;;;;;-1:-1:-1;646:126:18;-1:-1:-1;;;;;646:126:18;;:::i;778:99::-;833:37;859:10;833:25;:37::i;:::-;778:99::o;509:131::-;577:4;600:33;577:4;625:7;600:24;:33::i;:::-;593:40;509:131;-1:-1:-1;;509:131:18:o;646:126::-;452:32;473:10;452:20;:32::i;:::-;444:41;;;;;;734:31:::1;757:7;734:22;:31::i;:::-;646:126:::0;:::o;374:130:17:-;447:18;451:4;457:7;447:3;:18::i;:::-;446:19;438:28;;;;;;-1:-1:-1;;;;;472:20:17;:11;:20;;;;;;;;;;;:27;;-1:-1:-1;;472:27:17;495:4;472:27;;;374:130::o;1044:163:18:-;1115:36;:20;1143:7;1115:27;:36::i;:::-;1166:34;;-1:-1:-1;;;;;1166:34:18;;;;;;;;1044:163;:::o;783:152:17:-;855:4;-1:-1:-1;;;;;875:21:17;;867:30;;;;;;-1:-1:-1;;;;;;910:20:17;:11;:20;;;;;;;;;;;;;;;783:152::o;883:155:18:-;951:33;:20;976:7;951:24;:33::i;:::-;999:32;;-1:-1:-1;;;;;999:32:18;;;;;;;;883:155;:::o;571:133:17:-;646:18;650:4;656:7;646:3;:18::i;:::-;638:27;;;;;;-1:-1:-1;;;;;671:20:17;694:5;671:20;;;;;;;;;;;:28;;-1:-1:-1;;671:28:17;;;571:133::o",
+  "sourceMap": "85:1124:20:-:0;;;328:66;;;;;;;;;-1:-1:-1;353:34:20;376:10;353:22;:34::i;:::-;85:1124;;883:155;951:33;976:7;951:20;:24;;;;;;:33;;;;:::i;:::-;999:32;;-1:-1:-1;;;;;999:32:20;;;;;;;;883:155;:::o;374:130:19:-;447:18;451:4;457:7;447:3;:18::i;:::-;446:19;438:28;;;;;;-1:-1:-1;;;;;472:20:19;:11;:20;;;;;;;;;;;:27;;-1:-1:-1;;472:27:19;495:4;472:27;;;374:130::o;783:152::-;855:4;-1:-1:-1;;;;;875:21:19;;867:30;;;;;;-1:-1:-1;;;;;;910:20:19;:11;:20;;;;;;;;;;;;;;;783:152::o;85:1124:20:-;;;;;;;",
+  "deployedSourceMap": "85:1124:20:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;778:99;;;:::i;:::-;;509:131;;;;;;;;;;;;;;;;-1:-1:-1;509:131:20;-1:-1:-1;;;;;509:131:20;;:::i;:::-;;;;;;;;;;;;;;;;;;646:126;;;;;;;;;;;;;;;;-1:-1:-1;646:126:20;-1:-1:-1;;;;;646:126:20;;:::i;778:99::-;833:37;859:10;833:25;:37::i;:::-;778:99::o;509:131::-;577:4;600:33;577:4;625:7;600:24;:33::i;:::-;593:40;509:131;-1:-1:-1;;509:131:20:o;646:126::-;452:32;473:10;452:20;:32::i;:::-;444:41;;;;;;734:31:::1;757:7;734:22;:31::i;:::-;646:126:::0;:::o;374:130:19:-;447:18;451:4;457:7;447:3;:18::i;:::-;446:19;438:28;;;;;;-1:-1:-1;;;;;472:20:19;:11;:20;;;;;;;;;;;:27;;-1:-1:-1;;472:27:19;495:4;472:27;;;374:130::o;1044:163:20:-;1115:36;:20;1143:7;1115:27;:36::i;:::-;1166:34;;-1:-1:-1;;;;;1166:34:20;;;;;;;;1044:163;:::o;783:152:19:-;855:4;-1:-1:-1;;;;;875:21:19;;867:30;;;;;;-1:-1:-1;;;;;;910:20:19;:11;:20;;;;;;;;;;;;;;;783:152::o;883:155:20:-;951:33;:20;976:7;951:24;:33::i;:::-;999:32;;-1:-1:-1;;;;;999:32:20;;;;;;;;883:155;:::o;571:133:19:-;646:18;650:4;656:7;646:3;:18::i;:::-;638:27;;;;;;-1:-1:-1;;;;;671:20:19;694:5;671:20;;;;;;;;;;;:28;;-1:-1:-1;;671:28:19;;;571:133::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\n\nimport \"../lib/Roles.sol\";\n\ncontract DAOActivityFeeManagerRole {\n    using Roles for Roles.Role;\n\n    event ActivityFeeManagerAdded(address indexed account);\n    event ActivityFeeManagerRemoved(address indexed account);\n\n    Roles.Role private _activityFeeManagers;\n\n    constructor () {\n        _addActivityFeeManager(msg.sender);\n    }\n\n    modifier onlyActivityFeeManager() {\n        require(isActivityFeeManager(msg.sender));\n        _;\n    }\n\n    function isActivityFeeManager(address account) public view returns (bool) {\n        return _activityFeeManagers.has(account);\n    }\n\n    function addActivityFeeManager(address account) public onlyActivityFeeManager {\n        _addActivityFeeManager(account);\n    }\n\n    function renounceActivityFeeManager() public {\n        _removeActivityFeeManager(msg.sender);\n    }\n\n    function _addActivityFeeManager(address account) internal {\n        _activityFeeManagers.add(account);\n        emit ActivityFeeManagerAdded(account);\n    }\n\n    function _removeActivityFeeManager(address account) internal {\n        _activityFeeManagers.remove(account);\n        emit ActivityFeeManagerRemoved(account);\n    }\n}\n",
   "sourcePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/roles/DAOActivityFeeManagerRole.sol",
   "ast": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/roles/DAOActivityFeeManagerRole.sol",
     "exportedSymbols": {
       "DAOActivityFeeManagerRole": [
-        4479
+        5307
       ],
       "Roles": [
-        4376
+        5204
       ]
     },
-    "id": 4480,
+    "id": 5308,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4378,
+        "id": 5206,
         "literals": [
           "solidity",
           "^",
@@ -105,16 +105,16 @@
           ".6"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:18"
+        "src": "32:23:20"
       },
       {
         "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Roles.sol",
         "file": "../lib/Roles.sol",
-        "id": 4379,
+        "id": 5207,
         "nodeType": "ImportDirective",
-        "scope": 4480,
-        "sourceUnit": 4377,
-        "src": "57:26:18",
+        "scope": 5308,
+        "sourceUnit": 5205,
+        "src": "57:26:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -124,58 +124,58 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 4479,
+        "id": 5307,
         "linearizedBaseContracts": [
-          4479
+          5307
         ],
         "name": "DAOActivityFeeManagerRole",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 4382,
+            "id": 5210,
             "libraryName": {
-              "id": 4380,
+              "id": 5208,
               "name": "Roles",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4376,
-              "src": "132:5:18",
+              "referencedDeclaration": 5204,
+              "src": "132:5:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Roles_$4376",
+                "typeIdentifier": "t_contract$_Roles_$5204",
                 "typeString": "library Roles"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "126:27:18",
+            "src": "126:27:20",
             "typeName": {
-              "id": 4381,
+              "id": 5209,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4301,
-              "src": "142:10:18",
+              "referencedDeclaration": 5129,
+              "src": "142:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$4301_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$5129_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             }
           },
           {
             "anonymous": false,
-            "id": 4386,
+            "id": 5214,
             "name": "ActivityFeeManagerAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4385,
+              "id": 5213,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4384,
+                  "id": 5212,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4386,
-                  "src": "189:23:18",
+                  "scope": 5214,
+                  "src": "189:23:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -183,10 +183,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4383,
+                    "id": 5211,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "189:7:18",
+                    "src": "189:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -196,28 +196,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "188:25:18"
+              "src": "188:25:20"
             },
-            "src": "159:55:18"
+            "src": "159:55:20"
           },
           {
             "anonymous": false,
-            "id": 4390,
+            "id": 5218,
             "name": "ActivityFeeManagerRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4389,
+              "id": 5217,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4388,
+                  "id": 5216,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4390,
-                  "src": "251:23:18",
+                  "scope": 5218,
+                  "src": "251:23:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -225,10 +225,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4387,
+                    "id": 5215,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "251:7:18",
+                    "src": "251:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -238,32 +238,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "250:25:18"
+              "src": "250:25:20"
             },
-            "src": "219:57:18"
+            "src": "219:57:20"
           },
           {
             "constant": false,
-            "id": 4392,
+            "id": 5220,
             "mutability": "mutable",
             "name": "_activityFeeManagers",
             "nodeType": "VariableDeclaration",
-            "scope": 4479,
-            "src": "282:39:18",
+            "scope": 5307,
+            "src": "282:39:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_struct$_Role_$4301_storage",
+              "typeIdentifier": "t_struct$_Role_$5129_storage",
               "typeString": "struct Roles.Role"
             },
             "typeName": {
-              "id": 4391,
+              "id": 5219,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4301,
-              "src": "282:10:18",
+              "referencedDeclaration": 5129,
+              "src": "282:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$4301_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$5129_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             },
@@ -271,34 +271,34 @@
           },
           {
             "body": {
-              "id": 4400,
+              "id": 5228,
               "nodeType": "Block",
-              "src": "343:51:18",
+              "src": "343:51:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "expression": {
-                          "id": 4396,
+                          "id": 5224,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 4294967281,
-                          "src": "376:3:18",
+                          "src": "376:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 4397,
+                        "id": 5225,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
-                        "src": "376:10:18",
+                        "src": "376:10:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
                           "typeString": "address payable"
@@ -312,18 +312,18 @@
                           "typeString": "address payable"
                         }
                       ],
-                      "id": 4395,
+                      "id": 5223,
                       "name": "_addActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4462,
-                      "src": "353:22:18",
+                      "referencedDeclaration": 5290,
+                      "src": "353:22:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4398,
+                    "id": 5226,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -331,48 +331,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "353:34:18",
+                    "src": "353:34:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4399,
+                  "id": 5227,
                   "nodeType": "ExpressionStatement",
-                  "src": "353:34:18"
+                  "src": "353:34:20"
                 }
               ]
             },
-            "id": 4401,
+            "id": 5229,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4393,
+              "id": 5221,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "340:2:18"
+              "src": "340:2:20"
             },
             "returnParameters": {
-              "id": 4394,
+              "id": 5222,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "343:0:18"
+              "src": "343:0:20"
             },
-            "scope": 4479,
-            "src": "328:66:18",
+            "scope": 5307,
+            "src": "328:66:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4411,
+              "id": 5239,
               "nodeType": "Block",
-              "src": "434:69:18",
+              "src": "434:69:20",
               "statements": [
                 {
                   "expression": {
@@ -381,25 +381,25 @@
                         "arguments": [
                           {
                             "expression": {
-                              "id": 4405,
+                              "id": 5233,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
                               "referencedDeclaration": 4294967281,
-                              "src": "473:3:18",
+                              "src": "473:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 4406,
+                            "id": 5234,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
-                            "src": "473:10:18",
+                            "src": "473:10:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address_payable",
                               "typeString": "address payable"
@@ -413,18 +413,18 @@
                               "typeString": "address payable"
                             }
                           ],
-                          "id": 4404,
+                          "id": 5232,
                           "name": "isActivityFeeManager",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4425,
-                          "src": "452:20:18",
+                          "referencedDeclaration": 5253,
+                          "src": "452:20:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 4407,
+                        "id": 5235,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -432,7 +432,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "452:32:18",
+                        "src": "452:32:20",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -447,7 +447,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 4403,
+                      "id": 5231,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -455,13 +455,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "444:7:18",
+                      "src": "444:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 4408,
+                    "id": 5236,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -469,53 +469,53 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "444:41:18",
+                    "src": "444:41:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4409,
+                  "id": 5237,
                   "nodeType": "ExpressionStatement",
-                  "src": "444:41:18"
+                  "src": "444:41:20"
                 },
                 {
-                  "id": 4410,
+                  "id": 5238,
                   "nodeType": "PlaceholderStatement",
-                  "src": "495:1:18"
+                  "src": "495:1:20"
                 }
               ]
             },
-            "id": 4412,
+            "id": 5240,
             "name": "onlyActivityFeeManager",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 4402,
+              "id": 5230,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "431:2:18"
+              "src": "431:2:20"
             },
-            "src": "400:103:18",
+            "src": "400:103:20",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 4424,
+              "id": 5252,
               "nodeType": "Block",
-              "src": "583:57:18",
+              "src": "583:57:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4421,
+                        "id": 5249,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4414,
-                        "src": "625:7:18",
+                        "referencedDeclaration": 5242,
+                        "src": "625:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -530,32 +530,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4419,
+                        "id": 5247,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "600:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "600:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4420,
+                      "id": 5248,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "has",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4375,
-                      "src": "600:24:18",
+                      "referencedDeclaration": 5203,
+                      "src": "600:24:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address) view returns (bool)"
                       }
                     },
-                    "id": 4422,
+                    "id": 5250,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -563,39 +563,39 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "600:33:18",
+                    "src": "600:33:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 4418,
-                  "id": 4423,
+                  "functionReturnParameters": 5246,
+                  "id": 5251,
                   "nodeType": "Return",
-                  "src": "593:40:18"
+                  "src": "593:40:20"
                 }
               ]
             },
             "functionSelector": "613a3fd9",
-            "id": 4425,
+            "id": 5253,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4415,
+              "id": 5243,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4414,
+                  "id": 5242,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4425,
-                  "src": "539:15:18",
+                  "scope": 5253,
+                  "src": "539:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -603,10 +603,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4413,
+                    "id": 5241,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "539:7:18",
+                    "src": "539:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -616,20 +616,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "538:17:18"
+              "src": "538:17:20"
             },
             "returnParameters": {
-              "id": 4418,
+              "id": 5246,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4417,
+                  "id": 5245,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4425,
-                  "src": "577:4:18",
+                  "scope": 5253,
+                  "src": "577:4:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -637,10 +637,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 4416,
+                    "id": 5244,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "577:4:18",
+                    "src": "577:4:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -649,30 +649,30 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "576:6:18"
+              "src": "576:6:20"
             },
-            "scope": 4479,
-            "src": "509:131:18",
+            "scope": 5307,
+            "src": "509:131:20",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4436,
+              "id": 5264,
               "nodeType": "Block",
-              "src": "724:48:18",
+              "src": "724:48:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4433,
+                        "id": 5261,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4427,
-                        "src": "757:7:18",
+                        "referencedDeclaration": 5255,
+                        "src": "757:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -686,18 +686,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4432,
+                      "id": 5260,
                       "name": "_addActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4462,
-                      "src": "734:22:18",
+                      "referencedDeclaration": 5290,
+                      "src": "734:22:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4434,
+                    "id": 5262,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -705,56 +705,56 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "734:31:18",
+                    "src": "734:31:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4435,
+                  "id": 5263,
                   "nodeType": "ExpressionStatement",
-                  "src": "734:31:18"
+                  "src": "734:31:20"
                 }
               ]
             },
             "functionSelector": "de0760fc",
-            "id": 4437,
+            "id": 5265,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 4430,
+                "id": 5258,
                 "modifierName": {
-                  "id": 4429,
+                  "id": 5257,
                   "name": "onlyActivityFeeManager",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4412,
-                  "src": "701:22:18",
+                  "referencedDeclaration": 5240,
+                  "src": "701:22:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "701:22:18"
+                "src": "701:22:20"
               }
             ],
             "name": "addActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4428,
+              "id": 5256,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4427,
+                  "id": 5255,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4437,
-                  "src": "677:15:18",
+                  "scope": 5265,
+                  "src": "677:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -762,10 +762,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4426,
+                    "id": 5254,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "677:7:18",
+                    "src": "677:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -775,50 +775,50 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "676:17:18"
+              "src": "676:17:20"
             },
             "returnParameters": {
-              "id": 4431,
+              "id": 5259,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "724:0:18"
+              "src": "724:0:20"
             },
-            "scope": 4479,
-            "src": "646:126:18",
+            "scope": 5307,
+            "src": "646:126:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4445,
+              "id": 5273,
               "nodeType": "Block",
-              "src": "823:54:18",
+              "src": "823:54:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "expression": {
-                          "id": 4441,
+                          "id": 5269,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 4294967281,
-                          "src": "859:3:18",
+                          "src": "859:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 4442,
+                        "id": 5270,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
-                        "src": "859:10:18",
+                        "src": "859:10:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
                           "typeString": "address payable"
@@ -832,18 +832,18 @@
                           "typeString": "address payable"
                         }
                       ],
-                      "id": 4440,
+                      "id": 5268,
                       "name": "_removeActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4478,
-                      "src": "833:25:18",
+                      "referencedDeclaration": 5306,
+                      "src": "833:25:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4443,
+                    "id": 5271,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -851,60 +851,60 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "833:37:18",
+                    "src": "833:37:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4444,
+                  "id": 5272,
                   "nodeType": "ExpressionStatement",
-                  "src": "833:37:18"
+                  "src": "833:37:20"
                 }
               ]
             },
             "functionSelector": "2a43be2c",
-            "id": 4446,
+            "id": 5274,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "renounceActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4438,
+              "id": 5266,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "813:2:18"
+              "src": "813:2:20"
             },
             "returnParameters": {
-              "id": 4439,
+              "id": 5267,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "823:0:18"
+              "src": "823:0:20"
             },
-            "scope": 4479,
-            "src": "778:99:18",
+            "scope": 5307,
+            "src": "778:99:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4461,
+              "id": 5289,
               "nodeType": "Block",
-              "src": "941:97:18",
+              "src": "941:97:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4454,
+                        "id": 5282,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4448,
-                        "src": "976:7:18",
+                        "referencedDeclaration": 5276,
+                        "src": "976:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -919,32 +919,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4451,
+                        "id": 5279,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "951:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "951:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4453,
+                      "id": 5281,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "add",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4326,
-                      "src": "951:24:18",
+                      "referencedDeclaration": 5154,
+                      "src": "951:24:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 4455,
+                    "id": 5283,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -952,27 +952,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "951:33:18",
+                    "src": "951:33:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4456,
+                  "id": 5284,
                   "nodeType": "ExpressionStatement",
-                  "src": "951:33:18"
+                  "src": "951:33:20"
                 },
                 {
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 4458,
+                        "id": 5286,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4448,
-                        "src": "1023:7:18",
+                        "referencedDeclaration": 5276,
+                        "src": "1023:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -986,18 +986,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4457,
+                      "id": 5285,
                       "name": "ActivityFeeManagerAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4386,
-                      "src": "999:23:18",
+                      "referencedDeclaration": 5214,
+                      "src": "999:23:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4459,
+                    "id": 5287,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1005,37 +1005,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "999:32:18",
+                    "src": "999:32:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4460,
+                  "id": 5288,
                   "nodeType": "EmitStatement",
-                  "src": "994:37:18"
+                  "src": "994:37:20"
                 }
               ]
             },
-            "id": 4462,
+            "id": 5290,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_addActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4449,
+              "id": 5277,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4448,
+                  "id": 5276,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4462,
-                  "src": "915:15:18",
+                  "scope": 5290,
+                  "src": "915:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1043,10 +1043,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4447,
+                    "id": 5275,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "915:7:18",
+                    "src": "915:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1056,36 +1056,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "914:17:18"
+              "src": "914:17:20"
             },
             "returnParameters": {
-              "id": 4450,
+              "id": 5278,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "941:0:18"
+              "src": "941:0:20"
             },
-            "scope": 4479,
-            "src": "883:155:18",
+            "scope": 5307,
+            "src": "883:155:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 4477,
+              "id": 5305,
               "nodeType": "Block",
-              "src": "1105:102:18",
+              "src": "1105:102:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4470,
+                        "id": 5298,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4464,
-                        "src": "1143:7:18",
+                        "referencedDeclaration": 5292,
+                        "src": "1143:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1100,32 +1100,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4467,
+                        "id": 5295,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "1115:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "1115:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4469,
+                      "id": 5297,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "remove",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4350,
-                      "src": "1115:27:18",
+                      "referencedDeclaration": 5178,
+                      "src": "1115:27:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 4471,
+                    "id": 5299,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1133,27 +1133,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1115:36:18",
+                    "src": "1115:36:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4472,
+                  "id": 5300,
                   "nodeType": "ExpressionStatement",
-                  "src": "1115:36:18"
+                  "src": "1115:36:20"
                 },
                 {
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 4474,
+                        "id": 5302,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4464,
-                        "src": "1192:7:18",
+                        "referencedDeclaration": 5292,
+                        "src": "1192:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1167,18 +1167,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4473,
+                      "id": 5301,
                       "name": "ActivityFeeManagerRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4390,
-                      "src": "1166:25:18",
+                      "referencedDeclaration": 5218,
+                      "src": "1166:25:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4475,
+                    "id": 5303,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1186,37 +1186,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1166:34:18",
+                    "src": "1166:34:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4476,
+                  "id": 5304,
                   "nodeType": "EmitStatement",
-                  "src": "1161:39:18"
+                  "src": "1161:39:20"
                 }
               ]
             },
-            "id": 4478,
+            "id": 5306,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_removeActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4465,
+              "id": 5293,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4464,
+                  "id": 5292,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4478,
-                  "src": "1079:15:18",
+                  "scope": 5306,
+                  "src": "1079:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1224,10 +1224,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4463,
+                    "id": 5291,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1079:7:18",
+                    "src": "1079:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1237,43 +1237,43 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1078:17:18"
+              "src": "1078:17:20"
             },
             "returnParameters": {
-              "id": 4466,
+              "id": 5294,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1105:0:18"
+              "src": "1105:0:20"
             },
-            "scope": 4479,
-            "src": "1044:163:18",
+            "scope": 5307,
+            "src": "1044:163:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 4480,
-        "src": "85:1124:18"
+        "scope": 5308,
+        "src": "85:1124:20"
       }
     ],
-    "src": "32:1178:18"
+    "src": "32:1178:20"
   },
   "legacyAST": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/roles/DAOActivityFeeManagerRole.sol",
     "exportedSymbols": {
       "DAOActivityFeeManagerRole": [
-        4479
+        5307
       ],
       "Roles": [
-        4376
+        5204
       ]
     },
-    "id": 4480,
+    "id": 5308,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4378,
+        "id": 5206,
         "literals": [
           "solidity",
           "^",
@@ -1281,16 +1281,16 @@
           ".6"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:18"
+        "src": "32:23:20"
       },
       {
         "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Roles.sol",
         "file": "../lib/Roles.sol",
-        "id": 4379,
+        "id": 5207,
         "nodeType": "ImportDirective",
-        "scope": 4480,
-        "sourceUnit": 4377,
-        "src": "57:26:18",
+        "scope": 5308,
+        "sourceUnit": 5205,
+        "src": "57:26:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1300,58 +1300,58 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 4479,
+        "id": 5307,
         "linearizedBaseContracts": [
-          4479
+          5307
         ],
         "name": "DAOActivityFeeManagerRole",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 4382,
+            "id": 5210,
             "libraryName": {
-              "id": 4380,
+              "id": 5208,
               "name": "Roles",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4376,
-              "src": "132:5:18",
+              "referencedDeclaration": 5204,
+              "src": "132:5:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Roles_$4376",
+                "typeIdentifier": "t_contract$_Roles_$5204",
                 "typeString": "library Roles"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "126:27:18",
+            "src": "126:27:20",
             "typeName": {
-              "id": 4381,
+              "id": 5209,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4301,
-              "src": "142:10:18",
+              "referencedDeclaration": 5129,
+              "src": "142:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$4301_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$5129_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             }
           },
           {
             "anonymous": false,
-            "id": 4386,
+            "id": 5214,
             "name": "ActivityFeeManagerAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4385,
+              "id": 5213,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4384,
+                  "id": 5212,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4386,
-                  "src": "189:23:18",
+                  "scope": 5214,
+                  "src": "189:23:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1359,10 +1359,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4383,
+                    "id": 5211,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "189:7:18",
+                    "src": "189:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1372,28 +1372,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "188:25:18"
+              "src": "188:25:20"
             },
-            "src": "159:55:18"
+            "src": "159:55:20"
           },
           {
             "anonymous": false,
-            "id": 4390,
+            "id": 5218,
             "name": "ActivityFeeManagerRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4389,
+              "id": 5217,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4388,
+                  "id": 5216,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4390,
-                  "src": "251:23:18",
+                  "scope": 5218,
+                  "src": "251:23:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1401,10 +1401,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4387,
+                    "id": 5215,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "251:7:18",
+                    "src": "251:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1414,32 +1414,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "250:25:18"
+              "src": "250:25:20"
             },
-            "src": "219:57:18"
+            "src": "219:57:20"
           },
           {
             "constant": false,
-            "id": 4392,
+            "id": 5220,
             "mutability": "mutable",
             "name": "_activityFeeManagers",
             "nodeType": "VariableDeclaration",
-            "scope": 4479,
-            "src": "282:39:18",
+            "scope": 5307,
+            "src": "282:39:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_struct$_Role_$4301_storage",
+              "typeIdentifier": "t_struct$_Role_$5129_storage",
               "typeString": "struct Roles.Role"
             },
             "typeName": {
-              "id": 4391,
+              "id": 5219,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4301,
-              "src": "282:10:18",
+              "referencedDeclaration": 5129,
+              "src": "282:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$4301_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$5129_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             },
@@ -1447,34 +1447,34 @@
           },
           {
             "body": {
-              "id": 4400,
+              "id": 5228,
               "nodeType": "Block",
-              "src": "343:51:18",
+              "src": "343:51:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "expression": {
-                          "id": 4396,
+                          "id": 5224,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 4294967281,
-                          "src": "376:3:18",
+                          "src": "376:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 4397,
+                        "id": 5225,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
-                        "src": "376:10:18",
+                        "src": "376:10:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
                           "typeString": "address payable"
@@ -1488,18 +1488,18 @@
                           "typeString": "address payable"
                         }
                       ],
-                      "id": 4395,
+                      "id": 5223,
                       "name": "_addActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4462,
-                      "src": "353:22:18",
+                      "referencedDeclaration": 5290,
+                      "src": "353:22:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4398,
+                    "id": 5226,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1507,48 +1507,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "353:34:18",
+                    "src": "353:34:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4399,
+                  "id": 5227,
                   "nodeType": "ExpressionStatement",
-                  "src": "353:34:18"
+                  "src": "353:34:20"
                 }
               ]
             },
-            "id": 4401,
+            "id": 5229,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4393,
+              "id": 5221,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "340:2:18"
+              "src": "340:2:20"
             },
             "returnParameters": {
-              "id": 4394,
+              "id": 5222,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "343:0:18"
+              "src": "343:0:20"
             },
-            "scope": 4479,
-            "src": "328:66:18",
+            "scope": 5307,
+            "src": "328:66:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4411,
+              "id": 5239,
               "nodeType": "Block",
-              "src": "434:69:18",
+              "src": "434:69:20",
               "statements": [
                 {
                   "expression": {
@@ -1557,25 +1557,25 @@
                         "arguments": [
                           {
                             "expression": {
-                              "id": 4405,
+                              "id": 5233,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
                               "referencedDeclaration": 4294967281,
-                              "src": "473:3:18",
+                              "src": "473:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 4406,
+                            "id": 5234,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
-                            "src": "473:10:18",
+                            "src": "473:10:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address_payable",
                               "typeString": "address payable"
@@ -1589,18 +1589,18 @@
                               "typeString": "address payable"
                             }
                           ],
-                          "id": 4404,
+                          "id": 5232,
                           "name": "isActivityFeeManager",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4425,
-                          "src": "452:20:18",
+                          "referencedDeclaration": 5253,
+                          "src": "452:20:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 4407,
+                        "id": 5235,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1608,7 +1608,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "452:32:18",
+                        "src": "452:32:20",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -1623,7 +1623,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 4403,
+                      "id": 5231,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1631,13 +1631,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "444:7:18",
+                      "src": "444:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 4408,
+                    "id": 5236,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1645,53 +1645,53 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "444:41:18",
+                    "src": "444:41:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4409,
+                  "id": 5237,
                   "nodeType": "ExpressionStatement",
-                  "src": "444:41:18"
+                  "src": "444:41:20"
                 },
                 {
-                  "id": 4410,
+                  "id": 5238,
                   "nodeType": "PlaceholderStatement",
-                  "src": "495:1:18"
+                  "src": "495:1:20"
                 }
               ]
             },
-            "id": 4412,
+            "id": 5240,
             "name": "onlyActivityFeeManager",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 4402,
+              "id": 5230,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "431:2:18"
+              "src": "431:2:20"
             },
-            "src": "400:103:18",
+            "src": "400:103:20",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 4424,
+              "id": 5252,
               "nodeType": "Block",
-              "src": "583:57:18",
+              "src": "583:57:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4421,
+                        "id": 5249,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4414,
-                        "src": "625:7:18",
+                        "referencedDeclaration": 5242,
+                        "src": "625:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1706,32 +1706,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4419,
+                        "id": 5247,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "600:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "600:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4420,
+                      "id": 5248,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "has",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4375,
-                      "src": "600:24:18",
+                      "referencedDeclaration": 5203,
+                      "src": "600:24:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address) view returns (bool)"
                       }
                     },
-                    "id": 4422,
+                    "id": 5250,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1739,39 +1739,39 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "600:33:18",
+                    "src": "600:33:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 4418,
-                  "id": 4423,
+                  "functionReturnParameters": 5246,
+                  "id": 5251,
                   "nodeType": "Return",
-                  "src": "593:40:18"
+                  "src": "593:40:20"
                 }
               ]
             },
             "functionSelector": "613a3fd9",
-            "id": 4425,
+            "id": 5253,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4415,
+              "id": 5243,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4414,
+                  "id": 5242,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4425,
-                  "src": "539:15:18",
+                  "scope": 5253,
+                  "src": "539:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1779,10 +1779,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4413,
+                    "id": 5241,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "539:7:18",
+                    "src": "539:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1792,20 +1792,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "538:17:18"
+              "src": "538:17:20"
             },
             "returnParameters": {
-              "id": 4418,
+              "id": 5246,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4417,
+                  "id": 5245,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4425,
-                  "src": "577:4:18",
+                  "scope": 5253,
+                  "src": "577:4:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1813,10 +1813,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 4416,
+                    "id": 5244,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "577:4:18",
+                    "src": "577:4:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1825,30 +1825,30 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "576:6:18"
+              "src": "576:6:20"
             },
-            "scope": 4479,
-            "src": "509:131:18",
+            "scope": 5307,
+            "src": "509:131:20",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4436,
+              "id": 5264,
               "nodeType": "Block",
-              "src": "724:48:18",
+              "src": "724:48:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4433,
+                        "id": 5261,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4427,
-                        "src": "757:7:18",
+                        "referencedDeclaration": 5255,
+                        "src": "757:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1862,18 +1862,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4432,
+                      "id": 5260,
                       "name": "_addActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4462,
-                      "src": "734:22:18",
+                      "referencedDeclaration": 5290,
+                      "src": "734:22:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4434,
+                    "id": 5262,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1881,56 +1881,56 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "734:31:18",
+                    "src": "734:31:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4435,
+                  "id": 5263,
                   "nodeType": "ExpressionStatement",
-                  "src": "734:31:18"
+                  "src": "734:31:20"
                 }
               ]
             },
             "functionSelector": "de0760fc",
-            "id": 4437,
+            "id": 5265,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 4430,
+                "id": 5258,
                 "modifierName": {
-                  "id": 4429,
+                  "id": 5257,
                   "name": "onlyActivityFeeManager",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4412,
-                  "src": "701:22:18",
+                  "referencedDeclaration": 5240,
+                  "src": "701:22:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "701:22:18"
+                "src": "701:22:20"
               }
             ],
             "name": "addActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4428,
+              "id": 5256,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4427,
+                  "id": 5255,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4437,
-                  "src": "677:15:18",
+                  "scope": 5265,
+                  "src": "677:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1938,10 +1938,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4426,
+                    "id": 5254,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "677:7:18",
+                    "src": "677:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1951,50 +1951,50 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "676:17:18"
+              "src": "676:17:20"
             },
             "returnParameters": {
-              "id": 4431,
+              "id": 5259,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "724:0:18"
+              "src": "724:0:20"
             },
-            "scope": 4479,
-            "src": "646:126:18",
+            "scope": 5307,
+            "src": "646:126:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4445,
+              "id": 5273,
               "nodeType": "Block",
-              "src": "823:54:18",
+              "src": "823:54:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "expression": {
-                          "id": 4441,
+                          "id": 5269,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 4294967281,
-                          "src": "859:3:18",
+                          "src": "859:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 4442,
+                        "id": 5270,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
-                        "src": "859:10:18",
+                        "src": "859:10:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
                           "typeString": "address payable"
@@ -2008,18 +2008,18 @@
                           "typeString": "address payable"
                         }
                       ],
-                      "id": 4440,
+                      "id": 5268,
                       "name": "_removeActivityFeeManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4478,
-                      "src": "833:25:18",
+                      "referencedDeclaration": 5306,
+                      "src": "833:25:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4443,
+                    "id": 5271,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2027,60 +2027,60 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "833:37:18",
+                    "src": "833:37:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4444,
+                  "id": 5272,
                   "nodeType": "ExpressionStatement",
-                  "src": "833:37:18"
+                  "src": "833:37:20"
                 }
               ]
             },
             "functionSelector": "2a43be2c",
-            "id": 4446,
+            "id": 5274,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "renounceActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4438,
+              "id": 5266,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "813:2:18"
+              "src": "813:2:20"
             },
             "returnParameters": {
-              "id": 4439,
+              "id": 5267,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "823:0:18"
+              "src": "823:0:20"
             },
-            "scope": 4479,
-            "src": "778:99:18",
+            "scope": 5307,
+            "src": "778:99:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 4461,
+              "id": 5289,
               "nodeType": "Block",
-              "src": "941:97:18",
+              "src": "941:97:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4454,
+                        "id": 5282,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4448,
-                        "src": "976:7:18",
+                        "referencedDeclaration": 5276,
+                        "src": "976:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2095,32 +2095,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4451,
+                        "id": 5279,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "951:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "951:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4453,
+                      "id": 5281,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "add",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4326,
-                      "src": "951:24:18",
+                      "referencedDeclaration": 5154,
+                      "src": "951:24:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 4455,
+                    "id": 5283,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2128,27 +2128,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "951:33:18",
+                    "src": "951:33:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4456,
+                  "id": 5284,
                   "nodeType": "ExpressionStatement",
-                  "src": "951:33:18"
+                  "src": "951:33:20"
                 },
                 {
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 4458,
+                        "id": 5286,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4448,
-                        "src": "1023:7:18",
+                        "referencedDeclaration": 5276,
+                        "src": "1023:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2162,18 +2162,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4457,
+                      "id": 5285,
                       "name": "ActivityFeeManagerAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4386,
-                      "src": "999:23:18",
+                      "referencedDeclaration": 5214,
+                      "src": "999:23:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4459,
+                    "id": 5287,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2181,37 +2181,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "999:32:18",
+                    "src": "999:32:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4460,
+                  "id": 5288,
                   "nodeType": "EmitStatement",
-                  "src": "994:37:18"
+                  "src": "994:37:20"
                 }
               ]
             },
-            "id": 4462,
+            "id": 5290,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_addActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4449,
+              "id": 5277,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4448,
+                  "id": 5276,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4462,
-                  "src": "915:15:18",
+                  "scope": 5290,
+                  "src": "915:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2219,10 +2219,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4447,
+                    "id": 5275,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "915:7:18",
+                    "src": "915:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2232,36 +2232,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "914:17:18"
+              "src": "914:17:20"
             },
             "returnParameters": {
-              "id": 4450,
+              "id": 5278,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "941:0:18"
+              "src": "941:0:20"
             },
-            "scope": 4479,
-            "src": "883:155:18",
+            "scope": 5307,
+            "src": "883:155:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 4477,
+              "id": 5305,
               "nodeType": "Block",
-              "src": "1105:102:18",
+              "src": "1105:102:20",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 4470,
+                        "id": 5298,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4464,
-                        "src": "1143:7:18",
+                        "referencedDeclaration": 5292,
+                        "src": "1143:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2276,32 +2276,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 4467,
+                        "id": 5295,
                         "name": "_activityFeeManagers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4392,
-                        "src": "1115:20:18",
+                        "referencedDeclaration": 5220,
+                        "src": "1115:20:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$4301_storage",
+                          "typeIdentifier": "t_struct$_Role_$5129_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 4469,
+                      "id": 5297,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "remove",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4350,
-                      "src": "1115:27:18",
+                      "referencedDeclaration": 5178,
+                      "src": "1115:27:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$4301_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$4301_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$5129_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$5129_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 4471,
+                    "id": 5299,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2309,27 +2309,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1115:36:18",
+                    "src": "1115:36:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4472,
+                  "id": 5300,
                   "nodeType": "ExpressionStatement",
-                  "src": "1115:36:18"
+                  "src": "1115:36:20"
                 },
                 {
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 4474,
+                        "id": 5302,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4464,
-                        "src": "1192:7:18",
+                        "referencedDeclaration": 5292,
+                        "src": "1192:7:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2343,18 +2343,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 4473,
+                      "id": 5301,
                       "name": "ActivityFeeManagerRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 4390,
-                      "src": "1166:25:18",
+                      "referencedDeclaration": 5218,
+                      "src": "1166:25:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 4475,
+                    "id": 5303,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2362,37 +2362,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1166:34:18",
+                    "src": "1166:34:20",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4476,
+                  "id": 5304,
                   "nodeType": "EmitStatement",
-                  "src": "1161:39:18"
+                  "src": "1161:39:20"
                 }
               ]
             },
-            "id": 4478,
+            "id": 5306,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_removeActivityFeeManager",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4465,
+              "id": 5293,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4464,
+                  "id": 5292,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4478,
-                  "src": "1079:15:18",
+                  "scope": 5306,
+                  "src": "1079:15:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2400,10 +2400,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4463,
+                    "id": 5291,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1079:7:18",
+                    "src": "1079:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2413,26 +2413,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1078:17:18"
+              "src": "1078:17:20"
             },
             "returnParameters": {
-              "id": 4466,
+              "id": 5294,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1105:0:18"
+              "src": "1105:0:20"
             },
-            "scope": 4479,
-            "src": "1044:163:18",
+            "scope": 5307,
+            "src": "1044:163:20",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 4480,
-        "src": "85:1124:18"
+        "scope": 5308,
+        "src": "85:1124:20"
       }
     ],
-    "src": "32:1178:18"
+    "src": "32:1178:20"
   },
   "compiler": {
     "name": "solc",
@@ -2440,7 +2440,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2021-01-06T08:41:25.558Z",
+  "updatedAt": "2021-01-14T00:27:18.462Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

@@ -1,10 +1,9 @@
 <template>
   <div class="committee-slot">
-    <div class="title">Elected Candidate</div>
-    <div class="slot-info">
-      <!-- TODO: message -->
+    <div class="title">Elected Candidates</div>
+    <!-- <div class="slot-info">
       3 slot
-    </div>
+    </div> -->
     <card-committee-slot :slotnumber="0" />
     <card-committee-slot :slotnumber="1" />
     <card-committee-slot :slotnumber="2" />
@@ -13,8 +12,7 @@
     >
       Candidates
     </div>
-    <!-- <candidate v-for="candidate in nonmembers" :key="candidate.layer2" :candidate="candidate" /> -->
-    <candidate v-for="candidate in members" :key="candidate.layer2" :candidate="candidate" />
+    <candidate v-for="candidate in nonmembers" :key="candidate.layer2" :candidate="candidate" />
   </div>
 </template>
 
@@ -30,7 +28,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'members', // TODO: use nonmembers
+      'nonmembers',
     ]),
   },
 };

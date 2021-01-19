@@ -8,57 +8,81 @@
     </div>
     <div class="body">
       <div v-if="currentSelector === 0" class="vote-container">
-        <div>Available Balance 00 TON</div>
+        <div>Available Balance {{ tonBalance | TON }} TON</div>
         <div>
-          <text-input class="vote-input"
+          <text-input ref="tonvote"
+                      class="vote-input"
                       :unit="'TON'"
-                      :hint="'0'"
+                      :hint="'0.00'"
           />
           <custom-button class="vote-max"
                          :name="'MAX'"
                          :type="'vote'"
                          :width="'100px'"
+                         @on-clicked="tonMax"
           />
         </div>
         <custom-button :type="'secondary'"
-                       :name="'Vote'"
+                       :name="account ? 'Vote' : 'Please connect wallet'"
+                       :disabled="account ? false : true"
+                       @on-clicked="vote"
         />
       </div>
       <div v-if="currentSelector === 1">
-        <text-input class="revote-input"
+        <text-input ref="tonrevote"
+                    class="revote-input"
                     :unit="'TON'"
-                    :hint="'0'"
+                    :hint="'0.00'"
                     :big="true"
+                    :readonly="true"
+                    :clickable="true"
+                    :value="canRevote(address, revoteIndex) ? canRevote(address, revoteIndex) : undefined"
+                    :label="'Available Amount'"
+                    @on-clicked="setRevoteAmount"
         />
         <custom-button :type="'secondary'"
-                       :name="'Revote'"
+                       :name="account ? 'Revote' : 'Please connect wallet'"
+                       :disabled="account ? false : true"
+                       @on-clicked="revote"
         />
       </div>
       <div v-if="currentSelector === 2" class="unvote-container">
-        <div>Available Balance 00 TON</div>
+        <div>Available Balance {{ myVotes(address) | WTON }} TON</div>
         <div>
-          <text-input class="unvote-input"
+          <text-input ref="tonunvote"
+                      class="unvote-input"
                       :unit="'TON'"
-                      :hint="'0'"
+                      :hint="'0.00'"
           />
           <custom-button class="unvote-max"
                          :name="'MAX'"
                          :type="'vote'"
                          :width="'100px'"
+                         @on-clicked="wtonMax"
           />
         </div>
         <custom-button :type="'secondary'"
-                       :name="'Unvote'"
+                       :name="account ? 'Unvote' : 'Please connect wallet'"
+                       :disabled="account ? false : true"
+                       @on-clicked="unvote"
         />
       </div>
-      <div v-if="currentSelector === 3">
-        <text-input class="withdraw-input"
+      <div v-if="currentSelector === 3" class="unvote-container">
+        <div>Not Withdrawable Amount {{ cannotWithdraw ? cannotWithdraw : 0 }} TON</div>
+        <text-input ref="tonwithdraw"
+                    class="withdraw-input"
                     :unit="'TON'"
-                    :hint="'0'"
-                    :big="true"
+                    :hint="'0.00'"
+                    :readonly="true"
+                    :clickable="true"
+                    :value="canWithdraw(address, withdrawIndex) ? canWithdraw(address, withdrawIndex) : undefined"
+                    :label="'Withdrawable Amount'"
+                    @on-clicked="setWithdrawableAmount"
         />
         <custom-button :type="'secondary'"
-                       :name="'Withdraw'"
+                       :name="account ? 'Withdraw' : 'Please connect wallet'"
+                       :disabled="account ? false : true"
+                       @on-clicked="withdraw"
         />
       </div>
     </div>
@@ -66,6 +90,10 @@
 </template>
 
 <script>
+import { TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
+import { getContracts } from '@/utils/contracts';
+
+import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
 
@@ -77,12 +105,217 @@ export default {
   data () {
     return {
       currentSelector: 0,
+
+      address: '',
+
+      revoteIndex: 0,
+      withdrawIndex: 0,
     };
+  },
+  computed: {
+    ...mapState([
+      'account',
+      'web3',
+      'tonBalance',
+    ]),
+    ...mapGetters([
+      'candidate',
+      'notWithdrawableRequests',
+      'withdrawableRequests',
+      'numCanRevote',
+      'canRevote',
+      'numCanWithdraw',
+      'canWithdraw',
+      'requests',
+      'myVotes',
+    ]),
+    cannotWithdraw () {
+      const requests = this.notWithdrawableRequests(this.address);
+      const amount = requests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
+      return WTON(amount);
+    },
+  },
+  watch: {
+    '$route.params.address': {
+      handler: async function () {
+        this.address = this.$route.params.address;
+      },
+      deep: true,
+      immediate: true,
+    },
+    currentSelector (newSelector, oldSelector) {
+      if (oldSelector === 2 && newSelector === 0) {
+        this.$refs.tonunvote.$refs.input.value = null;
+      } else if (oldSelector === 0 && newSelector === 2) {
+        this.$refs.tonvote.$refs.input.value = null;
+      } else if (newSelector === 1) {
+        this.revoteIndex = 0;
+      } else if (newSelector === 3) {
+        this.withdrawIndex = 0;
+      }
+    },
+  },
+  created () {
+    this.address = this.$route.params.address;
+  },
+  methods: {
+    tonMax () {
+      if (this.tonBalance && this.tonBalance > 0) {
+        this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);
+      }
+    },
+    wtonMax () {
+      if (this.myVotes(this.address) && this.myVotes(this.address) > 0) {
+        this.$refs.tonunvote.$refs.input.value = WTON(this.myVotes(this.address));
+      }
+    },
+    setRevoteAmount () {
+      const requests = this.requests(this.address);
+      this.revoteIndex + 1 === requests.length ? this.revoteIndex = 0 : this.revoteIndex++;
+    },
+    setWithdrawableAmount () {
+      const requests = this.withdrawableRequests(this.address);
+      this.withdrawIndex + 1 === requests.length ? this.withdrawIndex = 0 : this.withdrawIndex++;
+    },
+    async vote () {
+      if (!this.account) return;
+
+      const ton = getContracts('TON', this.web3);
+      const wton = getContracts('WTON', this.web3);
+
+      const amount = toWei(this.$refs.tonvote.$refs.input.value);
+      const data = await this.dataForDeposit();
+
+      const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await ton.methods.approveAndCall(wton._address, amount, data)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$refs.tonvote.$refs.input.value = null;
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          await this.update();
+
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async unvote () {
+      if (!this.account) return;
+      const depositManager = getContracts('DepositManager', this.web3);
+
+      const layer2 = this.address;
+      const amount = toRay(this.$refs.tonunvote.$refs.input.value);
+
+      const gasLimit = await depositManager.methods.requestWithdrawal(layer2, amount)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.requestWithdrawal(layer2, amount)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$refs.tonunvote.$refs.input.value = null;
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          await this.update();
+
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async revote () {
+      if (!this.account) return;
+
+      const depositManager = getContracts('DepositManager', this.web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const candidate = this.candidate(this.address);
+      const candidateContract = await committeeProxy.methods.candidateContract(candidate.operator).call();
+
+      const gasLimit = await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          await this.update();
+
+          this.revoteIndex = 0;
+          this.$store.commit('SET_PENDING_TX', '');
+
+          this.$forceUpdate();
+        });
+    },
+    async withdraw () {
+      if (!this.account) return;
+
+      const depositManager = getContracts('DepositManager', this.web3);
+
+      const layer2 = this.address;
+
+      const gasLimit = await depositManager.methods.processRequests(layer2, this.numCanWithdraw, true)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await depositManager.methods.processRequests(layer2, this.numCanWithdraw, true)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', async (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          await this.update();
+
+          this.withdrawIndex = 0;
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async dataForDeposit () {
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const depositManager = getContracts('DepositManager', this.web3);
+
+      const candidate = this.candidate(this.address);
+      const candidateContract = await committeeProxy.methods.candidateContract(candidate.operator).call();
+
+      const data = marshalString(
+        [depositManager._address, candidateContract]
+          .map(unmarshalString)
+          .map(str => padLeft(str, 64))
+          .join(''),
+      );
+      return data;
+    },
+    async update () {
+      await this.$store.dispatch('setBalance');
+      await this.$store.dispatch('setRequests');
+      await this.$store.dispatch('setMyVotes');
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .committee-vote {
   height: 410px;
 

@@ -1,25 +1,29 @@
 <template>
   <div class="card-committee-info">
     <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
+                   @on-clicked="$router.push({ path: '/election' })"
+      />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" />
-        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
-      <div class="timeline">
-        <div class="date">Posted 2020 / 12 / 07 / 16:00 UTC</div>
+      <div v-if="isMember" class="timeline">
+        <div class="date">
+          Elected at {{ candidate(address) ? electedAt(candidate(address).info.memberJoinedTime) : '-' }}
+        </div>
         <div>
           <img src="@/assets/poll-time-active-icon.svg" alt=""
                width="14" height="14"
           >
-          <span class="black">Slot </span>
-          <span class="blue">#0</span>
-          <span> in Office 12D 13H</span>
+          <span class="black">Slot</span>
+          <span class="blue"> #0 </span>
+          <span>in Office {{ candidate(address) ? fromNow(candidate(address).info.memberJoinedTime) : '-' }}</span>
         </div>
       </div>
-      <div class="title">0xabc.. is nominated to Commmittee member Add UNI-V2-USDC-ETH  as a Collateral Type - December 7, 2020</div>
+      <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
       <div class="selector">
         <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
@@ -34,6 +38,9 @@
 </template>
 
 <script>
+import { date1, fromNow } from '@/utils/helpers';
+
+import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
@@ -49,7 +56,52 @@ export default {
   data () {
     return {
       currentSelector: 0,
+      address: '',
     };
+  },
+  computed: {
+    ...mapState([
+      'candidates',
+      'members',
+    ]),
+    ...mapGetters([
+      'candidate',
+    ]),
+    isMember () {
+      return this.members.find(member => member.layer2.toLowerCase() === this.candidate(this.address).layer2.toLowerCase());
+    },
+  },
+  created () {
+    this.address = this.$route.params.address;
+  },
+  methods: {
+    electedAt (timestamp) {
+      return date1(timestamp);
+    },
+    fromNow (timestamp) {
+      return fromNow(timestamp, true);
+    },
+    prev () {
+      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === -1 || index === 0) {
+        return;
+      }
+      index--;
+
+      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
+      this.address = this.$route.params.address;
+    },
+    next () {
+      const max = this.candidates.length;
+      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      if (index === -1 || index === max - 1) {
+        return;
+      }
+      index++;
+
+      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
+      this.address = this.$route.params.address;
+    },
   },
 };
 </script>

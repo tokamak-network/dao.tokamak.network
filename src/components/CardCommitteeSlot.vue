@@ -12,13 +12,13 @@
             :class="{ 'link': occupied() }"
             @click="etherscan()"
       >
-        {{ (occupied() ? members[slotnumber].operator : '-') | hexSlicer }}
+        {{ (occupied() ? members[slotnumber].layer2 : '-') | hexSlicer }}
       </span>
       <span> | </span>
 
       <span class="title"># of Votes</span>
       <span> : </span>
-      <span class="content">{{ occupied() ? members[slotnumber].vote : '-' }}</span>
+      <span class="content">{{ occupied() ? members[slotnumber].vote : '0' | WTON }}TON</span>
 
       <div class="info-slot">
         <span>Slot </span>
@@ -55,6 +55,7 @@
 
 <script>
 import moment from 'moment';
+import { hexSlicer } from '@/utils/helpers';
 
 import { mapState } from 'vuex';
 import Button from '@/components/Button.vue';
@@ -94,7 +95,7 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
     desc () {
-      return `${this.members[this.slotnumber].layer2} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
+      return `${hexSlicer(this.members[this.slotnumber].layer2)} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
     },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
@@ -115,7 +116,7 @@ export default {
     detail () {
       if (this.occupied()) {
         this.$router.push({
-          path: `/election/${this.members[this.slotnumber].operator}`,
+          path: `/election/${this.members[this.slotnumber].layer2}`,
         });
       }
     },

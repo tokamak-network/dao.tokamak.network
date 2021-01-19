@@ -3,6 +3,10 @@ const Web3 = require('web3');
 const manager = require('../contracts/DAOAgendaManager.json');
 const proxy = require('../contracts/DAOCommitteeProxy.json');
 const committee = require('../contracts/DAOCommittee.json');
+const deposit = require('../contracts/DepositManager.json');
+const ton = require('../contracts/TON.json');
+const wton = require('../contracts/WTON.json');
+const seigManager = require('../contracts/SeigManager.json');
 
 const deployed = {
   'TON': '0xE755219E15D4d972f09C59d3a1F26528C6B0C08f',
@@ -27,11 +31,19 @@ module.exports.getContracts = function (want, web3) {
   const DAOAgendaManager = new web3.eth.Contract(manager.abi, deployed.DAOAgendaManager);
   const DAOCommitteeProxy = new web3.eth.Contract(proxy.abi, deployed.DAOCommitteeProxy);
   const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
+  const DepositManager = new web3.eth.Contract(deposit.abi, deployed.DepositManager);
+  const TON = new web3.eth.Contract(ton.abi, deployed.TON);
+  const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
+  const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
 
   const contracts = {
     DAOAgendaManager,
     DAOCommitteeProxy,
     DAOCommittee,
+    DepositManager,
+    TON,
+    WTON,
+    SeigManager,
   };
 
   if (want) {

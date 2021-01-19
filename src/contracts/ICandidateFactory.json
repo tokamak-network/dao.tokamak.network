@@ -50,15 +50,15 @@
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol",
     "exportedSymbols": {
       "ICandidateFactory": [
-        3532
+        4233
       ]
     },
-    "id": 3533,
+    "id": 4234,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3518,
+        "id": 4219,
         "literals": [
           "solidity",
           "^",
@@ -74,32 +74,32 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 3532,
+        "id": 4233,
         "linearizedBaseContracts": [
-          3532
+          4233
         ],
         "name": "ICandidateFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "37d5af5f",
-            "id": 3531,
+            "id": 4232,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deploy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3527,
+              "id": 4228,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3520,
+                  "id": 4221,
                   "mutability": "mutable",
                   "name": "_candidate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "107:18:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -108,7 +108,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3519,
+                    "id": 4220,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "107:7:10",
@@ -122,11 +122,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3522,
+                  "id": 4223,
                   "mutability": "mutable",
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "127:19:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -135,7 +135,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3521,
+                    "id": 4222,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "127:6:10",
@@ -148,11 +148,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3524,
+                  "id": 4225,
                   "mutability": "mutable",
                   "name": "_seigManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "148:20:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -161,7 +161,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3523,
+                    "id": 4224,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "148:7:10",
@@ -175,11 +175,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3526,
+                  "id": 4227,
                   "mutability": "mutable",
                   "name": "_layer2registry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "170:23:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -188,7 +188,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3525,
+                    "id": 4226,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "170:7:10",
@@ -204,16 +204,16 @@
               "src": "106:88:10"
             },
             "returnParameters": {
-              "id": 3530,
+              "id": 4231,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3529,
+                  "id": 4230,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "213:7:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -222,7 +222,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3528,
+                    "id": 4229,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "213:7:10",
@@ -237,14 +237,14 @@
               ],
               "src": "212:9:10"
             },
-            "scope": 3532,
+            "scope": 4233,
             "src": "91:131:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 3533,
+        "scope": 4234,
         "src": "57:167:10"
       }
     ],
@@ -254,15 +254,15 @@
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol",
     "exportedSymbols": {
       "ICandidateFactory": [
-        3532
+        4233
       ]
     },
-    "id": 3533,
+    "id": 4234,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3518,
+        "id": 4219,
         "literals": [
           "solidity",
           "^",
@@ -278,32 +278,32 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 3532,
+        "id": 4233,
         "linearizedBaseContracts": [
-          3532
+          4233
         ],
         "name": "ICandidateFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "37d5af5f",
-            "id": 3531,
+            "id": 4232,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deploy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3527,
+              "id": 4228,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3520,
+                  "id": 4221,
                   "mutability": "mutable",
                   "name": "_candidate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "107:18:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -312,7 +312,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3519,
+                    "id": 4220,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "107:7:10",
@@ -326,11 +326,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3522,
+                  "id": 4223,
                   "mutability": "mutable",
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "127:19:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -339,7 +339,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3521,
+                    "id": 4222,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "127:6:10",
@@ -352,11 +352,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3524,
+                  "id": 4225,
                   "mutability": "mutable",
                   "name": "_seigManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "148:20:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -365,7 +365,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3523,
+                    "id": 4224,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "148:7:10",
@@ -379,11 +379,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3526,
+                  "id": 4227,
                   "mutability": "mutable",
                   "name": "_layer2registry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "170:23:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -392,7 +392,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3525,
+                    "id": 4226,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "170:7:10",
@@ -408,16 +408,16 @@
               "src": "106:88:10"
             },
             "returnParameters": {
-              "id": 3530,
+              "id": 4231,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3529,
+                  "id": 4230,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3531,
+                  "scope": 4232,
                   "src": "213:7:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -426,7 +426,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3528,
+                    "id": 4229,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "213:7:10",
@@ -441,14 +441,14 @@
               ],
               "src": "212:9:10"
             },
-            "scope": 3532,
+            "scope": 4233,
             "src": "91:131:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 3533,
+        "scope": 4234,
         "src": "57:167:10"
       }
     ],
@@ -460,7 +460,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2021-01-06T08:41:25.549Z",
+  "updatedAt": "2021-01-14T00:27:18.453Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
