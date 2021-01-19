@@ -59,3 +59,7 @@ export async function getCandidateRankByVotes () {
   const res = await instance.get('balances/sums');
   return res.data.datas;
 }
+
+export async function createAgenda (from, txHash, contents) {
+  await instance.post('/agendacontents', { account: from, tx: txHash, contents });
+}

@@ -3,24 +3,30 @@
     <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
          @click="close"
     >
-    <div class="function">DAO Vault Contract</div>
+    <div class="function">{{ functionName }}</div>
     <div class="argument-container">
-      <div class="argument" style="margin-right: 15px;">
-        <div class="label">To</div>
-        <text-input />
-      </div>
-      <div class="argument" style="margin-left: 15px;">
-        <div class="label">Amount</div>
-        <text-input />
+      <div v-for="(param, index) in params" :key="param.name"
+           class="argument"
+      >
+        <div class="label">{{ param.name }} ({{ param.type }})</div>
+        <text-input :ref="`param${index}`"
+                    :hint="`${param.name} (${param.type})`"
+        />
       </div>
     </div>
-    <div class="label">Description</div>
-    <textarea id="" name="" cols="30" rows="10" style="width: 100%;"></textarea>
+    <div class="description">Description</div>
+    <textarea v-model="desc" name="" cols="30" rows="10" />
     <div class="button-container">
-      <button-comp :name="'Propose'" :type="'primary'" :width="'110px'"
+      <button-comp :name="account ? 'Propose' : 'Please Connect Wallet'"
+                   :type="'primary'"
+                   :width="'160px'"
+                   :status="account ? '' : 'disabled'"
                    style="margin-right: 7.5px;"
+                   @on-clicked="propose"
       />
-      <button-comp :name="'Close'" :type="'hide'" :width="'110px'"
+      <button-comp :name="'Close'"
+                   :type="'hide'"
+                   :width="'160px'"
                    style="margin-left: 7.5px;"
                    @on-clicked="close"
       />
@@ -29,6 +35,11 @@
 </template>
 
 <script>
+import { getContracts, encodeFunctionSignature, encodeParameters, encoded } from '@/utils/contracts';
+import { unmarshalString } from '@/utils/helpers';
+import { createAgenda } from '@/api';
+
+import { mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
 
@@ -37,9 +48,96 @@ export default {
     'button-comp': Button,
     'text-input': TextInput,
   },
+  props: {
+    contract: {
+      type: String,
+      default: '',
+    },
+    functionName: {
+      type: String,
+      default: '',
+    },
+    params: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data () {
+    return {
+      desc: '',
+    };
+  },
+  computed: {
+    ...mapState([
+      'web3',
+      'account',
+      'tonBalance',
+    ]),
+  },
   methods: {
     close () {
       this.$emit('on-closed');
+    },
+    async propose () {
+      const ton = getContracts('TON', this.web3);
+      const agendaManager = getContracts('DAOAgendaManager', this.web3);
+      const proxy = getContracts('DAOCommitteeProxy', this.web3);
+
+      const [
+        noticePeriod,
+        votingPeriod,
+        fee,
+      ] = await Promise.all([
+        agendaManager.methods.minimunNoticePeriodSeconds().call(),
+        agendaManager.methods.minimunVotingPeriodSeconds().call(),
+        agendaManager.methods.createAgendaFees().call(),
+      ]);
+
+      const selector = encodeFunctionSignature(this.contract, this.functionName);
+
+      const nParams = Object.keys(this.$refs).length;
+      if (this.params.length !== nParams) {
+        alert('bug');
+      }
+
+      const types = [];
+      const values = [];
+      for (let i = 0; i < nParams; i++) {
+        const type = this.params[i].type;
+        const inputValue = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
+        const value = encoded(type, inputValue);
+
+        types.push(type);
+        values.push(value);
+      }
+
+      const params = encodeParameters(types, values);
+      const data = unmarshalString(params);
+
+      const bytecode = selector.concat(data);
+
+      const param = encodeParameters(
+        ['address', 'uint256', 'uint256', 'bytes'],
+        [agendaManager._address, noticePeriod.toString(), votingPeriod.toString(), bytecode],
+      );
+
+      const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await ton.methods.approveAndCall(proxy._address, fee, param)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', async (hash) => {
+          await createAgenda(this.account, hash, this.desc);
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
   },
 };
@@ -77,13 +175,13 @@ export default {
 
   .argument-container {
     display: flex;
-
-    margin-bottom: 20px;
+    flex-direction: column;
   }
 
   .argument {
     flex: 1;
 
+    margin-bottom: 16px;
   }
   .label {
     font-family: Roboto;
@@ -94,6 +192,8 @@ export default {
     letter-spacing: normal;
     text-align: left;
     color: #2d3136;
+
+    margin-bottom: 10px;
   }
 
   .button-container {
@@ -102,6 +202,52 @@ export default {
 
     margin-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .description {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #2d3136;
+
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+
+    border: solid 1px #dfe4ee;
+    border-radius: 4px;
+
+    outline: none;
+
+    padding: 8px 16px;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: 0.22px;
+    color: #3e495c;
+
+    resize: none;
+
+    &::placeholder {
+      color: #86929d;
+    }
+
+    &:hover {
+      border: 1px solid #c9d1d8;
+    }
+
+    &:focus {
+      border: 1px solid #2a72e5;
+    }
   }
 }
 </style>

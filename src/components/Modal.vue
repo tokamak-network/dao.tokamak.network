@@ -1,8 +1,7 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask"
-         @mousedown="$emit('on-closed')"
-    >
+    <div class="modal-mask">
+      <!-- @mousedown="$emit('on-closed')" -->
       <div class="modal-wrapper">
         <div class="modal-container"
              :style="{ width: width+'px'}"

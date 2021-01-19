@@ -52,3 +52,47 @@ module.exports.getContracts = function (want, web3) {
     return contracts;
   }
 };
+
+const depositManagerFunctions = [
+  {
+    name: 'setGlobalWithdrawalDelay',
+    params: [
+      {
+        type: 'uint256',
+        name: 'globalWithdrawalDelay_',
+      },
+    ],
+  },
+];
+
+module.exports.getContractFunctions = function (want) {
+  if (want === 'DepositManager') return depositManagerFunctions;
+  return [];
+};
+
+module.exports.encodeFunctionSignature = function (contract, want) {
+  const web3 = new Web3();
+  if (contract === 'DepositManager') {
+    const abi = deposit.abi;
+    const func = abi.find(f => f.name === want);
+
+    return web3.eth.abi.encodeFunctionSignature(func);
+  }
+  return '';
+};
+
+module.exports.encodeParameters = function (typesArray, parameters) {
+  const web3 = new Web3();
+  return web3.eth.abi.encodeParameters(typesArray, parameters);
+};
+
+module.exports.encoded = function (type, value) {
+  if (type.includes('int')) {
+    try {
+      return parseInt(value);
+    } catch (err) {
+      console.log(err.message); // eslint-disable-line
+      return -1;
+    }
+  }
+};

@@ -117,6 +117,7 @@ export default {
   outline: none;
 
   padding-left: 16px;
+  padding-right: 16px;
 }
 .text-input input::placeholder {
   color: #86929d;
