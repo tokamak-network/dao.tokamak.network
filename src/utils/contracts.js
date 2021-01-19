@@ -3,10 +3,6 @@ const Web3 = require('web3');
 const manager = require('../contracts/DAOAgendaManager.json');
 const proxy = require('../contracts/DAOCommitteeProxy.json');
 const committee = require('../contracts/DAOCommittee.json');
-const deposit = require('../contracts/DepositManager.json');
-const ton = require('../contracts/TON.json');
-const wton = require('../contracts/WTON.json');
-const seigManager = require('../contracts/SeigManager.json');
 
 const deployed = {
   'TON': '0xE755219E15D4d972f09C59d3a1F26528C6B0C08f',
@@ -17,11 +13,11 @@ const deployed = {
   'DaoVault': '0xbfD599168dDEBA0dcBA7eF987436c3f3139B26bf',
   'SeigManager': '0x679F73279D59D408919DbDA4e524C0086581Cfa7',
   'PowerTON': '0x9Af0465efC117F0693D6dd9602B80b979C3af52B',
-  'DAOVault2': '0x8e90c958B542ea5c0374e8197C575AbD1d121223',
-  'DAOAgendaManager': '0x73996fea9c25e1462b610392DE82A5f524187a57',
-  'CandidateFactory': '0x9fDc894dD7367Fb60Fb295f7AB666fd13de4967D',
-  'DAOCommittee': '0x2eb14720c1b14D70e95EC83C4BC967B5cE0F61Ca',
-  'DAOCommitteeProxy': '0x8d01ed892A609206B17600e75C204E342DF71eCf',
+  'DAOVault2': '0x51e85b3ef76Df03cF5a9D54e2FEf1A9Cc3aB7fd9',
+  'DAOAgendaManager': '0x72007Cc15551DeA3bF1e9bedee2A138c7e20ADcb',
+  'CandidateFactory': '0xF95618B712fb00d7ee1070c4E7B922c440826620',
+  'DAOCommittee': '0x2CFC2f501a1589c7C83F59C35B2404f6f09121DD',
+  'DAOCommitteeProxy': '0x666463C4D94bed5a12F6171E1AC967627E00D8bA',
 };
 
 module.exports.getContracts = function (want, web3) {
@@ -31,19 +27,11 @@ module.exports.getContracts = function (want, web3) {
   const DAOAgendaManager = new web3.eth.Contract(manager.abi, deployed.DAOAgendaManager);
   const DAOCommitteeProxy = new web3.eth.Contract(proxy.abi, deployed.DAOCommitteeProxy);
   const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
-  const DepositManager = new web3.eth.Contract(deposit.abi, deployed.DepositManager);
-  const TON = new web3.eth.Contract(ton.abi, deployed.TON);
-  const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
-  const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
 
   const contracts = {
     DAOAgendaManager,
     DAOCommitteeProxy,
     DAOCommittee,
-    DepositManager,
-    TON,
-    WTON,
-    SeigManager,
   };
 
   if (want) {

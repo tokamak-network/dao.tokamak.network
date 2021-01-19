@@ -165,6 +165,7 @@ export default new Vuex.Store({
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
+      await dispatch('setAgendas');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', state.web3);
@@ -217,9 +218,8 @@ export default new Vuex.Store({
       ]);
 
       let activityReward;
-
-      if (account) {
-        activityReward = await Promise.all(await daoCommittee.methods.getClaimableActivityReward(account).call());
+      if (account !== '') {
+        [ activityReward ] = await Promise.all([await daoCommittee.methods.getClaimableActivityReward(account).call()]);
         activityReward = _TON(activityReward, 'wei').toString();
       } else {
         activityReward = '0 TON';

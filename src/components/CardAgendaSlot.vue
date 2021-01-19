@@ -12,7 +12,7 @@
       DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
     </div>
     <div class="description">
-      {{ agenda.target }}
+      Created by {{ shortAddress(agenda.creator) }}
     </div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
@@ -166,8 +166,30 @@ export default {
       }
       return 'disabled';
     },
-    votedResult () {
+    votedResult: {
+      get: function () {
+        for (const vote of this.myVote) {
+        // console.log(vote[2]);
+          if (Number(vote[1]) === this.agenda.agendaid) {
+            switch (vote[2]) {
+            case '0': return 'You have voted to Abstain';
+            case '1': return 'You have voted Yes';
+            case '2': return 'You have voted No';
+            }
+          }
+        }
+        this.comment;
+        return 'You have not voted';
+      },
+      set: function () {
+        this.voted = false;
+      },
+    },
+  },
+  watch: {
+    comment: function () {
       for (const vote of this.myVote) {
+        // console.log(vote[2]);
         if (Number(vote[1]) === this.agenda.agendaid) {
           switch (vote[2]) {
           case '0': return 'You have voted to Abstain';
@@ -176,7 +198,7 @@ export default {
           }
         }
       }
-      this.comment();
+      this.voted = false;
       return 'You have not voted';
     },
   },
@@ -186,8 +208,8 @@ export default {
       this.voted = true;
       this.buttonClass.buttonStatus = '';
     },
-    comment () {
-      this.voted = false;
+    comments () {
+      this.comment;
     },
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {
