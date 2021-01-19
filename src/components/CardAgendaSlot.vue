@@ -143,12 +143,6 @@ export default {
         }
       };
     },
-    // const AGENDA_STATUS_NONE = 0;
-    // const AGENDA_STATUS_NOTICE = 1;
-    // const AGENDA_STATUS_VOTING = 2;
-    // const AGENDA_STATUS_WAITING_EXEC = 3;
-    // const AGENDA_STATUS_EXECUTED = 4;
-    // const AGENDA_STATUS_ENDED = 5;
     buttonName () {
       switch (this.agenda.status) {
       case 3: return 'Execute';
@@ -169,8 +163,6 @@ export default {
       case 1: return '';
       case 2: return '';
       case 3: return '';
-      case 4: return 'disabled';
-      case 5: return 'disabled';
       }
       return 'disabled';
     },
@@ -184,24 +176,18 @@ export default {
           }
         }
       }
+      this.comment();
       return 'You have not voted';
     },
-    classify () {
-      return () => {
-        this.voteCasted.forEach(async casted => Number(casted.data.id) === this.agenda.agendaid ? this.voted = true : this.voted = false);
-      };
-    },
-  },
-  created () {
-    // this.classify();
-    // this.changeButtonProperty();
-    // this.myVoteResult();
   },
   methods: {
     select (item) {
       this.choice = item;
       this.voted = true;
       this.buttonClass.buttonStatus = '';
+    },
+    comment () {
+      this.voted = false;
     },
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {

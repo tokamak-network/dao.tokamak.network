@@ -219,7 +219,7 @@ export default new Vuex.Store({
       let activityReward;
 
       if (account) {
-        activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
+        activityReward = await Promise.all(await daoCommittee.methods.getClaimableActivityReward(account).call());
         activityReward = _TON(activityReward, 'wei').toString();
       } else {
         activityReward = '0 TON';
