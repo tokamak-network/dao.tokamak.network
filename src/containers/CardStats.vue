@@ -24,7 +24,7 @@ export default {
   components: {
     'card-container': Card,
   },
-  asyncComputed: {
+  computed: {
     ...mapState([
       'account',
       'web3',

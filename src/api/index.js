@@ -7,6 +7,7 @@ function createInstance () {
 }
 const instance = createInstance();
 
+// TODO: check param
 export async function getEvents (eventsnames) {
   eventsnames;
   const res = await instance.get('/events', {

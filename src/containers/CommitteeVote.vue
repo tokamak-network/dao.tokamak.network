@@ -309,7 +309,6 @@ export default {
     async update () {
       await this.$store.dispatch('setBalance');
       await this.$store.dispatch('setRequests');
-      await this.$store.dispatch('setMyVotes');
     },
   },
 };

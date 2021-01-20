@@ -41,6 +41,7 @@ export default {
     deployedDate () {
       return () => {
         const latest = this.agendas[0];
+        if (!latest) return 0;
         const date = new Date(latest.tCreationDate * 1000);
         const year = date.getFullYear();
         const month = date.getMonth();

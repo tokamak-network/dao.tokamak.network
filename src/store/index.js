@@ -115,7 +115,6 @@ export default new Vuex.Store({
       // TODO: await?
       await dispatch('setBalance');
       await dispatch('setRequests');
-      // await dispatch('setMyVotes');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -165,6 +164,7 @@ export default new Vuex.Store({
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
+      await dispatch('setAgendas');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', state.web3);

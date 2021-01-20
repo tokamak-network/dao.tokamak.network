@@ -65,7 +65,6 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           await this.$store.dispatch('connectEthereum', web3);
-          await this.$store.dispatch('setAgendas');
           this.setIcon();
         } catch (e) {
           // User deny to connect MetaMask wallet.
@@ -76,7 +75,6 @@ export default {
             this.$store.dispatch('disconnectEthereum');
           } else {
             await this.$store.dispatch('connectEthereum', web3);
-            await this.$store.dispatch('setAgendas');
             this.setIcon();
           }
         };
