@@ -1,29 +1,29 @@
 {
   "contractName": "LibAgenda",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol\":\"LibAgenda\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol\":{\"keccak256\":\"0x5fe910c089e53f89093d159e81078caa404a74bd742fc6eaebe2ecab4aefc001\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c7717e7f9d658d5eec4980688232b2b1ec66917a8fac970cb7d3f4269c5122c0\",\"dweb:/ipfs/QmWooEE6dCs3SFoYcCo3fgiQnugJufykLvEdRwfJLBRRkR\"]}},\"version\":1}",
-  "bytecode": "0x60566023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b4acb90d689ea866d694163fbe635bef650334ec51ab059da36808c4071aa45964736f6c63430007060033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b4acb90d689ea866d694163fbe635bef650334ec51ab059da36808c4071aa45964736f6c63430007060033",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol\":\"LibAgenda\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol\":{\"keccak256\":\"0x53a055efd93d8515799e3c8c24481ccbb8ca3deb6534675683efc3f9afb1be02\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7455646a56affd159bb6cf640c96aa9186a041b76a21c889bec73c5c6e17999b\",\"dweb:/ipfs/QmehX2Wnrv4M2JSy5bWjhWiptkmF6QJjvv5938ZizdrpjD\"]}},\"version\":1}",
+  "bytecode": "0x60566023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122036783cddc4a2dcee728e22c0feebf942342eb22ffa58321c982ee5fc2763bdfc64736f6c63430007060033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122036783cddc4a2dcee728e22c0feebf942342eb22ffa58321c982ee5fc2763bdfc64736f6c63430007060033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "77:1072:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "77:1072:18:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\npragma abicoder v2;\n\nlibrary LibAgenda {\n    //using LibAgenda for Agenda;\n\n    enum AgendaStatus { NONE, NOTICE, VOTING, WAITING_EXEC, EXECUTED, ENDED }\n    enum AgendaResult { PENDING, ACCEPT, REJECT, DISMISS }\n\n    //votor : based operator \n    struct Voter {\n        bool isVoter;\n        bool hasVoted;\n        uint vote;\n    }\n\n    // counting abstainVotes yesVotes noVotes\n    struct Agenda {\n        uint256 createdTimestamp;\n        uint256 noticeEndTimestamp;\n        uint256 votingPeriodInSeconds;\n        uint256 votingStartedTimestamp;\n        uint256 votingEndTimestamp;\n        uint256 executedTimestamp;\n        uint256 countingYes;\n        uint256 countingNo;\n        uint256 countingAbstain;\n        uint256 reward;\n        AgendaStatus status;\n        AgendaResult result;\n        address[] voters;\n        bool executed;\n    }\n\n    struct AgendaExecutionInfo {\n        address target;\n        bytes functionBytecode;\n    }\n\n    /*function getAgenda(Agenda[] storage agendas, uint index) public view returns (Agenda storage agenda) {\n        return agendas[index];\n    }*/\n}\n",
+  "sourceMap": "77:1078:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "77:1078:18:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\npragma abicoder v2;\n\nlibrary LibAgenda {\n    //using LibAgenda for Agenda;\n\n    enum AgendaStatus { NONE, NOTICE, VOTING, WAITING_EXEC, EXECUTED, ENDED }\n    enum AgendaResult { PENDING, ACCEPT, REJECT, DISMISS }\n\n    //votor : based operator \n    struct Voter {\n        bool isVoter;\n        bool hasVoted;\n        uint vote;\n    }\n\n    // counting abstainVotes yesVotes noVotes\n    struct Agenda {\n        uint256 createdTimestamp;\n        uint256 noticeEndTimestamp;\n        uint256 votingPeriodInSeconds;\n        uint256 votingStartedTimestamp;\n        uint256 votingEndTimestamp;\n        uint256 executedTimestamp;\n        uint256 countingYes;\n        uint256 countingNo;\n        uint256 countingAbstain;\n        uint256 reward;\n        AgendaStatus status;\n        AgendaResult result;\n        address[] voters;\n        bool executed;\n    }\n\n    struct AgendaExecutionInfo {\n        address[] targets;\n        bytes[] functionBytecodes;\n    }\n\n    /*function getAgenda(Agenda[] storage agendas, uint index) public view returns (Agenda storage agenda) {\n        return agendas[index];\n    }*/\n}\n",
   "sourcePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol",
   "ast": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol",
     "exportedSymbols": {
       "LibAgenda": [
-        5121
+        5155
       ]
     },
-    "id": 5122,
+    "id": 5156,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5065,
+        "id": 5097,
         "literals": [
           "solidity",
           "^",
@@ -34,7 +34,7 @@
         "src": "32:23:18"
       },
       {
-        "id": 5066,
+        "id": 5098,
         "literals": [
           "abicoder",
           "v2"
@@ -48,49 +48,49 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 5121,
+        "id": 5155,
         "linearizedBaseContracts": [
-          5121
+          5155
         ],
         "name": "LibAgenda",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "LibAgenda.AgendaStatus",
-            "id": 5073,
+            "id": 5105,
             "members": [
               {
-                "id": 5067,
+                "id": 5099,
                 "name": "NONE",
                 "nodeType": "EnumValue",
                 "src": "156:4:18"
               },
               {
-                "id": 5068,
+                "id": 5100,
                 "name": "NOTICE",
                 "nodeType": "EnumValue",
                 "src": "162:6:18"
               },
               {
-                "id": 5069,
+                "id": 5101,
                 "name": "VOTING",
                 "nodeType": "EnumValue",
                 "src": "170:6:18"
               },
               {
-                "id": 5070,
+                "id": 5102,
                 "name": "WAITING_EXEC",
                 "nodeType": "EnumValue",
                 "src": "178:12:18"
               },
               {
-                "id": 5071,
+                "id": 5103,
                 "name": "EXECUTED",
                 "nodeType": "EnumValue",
                 "src": "192:8:18"
               },
               {
-                "id": 5072,
+                "id": 5104,
                 "name": "ENDED",
                 "nodeType": "EnumValue",
                 "src": "202:5:18"
@@ -102,28 +102,28 @@
           },
           {
             "canonicalName": "LibAgenda.AgendaResult",
-            "id": 5078,
+            "id": 5110,
             "members": [
               {
-                "id": 5074,
+                "id": 5106,
                 "name": "PENDING",
                 "nodeType": "EnumValue",
                 "src": "234:7:18"
               },
               {
-                "id": 5075,
+                "id": 5107,
                 "name": "ACCEPT",
                 "nodeType": "EnumValue",
                 "src": "243:6:18"
               },
               {
-                "id": 5076,
+                "id": 5108,
                 "name": "REJECT",
                 "nodeType": "EnumValue",
                 "src": "251:6:18"
               },
               {
-                "id": 5077,
+                "id": 5109,
                 "name": "DISMISS",
                 "nodeType": "EnumValue",
                 "src": "259:7:18"
@@ -135,15 +135,15 @@
           },
           {
             "canonicalName": "LibAgenda.Voter",
-            "id": 5085,
+            "id": 5117,
             "members": [
               {
                 "constant": false,
-                "id": 5080,
+                "id": 5112,
                 "mutability": "mutable",
                 "name": "isVoter",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "327:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -152,7 +152,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5079,
+                  "id": 5111,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "327:4:18",
@@ -165,11 +165,11 @@
               },
               {
                 "constant": false,
-                "id": 5082,
+                "id": 5114,
                 "mutability": "mutable",
                 "name": "hasVoted",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "349:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -178,7 +178,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5081,
+                  "id": 5113,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "349:4:18",
@@ -191,11 +191,11 @@
               },
               {
                 "constant": false,
-                "id": 5084,
+                "id": 5116,
                 "mutability": "mutable",
                 "name": "vote",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "372:9:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -204,7 +204,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5083,
+                  "id": 5115,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "372:4:18",
@@ -218,21 +218,21 @@
             ],
             "name": "Voter",
             "nodeType": "StructDefinition",
-            "scope": 5121,
+            "scope": 5155,
             "src": "304:84:18",
             "visibility": "public"
           },
           {
             "canonicalName": "LibAgenda.Agenda",
-            "id": 5115,
+            "id": 5147,
             "members": [
               {
                 "constant": false,
-                "id": 5087,
+                "id": 5119,
                 "mutability": "mutable",
                 "name": "createdTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "464:24:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -241,7 +241,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5086,
+                  "id": 5118,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "464:7:18",
@@ -254,11 +254,11 @@
               },
               {
                 "constant": false,
-                "id": 5089,
+                "id": 5121,
                 "mutability": "mutable",
                 "name": "noticeEndTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "498:26:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -267,7 +267,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5088,
+                  "id": 5120,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "498:7:18",
@@ -280,11 +280,11 @@
               },
               {
                 "constant": false,
-                "id": 5091,
+                "id": 5123,
                 "mutability": "mutable",
                 "name": "votingPeriodInSeconds",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "534:29:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -293,7 +293,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5090,
+                  "id": 5122,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "534:7:18",
@@ -306,11 +306,11 @@
               },
               {
                 "constant": false,
-                "id": 5093,
+                "id": 5125,
                 "mutability": "mutable",
                 "name": "votingStartedTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "573:30:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -319,7 +319,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5092,
+                  "id": 5124,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "573:7:18",
@@ -332,11 +332,11 @@
               },
               {
                 "constant": false,
-                "id": 5095,
+                "id": 5127,
                 "mutability": "mutable",
                 "name": "votingEndTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "613:26:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -345,7 +345,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5094,
+                  "id": 5126,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "613:7:18",
@@ -358,11 +358,11 @@
               },
               {
                 "constant": false,
-                "id": 5097,
+                "id": 5129,
                 "mutability": "mutable",
                 "name": "executedTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "649:25:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -371,7 +371,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5096,
+                  "id": 5128,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "649:7:18",
@@ -384,11 +384,11 @@
               },
               {
                 "constant": false,
-                "id": 5099,
+                "id": 5131,
                 "mutability": "mutable",
                 "name": "countingYes",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "684:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -397,7 +397,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5098,
+                  "id": 5130,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "684:7:18",
@@ -410,11 +410,11 @@
               },
               {
                 "constant": false,
-                "id": 5101,
+                "id": 5133,
                 "mutability": "mutable",
                 "name": "countingNo",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "713:18:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -423,7 +423,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5100,
+                  "id": 5132,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "713:7:18",
@@ -436,11 +436,11 @@
               },
               {
                 "constant": false,
-                "id": 5103,
+                "id": 5135,
                 "mutability": "mutable",
                 "name": "countingAbstain",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "741:23:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -449,7 +449,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5102,
+                  "id": 5134,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "741:7:18",
@@ -462,11 +462,11 @@
               },
               {
                 "constant": false,
-                "id": 5105,
+                "id": 5137,
                 "mutability": "mutable",
                 "name": "reward",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "774:14:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -475,7 +475,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5104,
+                  "id": 5136,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "774:7:18",
@@ -488,26 +488,26 @@
               },
               {
                 "constant": false,
-                "id": 5107,
+                "id": 5139,
                 "mutability": "mutable",
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "798:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_AgendaStatus_$5073",
+                  "typeIdentifier": "t_enum$_AgendaStatus_$5105",
                   "typeString": "enum LibAgenda.AgendaStatus"
                 },
                 "typeName": {
-                  "id": 5106,
+                  "id": 5138,
                   "name": "AgendaStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 5073,
+                  "referencedDeclaration": 5105,
                   "src": "798:12:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_AgendaStatus_$5073",
+                    "typeIdentifier": "t_enum$_AgendaStatus_$5105",
                     "typeString": "enum LibAgenda.AgendaStatus"
                   }
                 },
@@ -515,26 +515,26 @@
               },
               {
                 "constant": false,
-                "id": 5109,
+                "id": 5141,
                 "mutability": "mutable",
                 "name": "result",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "827:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_AgendaResult_$5078",
+                  "typeIdentifier": "t_enum$_AgendaResult_$5110",
                   "typeString": "enum LibAgenda.AgendaResult"
                 },
                 "typeName": {
-                  "id": 5108,
+                  "id": 5140,
                   "name": "AgendaResult",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 5078,
+                  "referencedDeclaration": 5110,
                   "src": "827:12:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_AgendaResult_$5078",
+                    "typeIdentifier": "t_enum$_AgendaResult_$5110",
                     "typeString": "enum LibAgenda.AgendaResult"
                   }
                 },
@@ -542,11 +542,11 @@
               },
               {
                 "constant": false,
-                "id": 5112,
+                "id": 5144,
                 "mutability": "mutable",
                 "name": "voters",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "856:16:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -556,7 +556,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 5110,
+                    "id": 5142,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "856:7:18",
@@ -566,7 +566,7 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 5111,
+                  "id": 5143,
                   "nodeType": "ArrayTypeName",
                   "src": "856:9:18",
                   "typeDescriptions": {
@@ -578,11 +578,11 @@
               },
               {
                 "constant": false,
-                "id": 5114,
+                "id": 5146,
                 "mutability": "mutable",
                 "name": "executed",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "882:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -591,7 +591,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5113,
+                  "id": 5145,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "882:4:18",
@@ -605,63 +605,81 @@
             ],
             "name": "Agenda",
             "nodeType": "StructDefinition",
-            "scope": 5121,
+            "scope": 5155,
             "src": "440:462:18",
             "visibility": "public"
           },
           {
             "canonicalName": "LibAgenda.AgendaExecutionInfo",
-            "id": 5120,
+            "id": 5154,
             "members": [
               {
                 "constant": false,
-                "id": 5117,
+                "id": 5150,
                 "mutability": "mutable",
-                "name": "target",
+                "name": "targets",
                 "nodeType": "VariableDeclaration",
-                "scope": 5120,
-                "src": "945:14:18",
+                "scope": 5154,
+                "src": "945:17:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
                 },
                 "typeName": {
-                  "id": 5116,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "945:7:18",
-                  "stateMutability": "nonpayable",
+                  "baseType": {
+                    "id": 5148,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "945:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 5149,
+                  "nodeType": "ArrayTypeName",
+                  "src": "945:9:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
                   }
                 },
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 5119,
+                "id": 5153,
                 "mutability": "mutable",
-                "name": "functionBytecode",
+                "name": "functionBytecodes",
                 "nodeType": "VariableDeclaration",
-                "scope": 5120,
-                "src": "969:22:18",
+                "scope": 5154,
+                "src": "972:25:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_bytes_storage_ptr",
-                  "typeString": "bytes"
+                  "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                  "typeString": "bytes[]"
                 },
                 "typeName": {
-                  "id": 5118,
-                  "name": "bytes",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "969:5:18",
+                  "baseType": {
+                    "id": 5151,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "972:5:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "id": 5152,
+                  "nodeType": "ArrayTypeName",
+                  "src": "972:7:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_storage_ptr",
-                    "typeString": "bytes"
+                    "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                    "typeString": "bytes[]"
                   }
                 },
                 "visibility": "internal"
@@ -669,30 +687,30 @@
             ],
             "name": "AgendaExecutionInfo",
             "nodeType": "StructDefinition",
-            "scope": 5121,
-            "src": "908:90:18",
+            "scope": 5155,
+            "src": "908:96:18",
             "visibility": "public"
           }
         ],
-        "scope": 5122,
-        "src": "77:1072:18"
+        "scope": 5156,
+        "src": "77:1078:18"
       }
     ],
-    "src": "32:1118:18"
+    "src": "32:1124:18"
   },
   "legacyAST": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/lib/Agenda.sol",
     "exportedSymbols": {
       "LibAgenda": [
-        5121
+        5155
       ]
     },
-    "id": 5122,
+    "id": 5156,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5065,
+        "id": 5097,
         "literals": [
           "solidity",
           "^",
@@ -703,7 +721,7 @@
         "src": "32:23:18"
       },
       {
-        "id": 5066,
+        "id": 5098,
         "literals": [
           "abicoder",
           "v2"
@@ -717,49 +735,49 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 5121,
+        "id": 5155,
         "linearizedBaseContracts": [
-          5121
+          5155
         ],
         "name": "LibAgenda",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "LibAgenda.AgendaStatus",
-            "id": 5073,
+            "id": 5105,
             "members": [
               {
-                "id": 5067,
+                "id": 5099,
                 "name": "NONE",
                 "nodeType": "EnumValue",
                 "src": "156:4:18"
               },
               {
-                "id": 5068,
+                "id": 5100,
                 "name": "NOTICE",
                 "nodeType": "EnumValue",
                 "src": "162:6:18"
               },
               {
-                "id": 5069,
+                "id": 5101,
                 "name": "VOTING",
                 "nodeType": "EnumValue",
                 "src": "170:6:18"
               },
               {
-                "id": 5070,
+                "id": 5102,
                 "name": "WAITING_EXEC",
                 "nodeType": "EnumValue",
                 "src": "178:12:18"
               },
               {
-                "id": 5071,
+                "id": 5103,
                 "name": "EXECUTED",
                 "nodeType": "EnumValue",
                 "src": "192:8:18"
               },
               {
-                "id": 5072,
+                "id": 5104,
                 "name": "ENDED",
                 "nodeType": "EnumValue",
                 "src": "202:5:18"
@@ -771,28 +789,28 @@
           },
           {
             "canonicalName": "LibAgenda.AgendaResult",
-            "id": 5078,
+            "id": 5110,
             "members": [
               {
-                "id": 5074,
+                "id": 5106,
                 "name": "PENDING",
                 "nodeType": "EnumValue",
                 "src": "234:7:18"
               },
               {
-                "id": 5075,
+                "id": 5107,
                 "name": "ACCEPT",
                 "nodeType": "EnumValue",
                 "src": "243:6:18"
               },
               {
-                "id": 5076,
+                "id": 5108,
                 "name": "REJECT",
                 "nodeType": "EnumValue",
                 "src": "251:6:18"
               },
               {
-                "id": 5077,
+                "id": 5109,
                 "name": "DISMISS",
                 "nodeType": "EnumValue",
                 "src": "259:7:18"
@@ -804,15 +822,15 @@
           },
           {
             "canonicalName": "LibAgenda.Voter",
-            "id": 5085,
+            "id": 5117,
             "members": [
               {
                 "constant": false,
-                "id": 5080,
+                "id": 5112,
                 "mutability": "mutable",
                 "name": "isVoter",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "327:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -821,7 +839,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5079,
+                  "id": 5111,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "327:4:18",
@@ -834,11 +852,11 @@
               },
               {
                 "constant": false,
-                "id": 5082,
+                "id": 5114,
                 "mutability": "mutable",
                 "name": "hasVoted",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "349:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -847,7 +865,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5081,
+                  "id": 5113,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "349:4:18",
@@ -860,11 +878,11 @@
               },
               {
                 "constant": false,
-                "id": 5084,
+                "id": 5116,
                 "mutability": "mutable",
                 "name": "vote",
                 "nodeType": "VariableDeclaration",
-                "scope": 5085,
+                "scope": 5117,
                 "src": "372:9:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -873,7 +891,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5083,
+                  "id": 5115,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "372:4:18",
@@ -887,21 +905,21 @@
             ],
             "name": "Voter",
             "nodeType": "StructDefinition",
-            "scope": 5121,
+            "scope": 5155,
             "src": "304:84:18",
             "visibility": "public"
           },
           {
             "canonicalName": "LibAgenda.Agenda",
-            "id": 5115,
+            "id": 5147,
             "members": [
               {
                 "constant": false,
-                "id": 5087,
+                "id": 5119,
                 "mutability": "mutable",
                 "name": "createdTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "464:24:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -910,7 +928,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5086,
+                  "id": 5118,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "464:7:18",
@@ -923,11 +941,11 @@
               },
               {
                 "constant": false,
-                "id": 5089,
+                "id": 5121,
                 "mutability": "mutable",
                 "name": "noticeEndTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "498:26:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -936,7 +954,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5088,
+                  "id": 5120,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "498:7:18",
@@ -949,11 +967,11 @@
               },
               {
                 "constant": false,
-                "id": 5091,
+                "id": 5123,
                 "mutability": "mutable",
                 "name": "votingPeriodInSeconds",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "534:29:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -962,7 +980,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5090,
+                  "id": 5122,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "534:7:18",
@@ -975,11 +993,11 @@
               },
               {
                 "constant": false,
-                "id": 5093,
+                "id": 5125,
                 "mutability": "mutable",
                 "name": "votingStartedTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "573:30:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -988,7 +1006,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5092,
+                  "id": 5124,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "573:7:18",
@@ -1001,11 +1019,11 @@
               },
               {
                 "constant": false,
-                "id": 5095,
+                "id": 5127,
                 "mutability": "mutable",
                 "name": "votingEndTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "613:26:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1014,7 +1032,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5094,
+                  "id": 5126,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "613:7:18",
@@ -1027,11 +1045,11 @@
               },
               {
                 "constant": false,
-                "id": 5097,
+                "id": 5129,
                 "mutability": "mutable",
                 "name": "executedTimestamp",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "649:25:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1040,7 +1058,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5096,
+                  "id": 5128,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "649:7:18",
@@ -1053,11 +1071,11 @@
               },
               {
                 "constant": false,
-                "id": 5099,
+                "id": 5131,
                 "mutability": "mutable",
                 "name": "countingYes",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "684:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1066,7 +1084,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5098,
+                  "id": 5130,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "684:7:18",
@@ -1079,11 +1097,11 @@
               },
               {
                 "constant": false,
-                "id": 5101,
+                "id": 5133,
                 "mutability": "mutable",
                 "name": "countingNo",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "713:18:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1092,7 +1110,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5100,
+                  "id": 5132,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "713:7:18",
@@ -1105,11 +1123,11 @@
               },
               {
                 "constant": false,
-                "id": 5103,
+                "id": 5135,
                 "mutability": "mutable",
                 "name": "countingAbstain",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "741:23:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1118,7 +1136,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5102,
+                  "id": 5134,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "741:7:18",
@@ -1131,11 +1149,11 @@
               },
               {
                 "constant": false,
-                "id": 5105,
+                "id": 5137,
                 "mutability": "mutable",
                 "name": "reward",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "774:14:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1144,7 +1162,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5104,
+                  "id": 5136,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "774:7:18",
@@ -1157,26 +1175,26 @@
               },
               {
                 "constant": false,
-                "id": 5107,
+                "id": 5139,
                 "mutability": "mutable",
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "798:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_AgendaStatus_$5073",
+                  "typeIdentifier": "t_enum$_AgendaStatus_$5105",
                   "typeString": "enum LibAgenda.AgendaStatus"
                 },
                 "typeName": {
-                  "id": 5106,
+                  "id": 5138,
                   "name": "AgendaStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 5073,
+                  "referencedDeclaration": 5105,
                   "src": "798:12:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_AgendaStatus_$5073",
+                    "typeIdentifier": "t_enum$_AgendaStatus_$5105",
                     "typeString": "enum LibAgenda.AgendaStatus"
                   }
                 },
@@ -1184,26 +1202,26 @@
               },
               {
                 "constant": false,
-                "id": 5109,
+                "id": 5141,
                 "mutability": "mutable",
                 "name": "result",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "827:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_AgendaResult_$5078",
+                  "typeIdentifier": "t_enum$_AgendaResult_$5110",
                   "typeString": "enum LibAgenda.AgendaResult"
                 },
                 "typeName": {
-                  "id": 5108,
+                  "id": 5140,
                   "name": "AgendaResult",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 5078,
+                  "referencedDeclaration": 5110,
                   "src": "827:12:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_AgendaResult_$5078",
+                    "typeIdentifier": "t_enum$_AgendaResult_$5110",
                     "typeString": "enum LibAgenda.AgendaResult"
                   }
                 },
@@ -1211,11 +1229,11 @@
               },
               {
                 "constant": false,
-                "id": 5112,
+                "id": 5144,
                 "mutability": "mutable",
                 "name": "voters",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "856:16:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1225,7 +1243,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 5110,
+                    "id": 5142,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "856:7:18",
@@ -1235,7 +1253,7 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 5111,
+                  "id": 5143,
                   "nodeType": "ArrayTypeName",
                   "src": "856:9:18",
                   "typeDescriptions": {
@@ -1247,11 +1265,11 @@
               },
               {
                 "constant": false,
-                "id": 5114,
+                "id": 5146,
                 "mutability": "mutable",
                 "name": "executed",
                 "nodeType": "VariableDeclaration",
-                "scope": 5115,
+                "scope": 5147,
                 "src": "882:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1260,7 +1278,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 5113,
+                  "id": 5145,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "882:4:18",
@@ -1274,63 +1292,81 @@
             ],
             "name": "Agenda",
             "nodeType": "StructDefinition",
-            "scope": 5121,
+            "scope": 5155,
             "src": "440:462:18",
             "visibility": "public"
           },
           {
             "canonicalName": "LibAgenda.AgendaExecutionInfo",
-            "id": 5120,
+            "id": 5154,
             "members": [
               {
                 "constant": false,
-                "id": 5117,
+                "id": 5150,
                 "mutability": "mutable",
-                "name": "target",
+                "name": "targets",
                 "nodeType": "VariableDeclaration",
-                "scope": 5120,
-                "src": "945:14:18",
+                "scope": 5154,
+                "src": "945:17:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
                 },
                 "typeName": {
-                  "id": 5116,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "945:7:18",
-                  "stateMutability": "nonpayable",
+                  "baseType": {
+                    "id": 5148,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "945:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 5149,
+                  "nodeType": "ArrayTypeName",
+                  "src": "945:9:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
                   }
                 },
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 5119,
+                "id": 5153,
                 "mutability": "mutable",
-                "name": "functionBytecode",
+                "name": "functionBytecodes",
                 "nodeType": "VariableDeclaration",
-                "scope": 5120,
-                "src": "969:22:18",
+                "scope": 5154,
+                "src": "972:25:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_bytes_storage_ptr",
-                  "typeString": "bytes"
+                  "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                  "typeString": "bytes[]"
                 },
                 "typeName": {
-                  "id": 5118,
-                  "name": "bytes",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "969:5:18",
+                  "baseType": {
+                    "id": 5151,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "972:5:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "id": 5152,
+                  "nodeType": "ArrayTypeName",
+                  "src": "972:7:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_storage_ptr",
-                    "typeString": "bytes"
+                    "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                    "typeString": "bytes[]"
                   }
                 },
                 "visibility": "internal"
@@ -1338,16 +1374,16 @@
             ],
             "name": "AgendaExecutionInfo",
             "nodeType": "StructDefinition",
-            "scope": 5121,
-            "src": "908:90:18",
+            "scope": 5155,
+            "src": "908:96:18",
             "visibility": "public"
           }
         ],
-        "scope": 5122,
-        "src": "77:1072:18"
+        "scope": 5156,
+        "src": "77:1078:18"
       }
     ],
-    "src": "32:1118:18"
+    "src": "32:1124:18"
   },
   "compiler": {
     "name": "solc",
@@ -1355,7 +1391,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2021-01-14T00:27:18.460Z",
+  "updatedAt": "2021-01-20T01:55:31.129Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
