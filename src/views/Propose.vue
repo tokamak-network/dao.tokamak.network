@@ -41,10 +41,43 @@
         </div>
       </div>
     </div>
-    <div v-if="index !== -1" class="box-container">
+    <div v-if="index === 0" class="box-container">
       <div>
         <div v-for="func in depositManagerFunctions" :key="func.name"
-             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.params;"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+        >
+          <box :function-name="func.name"
+               :status="currentFunction === func.name ? 'selected' : 'unselected'"
+          />
+        </div>
+      </div>
+    </div>
+    <div v-if="index === 1" class="box-container">
+      <div>
+        <div v-for="func in seigManagerFunctions" :key="func.name"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+        >
+          <box :function-name="func.name"
+               :status="currentFunction === func.name ? 'selected' : 'unselected'"
+          />
+        </div>
+      </div>
+    </div>
+    <div v-if="index === 2" class="box-container">
+      <div>
+        <div v-for="func in daoCommitteeFunctions" :key="func.name"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+        >
+          <box :function-name="func.name"
+               :status="currentFunction === func.name ? 'selected' : 'unselected'"
+          />
+        </div>
+      </div>
+    </div>
+    <div v-if="index === 3" class="box-container">
+      <div>
+        <div v-for="func in daoVaultFunctions" :key="func.name"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
         >
           <box :function-name="func.name"
                :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -56,7 +89,7 @@
 </template>
 
 <script>
-import { getContractFunctions } from '@/utils/contracts';
+import { getContractABI } from '@/utils/contracts';
 
 import Box from '@/components/Box.vue';
 import Modal from '@/components/Modal.vue';
@@ -73,32 +106,37 @@ export default {
       index : -1,
       showModal: false,
 
-      contracts: ['Deposit Manager\n Contract', 'Seig Manager\n Contract', 'DAO Vault', 'DAO Committee'],
+      contracts: ['Deposit Manager\n Contract', 'Seig Manager\n Contract', 'DAO Committee', 'DAO Vault'],
 
       currentContract: '',
       currentFunction: '',
       currentFunctionParams: [],
+
+      depositManagerFunctions: [],
+      seigManagerFunctions: [],
+      daoCommitteeFunctions: [],
+      daoVaultFunctions: [],
     };
   },
   created () {
-    this.depositManagerFunctions = getContractFunctions('DepositManager');
-    // TODO: delete data property
+    this.depositManagerFunctions = getContractABI('DepositManager');
+    this.seigManagerFunctions = getContractABI('SeigManager');
+    this.daoCommitteeFunctions = getContractABI('DAOCommittee');
+    this.daoVaultFunctions = getContractABI('DAOVault');
   },
   methods: {
     numFunctions (index) {
-      if (index === 0) {
-        return this.depositManagerFunctions.length;
-      }
-      return 0;
-      // else if (index === 1) {
-      // } else if (index === 2) {
-      // } else {
-      // }
+      if (index === 0) return this.depositManagerFunctions.length;
+      else if (index === 1) return this.seigManagerFunctions.length;
+      else if (index === 2) return this.daoCommitteeFunctions.length;
+      else if (index === 3) return this.daoVaultFunctions.length;
+      else return 0;
     },
     setCurrentContract (index) {
-      if (index === 0) {
-        this.currentContract = 'DepositManager';
-      }
+      if (index === 0) this.currentContract = 'DepositManager';
+      else if (index === 1) this.currentContract = 'SeigManager';
+      else if (index === 2) this.currentContract = 'DAOCommittee';
+      else if (index === 3) this.currentContract = 'DAOVault';
     },
   },
 };

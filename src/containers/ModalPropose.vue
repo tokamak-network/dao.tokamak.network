@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getContracts, encodeFunctionSignature, encodeParameters, encoded } from '@/utils/contracts';
+import { getContracts, functionSignature, encodeParameters, encoded } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 
@@ -79,6 +79,8 @@ export default {
       this.$emit('on-closed');
     },
     async propose () {
+      const account = this.account.toLowerCase();
+
       const ton = getContracts('TON', this.web3);
       const agendaManager = getContracts('DAOAgendaManager', this.web3);
       const proxy = getContracts('DAOCommitteeProxy', this.web3);
@@ -88,27 +90,26 @@ export default {
         votingPeriod,
         fee,
       ] = await Promise.all([
-        agendaManager.methods.minimunNoticePeriodSeconds().call(),
-        agendaManager.methods.minimunVotingPeriodSeconds().call(),
+        agendaManager.methods.minimumNoticePeriodSeconds().call(),
+        agendaManager.methods.minimumVotingPeriodSeconds().call(),
         agendaManager.methods.createAgendaFees().call(),
       ]);
 
-      const selector = encodeFunctionSignature(this.contract, this.functionName);
+      const selector = functionSignature (this.contract, this.functionName);
 
       const nParams = Object.keys(this.$refs).length;
       if (this.params.length !== nParams) {
-        alert('bug');
+        console.log('bug'); // eslint-disable-line
       }
 
       const types = [];
       const values = [];
       for (let i = 0; i < nParams; i++) {
         const type = this.params[i].type;
-        const inputValue = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
-        const value = encoded(type, inputValue);
+        const value = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
 
         types.push(type);
-        values.push(value);
+        values.push(encoded(type, value));
       }
 
       const params = encodeParameters(types, values);
@@ -117,23 +118,28 @@ export default {
       const bytecode = selector.concat(data);
 
       const param = encodeParameters(
-        ['address', 'uint256', 'uint256', 'bytes'],
-        [agendaManager._address, noticePeriod.toString(), votingPeriod.toString(), bytecode],
+        ['address[]', 'uint256', 'uint256', 'bytes[]'],
+        [[agendaManager._address], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],
       );
 
       const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)
         .estimateGas({
-          from: this.account,
+          from: account,
         });
 
       await ton.methods.approveAndCall(proxy._address, fee, param)
         .send({
-          from: this.account,
+          from: account,
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
-          await createAgenda(this.account, hash, this.desc);
+          await createAgenda(account, hash, this.desc);
+
           this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
+
+          await this.$store.dispatch('launch');
+          await this.$store.dispatch('connectEthereum', this.web3);
         })
         .on('receipt', async () => {
           this.$store.commit('SET_PENDING_TX', '');
