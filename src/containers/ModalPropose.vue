@@ -4,6 +4,7 @@
          @click="close"
     >
     <div class="function">{{ functionName }}</div>
+    <div class="function-explanation">TODO: function explanation</div>
     <div class="argument-container">
       <div v-for="(param, index) in params" :key="param.name"
            class="argument"
@@ -14,7 +15,18 @@
         />
       </div>
     </div>
-    <div class="description">Description</div>
+    <div class="description-container">
+      <div class="description">Description</div>
+      <div v-if="account" class="amount-container">
+        <span>Available Amount: </span>
+        <span class="amount">{{ tonBalance | TON }}</span>
+        <span> TON / </span>
+
+        <span>Required Amount: </span>
+        <span class="amount">{{ createAgendaFee | TON }}</span>
+        <span> TON</span>
+      </div>
+    </div>
     <textarea v-model="desc" name="" cols="30" rows="10" />
     <div class="button-container">
       <button-comp :name="account ? 'Propose' : 'Please Connect Wallet'"
@@ -39,7 +51,7 @@ import { getContracts, functionSignature, encodeParameters, encoded } from '@/ut
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 import TextInput from '@/components/TextInput.vue';
 
@@ -72,6 +84,9 @@ export default {
       'web3',
       'account',
       'tonBalance',
+    ]),
+    ...mapGetters([
+      'createAgendaFee',
     ]),
   },
   methods: {
@@ -177,7 +192,21 @@ export default {
     color: #3e495c;
 
     padding-top: 25px;
-    padding-bottom: 30px;
+    margin-bottom: 5px;
+  }
+
+  > .function-explanation {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+
+    color: #818992;
+
+    margin-bottom: 30px;
   }
 
   .argument-container {
@@ -210,7 +239,11 @@ export default {
     margin-top: 20px;
     padding-bottom: 20px;
   }
-
+  .description-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .description {
     font-family: Roboto;
     font-size: 13px;
@@ -222,6 +255,28 @@ export default {
     color: #2d3136;
 
     margin-bottom: 10px;
+
+    flex: 1;
+  }
+  .amount-container {
+    > span {
+      white-space: pre-wrap;
+
+      font-family: Roboto;
+      font-size: 10px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 2.6;
+      letter-spacing: normal;
+      text-align: right;
+
+      color: #c9d1d8;
+    }
+
+    .amount {
+      color: #434b52
+    }
   }
 
   textarea {

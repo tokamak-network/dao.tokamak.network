@@ -20,6 +20,7 @@ export default new Vuex.Store({
     blockNumber: 0,
 
     tonBalance: 0,
+    contractState: {},
 
     candidates: [],
     members: [],
@@ -81,6 +82,9 @@ export default new Vuex.Store({
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
+    SET_CONTRACT_STATE (state, contractState) {
+      state.contractState = contractState;
+    },
 
     SET_MY_VOTES_BY_CANDIDATE (state, myVotesByCandidate) {
       state.myVotesByCandidate = myVotesByCandidate;
@@ -117,6 +121,7 @@ export default new Vuex.Store({
       // TODO: await?
       await dispatch('setBalance');
       await dispatch('setRequests');
+      await dispatch('setContractState');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -161,6 +166,19 @@ export default new Vuex.Store({
         requestsByCandidate.push(candidate);
       });
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
+    },
+    async setContractState ({ state, commit }) {
+      const agendaManager = getContracts('DAOAgendaManager', state.web3);
+      const [
+        createAgendaFee,
+      ] = await Promise.all([
+        agendaManager.methods.createAgendaFees().call(),
+      ]);
+
+      const contractState = {
+        createAgendaFee,
+      };
+      commit('SET_CONTRACT_STATE', contractState);
     },
     async launch ({ dispatch }) {
       await dispatch('setMembersAndNonmembers');
@@ -368,6 +386,10 @@ export default new Vuex.Store({
       }
 
       return agenda.onChainEffects ? agenda.onChainEffects : [];
+    },
+    createAgendaFee: (state) => {
+      if (!state.contractState) return 0;
+      return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
     },
   },
 });
