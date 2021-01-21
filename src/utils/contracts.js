@@ -2,6 +2,8 @@ const Web3 = require('web3');
 const web3Utils = require('web3-utils');
 const BN = web3Utils.BN;
 
+const { marshalString, unmarshalString } = require('../utils/helpers.js');
+
 const agendaManager = require('../contracts/DAOAgendaManager.json');
 const committeeProxy = require('../contracts/DAOCommitteeProxy.json');
 const committee = require('../contracts/DAOCommittee.json');
@@ -58,11 +60,11 @@ module.exports.getContracts = function (want, web3) {
 
 const depositManagerFunctions = ['setGlobalWithdrawalDelay'];
 const seigManagerFunctions = [
-  'pause',
-  'unpause',
   'setPowerTONSeigRate',
   'setDaoSeigRate',
   'setPseigRate',
+  'setAdjustDelay',
+  'setMinimumAmount',
 ];
 const daoCommitteeFunctions = [
   'setActivityRewardPerSecond',
@@ -145,4 +147,77 @@ module.exports.encoded = function (type, value) {
     return '';
   }
   if (index === 0) return new BN(value);
+};
+
+const decodeParameters = function (typesArray, hexString) {
+  const web3 = new Web3();
+  return web3.eth.abi.decodeParameters(typesArray, hexString);
+};
+module.exports.decodeParameters = decodeParameters;
+
+const getABIFromSignature = function (signature) {
+  let abi;
+
+  abi = depositManagerABI.find(abi => abi.signature === signature);
+  if (abi) return abi;
+
+  abi = seigManagerABI.find(abi => abi.signature === signature);
+  if (abi) return abi;
+
+  abi = daoCommitteeABI.find(abi => abi.signature === signature);
+  if (abi) return abi;
+
+  abi = daoVaultABI.find(abi => abi.signature === signature);
+  if (abi) return abi;
+
+  if (!abi) {
+    console.log('bug'); // eslint-disable-line
+  }
+
+  return abi;
+};
+module.exports.getABIFromSignature = getABIFromSignature;
+
+module.exports.parseAgendaBytecode = function (tx) {
+  const params1 = marshalString(unmarshalString(tx.input).substring(8));
+  const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
+
+  const params2 = decodedParams1[2];
+  const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bytes[]'], params2);
+
+  const targets = decodedParams2[0];
+  const commands = decodedParams2[3];
+
+  if (targets.length !== commands.length) {
+    console.log('bug'); // eslint-disable-line
+  }
+
+  const onChainEffects = [];
+  for (let i = 0; i < targets.length; i++) {
+    const signature = commands[i].slice(0, 10);
+    const abi = getABIFromSignature(signature);
+
+    if (!abi) {
+      console.log('bug'); // eslint-disable-line
+      onChainEffects.push({
+        name: '',
+        types: [],
+        bytecode: '',
+      });
+
+      continue;
+    }
+
+    const name = abi.name;
+    const types = [];
+    abi.inputs.forEach(input => {
+      types.push(input.type);
+    });
+    const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
+    const values = decodeParameters(types, bytecode);
+
+    const onChainEffect = { name, types, values };
+    onChainEffects.push(onChainEffect);
+  }
+  return onChainEffects;
 };

@@ -95,7 +95,7 @@ export default {
         agendaManager.methods.createAgendaFees().call(),
       ]);
 
-      const selector = functionSignature (this.contract, this.functionName);
+      const selector = functionSignature(this.contract, this.functionName);
 
       const nParams = Object.keys(this.$refs).length;
       if (this.params.length !== nParams) {
@@ -117,6 +117,7 @@ export default {
 
       const bytecode = selector.concat(data);
 
+      // TODO: considering combination of functions.
       const param = encodeParameters(
         ['address[]', 'uint256', 'uint256', 'bytes[]'],
         [[agendaManager._address], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],

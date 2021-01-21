@@ -1,5 +1,7 @@
+import Web3 from 'web3';
+
 import { getCandidates, getAgendas, getAgendaVoteCasted, getVotersByCandidate, getCandidateRankByVotes } from '@/api';
-import { getContracts } from '@/utils/contracts';
+import { getContracts, parseAgendaBytecode } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
 import { WTON } from '@/utils/helpers';
 
@@ -205,9 +207,9 @@ export default new Vuex.Store({
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
-    async setAgendas (context) {
+    async setAgendas ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', this.web3);
-      const account = context.state.account;
+      const account = state.account;
       const [
         agendas,
         events,
@@ -225,20 +227,35 @@ export default new Vuex.Store({
         activityReward = '0 TON';
       }
 
-      context.commit('SET_ACTIVITY_REWARD', activityReward);
+      commit('SET_ACTIVITY_REWARD', activityReward);
 
       const voteCasted = [];
       events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
-      context.commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
       const myVote = [];
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
       const voteRate = (myVote.length / agendas.length) * 100;
 
-      context.commit('SET_MY_VOTE', myVote);
-      context.commit('SET_VOTE_RATE', voteRate);
+      commit('SET_MY_VOTE', myVote);
+      commit('SET_VOTE_RATE', voteRate);
 
-      context.commit('SET_AGENDAS', agendas);
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+      const agendaTxHashes = [];
+      for (let i = 0; i < agendas.length; i++) {
+        const txHash = agendas[i].transactionHash;
+        agendaTxHashes.push(web3.eth.getTransaction(txHash));
+      }
+      const agendaTxs = await Promise.all(agendaTxHashes);
+
+      for (let i = 0; i < agendas.length; i++) {
+        agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i]);
+      }
+
+      commit('SET_AGENDAS', agendas);
     },
     async setVotersByCandidate ({ state, commit }) {
       const votersByCandidate = [];
@@ -343,6 +360,14 @@ export default new Vuex.Store({
       const withdrawableRequests = requests.slice(0, requests.length - withdrawIndex);
       const amount = withdrawableRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
       return WTON(amount);
+    },
+    onChainEffects: (_, getters) => (agendaId) => {
+      const agenda = getters.getAgendaByID(agendaId);
+      if (!agenda) {
+        return [];
+      }
+
+      return agenda.onChainEffects ? agenda.onChainEffects : [];
     },
   },
 });
