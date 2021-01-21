@@ -9,7 +9,13 @@
       </template>
     </modal>
     <div class="card-title">
-      DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+      <div>
+        DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+      </div>
+      <div class="info-slot">
+        <span>Agenda </span>
+        <span class="slot">#{{ agenda.agendaid }}</span>
+      </div>
     </div>
     <div class="description">
       Created by {{ shortAddress(agenda.creator) }}
@@ -166,30 +172,9 @@ export default {
       }
       return 'disabled';
     },
-    votedResult: {
-      get: function () {
-        for (const vote of this.myVote) {
-        // console.log(vote[2]);
-          if (Number(vote[1]) === this.agenda.agendaid) {
-            switch (vote[2]) {
-            case '0': return 'You have voted to Abstain';
-            case '1': return 'You have voted Yes';
-            case '2': return 'You have voted No';
-            }
-          }
-        }
-        this.comment;
-        return 'You have not voted';
-      },
-      set: function () {
-        this.voted = false;
-      },
-    },
-  },
-  watch: {
-    comment: function () {
+    votedResult () {
       for (const vote of this.myVote) {
-        // console.log(vote[2]);
+      // console.log(vote[2]);
         if (Number(vote[1]) === this.agenda.agendaid) {
           switch (vote[2]) {
           case '0': return 'You have voted to Abstain';
@@ -198,7 +183,7 @@ export default {
           }
         }
       }
-      this.voted = false;
+      // this.comments();
       return 'You have not voted';
     },
   },
@@ -209,7 +194,7 @@ export default {
       this.buttonClass.buttonStatus = '';
     },
     comments () {
-      this.comment;
+      this.voted = false;
     },
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {
@@ -220,11 +205,6 @@ export default {
         this.execute();
       }
       this.$store.dispatch('setAgendas');
-    },
-    async start () {
-      const agendaManager = getContracts('DAOAgendaManager', this.web3);
-
-      agendaManager.methods.startVoting(this.agenda.agendaid).send({ from:this.account });
     },
     async execute () {
       const daoCommittee = getContracts('DAOCommittee', this.web3);
@@ -272,6 +252,31 @@ export default {
   font-size: 20px;
   text-align: left;
   color: #3e495c;
+
+  display: flex;
+}
+
+.info-slot {
+  flex: 1;
+
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+.info-slot > span {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #3e495c;
+
+  white-space: pre-wrap;
+}
+.info-slot > .slot {
+  color: #2a72e5;
 }
 .description {
   font-size: 14px;

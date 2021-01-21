@@ -1,5 +1,13 @@
 <template>
   <div class="header" :class="{ 'header-sub': isSub }">
+    <modal v-if="showModal"
+           :width="390"
+           @on-closed="showModal=false"
+    >
+      <template #body>
+        <modal-claim @on-closed="showModal=false" />
+      </template>
+    </modal>
     <div class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
       <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
       <img v-else src="@/assets/logo.png" alt="">
@@ -21,20 +29,47 @@
         Agenda
       </router-link>
       <connect-wallet :is-sub="isSub" />
+      <div v-if="account!=='' && checkRoute === true">
+        <button
+          class="claim"
+          @click="showModal=true"
+        >
+          Claim
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Connect from '@/components/Connect.vue';
+import Modal from '@/components/Modal.vue';
+import ModalClaim from '@/containers/ModalClaim.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     'connect-wallet': Connect,
+    'modal': Modal,
+    'modal-claim': ModalClaim,
+  },
+  data () {
+    return {
+      showModal: false,
+    };
   },
   computed: {
+    ...mapState([
+      'account',
+    ]),
     isSub () {
       return this.$route.path !== '/';
+    },
+    checkRoute () {
+      if (this.$route.path === '/') {
+        return true;
+      }
+      return false;
     },
   },
 };
@@ -64,6 +99,28 @@ export default {
   &:hover {
     cursor: pointer;
   }
+}
+
+button {
+  width: 76px;
+  height: 35px;
+  padding: 8px 20px;
+  margin-left: 15px;
+  border-radius: 19px;
+  border: solid 1px #6c9ed0;
+  background: #0062c2;
+  outline: none;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #a6c8e9
+}
+button:hover {
+  cursor: pointer;
 }
 
 .logo img {

@@ -1,13 +1,50 @@
 <template>
-  <div class="committee-slot">
-    <div class="title">Agenda</div>
-    <div class="agenda-info">
-      {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
+  <div class="agenda-slot">
+    <div class="dropdown-section">
+      <div>Filters</div>
+      <dropdown
+        :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
+        :hint="'Status'"
+        :button-type="'a'"
+        :selector-type="'a'"
+        class="dropdown"
+        @on-selected="selectStatus"
+      />
+      <dropdown
+        :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
+        :hint="'Result'"
+        :button-type="'a'"
+        :selector-type="'a'"
+        class="dropdown"
+        @on-selected="selectResult"
+      />
+      <dropdown
+        :items="['All', 'Yes', 'No', 'Abstain']"
+        :hint="'Voted'"
+        :button-type="'a'"
+        :selector-type="'a'"
+        class="dropdown"
+        @on-selected="selectVoted"
+      />
+      <dropdown
+        :items="['All', 'Executed', 'Not Executed']"
+        :hint="'Executed'"
+        :button-type="'a'"
+        :selector-type="'a'"
+        class="dropdown"
+        @on-selected="selectExecuted"
+      />
     </div>
-    <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
-    <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
-    <div v-if="hide === true">
-      <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
+    <div>
+      <div class="title">Agenda</div>
+      <div class="agenda-info">
+        {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
+      </div>
+      <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
+      <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
+      <div v-if="hide === true">
+        <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
+      </div>
     </div>
   </div>
 </template>
@@ -16,11 +53,13 @@
 import { mapState } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
+import Dropdown from '@/components/Dropdown.vue';
 
 export default {
   components: {
     'card-agenda-slot': CardAgendaSlot,
     'button-comp': Button,
+    'dropdown': Dropdown,
   },
   data (){
     return {
@@ -28,6 +67,18 @@ export default {
       hideAgendas: [],
       hideButton: '',
       hide: false,
+      execute: false,
+      status: false,
+      vote: false,
+      result: false,
+      executeCode: ['Executed', 'Not Executed'],
+      statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
+      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
+      voteCode: ['Yes', 'No', 'Abstain'],
+      curExecCode: '',
+      curStatCode: '',
+      curResultCode: '',
+      curVoteCode: '',
       monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
@@ -36,7 +87,7 @@ export default {
       'agendas',
     ]),
     numAgenda (){
-      return this.agendas.length;
+      return this.openAgendas.length;
     },
     deployedDate () {
       return () => {
@@ -58,6 +109,7 @@ export default {
   methods: {
     cassify () {
       // console.log(this.agendas);
+      this.openAgendas = this.agendas;
       // if (this.agendas.length > 5) {
       //   this.openAgendas = this.agendas.slice(0, 5);
       //   this.hideAgendas = this.agendas.slice(5, this.agendas.length);
@@ -68,6 +120,53 @@ export default {
     },
     hideSection () {
       this.hide = this.hide ? false : true;
+    },
+    agendaFilter () {
+      let filteredAgenda = [];
+      if (this.execute === true) {
+        let statusCode;
+        this.curExecCode === 'Executed' ? statusCode = true : statusCode = false;
+        filteredAgenda = this.agendas.filter(agenda => (agenda.executed === statusCode));
+      }
+      if (this.status === true) {
+        const statusCode = this.statusCode.indexOf(this.curStatCode);
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.status === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      }
+      // if (this.vote === true) {
+      //   const statusCode = this.getVote();
+      //   filteredAgenda === [] ? filteredAgenda = this.agendas.filter(agenda => (agenda.vote === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      // }
+      if (this.result === true) {
+        const statusCode = this.resultCode.indexOf(this.curResultCode);
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      }
+      this.openAgendas = filteredAgenda;
+    },
+    selectExecuted (item) {
+      item === 'All' ? this.result = false : this.curExecCode = item, this.execute = true;
+      this.agendaFilter();
+    },
+    selectStatus (item) {
+      item === 'All' ? this.status = false : this.curStatCode = item, this.status = true;
+      this.agendaFilter();
+    },
+    selectResult (item) {
+      item === 'All' ? this.result = false : this.curResultCode = item, this.result = true;
+      this.agendaFilter();
+    },
+    selectVoted (item) {
+      console.log(item);
+      // if (item === 'Result') {
+      //   this.openAgendas = this.agendas;
+      // } else {
+      //   let itemIndex;
+      //   switch (item) {
+      //   case 'Yes': itemIndex = 0; break;
+      //   case 'No': itemIndex = 1; break;
+      //   case 'Abstain': itemIndex = 2; break;
+      //   }
+      //   this.openAgendas = this.agendas.filter(agenda => (agenda.result === itemIndex));
+      // }
     },
   },
 };
@@ -98,7 +197,21 @@ export default {
   text-align: left;
   color: #86929d;
 }
-.committee-slot {
+.agenda-slot {
   width: 786px;
+}
+.dropdown-section {
+  display: flex;
+  margin-bottom: 45px;
+}
+.dropdown-section > div:first-child {
+  align-self: center;
+  font-size: 20px;
+  color: #3e495c;
+  margin-right: 15px;
+}
+.dropdown {
+  width: 150px;
+  margin-left: 15px;
 }
 </style>

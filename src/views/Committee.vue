@@ -41,7 +41,7 @@ export default {
 
   background: #fafbfc;
 
-  padding-top: 50px;
+  padding-top: 30px;
   padding-bottom: 50px;
 }
 
@@ -53,7 +53,7 @@ export default {
 
   display: flex;
   flex-direction: column;
-
+  margin-top: 72px;
   margin-left: 30px;
 }
 </style>
