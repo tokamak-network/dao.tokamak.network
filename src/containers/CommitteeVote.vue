@@ -307,9 +307,8 @@ export default {
       return data;
     },
     async update () {
-      await this.$store.dispatch('setBalance');
-      await this.$store.dispatch('setRequests');
-      await this.$store.dispatch('setMyVotes');
+      await this.$store.dispatch('launch');
+      await this.$store.dispatch('connectEthereum', this.web3);
     },
   },
 };

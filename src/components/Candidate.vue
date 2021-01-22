@@ -3,7 +3,7 @@
     <div class="label"># of Votes</div>
     <div class="amount">{{ candidate.vote }} TON</div>
     <div class="name">{{ candidate.name }}</div>
-    <div class="detail" @click="detail()">View Details</div>
+    <div class="detail" @click="detail()">View Detail</div>
   </div>
 </template>
 

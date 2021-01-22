@@ -39,8 +39,8 @@ const routes = [
     component: Committee,
   },
   {
-    path: '/agenda/:address',
-    name: 'agenda-detal',
+    path: '/agenda/:id',
+    name: 'agenda-detail',
     component: AgendaDetail,
   },
   {

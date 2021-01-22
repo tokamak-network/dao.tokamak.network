@@ -40,7 +40,7 @@ export default {
       'getVotedListByID',
     ]),
     voted () {
-      return this.getVotedListByID(this.$route.params.address);
+      return this.getVotedListByID(this.$route.params.id);
     },
   },
 };

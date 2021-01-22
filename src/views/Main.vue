@@ -22,10 +22,10 @@
         <div>
           Tx
         </div>
-        <div @click="newtab(event.transactionHash)">
+        <div class="tx-hash" @click="newtab(event.transactionHash)">
           {{ event.transactionHash | hexSlicer }}
         </div>
-        <div>
+        <div class="event">
           ETH-B Debt Ceiling Instant Access Module - December 7, 2020
         </div>
         <div>
@@ -224,6 +224,14 @@ export default {
       text-align: right;
       color: #8fc7fd;
     }
+  }
+
+  .tx-hash {
+    width: 90px;
+  }
+
+  .event {
+    flex: 1;
   }
 }
 </style>

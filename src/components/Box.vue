@@ -1,24 +1,35 @@
 <template>
   <div class="box">
-    <img src="@/assets/box-side.svg" alt="" width="2" height="10">
-    <div :style="[
-      status === 'selected' ? { color: '#2a72e5' } : {},
-      status === 'unselected' ? { color: '#434b52' } : {},
-      status === 'normal' ? { color: '#434b52' } : {},
-    ]"
+    <!-- <img src="@/assets/box-side.svg" alt="" width="2" height="10"> -->
+    <div class="function-name"
+         :style="[
+           status === 'selected' ? { color: '#2a72e5' } : {},
+           status === 'unselected' ? { color: '#bfc2c4' } : {},
+         ]"
     >
-      Normal
+      {{ functionName }}
     </div>
-    <div>What is the temporary explanatory text insertion area.</div>
+    <!-- <div>What is the temporary explanatory text insertion area.</div> -->
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      status: 'normal',
-    };
+  props: {
+    functionName: {
+      type: String,
+      default: '',
+    },
+    status: {
+      type: String,
+      default: 'unselected',
+      validator: (value) => {
+        return [
+          'selected',
+          'unselected',
+        ].indexOf(value) !== -1;
+      },
+    },
   },
 };
 </script>
@@ -37,6 +48,10 @@ export default {
 
   position: relative;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   &:hover {
     border: solid 1px #2a72e5;
     cursor: pointer;
@@ -48,29 +63,29 @@ export default {
     top: 15px;
   }
 
-  > div {
-    &:nth-child(2) {
-      font-family: Roboto;
-      font-size: 13px;
-      font-weight: 900;
-      font-stretch: normal;
-      font-style: normal;
-      letter-spacing: normal;
-      text-align: left;
-      color: #434b52;
-    }
-    &:nth-child(3) {
-      margin-top: 5px;
-
-      font-family: Roboto;
-      font-size: 9px;
-      font-weight: 300;
-      font-stretch: normal;
-      font-style: normal;
-      letter-spacing: normal;
-      text-align: left;
-      color: #818992;
-    }
+  .function-name {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 900;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
   }
+
+  // > div {
+  //   &:nth-child(3) {
+  //     margin-top: 5px;
+
+  //     font-family: Roboto;
+  //     font-size: 9px;
+  //     font-weight: 300;
+  //     font-stretch: normal;
+  //     font-style: normal;
+  //     letter-spacing: normal;
+  //     text-align: left;
+  //     color: #818992;
+  //   }
+  // }
 }
 </style>

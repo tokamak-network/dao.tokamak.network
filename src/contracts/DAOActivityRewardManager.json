@@ -342,27 +342,27 @@
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "363:4140:2:-:0;;;944:143;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;944:143:2;;;;;;;882:17:25;902:12;:10;:12::i;:::-;924:6;:18;;-1:-1:-1;;;;;;924:18:25;-1:-1:-1;;;;;924:18:25;;;;;;;957:43;;924:18;;-1:-1:-1;924:18:25;957:43;;924:6;;957:43;-1:-1:-1;1029:1:2;1006:20;:24;1040:3;:10;;-1:-1:-1;;;;;1040:10:2;;;-1:-1:-1;;;;;;1040:10:2;;;;;;;-1:-1:-1;1060:20:2;;;;;;;;;;;363:4140;;598:104:24;685:10;598:104;:::o;363:4140:2:-;;;;;;;",
-  "deployedSourceMap": "363:4140:2:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;724:64;;;;;;;;;;;;;;;;-1:-1:-1;724:64:2;;;;;;-1:-1:-1;;;;;724:64:2;;:::i;:::-;;;;;;;;;;;;;;;;;;639:53;;;;;;;;;;;;;;;;-1:-1:-1;639:53:2;;:::i;:::-;;;;;;;;;;;;;;;;1258:176;;;;;;;;;;;;;;;;-1:-1:-1;1258:176:2;-1:-1:-1;;;;;1258:176:2;;:::i;:::-;;4262:239;;;:::i;1932:211::-;;;;;;;;;;;;;;;;-1:-1:-1;1932:211:2;;;;;;;:::i;501:23::-;;;:::i;:::-;;;;-1:-1:-1;;;;;501:23:2;;;;;;;;;;;;;;1706:145:25;;;:::i;794:32:2:-;;;:::i;1083:77:25:-;;;:::i;1521:73:2:-;;;:::i;536:35::-;;;:::i;2153:343::-;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;2153:343:2;;;;;;;;:::i;477:18::-;;;:::i;1609:313::-;;;;;;;;;;;;;;;;-1:-1:-1;1609:313:2;-1:-1:-1;;;;;1609:313:2;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;1105:142;;;;;;;;;;;;;;;;-1:-1:-1;1105:142:2;;:::i;2506:109::-;;;:::i;2000:240:25:-;;;;;;;;;;;;;;;;-1:-1:-1;2000:240:25;-1:-1:-1;;;;;2000:240:25;;:::i;582:51:2:-;;;;;;;;;;;;;;;;-1:-1:-1;582:51:2;-1:-1:-1;;;;;582:51:2;;:::i;724:64::-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;639:53::-;;;;;;;;;;;;;:::o;1258:176::-;1297:12:25;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;-1:-1:-1;;;;;1333:23:2;::::1;1325:72;;;;-1:-1:-1::0;;;1325:72:2::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1407:8;:20:::0;;-1:-1:-1;;;;;;1407:20:2::1;-1:-1:-1::0;;;;;1407:20:2;;;::::1;::::0;;;::::1;::::0;;1258:176::o;4262:239::-;4316:7;4335:16;4354:25;:23;:25::i;:::-;4335:44;-1:-1:-1;4402:12:2;;4398:97;;4437:8;-1:-1:-1;4430:15:2;;4398:97;4483:1;4476:8;;;4262:239;;:::o;1932:211::-;2016:4;1297:12:25;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;2036:8:2;;2032:75:::1;;2060:29;::::0;;;:18:::1;:29;::::0;;;;:36;;;2032:75:::1;-1:-1:-1::0;2132:4:2::1;1356:1:25;1932:211:2::0;;;;:::o;501:23::-;;;-1:-1:-1;;;;;501:23:2;;:::o;1706:145:25:-;1297:12;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;1812:1:::1;1796:6:::0;;1775:40:::1;::::0;-1:-1:-1;;;;;1796:6:25;;::::1;::::0;1775:40:::1;::::0;1812:1;;1775:40:::1;1842:1;1825:19:::0;;-1:-1:-1;;;;;;1825:19:25::1;::::0;;1706:145::o;794:32:2:-;;;;:::o;1083:77:25:-;1121:7;1147:6;-1:-1:-1;;;;;1147:6:25;1083:77;:::o;1521:73:2:-;1583:8;;-1:-1:-1;;;;;1583:8:2;1521:73;:::o;536:35::-;;;;:::o;2153:343::-;2224:7;1297:12:25;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;-1:-1:-1;;;;;2267:18:2;::::1;2242:22;2267:18:::0;;;:12:::1;:18;::::0;;;;2306:9:::1;::::0;::::1;::::0;:19;-1:-1:-1;2302:188:2::1;;2352:9;::::0;::::1;::::0;:21:::1;::::0;2366:6;2352:13:::1;:21::i;:::-;2340:9;::::0;::::1;:33:::0;2397:8:::1;::::0;::::1;::::0;:20:::1;::::0;2410:6;2397:12:::1;:20::i;:::-;2386:8;::::0;;::::1;:31:::0;-1:-1:-1;2437:6:2;2430:13:::1;;2302:188;2479:1;2472:8;;;;;477:18:::0;;;-1:-1:-1;;;;;477:18:2;;:::o;1609:313::-;-1:-1:-1;;;;;1729:18:2;;1669:13;1729:18;;;:12;:18;;;;;:24;1669:13;;;;1729:28;1725:191;;-1:-1:-1;;;;;;;;1781:18:2;;;;;;:12;:18;;;;;:24;;1807:25;;;;1834:24;;;;;1781;;1807:25;1773:86;;1725:191;-1:-1:-1;1897:1:2;;-1:-1:-1;1897:1:2;;-1:-1:-1;1897:1:2;1725:191;1609:313;;;;;:::o;1105:142::-;1297:12:25;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;1196:20:2::1;:44:::0;1105:142::o;2506:109::-;2588:20;;2506:109;:::o;2000:240:25:-;1297:12;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:25;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:25;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:25;;;;;;;;;;;;;;;-1:-1:-1;;;;;2088:22:25;::::1;2080:73;;;;-1:-1:-1::0;;;2080:73:25::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2189:6;::::0;;2168:38:::1;::::0;-1:-1:-1;;;;;2168:38:25;;::::1;::::0;2189:6;::::1;::::0;2168:38:::1;::::0;::::1;2216:6;:17:::0;;-1:-1:-1;;;;;;2216:17:25::1;-1:-1:-1::0;;;;;2216:17:25;;;::::1;::::0;;;::::1;::::0;;2000:240::o;582:51:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;598:104:24:-;685:10;598:104;:::o;1329:134:29:-;1387:7;1413:43;1417:1;1420;1413:43;;;;;;;;;;;;;;;;;:3;:43::i;:::-;1406:50;1329:134;-1:-1:-1;;;1329:134:29:o;882:176::-;940:7;971:5;;;994:6;;;;986:46;;;;;-1:-1:-1;;;986:46:29;;;;;;;;;;;;;;;;;;;;;;;;;;;1754:187;1840:7;1875:12;1867:6;;;;1859:29;;;;-1:-1:-1;;;1859:29:29;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;1910:5:29;;;1754:187::o",
+  "sourceMap": "363:4140:2:-:0;;;944:143;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;944:143:2;;;;;;;882:17:26;902:12;:10;:12::i;:::-;924:6;:18;;-1:-1:-1;;;;;;924:18:26;-1:-1:-1;;;;;924:18:26;;;;;;;957:43;;924:18;;-1:-1:-1;924:18:26;957:43;;924:6;;957:43;-1:-1:-1;1029:1:2;1006:20;:24;1040:3;:10;;-1:-1:-1;;;;;1040:10:2;;;-1:-1:-1;;;;;;1040:10:2;;;;;;;-1:-1:-1;1060:20:2;;;;;;;;;;;363:4140;;598:104:24;685:10;598:104;:::o;363:4140:2:-;;;;;;;",
+  "deployedSourceMap": "363:4140:2:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;724:64;;;;;;;;;;;;;;;;-1:-1:-1;724:64:2;;;;;;-1:-1:-1;;;;;724:64:2;;:::i;:::-;;;;;;;;;;;;;;;;;;639:53;;;;;;;;;;;;;;;;-1:-1:-1;639:53:2;;:::i;:::-;;;;;;;;;;;;;;;;1258:176;;;;;;;;;;;;;;;;-1:-1:-1;1258:176:2;-1:-1:-1;;;;;1258:176:2;;:::i;:::-;;4262:239;;;:::i;1932:211::-;;;;;;;;;;;;;;;;-1:-1:-1;1932:211:2;;;;;;;:::i;501:23::-;;;:::i;:::-;;;;-1:-1:-1;;;;;501:23:2;;;;;;;;;;;;;;1706:145:26;;;:::i;794:32:2:-;;;:::i;1083:77:26:-;;;:::i;1521:73:2:-;;;:::i;536:35::-;;;:::i;2153:343::-;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;2153:343:2;;;;;;;;:::i;477:18::-;;;:::i;1609:313::-;;;;;;;;;;;;;;;;-1:-1:-1;1609:313:2;-1:-1:-1;;;;;1609:313:2;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;1105:142;;;;;;;;;;;;;;;;-1:-1:-1;1105:142:2;;:::i;2506:109::-;;;:::i;2000:240:26:-;;;;;;;;;;;;;;;;-1:-1:-1;2000:240:26;-1:-1:-1;;;;;2000:240:26;;:::i;582:51:2:-;;;;;;;;;;;;;;;;-1:-1:-1;582:51:2;-1:-1:-1;;;;;582:51:2;;:::i;724:64::-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;639:53::-;;;;;;;;;;;;;:::o;1258:176::-;1297:12:26;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;-1:-1:-1;;;;;1333:23:2;::::1;1325:72;;;;-1:-1:-1::0;;;1325:72:2::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1407:8;:20:::0;;-1:-1:-1;;;;;;1407:20:2::1;-1:-1:-1::0;;;;;1407:20:2;;;::::1;::::0;;;::::1;::::0;;1258:176::o;4262:239::-;4316:7;4335:16;4354:25;:23;:25::i;:::-;4335:44;-1:-1:-1;4402:12:2;;4398:97;;4437:8;-1:-1:-1;4430:15:2;;4398:97;4483:1;4476:8;;;4262:239;;:::o;1932:211::-;2016:4;1297:12:26;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;2036:8:2;;2032:75:::1;;2060:29;::::0;;;:18:::1;:29;::::0;;;;:36;;;2032:75:::1;-1:-1:-1::0;2132:4:2::1;1356:1:26;1932:211:2::0;;;;:::o;501:23::-;;;-1:-1:-1;;;;;501:23:2;;:::o;1706:145:26:-;1297:12;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;1812:1:::1;1796:6:::0;;1775:40:::1;::::0;-1:-1:-1;;;;;1796:6:26;;::::1;::::0;1775:40:::1;::::0;1812:1;;1775:40:::1;1842:1;1825:19:::0;;-1:-1:-1;;;;;;1825:19:26::1;::::0;;1706:145::o;794:32:2:-;;;;:::o;1083:77:26:-;1121:7;1147:6;-1:-1:-1;;;;;1147:6:26;1083:77;:::o;1521:73:2:-;1583:8;;-1:-1:-1;;;;;1583:8:2;1521:73;:::o;536:35::-;;;;:::o;2153:343::-;2224:7;1297:12:26;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;-1:-1:-1;;;;;2267:18:2;::::1;2242:22;2267:18:::0;;;:12:::1;:18;::::0;;;;2306:9:::1;::::0;::::1;::::0;:19;-1:-1:-1;2302:188:2::1;;2352:9;::::0;::::1;::::0;:21:::1;::::0;2366:6;2352:13:::1;:21::i;:::-;2340:9;::::0;::::1;:33:::0;2397:8:::1;::::0;::::1;::::0;:20:::1;::::0;2410:6;2397:12:::1;:20::i;:::-;2386:8;::::0;;::::1;:31:::0;-1:-1:-1;2437:6:2;2430:13:::1;;2302:188;2479:1;2472:8;;;;;477:18:::0;;;-1:-1:-1;;;;;477:18:2;;:::o;1609:313::-;-1:-1:-1;;;;;1729:18:2;;1669:13;1729:18;;;:12;:18;;;;;:24;1669:13;;;;1729:28;1725:191;;-1:-1:-1;;;;;;;;1781:18:2;;;;;;:12;:18;;;;;:24;;1807:25;;;;1834:24;;;;;1781;;1807:25;1773:86;;1725:191;-1:-1:-1;1897:1:2;;-1:-1:-1;1897:1:2;;-1:-1:-1;1897:1:2;1725:191;1609:313;;;;;:::o;1105:142::-;1297:12:26;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;1196:20:2::1;:44:::0;1105:142::o;2506:109::-;2588:20;;2506:109;:::o;2000:240:26:-;1297:12;:10;:12::i;:::-;1287:6;;-1:-1:-1;;;;;1287:6:26;;;:22;;;1279:67;;;;;-1:-1:-1;;;1279:67:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1279:67:26;;;;;;;;;;;;;;;-1:-1:-1;;;;;2088:22:26;::::1;2080:73;;;;-1:-1:-1::0;;;2080:73:26::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2189:6;::::0;;2168:38:::1;::::0;-1:-1:-1;;;;;2168:38:26;;::::1;::::0;2189:6;::::1;::::0;2168:38:::1;::::0;::::1;2216:6;:17:::0;;-1:-1:-1;;;;;;2216:17:26::1;-1:-1:-1::0;;;;;2216:17:26;;;::::1;::::0;;;::::1;::::0;;2000:240::o;582:51:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;598:104:24:-;685:10;598:104;:::o;1329:134:30:-;1387:7;1413:43;1417:1;1420;1413:43;;;;;;;;;;;;;;;;;:3;:43::i;:::-;1406:50;1329:134;-1:-1:-1;;;1329:134:30:o;882:176::-;940:7;971:5;;;994:6;;;;986:46;;;;;-1:-1:-1;;;986:46:30;;;;;;;;;;;;;;;;;;;;;;;;;;;1754:187;1840:7;1875:12;1867:6;;;;1859:29;;;;-1:-1:-1;;;1859:29:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;1910:5:30;;;1754:187::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\n\nimport { SafeMath } from \"../../node_modules/@openzeppelin/contracts/math/SafeMath.sol\";\nimport { IERC20 } from  \"../../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol\";\n//import \"../roles/DAOActivityFeeManagerRole.sol\";\nimport \"../../node_modules/@openzeppelin/contracts/access/Ownable.sol\";\n\ncontract DAOActivityRewardManager is Ownable/*, DAOActivityFeeManagerRole*/ {\n    using SafeMath for uint256;\n    address public ton;\n    address public daoVault;\n     \n    uint256 public activityfeePerVoting;\n    \n    mapping(address => ActivityFee) public activityfees;\n    mapping(uint256 => uint256) public agendaActivityfees; // agenda's activity fees\n    mapping(uint256 => mapping(address => bool)) public agendaVoters;\n    uint256 public totalActivityFees;\n    \n    struct ActivityFee {\n        uint256 total;\n        uint256 remain;\n        uint256 claim;\n    }\n     \n    constructor(address _ton, address _daoVault) public {\n        activityfeePerVoting = 0;\n        ton = _ton;\n        daoVault = _daoVault;\n    }\n            \n    function setActivityfeePerVoting(uint256 _activityfeePerVoting) onlyOwner public {\n        activityfeePerVoting = _activityfeePerVoting;\n    }\n     \n    function setDaoVault(address _daoVault) onlyOwner public {\n        require(_daoVault != address(0), \"DAOActivityFeeManager: Vault is zero\");\n        daoVault = _daoVault;\n    }\n     \n    //function getTON() public view returns (address) { return ton; }\n     \n    function getDaoVault() public view returns (address) { return daoVault; }\n    \n    \n    function getActivityfees(address user) public view returns (uint256 total, uint256 remain, uint256 claim) {\n        if (activityfees[user].total > 0) {\n            return (activityfees[user].total, activityfees[user].remain, activityfees[user].claim);\n        } else {\n            return(0, 0, 0);\n        }\n    }\n    \n    function payActivityFees(uint256 _AgendaID, uint256 fees) onlyOwner public returns (bool) {\n        if (fees > 0) {\n            agendaActivityfees[_AgendaID] = fees;\n        }\n        \n        return true;\n    }\n    \n    function claim(address user, uint256 amount) onlyOwner public returns (uint256) {\n       ActivityFee storage af = activityfees[user];\n       \n       if (af.remain >= amount) {\n           af.remain = af.remain.sub(amount);\n           af.claim = af.claim.add(amount);\n           return amount;\n       } else {\n           return 0;\n       }\n    }\n    \n    function getActivityfeePerVoting() public view returns (uint256) {\n        return activityfeePerVoting;\n    }\n\n    /*\n    function claim(uint256 amount) public returns (uint256) {\n        address dauvault = store.getDaoVault();\n        require(dauvault != address(0), \"dauvault is zreo\");\n        \n        address activityFeeManager = store.getActivityFeeManager();\n        require(activityFeeManager != address(0), \"activityFeeManager is zreo\");\n        \n        require(amount > 0, \"amount is zreo\");\n        (uint256 total, uint256 remain, ) = DAOActivityFeeManagerI(activityFeeManager).getActivityfees(msg.sender);\n        require(total >= amount && remain >= amount, \"lack of remain\");\n        \n        uint256 storeclaim = DAOActivityFeeManagerI(activityFeeManager).claim(msg.sender, amount);\n        require(amount == storeclaim, \"store claim fail\");\n         \n        // from daovault to sender\n        (bool success, bytes memory execresult) = address(dauvault).call(abi.encodeWithSignature(\"claimCommittee(address,uint256)\", msg.sender, amount));\n        require(success, \"fail to claimCommittee\");\n        uint256 callclaimamount = abi.decode(execresult, (uint256));\n        require(callclaimamount > 0, \"callclaimamount is zero\");\n        \n        emit ClaimActivityFees(msg.sender, amount, callclaimamount, storeclaim);\n        \n        return callclaimamount;\n    }\n    \n    function getActivityfees() public view returns (uint256 total, uint256 remain, uint256 claimdone) {\n        address activityFeeManager = store.getActivityFeeManager();\n        require(activityFeeManager != address(0), \"activityFeeManager is zreo\");\n        \n        return DAOActivityFeeManagerI(activityFeeManager).getActivityfees(msg.sender);\n    }\n    */\n    \n    function calculateActivityFees() public view returns (uint256) {\n        uint256 uintFees = getActivityfeePerVoting();\n        \n        if (uintFees > 0) {\n            return uintFees;\n        } else {\n            return 0;\n        }\n    }\n}\n",
   "sourcePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/dao/DAOActivityRewardManager.sol",
   "ast": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/dao/DAOActivityRewardManager.sol",
     "exportedSymbols": {
       "Context": [
-        5603
+        5637
       ],
       "DAOActivityRewardManager": [
         440
       ],
       "IERC20": [
-        6227
+        6544
       ],
       "Ownable": [
-        5712
+        6029
       ],
       "SafeMath": [
-        6149
+        6466
       ]
     },
     "id": 441,
@@ -386,7 +386,7 @@
         "id": 197,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 6150,
+        "sourceUnit": 6467,
         "src": "57:88:2",
         "symbolAliases": [
           {
@@ -408,7 +408,7 @@
         "id": 199,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 6228,
+        "sourceUnit": 6545,
         "src": "146:92:2",
         "symbolAliases": [
           {
@@ -430,7 +430,7 @@
         "id": 200,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 5713,
+        "sourceUnit": 6030,
         "src": "290:71:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -443,10 +443,10 @@
               "id": 201,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5712,
+              "referencedDeclaration": 6029,
               "src": "400:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$5712",
+                "typeIdentifier": "t_contract$_Ownable_$6029",
                 "typeString": "contract Ownable"
               }
             },
@@ -456,16 +456,16 @@
           }
         ],
         "contractDependencies": [
-          5603,
-          5712
+          5637,
+          6029
         ],
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 440,
         "linearizedBaseContracts": [
           440,
-          5712,
-          5603
+          6029,
+          5637
         ],
         "name": "DAOActivityRewardManager",
         "nodeType": "ContractDefinition",
@@ -476,10 +476,10 @@
               "id": 203,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6149,
+              "referencedDeclaration": 6466,
               "src": "451:8:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$6149",
+                "typeIdentifier": "t_contract$_SafeMath_$6466",
                 "typeString": "library SafeMath"
               }
             },
@@ -1136,7 +1136,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1169:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1411,7 +1411,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1298:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2210,7 +2210,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1990:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2588,7 +2588,7 @@
                               "lValueRequested": false,
                               "memberName": "sub",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 5999,
+                              "referencedDeclaration": 6316,
                               "src": "2352:13:2",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -2712,7 +2712,7 @@
                               "lValueRequested": false,
                               "memberName": "add",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 5982,
+                              "referencedDeclaration": 6299,
                               "src": "2397:12:2",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -2779,7 +2779,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "2198:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3211,19 +3211,19 @@
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/dao/DAOActivityRewardManager.sol",
     "exportedSymbols": {
       "Context": [
-        5603
+        5637
       ],
       "DAOActivityRewardManager": [
         440
       ],
       "IERC20": [
-        6227
+        6544
       ],
       "Ownable": [
-        5712
+        6029
       ],
       "SafeMath": [
-        6149
+        6466
       ]
     },
     "id": 441,
@@ -3247,7 +3247,7 @@
         "id": 197,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 6150,
+        "sourceUnit": 6467,
         "src": "57:88:2",
         "symbolAliases": [
           {
@@ -3269,7 +3269,7 @@
         "id": 199,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 6228,
+        "sourceUnit": 6545,
         "src": "146:92:2",
         "symbolAliases": [
           {
@@ -3291,7 +3291,7 @@
         "id": 200,
         "nodeType": "ImportDirective",
         "scope": 441,
-        "sourceUnit": 5713,
+        "sourceUnit": 6030,
         "src": "290:71:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3304,10 +3304,10 @@
               "id": 201,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5712,
+              "referencedDeclaration": 6029,
               "src": "400:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$5712",
+                "typeIdentifier": "t_contract$_Ownable_$6029",
                 "typeString": "contract Ownable"
               }
             },
@@ -3317,16 +3317,16 @@
           }
         ],
         "contractDependencies": [
-          5603,
-          5712
+          5637,
+          6029
         ],
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 440,
         "linearizedBaseContracts": [
           440,
-          5712,
-          5603
+          6029,
+          5637
         ],
         "name": "DAOActivityRewardManager",
         "nodeType": "ContractDefinition",
@@ -3337,10 +3337,10 @@
               "id": 203,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6149,
+              "referencedDeclaration": 6466,
               "src": "451:8:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$6149",
+                "typeIdentifier": "t_contract$_SafeMath_$6466",
                 "typeString": "library SafeMath"
               }
             },
@@ -3997,7 +3997,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1169:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -4272,7 +4272,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1298:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -5071,7 +5071,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "1990:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -5449,7 +5449,7 @@
                               "lValueRequested": false,
                               "memberName": "sub",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 5999,
+                              "referencedDeclaration": 6316,
                               "src": "2352:13:2",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5573,7 +5573,7 @@
                               "lValueRequested": false,
                               "memberName": "add",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 5982,
+                              "referencedDeclaration": 6299,
                               "src": "2397:12:2",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5640,7 +5640,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5661,
+                  "referencedDeclaration": 5978,
                   "src": "2198:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -6074,7 +6074,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2021-01-14T00:27:18.398Z",
+  "updatedAt": "2021-01-20T01:55:31.064Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
