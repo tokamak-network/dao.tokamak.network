@@ -54,7 +54,7 @@ export default {
       'getAgendaByID',
     ]),
     agenda () {
-      return this.getAgendaByID(this.$route.params.address);
+      return this.getAgendaByID(this.$route.params.id);
     },
     deployDate () {
       return (agenda) => {

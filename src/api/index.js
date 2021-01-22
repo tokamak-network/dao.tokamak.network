@@ -52,15 +52,20 @@ export async function getAgendas () {
 }
 
 export async function getVotersByCandidate (layer2) {
-  const res = await instance.get(`balances/stakeof?layer2=${layer2}`);
+  const res = await instance.get(`/balances/stakeof?layer2=${layer2}`);
   return res.data.datas;
 }
 
 export async function getCandidateRankByVotes () {
-  const res = await instance.get('balances/sums');
+  const res = await instance.get('/balances/sums');
   return res.data.datas;
 }
 
 export async function createAgenda (from, txHash, contents) {
   await instance.post('/agendacontents', { account: from, tx: txHash, contents });
+}
+
+export async function getAgendaContents (agendaId) {
+  const res = await instance.get(`/agendacontents?chainId=4&agendaid=${agendaId}`);
+  return res.data.datas[0];
 }

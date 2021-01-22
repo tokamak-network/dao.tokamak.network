@@ -19,8 +19,8 @@
       </div>
       <div class="title">DAO Vault is Foward Fund to 0xabcd… - {{ deployDate(creationTime) }}</div>
       <div class="selector">
-        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
-        <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">On-Chain Effect</div>
+        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+        <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">On-Chain Effects</div>
         <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Comments ({{ voted }})</div>
       </div>
       <div class="divider" />
@@ -47,6 +47,7 @@ export default {
   },
   data () {
     return {
+      agendaId: -1,
       currentSelector: 0,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
@@ -60,10 +61,10 @@ export default {
       'getVotedListByID',
     ]),
     voted () {
-      return this.getVotedListByID(this.$route.params.address).length;
+      return this.getVotedListByID(this.agendaId).length;
     },
     creationTime () {
-      return this.getAgendaByID(this.$route.params.address);
+      return this.getAgendaByID(this.agendaId);
     },
     deployedDate () {
       return (agenda) => {
@@ -107,18 +108,27 @@ export default {
       };
     },
   },
+  watch: {
+    '$route.params.id': {
+      handler: async function () {
+        this.agendaId = this.$route.params.id;
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     back () {
       this.$router.push({
-        path: '/agenda/',
+        path: '/agenda',
       });
     },
     prev () {
-      let index = Number(this.$route.params.address) -1 ;
+      let index = Number(this.agendaId) -1 ;
       if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
     },
     next () {
-      let index = Number(this.$route.params.address) + 1;
+      let index = Number(this.agendaId) + 1;
       if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
     },
   },

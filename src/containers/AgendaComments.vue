@@ -41,7 +41,7 @@ export default {
     },
     classify () {
       return () => {
-        this.voteCasted.forEach(async casted => casted.data.id === this.$route.params.address ? this.comments.push(casted.data) : 0);
+        this.voteCasted.forEach(async casted => casted.data.id === this.$route.params.id ? this.comments.push(casted.data) : 0);
       };
     },
   },

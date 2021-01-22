@@ -23,7 +23,7 @@
     <div class="bottom">
       <div class="left-side">
         <button-comp
-          :name="'View Details'"
+          :name="'View Detail'"
           :type="'primary'"
           class="left"
           :width="'118px'"

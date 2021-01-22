@@ -225,12 +225,6 @@ export default {
     color: #3e495c;
     margin-bottom: 10px;
   }
-  .textarea {
-    border-radius: 4px;
-    border: solid 1px;
-    border-color: #dfe4ee;
-    background-color: #ffffff;
-  }
 
   .button-container {
     display: flex;
@@ -238,6 +232,39 @@ export default {
 
     margin-top: 20px;
     padding-bottom: 20px;
+  }
+
+  textarea {
+    width: 100%;
+
+    border: solid 1px #dfe4ee;
+    border-radius: 4px;
+
+    outline: none;
+
+    padding: 8px 16px;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: 0.22px;
+    color: #3e495c;
+
+    resize: none;
+
+    &::placeholder {
+      color: #86929d;
+    }
+
+    &:hover {
+      border: 1px solid #c9d1d8;
+    }
+
+    &:focus {
+      border: 1px solid #2a72e5;
+    }
   }
 }
 </style>
