@@ -1,20 +1,20 @@
 <template>
   <div class="agenda-comment">
     <div class="date">
-      DEC 21, 2020, 22:04 UTC
+      {{ votedAt | date2 }}
     </div>
     <div class="vote-status">
       <span>
         <span class="blue">
-          {{ shortAddress }}
+          {{ voter | hexSlicer }}
         </span> voted
         <span class="blue">
-          {{ result }}
+          {{ toResult(vote) }}
         </span>
       </span>
     </div>
     <div class="comment">
-      {{ contents.comment }}
+      {{ comment }}
     </div>
     <div class="divider" />
   </div>
@@ -23,34 +23,29 @@
 <script>
 export default {
   props: {
-    contents: {
-      type: Object,
-      default: () => {},
+    votedAt: {
+      type: Number,
+      default: 0,
+    },
+    vote: {
+      type: String,
+      default: '',
+    },
+    voter: {
+      type: String,
+      default: '',
+    },
+    comment: {
+      type: String,
+      default: '',
     },
   },
-  data () {
-    return {
-      result : '',
-    };
-  },
-  computed: {
-    shortAddress () {
-      return `${this.contents[0].slice(0, 7)}...${this.contents[0].slice(-4)}`;
-    },
+  methods: {
     toResult () {
-      return () => {
-        if (this.contents.voting === '0') {
-          this.result = 'Abstain';
-        } else if (this.contents.voting === '1') {
-          this.result = 'Yes';
-        } else {
-          this.result = 'No';
-        }
-      };
+      if (this.vote === '0')      return 'Abstain';
+      else if (this.vote === '1') return 'Yes';
+      else                        return 'No';
     },
-  },
-  created () {
-    this.toResult();
   },
 };
 </script>
