@@ -1,6 +1,7 @@
 <template>
   <div>
-    {{ onChainEffects(agendaId) }}
+    {{ agendaCreator(agendaId) }}
+    {{ agendaOnChainEffects(agendaId) }}
   </div>
 </template>
 
@@ -15,11 +16,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'onChainEffects',
+      'agendaOnChainEffects',
+      'agendaCreator',
     ]),
   },
-  async created () {
-    this.agendaId = this.$route.params.id;
+  watch: {
+    '$route.params.id': {
+      handler: async function () {
+        this.agendaId = this.$route.params.id;
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 };
 </script>

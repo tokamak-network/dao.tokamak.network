@@ -31,6 +31,10 @@ export function date1 (timestamp) {
   return monthNames[parseInt(month)] + ' ' + day + ', ' + year;
 }
 
+export function date2 (timestamp) {
+  return moment.utc(timestamp*1000).local().format('MMM D, YYYY, HH:mm');
+}
+
 export function fromNow (timestamp, suffix=false) {
   return moment.unix(timestamp).fromNow(suffix);
 }

@@ -1,6 +1,13 @@
 import Web3 from 'web3';
 
-import { getCandidates, getAgendas, getAgendaVoteCasted, getVotersByCandidate, getCandidateRankByVotes } from '@/api';
+import {
+  getCandidates,
+  getAgendas,
+  getAgendaVoteCasted,
+  getVotersByCandidate,
+  getCandidateRankByVotes,
+  getAgendaContents,
+} from '@/api';
 import { getContracts, parseAgendaBytecode } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
 import { WTON } from '@/utils/helpers';
@@ -262,15 +269,22 @@ export default new Vuex.Store({
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
-      const agendaTxHashes = [];
+      const promAgendaTx = [];
+      const promAgendaContents = [];
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        agendaTxHashes.push(web3.eth.getTransaction(txHash));
+        promAgendaTx.push(web3.eth.getTransaction(txHash));
+
+        promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
-      const agendaTxs = await Promise.all(agendaTxHashes);
+      const agendaTxs = await Promise.all(promAgendaTx);
+      const agendaContents = await Promise.all(promAgendaContents);
 
       for (let i = 0; i < agendas.length; i++) {
         agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i]);
+
+        agendas[i].contents = agendaContents[i].contents;
+        agendas[i].creator = agendaContents[i].creator;
       }
 
       commit('SET_AGENDAS', agendas);
@@ -292,8 +306,9 @@ export default new Vuex.Store({
   },
   getters: {
     getAgendaByID: (state) => (agendaId) => {
+      if (agendaId === -1) return {};
       const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
-      return index > -1 ? state.agendas[index] : '';
+      return index > -1 ? state.agendas[index] : {};
     },
     getVotedListByID: (state) => (agendaId) => {
       const voted = [];
@@ -379,7 +394,7 @@ export default new Vuex.Store({
       const amount = withdrawableRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
       return WTON(amount);
     },
-    onChainEffects: (_, getters) => (agendaId) => {
+    agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
       if (!agenda) {
         return [];
@@ -390,6 +405,26 @@ export default new Vuex.Store({
     createAgendaFee: (state) => {
       if (!state.contractState) return 0;
       return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
+    },
+    agendaCreator: (_, getters) => (agendaId) => {
+      const agenda = getters.getAgendaByID(agendaId);
+      if (!agenda) {
+        return '';
+      }
+
+      return agenda.creator ? agenda.creator : '';
+    },
+    agendaContents: (_, getters) => (agendaId) => {
+      const agenda = getters.getAgendaByID(agendaId);
+      if (!agenda) {
+        return '';
+      }
+
+      return agenda.contents ? agenda.contents : '';
+    },
+    comments: (state) => (agendaId) => {
+      if (!state.voteCasted) return [];
+      return state.voteCasted.filter(v => v.data.id === agendaId);
     },
   },
 });
