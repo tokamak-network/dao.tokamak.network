@@ -261,6 +261,12 @@ export default {
   .propose-contract {
     &:hover {
       cursor: pointer;
+
+      background: #2a72e5;
+
+      .contract-name {
+        color: #ffffff;
+      }
     }
   }
 }
