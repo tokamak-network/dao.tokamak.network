@@ -45,7 +45,7 @@ export default {
       'comments',
     ]),
     numComments () {
-      return this.comments.length;
+      return this.comments(this.agendaId) ? this.comments(this.agendaId).length : 0;
     },
   },
   watch: {
