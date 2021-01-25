@@ -17,7 +17,6 @@ export default {
   },
   computed: {
     markdown () {
-      console.log(this.content);
       return DOMPurify.sanitize(marked(this.content));
     },
   },
