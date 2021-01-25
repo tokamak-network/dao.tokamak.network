@@ -52,6 +52,8 @@ export default {
   justify-content: center;
   align-items: center;
 
+  word-break: break-all;
+
   &:hover {
     border: solid 1px #2a72e5;
     cursor: pointer;
