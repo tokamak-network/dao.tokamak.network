@@ -36,13 +36,13 @@
                     :big="true"
                     :readonly="true"
                     :clickable="true"
-                    :value="canRevote(address, revoteIndex) ? canRevote(address, revoteIndex) : undefined"
+                    :value="canRevote(address, revoteIndex) ? wton(canRevote(address, revoteIndex)) : undefined"
                     :label="'Available Amount'"
                     @on-clicked="setRevoteAmount"
         />
         <custom-button :type="'secondary'"
                        :name="account ? 'Revote' : 'Please connect wallet'"
-                       :disabled="account ? false : true"
+                       :disabled="!account || !canRevote(address, revoteIndex) ? true : false"
                        @on-clicked="revote"
         />
       </div>
@@ -68,20 +68,20 @@
         />
       </div>
       <div v-if="currentSelector === 3" class="unvote-container">
-        <div>Not Withdrawable Amount {{ cannotWithdraw ? cannotWithdraw : 0 }} TON</div>
+        <div>Not Withdrawable Amount {{ cannotWithdraw ? wton(cannotWithdraw) : 0 }} TON</div>
         <text-input ref="tonwithdraw"
                     class="withdraw-input"
                     :unit="'TON'"
                     :hint="'0.00'"
                     :readonly="true"
                     :clickable="true"
-                    :value="canWithdraw(address, withdrawIndex) ? canWithdraw(address, withdrawIndex) : undefined"
+                    :value="canWithdraw(address, withdrawIndex) ? wton(canWithdraw(address, withdrawIndex)) : undefined"
                     :label="'Withdrawable Amount'"
                     @on-clicked="setWithdrawableAmount"
         />
         <custom-button :type="'secondary'"
                        :name="account ? 'Withdraw' : 'Please connect wallet'"
-                       :disabled="account ? false : true"
+                       :disabled="!account || !canWithdraw(address, revoteIndex) ? true : false"
                        @on-clicked="withdraw"
         />
       </div>
@@ -92,6 +92,7 @@
 <script>
 import { TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
 import { getContracts } from '@/utils/contracts';
+import web3Utils from 'web3-utils';
 
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
@@ -132,7 +133,10 @@ export default {
     cannotWithdraw () {
       const requests = this.notWithdrawableRequests(this.address);
       const amount = requests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
-      return WTON(amount);
+      return amount;
+    },
+    wton () {
+      return (amount) => WTON(amount);
     },
   },
   watch: {
@@ -179,11 +183,21 @@ export default {
     },
     async vote () {
       if (!this.account) return;
+      const BN = web3Utils.BN;
 
       const ton = getContracts('TON', this.web3);
       const wton = getContracts('WTON', this.web3);
 
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
+      if (String(amount) === '0') {
+        return alert('Please input amount!');
+      }
+      if (String(this.tonBalance) === '0') {
+        return alert('Please check your TON amount!');
+      }
+      if ((new BN(amount)).cmp(new BN(this.tonBalance)) === 1) {
+        return alert('Please check your TON amount!');
+      }
       const data = await this.dataForDeposit();
 
       const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
@@ -208,10 +222,23 @@ export default {
     },
     async unvote () {
       if (!this.account) return;
+      const BN = web3Utils.BN;
+
       const depositManager = getContracts('DepositManager', this.web3);
 
       const layer2 = this.address;
       const amount = toRay(this.$refs.tonunvote.$refs.input.value);
+
+      this.myVotes(this.address);
+      if (String(amount) === '0') {
+        return alert('Please input amount!');
+      }
+      if (String(this.myVotes(this.address)) === '0') {
+        return alert('Please check your TON amount!');
+      }
+      if ((new BN(amount)).cmp(new BN(this.myVotes(this.address))) === 1) {
+        return alert('Please check your TON amount!!');
+      }
 
       const gasLimit = await depositManager.methods.requestWithdrawal(layer2, amount)
         .estimateGas({

@@ -70,9 +70,11 @@ export function padLeft (str, characterAmount) {
 }
 
 export function toWei (amount) {
+  if (!amount) return 0;
   return _TON(amount).toFixed('wei');
 }
 
 export function toRay (amount) {
+  if (!amount) return 0;
   return _WTON(amount).toFixed('ray');
 }

@@ -10,7 +10,6 @@ import {
 } from '@/api';
 import { getContracts, parseAgendaBytecode } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
-import { WTON } from '@/utils/helpers';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -370,12 +369,12 @@ export default new Vuex.Store({
     canRevote: (_, getters) => (address, revoteIndex) => {
       const requests = getters.requests(address);
       if (!requests) {
-        return WTON(0);
+        return 0;
       }
 
       const voteRequests = requests.slice(0, requests.length - revoteIndex);
       const amount = voteRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
-      return WTON(amount);
+      return amount;
     },
     numCanWithdraw: (_, getters) => (address, withdrawIndex) => {
       const requests = getters.withdrawableRequests(address);
@@ -387,12 +386,12 @@ export default new Vuex.Store({
     canWithdraw: (_, getters) => (address, withdrawIndex) => {
       const requests = getters.withdrawableRequests(address);
       if (!requests) {
-        return WTON(0);
+        return 0;
       }
 
       const withdrawableRequests = requests.slice(0, requests.length - withdrawIndex);
       const amount = withdrawableRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
-      return WTON(amount);
+      return amount;
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
