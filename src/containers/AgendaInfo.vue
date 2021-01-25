@@ -1,9 +1,7 @@
 <template>
   <div class="agenda-info">
-    <div class="resource">
-      {{ agendaContents(agendaId) }}
-    </div>
-    <!-- TODO: how to edit?... -->
+    <!-- TODO: how to edit? -->
+    <markdown-viewer :content="agendaContents(agendaId)" />
     <button-comp v-if="account === getAgendaByID(agendaId).operator"
                  :name="'Agenda Edit'"
                  :type="'primary'"
@@ -15,10 +13,12 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
+import MarkdownViewer from '@/components/MarkdownViewer.vue';
 
 export default {
   components: {
     'button-comp': Button,
+    'markdown-viewer': MarkdownViewer,
   },
   data () {
     return {
