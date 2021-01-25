@@ -58,77 +58,91 @@ module.exports.getContracts = function (want, web3) {
   }
 };
 
-const depositManagerFunctions = ['setGlobalWithdrawalDelay'];
-const seigManagerFunctions = [
-  'setPowerTONSeigRate',
-  'setDaoSeigRate',
-  'setPseigRate',
-  'setAdjustDelay',
-  'setMinimumAmount',
+const depositManagerFunctionsOfTypeA = [
+  { 'name': 'setGlobalWithdrawalDelay', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.' },
 ];
-const daoCommitteeFunctions = [
-  'setActivityRewardPerSecond',
-  'increaseMaxMember',
-  'reduceMemberSlot',
-  'setQuorum',
-  'setCreateAgendaFees',
-  'setMinimumNoticePeriodSeconds',
-  'setMinimumVotingPeriodSeconds',
+const seigManagerFunctionsOfTypeA = [
+  { 'name': 'setPowerTONSeigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.' },
+  { 'name': 'setDaoSeigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.' },
+  { 'name': 'setPseigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.' },
+  { 'name': 'setAdjustDelay', 'explanation': 'It decides how much time should be wait until new commission rate is applied.' },
+  { 'name': 'setMinimumAmount', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.' },
 ];
-const daoVaultFunctions = [
-  'approveTON',
-  'approveWTON',
-  'approveERC20',
-  'claimTON',
-  'claimWTON',
-  'claimERC20',
+const daoCommitteeFunctionsOfTypeA = [
+  { 'name': 'setActivityRewardPerSecond', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.' },
+  { 'name': 'increaseMaxMember', 'explanation': 'It increases maximum number of Committee Members.' },
+  { 'name': 'reduceMemberSlot', 'explanation': 'It decreased maximum number of Committee Members.' },
+  { 'name': 'setQuorum', 'explanation': 'It sets minimum qurom for committee members to execute agenda.' },
+  { 'name': 'setCreateAgendaFees', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.' },
+  { 'name': 'setMinimumNoticePeriodSeconds', 'explanation': 'It sets minimum notice period of agenda. Per seconds.' },
+  { 'name': 'setMinimumVotingPeriodSeconds', 'explanation': 'It sets minimum vote period of agenda. Per seconds.' },
+];
+const daoVaultFunctionsOfTypeA = [
+  { 'name': 'approveTON', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.' },
+  { 'name': 'approveWTON', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.' },
+  { 'name': 'approveERC20', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.' },
+  { 'name': 'claimTON', 'explanation': 'It allows param1 to claim param2 amount of TON.' },
+  { 'name': 'claimWTON', 'explanation': 'It allows param1 to claim param2 amount of WTON.' },
+  { 'name': 'claimERC20', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).' },
 ];
 
-const depositManagerABI = [];
-const seigManagerABI = [];
-const daoCommitteeABI = [];
-const daoVaultABI = [];
+const depositManagerABIOfTypeA = [];
+const seigManagerABIOfTypeA = [];
+const daoCommitteeABIOfTypeA = [];
+const daoVaultABIOfTypeA = [];
 
 (() => {
-  depositManagerFunctions.forEach(func => {
-    const f = depositManager.abi.find(f => f.name === func);
-    depositManagerABI.push(f);
+  depositManagerFunctionsOfTypeA.forEach(func => {
+    const f = depositManager.abi.find(f => f.name === func.name);
+    f.explanation = func.explanation;
+    depositManagerABIOfTypeA.push(f);
   });
 
-  seigManagerFunctions.forEach(func => {
-    const f = seigManager.abi.find(f => f.name === func);
-    seigManagerABI.push(f);
+  seigManagerFunctionsOfTypeA.forEach(func => {
+    const f = seigManager.abi.find(f => f.name === func.name);
+    f.explanation = func.explanation;
+    seigManagerABIOfTypeA.push(f);
   });
 
-  daoCommitteeFunctions.forEach(func => {
-    const f = committee.abi.find(f => f.name === func);
-    daoCommitteeABI.push(f);
+  daoCommitteeFunctionsOfTypeA.forEach(func => {
+    const f = committee.abi.find(f => f.name === func.name);
+    f.explanation = func.explanation;
+    daoCommitteeABIOfTypeA.push(f);
   });
 
-  daoVaultFunctions.forEach(func => {
-    const f = daoVault.abi.find(f => f.name === func);
-    daoVaultABI.push(f);
+  daoVaultFunctionsOfTypeA.forEach(func => {
+    const f = daoVault.abi.find(f => f.name === func.name);
+    f.explanation = func.explanation;
+    daoVaultABIOfTypeA.push(f);
   });
 })();
 
-module.exports.getContractABI = function (want) {
+module.exports.getContractABI = function (want, type='A') {
   if (!want) return [];
 
-  if (want === 'DepositManager') return depositManagerABI;
-  else if (want === 'SeigManager') return seigManagerABI;
-  else if (want === 'DAOCommittee') return daoCommitteeABI;
-  else if (want === 'DAOVault') return daoVaultABI;
-  else return [];
+  if (type === 'A') {
+    if (want === 'DepositManager') return depositManagerABIOfTypeA;
+    else if (want === 'SeigManager') return seigManagerABIOfTypeA;
+    else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeA;
+    else if (want === 'DAOVault') return daoVaultABIOfTypeA;
+    else return [];
+  } else {
+    return [];
+  }
 };
 
-module.exports.functionSignature  = function (contract, want) {
+module.exports.functionSignature  = function (contract, want, type='A') {
   if (!contract || !want) return '';
 
-  if (contract === 'DepositManager') return (depositManagerABI.find(f => f.name === want)).signature;
-  else if (contract === 'SeigManager') return (seigManagerABI.find(f => f.name === want)).signature;
-  else if (contract === 'DAOCommittee') return (daoCommitteeABI.find(f => f.name === want)).signature;
-  else if (contract === 'DAOVault') return (daoVaultABI.find(f => f.name === want)).signature;
-  else return '';
+  if (type === 'A') {
+    if (contract === 'DepositManager') return (depositManagerABIOfTypeA.find(f => f.name === want)).signature;
+    else if (contract === 'SeigManager') return (seigManagerABIOfTypeA.find(f => f.name === want)).signature;
+    else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeA.find(f => f.name === want)).signature;
+    else if (contract === 'DAOVault') return (daoVaultABIOfTypeA.find(f => f.name === want)).signature;
+    else return '';
+  } else {
+    return '';
+  }
 };
 
 module.exports.encodeParameters = function (typesArray, parameters) {
@@ -155,26 +169,28 @@ const decodeParameters = function (typesArray, hexString) {
 };
 module.exports.decodeParameters = decodeParameters;
 
-const getABIFromSignature = function (signature) {
+const getABIFromSignature = function (signature, type='A') {
   let abi;
 
-  abi = depositManagerABI.find(abi => abi.signature === signature);
-  if (abi) return abi;
+  if (type === 'A') {
+    abi = depositManagerABIOfTypeA.find(abi => abi.signature === signature);
+    if (abi) return abi;
 
-  abi = seigManagerABI.find(abi => abi.signature === signature);
-  if (abi) return abi;
+    abi = seigManagerABIOfTypeA.find(abi => abi.signature === signature);
+    if (abi) return abi;
 
-  abi = daoCommitteeABI.find(abi => abi.signature === signature);
-  if (abi) return abi;
+    abi = daoCommitteeABIOfTypeA.find(abi => abi.signature === signature);
+    if (abi) return abi;
 
-  abi = daoVaultABI.find(abi => abi.signature === signature);
-  if (abi) return abi;
+    abi = daoVaultABIOfTypeA.find(abi => abi.signature === signature);
+    if (abi) return abi;
 
-  if (!abi) {
-    console.log('bug'); // eslint-disable-line
+    if (!abi) {
+      console.log('bug'); // eslint-disable-line
+    }
+  } else {
+    return abi;
   }
-
-  return abi;
 };
 module.exports.getABIFromSignature = getABIFromSignature;
 

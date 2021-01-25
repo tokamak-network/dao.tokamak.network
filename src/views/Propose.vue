@@ -8,6 +8,7 @@
         <modal-propose :contract="currentContract"
                        :function-name="currentFunction"
                        :params="currentFunctionParams"
+                       :explanation="currentFunctionExplanation"
                        @on-closed="showModal=false; currentFunction = ''; currentFunctionParams = []"
         />
       </template>
@@ -44,7 +45,7 @@
     <div v-if="index === 0" class="box-container">
       <div>
         <div v-for="func in depositManagerFunctions" :key="func.name"
-             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
         >
           <box :function-name="func.name"
                :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -55,7 +56,7 @@
     <div v-if="index === 1" class="box-container">
       <div>
         <div v-for="func in seigManagerFunctions" :key="func.name"
-             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
         >
           <box :function-name="func.name"
                :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -66,7 +67,7 @@
     <div v-if="index === 2" class="box-container">
       <div>
         <div v-for="func in daoCommitteeFunctions" :key="func.name"
-             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
         >
           <box :function-name="func.name"
                :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -77,7 +78,7 @@
     <div v-if="index === 3" class="box-container">
       <div>
         <div v-for="func in daoVaultFunctions" :key="func.name"
-             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs;"
+             @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
         >
           <box :function-name="func.name"
                :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -110,6 +111,7 @@ export default {
 
       currentContract: '',
       currentFunction: '',
+      currentFunctionExplanation: '',
       currentFunctionParams: [],
 
       depositManagerFunctions: [],

@@ -4,7 +4,7 @@
          @click="close"
     >
     <div class="function">{{ functionName }}</div>
-    <div class="function-explanation">TODO: function explanation</div>
+    <div class="function-explanation">{{ explanation }}</div>
     <div class="argument-container">
       <div v-for="(param, index) in params" :key="param.name"
            class="argument"
@@ -72,6 +72,10 @@ export default {
     params: {
       type: Array,
       default: () => [],
+    },
+    explanation: {
+      type: String,
+      default: '',
     },
   },
   data () {
@@ -196,6 +200,8 @@ export default {
   }
 
   > .function-explanation {
+    width: 90%;
+
     font-family: Roboto;
     font-size: 14px;
     font-weight: normal;
