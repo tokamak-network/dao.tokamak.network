@@ -59,31 +59,31 @@ module.exports.getContracts = function (want, web3) {
 };
 
 const depositManagerFunctionsOfTypeA = [
-  { 'name': 'setGlobalWithdrawalDelay', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.' },
+  { 'name': 'setGlobalWithdrawalDelay', 'prettyName': '', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.' },
 ];
 const seigManagerFunctionsOfTypeA = [
-  { 'name': 'setPowerTONSeigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.' },
-  { 'name': 'setDaoSeigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.' },
-  { 'name': 'setPseigRate', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.' },
-  { 'name': 'setAdjustDelay', 'explanation': 'It decides how much time should be wait until new commission rate is applied.' },
-  { 'name': 'setMinimumAmount', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.' },
+  { 'name': 'setPowerTONSeigRate', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.' },
+  { 'name': 'setDaoSeigRate', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.' },
+  { 'name': 'setPseigRate', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.' },
+  { 'name': 'setAdjustDelay', 'prettyName': '', 'explanation': 'It decides how much time should be wait until new commission rate is applied.' },
+  { 'name': 'setMinimumAmount', 'prettyName': '', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.' },
 ];
 const daoCommitteeFunctionsOfTypeA = [
-  { 'name': 'setActivityRewardPerSecond', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.' },
-  { 'name': 'increaseMaxMember', 'explanation': 'It increases maximum number of Committee Members.' },
-  { 'name': 'reduceMemberSlot', 'explanation': 'It decreased maximum number of Committee Members.' },
-  { 'name': 'setQuorum', 'explanation': 'It sets minimum qurom for committee members to execute agenda.' },
-  { 'name': 'setCreateAgendaFees', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.' },
-  { 'name': 'setMinimumNoticePeriodSeconds', 'explanation': 'It sets minimum notice period of agenda. Per seconds.' },
-  { 'name': 'setMinimumVotingPeriodSeconds', 'explanation': 'It sets minimum vote period of agenda. Per seconds.' },
+  { 'name': 'setActivityRewardPerSecond', 'prettyName': '', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.' },
+  { 'name': 'increaseMaxMember', 'prettyName': '', 'explanation': 'It increases maximum number of Committee Members.' },
+  { 'name': 'reduceMemberSlot', 'prettyName': '', 'explanation': 'It decreased maximum number of Committee Members.' },
+  { 'name': 'setQuorum', 'prettyName': '', 'explanation': 'It sets minimum qurom for committee members to execute agenda.' },
+  { 'name': 'setCreateAgendaFees', 'prettyName': '', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.' },
+  { 'name': 'setMinimumNoticePeriodSeconds', 'prettyName': '', 'explanation': 'It sets minimum notice period of agenda. Per seconds.' },
+  { 'name': 'setMinimumVotingPeriodSeconds', 'prettyName': '', 'explanation': 'It sets minimum vote period of agenda. Per seconds.' },
 ];
 const daoVaultFunctionsOfTypeA = [
-  { 'name': 'approveTON', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.' },
-  { 'name': 'approveWTON', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.' },
-  { 'name': 'approveERC20', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.' },
-  { 'name': 'claimTON', 'explanation': 'It allows param1 to claim param2 amount of TON.' },
-  { 'name': 'claimWTON', 'explanation': 'It allows param1 to claim param2 amount of WTON.' },
-  { 'name': 'claimERC20', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).' },
+  { 'name': 'approveTON', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.' },
+  { 'name': 'approveWTON', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.' },
+  { 'name': 'approveERC20', 'prettyName': '', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.' },
+  { 'name': 'claimTON', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of TON.' },
+  { 'name': 'claimWTON', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of WTON.' },
+  { 'name': 'claimERC20', 'prettyName': '', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).' },
 ];
 
 const depositManagerABIOfTypeA = [];
