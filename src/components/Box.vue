@@ -4,7 +4,6 @@
     <div class="function-name"
          :style="[
            status === 'selected' ? { color: '#2a72e5' } : {},
-           status === 'unselected' ? { color: '#bfc2c4' } : {},
          ]"
     >
       {{ functionName }}
@@ -57,6 +56,10 @@ export default {
   &:hover {
     border: solid 1px #2a72e5;
     cursor: pointer;
+
+    // .function-name {
+    //   color: #2a72e5;
+    // }
   }
 
   > img {
@@ -73,6 +76,8 @@ export default {
     font-style: normal;
     letter-spacing: normal;
     text-align: left;
+
+    color: #434b52;
   }
 
   // > div {
