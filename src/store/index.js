@@ -228,12 +228,22 @@ export default new Vuex.Store({
       context.commit('SET_ACTIVITY_REWARD', activityReward);
 
       const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : '')); // check
       context.commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
       const myVote = [];
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
       const voteRate = (myVote.length / agendas.length) * 100;
+
+      // if (account !== '') {
+      //   agendas.forEach(agenda => {
+      //     myVote.map(function (vote) {
+      //       if (Number(vote.id) === agenda.agendaid) {
+      //         agenda = { ...agenda, ...vote };
+      //       }
+      //     });
+      //   });
+      // }
 
       context.commit('SET_MY_VOTE', myVote);
       context.commit('SET_VOTE_RATE', voteRate);
@@ -259,6 +269,9 @@ export default new Vuex.Store({
     getAgendaByID: (state) => (agendaId) => {
       const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
       return index > -1 ? state.agendas[index] : '';
+    },
+    getAgendas: (state) => {
+      return state.agendas;
     },
     getVotedListByID: (state) => (agendaId) => {
       const voted = [];

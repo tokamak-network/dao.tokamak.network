@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
 import Dropdown from '@/components/Dropdown.vue';
@@ -86,8 +86,11 @@ export default {
     ...mapState([
       'agendas',
     ]),
+    ...mapGetters([
+      'getAgendas',
+    ]),
     numAgenda (){
-      return this.openAgendas.length;
+      return this.agendas.length;
     },
     deployedDate () {
       return () => {
@@ -107,6 +110,14 @@ export default {
     this.cassify();
   },
   methods: {
+    showAgendas () {
+      // (this.openAgendas.length !== 0) ? return this.openAgendas : return this.agendas
+      if (this.openAgendas.length !==0 ) {
+        return this.openAgendas;
+      } else {
+        return this.agendas;
+      }
+    },
     cassify () {
       // console.log(this.agendas);
       this.openAgendas = this.agendas;
@@ -141,6 +152,7 @@ export default {
         filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
       }
       this.openAgendas = filteredAgenda;
+      this.showAgendas();
     },
     selectExecuted (item) {
       item === 'All' ? this.result = false : this.curExecCode = item, this.execute = true;
@@ -154,20 +166,19 @@ export default {
       item === 'All' ? this.result = false : this.curResultCode = item, this.result = true;
       this.agendaFilter();
     },
-    selectVoted (item) {
-      console.log(item);
-      // if (item === 'Result') {
-      //   this.openAgendas = this.agendas;
-      // } else {
-      //   let itemIndex;
-      //   switch (item) {
-      //   case 'Yes': itemIndex = 0; break;
-      //   case 'No': itemIndex = 1; break;
-      //   case 'Abstain': itemIndex = 2; break;
-      //   }
-      //   this.openAgendas = this.agendas.filter(agenda => (agenda.result === itemIndex));
-      // }
-    },
+    // selectVoted (item) {
+    // if (item === 'Result') {
+    //   this.openAgendas = this.agendas;
+    // } else {
+    //   let itemIndex;
+    //   switch (item) {
+    //   case 'Yes': itemIndex = 0; break;
+    //   case 'No': itemIndex = 1; break;
+    //   case 'Abstain': itemIndex = 2; break;
+    //   }
+    //   this.openAgendas = this.agendas.filter(agenda => (agenda.result === itemIndex));
+    // }
+    // },
   },
 };
 </script>
