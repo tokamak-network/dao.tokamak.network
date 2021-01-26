@@ -14,19 +14,20 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault2.json');
 
 const deployed = {
-  'TON'              : '0xeF2cd138De0c0e0369A0daf41A45b51d50D608B1',
-  'WTON'             : '0x73d950D6074Aa76f123903E040349b007F9d570e',
-  'Layer2Registry'   : '0xdA773c5f94F0573a9aCbAA0d4a0D9470cc9DC1f1',
-  'DepositManager'   : '0x3588F691C6E91a449CB8e82CaFA41A591e40229c',
-  'CoinageFactory'   : '0x80bD7dd5a760E0349780ca205865f31492143bCd',
-  'DaoVault'         : '0x648FC895B7019C13E00cC801A78d3105dfe37B37',
-  'SeigManager'      : '0xfB160cBb8e1665e230Ee421A31D02E0A5Da09172',
-  'PowerTON'         : '0x55914667b2487233FC7A68E5cA0CdBA708338E18',
-  'DAOVault2'        : '0x7C6A6188B5360530528C6eA64Fb8F4d5A8D406fc',
-  'DAOAgendaManager' : '0xa08883f1Bf4D70862C0f0D96233E556893986434',
-  'CandidateFactory' : '0xA35B64519B1feAcF4111F58bDa7288bBE3139aC9',
-  'DAOCommittee'     : '0x7F7551BBDa4fCe30462aD35f59B7fBf35b07219e',
-  'DAOCommitteeProxy': '0x8bF69cC968b81f62a2CDC72A8A7024C3E9fCE067',
+  'TON'              : '0xa68d07eF3254E96103B7dC3f4661D72b68c88683',
+  'WTON'             : '0x72a08Efb6c9c10dE7491CC837b114123b4DB9b32',
+  'Layer2Registry'   : '0xbB974DB3758Fd428058C7cf2384C9f5186264760',
+  'DepositManager'   : '0x727971475F71eC885bDDc0827499c22A6014a327',
+  'CoinageFactory'   : '0x1AAf1EEF5E5F34FDb2865Ca2989ebC3417122EAA',
+  'DaoVault'         : '0xD795C4CC9E37Ac49752020c0B7300648961c553d',
+  'SeigManager'      : '0xc7eF6F6fAbE5501b8E9643b833D2de35232B6eF8',
+  'PowerTON'         : '0x937E45a0d1aec6DA0a59C853260df99FE65AEa9A',
+  'DAOVault2'        : '0x4E1eDdaaAAEE692c63dbdcBc9526b4F288636D2b',
+  'DAOAgendaManager' : '0x98D44C2aE6Db972b8d35dB4E7047778b91DFc850',
+  'DAOCommittee'     : '0xDb0dD01CE5964A816f87211Abb0DBe1DFf25e3b5',
+  'CandidateFactory' : '0xe5281527AAfe9de68AD02d330E5Fdb6A1DD252b1',
+  'DAOCommitteeProxy': '0x1778Ad4A28C406Bab57742e1bdb4D873Db686A98',
+  'EtherToken'       : '0x15928e97bAf0324A714560fe20DCC57a8C8A89Cb',
 };
 
 module.exports.getContracts = function (want, web3) {
