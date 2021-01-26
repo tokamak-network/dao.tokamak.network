@@ -40,7 +40,7 @@
       <div class="agenda-info">
         {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
       </div>
-      <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
+      <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
       <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
       <div v-if="hide === true">
         <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
@@ -67,18 +67,14 @@ export default {
       hideAgendas: [],
       hideButton: '',
       hide: false,
-      execute: false,
-      status: false,
-      vote: false,
-      result: false,
-      executeCode: ['Executed', 'Not Executed'],
-      statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
-      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
-      voteCode: ['Yes', 'No', 'Abstain'],
-      curExecCode: '',
-      curStatCode: '',
-      curResultCode: '',
-      curVoteCode: '',
+      execute: [false, ''],
+      status: [false, ''],
+      vote: [false, ''],
+      result: [false, ''],
+      // executeCode: ['Executed', 'Not Executed'],
+      // statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
+      // resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
+      // voteCode: ['Yes', 'No', 'Abstain'],
       monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
@@ -87,14 +83,22 @@ export default {
       'agendas',
     ]),
     ...mapGetters([
-      'getAgendas',
+      'getAgendasByFilter',
+      'getAgendaByID',
     ]),
-    numAgenda (){
+    // getAgenda () {
+    //   return this.getAgendaByFilter(this.execute, this.status, this.vote, this.result);
+    // },
+    getAgenda () {
+      return this.getAgendaByID(0);
+    },
+    numAgenda () {
       return this.agendas.length;
     },
     deployedDate () {
       return () => {
         const latest = this.agendas[0];
+        if (!latest) return 0;
         const date = new Date(latest.tCreationDate * 1000);
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -105,11 +109,6 @@ export default {
         return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year + ', ' + hour + ':' + minutes;
       };
     },
-  },
-  created () {
-    this.cassify();
-  },
-  methods: {
     showAgendas () {
       // (this.openAgendas.length !== 0) ? return this.openAgendas : return this.agendas
       if (this.openAgendas.length !==0 ) {
@@ -118,8 +117,20 @@ export default {
         return this.agendas;
       }
     },
+  },
+  created () {
+    this.cassify();
+  },
+  methods: {
+    // showAgendas () {
+    //   // (this.openAgendas.length !== 0) ? return this.openAgendas : return this.agendas
+    //   if (this.openAgendas.length !==0 ) {
+    //     return this.openAgendas;
+    //   } else {
+    //     return this.agendas;
+    //   }
+    // },
     cassify () {
-      // console.log(this.agendas);
       this.openAgendas = this.agendas;
       // if (this.agendas.length > 5) {
       //   this.openAgendas = this.agendas.slice(0, 5);
@@ -155,18 +166,18 @@ export default {
       this.showAgendas();
     },
     selectExecuted (item) {
-      item === 'All' ? this.result = false : this.curExecCode = item, this.execute = true;
+      item === 'All' ? this.execute[0] = false : this.execute[1] = item, this.execute[0] = true;
       this.agendaFilter();
     },
     selectStatus (item) {
-      item === 'All' ? this.status = false : this.curStatCode = item, this.status = true;
+      item === 'All' ? this.status[0] = false : this.curStatCode[1] = item, this.status[0] = true;
       this.agendaFilter();
     },
     selectResult (item) {
-      item === 'All' ? this.result = false : this.curResultCode = item, this.result = true;
+      item === 'All' ? this.result[0] = false : this.curResultCode[1] = item, this.result[0] = true;
       this.agendaFilter();
     },
-    // selectVoted (item) {
+    selectVoted () {
     // if (item === 'Result') {
     //   this.openAgendas = this.agendas;
     // } else {
@@ -178,7 +189,7 @@ export default {
     //   }
     //   this.openAgendas = this.agendas.filter(agenda => (agenda.result === itemIndex));
     // }
-    // },
+    },
   },
 };
 </script>

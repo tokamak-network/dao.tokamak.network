@@ -13,12 +13,17 @@
       /> -->
     </div>
     <div class="divider" />
-    <agenda-comment v-for="(comment, index) in comments" :key="index" :contents="comment" />
+    <agenda-comment v-for="comment in comments(agendaId)" :key="comment.transactionHash"
+                    :voted-at="comment.blockTimestamp"
+                    :vote="comment.data.voting"
+                    :voter="comment.data.from"
+                    :comment="comment.data.comment"
+    />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import AgendaComment from '@/components/AgendaCommentComponent.vue';
 // import Dropdown from '@/components/Dropdown.vue';
 
@@ -29,24 +34,28 @@ export default {
   },
   data () {
     return {
-      comments : [],
+      agendaId: -1,
     };
   },
   computed: {
     ...mapState([
       'voteCasted',
     ]),
+    ...mapGetters([
+      'comments',
+    ]),
     numComments () {
-      return this.comments.length;
-    },
-    classify () {
-      return () => {
-        this.voteCasted.forEach(async casted => casted.data.id === this.$route.params.address ? this.comments.push(casted.data) : 0);
-      };
+      return this.comments(this.agendaId) ? this.comments(this.agendaId).length : 0;
     },
   },
-  created () {
-    this.classify();
+  watch: {
+    '$route.params.id': {
+      handler: async function () {
+        this.agendaId = this.$route.params.id;
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 };
 </script>

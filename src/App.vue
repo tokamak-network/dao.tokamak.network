@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Header from '@/containers/Header.vue';
 import Footer from '@/containers/Footer.vue';
 import MobileHeader from '@/containers/MobileHeader.vue';
@@ -22,8 +23,31 @@ export default {
     'mobile-header-container': MobileHeader,
     'mobile-footer-container': MobileFooter,
   },
+  data () {
+    return {
+      polling: null,
+    };
+  },
+  computed: {
+    ...mapState([
+      'account',
+      'web3',
+    ]),
+  },
   created () {
     this.$store.dispatch('launch');
+
+    this.poll();
+  },
+  methods: {
+    poll () {
+      this.polling = setInterval(() => {
+        if (this.account) {
+          this.$store.dispatch('launch');
+          this.$store.dispatch('connectEthereum', this.web3);
+        }
+      }, 60000); // 1m
+    },
   },
 };
 </script>

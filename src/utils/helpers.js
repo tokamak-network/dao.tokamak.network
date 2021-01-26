@@ -31,6 +31,10 @@ export function date1 (timestamp) {
   return monthNames[parseInt(month)] + ' ' + day + ', ' + year;
 }
 
+export function date2 (timestamp) {
+  return moment.utc(timestamp*1000).local().format('MMM D, YYYY, HH:mm');
+}
+
 export function fromNow (timestamp, suffix=false) {
   return moment.unix(timestamp).fromNow(suffix);
 }
@@ -66,9 +70,11 @@ export function padLeft (str, characterAmount) {
 }
 
 export function toWei (amount) {
+  if (!amount) return 0;
   return _TON(amount).toFixed('wei');
 }
 
 export function toRay (amount) {
+  if (!amount) return 0;
   return _WTON(amount).toFixed('ray');
 }

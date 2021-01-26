@@ -3,9 +3,9 @@
     <card-container :title="'Your Vote'">
       <template #body>
         <div class="label">
-          <span>You</span>
-          <span class="blue"> Voted </span>
-          <span>for this Slot</span>
+          <span>You Voted for this Slot</span>
+          <!-- <span class="blue"> Voted </span>
+          <span>for this Slot</span> -->
         </div>
         <div class="divide" />
         <div class="content">

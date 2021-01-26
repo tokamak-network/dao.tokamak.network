@@ -25,7 +25,7 @@
       </div>
       <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
       <div class="selector">
-        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
+        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
         <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
       </div>

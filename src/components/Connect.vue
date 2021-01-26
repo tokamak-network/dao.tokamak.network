@@ -52,11 +52,6 @@ export default {
       return parseInt(this.account.slice(2, 10), 16);
     },
   },
-  watch: {
-    pendingTx (tx) {
-      tx ? this.deleteIcon() : this.setIcon();
-    },
-  },
   methods: {
     async connect () {
       if (typeof window.ethereum !== 'undefined') {
@@ -65,7 +60,6 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           await this.$store.dispatch('connectEthereum', web3);
-          await this.$store.dispatch('setAgendas');
           this.setIcon();
         } catch (e) {
           // User deny to connect MetaMask wallet.
@@ -76,7 +70,6 @@ export default {
             this.$store.dispatch('disconnectEthereum');
           } else {
             await this.$store.dispatch('connectEthereum', web3);
-            await this.$store.dispatch('setAgendas');
             this.setIcon();
           }
         };
@@ -97,12 +90,6 @@ export default {
           iconEle.removeChild(iconEle.lastElementChild);
         }
         iconEle.append(icon);
-      }
-    },
-    deleteIcon () {
-      const iconEle = this.$refs.icon;
-      if (iconEle) {
-        iconEle.removeChild(iconEle.lastElementChild);
       }
     },
     etherscan () {

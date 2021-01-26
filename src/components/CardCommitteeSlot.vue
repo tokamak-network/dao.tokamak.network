@@ -36,7 +36,7 @@
       <span>{{ occupied() ? fromNow(members[slotnumber].info.memberJoinedTime) : '-' }}</span>
     </div>
     <div class="button">
-      <button-comp :name="'View Details'"
+      <button-comp :name="'View Detail'"
                    :type="'primary'"
                    :status="occupied() ? '' : 'disabled'"
                    class="left"
