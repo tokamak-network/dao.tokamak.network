@@ -131,6 +131,29 @@ module.exports.getContractABI = function (want, type='A') {
   }
 };
 
+module.exports.getContractABIFromAddress = function (address, type='A') {
+  if (!address) return [];
+  address = address.toLowerCase();
+
+  if (type === 'A') {
+    if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
+    else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeA;
+    else if (address === deployed.DAOVault2.toLowerCase()) return daoVaultABIOfTypeA;
+    else return [];
+  } else {
+    return [];
+  }
+};
+
+module.exports.getContractAddress = function (target) {
+  const address = deployed[target];
+  if (!address) {
+    console.log('bug'); // eslint-disable-line
+  }
+  return address ? address : '';
+};
+
 module.exports.functionSignature  = function (contract, want, type='A') {
   if (!contract || !want) return '';
 
@@ -216,6 +239,7 @@ module.exports.parseAgendaBytecode = function (tx) {
     if (!abi) {
       console.log('bug'); // eslint-disable-line
       onChainEffects.push({
+        target: '',
         name: '',
         types: [],
         bytecode: '',
@@ -224,6 +248,7 @@ module.exports.parseAgendaBytecode = function (tx) {
       continue;
     }
 
+    const target = targets[i];
     const name = abi.name;
     const types = [];
     abi.inputs.forEach(input => {
@@ -232,7 +257,7 @@ module.exports.parseAgendaBytecode = function (tx) {
     const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
     const values = decodeParameters(types, bytecode);
 
-    const onChainEffect = { name, types, values };
+    const onChainEffect = { target, name, types, values };
     onChainEffects.push(onChainEffect);
   }
   return onChainEffects;

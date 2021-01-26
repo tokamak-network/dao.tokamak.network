@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getContracts, functionSignature, encodeParameters, encoded } from '@/utils/contracts';
+import { getContracts, functionSignature, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 
@@ -135,11 +135,12 @@ export default {
       const data = unmarshalString(params);
 
       const bytecode = selector.concat(data);
+      const target = getContractAddress(this.contract);
 
       // TODO: considering combination of functions.
       const param = encodeParameters(
         ['address[]', 'uint256', 'uint256', 'bytes[]'],
-        [[agendaManager._address], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],
+        [[target], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],
       );
 
       const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)
