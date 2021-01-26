@@ -52,11 +52,6 @@ export default {
       return parseInt(this.account.slice(2, 10), 16);
     },
   },
-  watch: {
-    pendingTx (tx) {
-      tx ? this.deleteIcon() : this.setIcon();
-    },
-  },
   methods: {
     async connect () {
       if (typeof window.ethereum !== 'undefined') {
@@ -95,12 +90,6 @@ export default {
           iconEle.removeChild(iconEle.lastElementChild);
         }
         iconEle.append(icon);
-      }
-    },
-    deleteIcon () {
-      const iconEle = this.$refs.icon;
-      if (iconEle) {
-        iconEle.removeChild(iconEle.lastElementChild);
       }
     },
     etherscan () {

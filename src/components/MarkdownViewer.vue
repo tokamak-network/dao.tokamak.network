@@ -34,5 +34,6 @@ export default {
     font-style: normal;
     letter-spacing: normal;
   }
+
 }
 </style>
