@@ -52,7 +52,7 @@ export async function getAgendas () {
 
 export async function getVotersByCandidate (layer2) {
   const res = await instance.get(`/balances/stakeof?layer2=${layer2}`);
-  if (!res || res.data.data.length === 0) {
+  if (!res || res.data.datas.length === 0) {
     return [];
   }
   return res.data.datas;
