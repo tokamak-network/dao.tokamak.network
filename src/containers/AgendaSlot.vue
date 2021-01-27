@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
 import Dropdown from '@/components/Dropdown.vue';
@@ -81,10 +81,6 @@ export default {
   computed: {
     ...mapState([
       'agendas',
-    ]),
-    ...mapGetters([
-      'getAgendasByFilter',
-      'getAgendaByID',
     ]),
     numAgenda () {
       return this.openAgendas.length + this.hideAgendas.length;
@@ -120,16 +116,16 @@ export default {
   },
   methods: {
     classify (agendas) {
-      // this.openAgendas = this.agendas;
       if (agendas.length > 5) {
         this.hideAgendas = agendas.slice(5, agendas.length);
         this.openAgendas = agendas.slice(0, 5);
         this.hideButton = 'View more agenda (' + this.hideAgendas.length + ')';
+      } else {
+        this.openAgendas = agendas;
+        this.hideAgendas = [];
       }
-
     },
     hideSection () {
-      console.log(this.hideAgendas);
       this.hide = this.hide ? false : true;
     },
     agendaFilter () {
@@ -150,43 +146,28 @@ export default {
       if (this.result[0] === true) {
         const stateCode = this.resultCode.indexOf(this.result[1]);
         filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
+        console.log(filteredAgenda);
       }
       // console.log(filteredAgenda);
-      // console.log(this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result !== true);
-      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result !== true) {
+      // console.log('result', this.result[0]);
+      // console.log('filter', this.execute[0] !== true && this.status[0] !== true && this.result[0] !== true && this.vote[0] !== true);
+      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result[0] !== true) {
+        console.log(filteredAgenda);
         filteredAgenda = this.agendas;
       }
-      // this.openAgendas = filteredAgenda;
+      // console.log('filtering result', filteredAgenda);
       this.classify(filteredAgenda);
     },
     selectExecuted (item) {
-      if (item === 'All') {
-        this.execute[0] = false;
-      } else {
-        this.execute[1] = item;
-        this.execute[0] = true;
-      }
+      item !== 'All' ? this.execute = [true, item] : this.execute[0] = false ;
       this.agendaFilter();
     },
     selectStatus (item) {
       item !== 'All' ? this.status = [true, item] : this.status[0] = false ;
-      console.log(this.status);
-      // if (item === 'All') {
-      //   this.status[0] = false;
-      // } else {
-      //   this.status[1] = item;
-      //   this.status[0] = true;
-      // }
       this.agendaFilter();
     },
     selectResult (item) {
-      // item === 'All' ? this.result[0] = false : this.result[1] = item, this.result[0] = true;
-      if (item === 'All') {
-        this.result[0] = false;
-      } else {
-        this.result[1] = item;
-        this.result[0] = true;
-      }
+      item !== 'All' ? this.result = [true, item] : this.result[0] = false ;
       this.agendaFilter();
     },
     selectVoted () {

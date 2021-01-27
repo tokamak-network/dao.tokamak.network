@@ -191,9 +191,9 @@ export default new Vuex.Store({
     },
     async launch ({ dispatch }) {
       await dispatch('setAgendas');
-      await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
+      await dispatch('setMembersAndNonmembers');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', state.web3);
@@ -231,6 +231,7 @@ export default new Vuex.Store({
       candidates.forEach(
         candidate => (addressMembers.includes(candidate.operator.toLowerCase()) ? members : nonmembers).push(candidate),
       );
+      console.log(members);
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
@@ -272,10 +273,12 @@ export default new Vuex.Store({
           myVote.map(function (vote) {
             if (Number(vote.id) === agenda.agendaid) {
               agenda = { ...agenda, ...vote };
+              agendas.push(agenda);
             }
           });
         });
       }
+      console.log(agendas);
 
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);
@@ -316,44 +319,10 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    getAgendasByFilter: (state) => (execute, status, vote, result) => {
-      // const executeCode = ['Executed', 'Not Executed'];
-      const statusCode = ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'];
-      const resultCode = ['Pending', 'Accepted', 'Reject', 'Dismiss'];
-      // const voteCode = ['Yes', 'No', 'Abstain'];
-      // execute=[bool, StatusCode]
-      const agendas = state.agendas;
-      // console.log(status);
-      let filteredAgenda = [];
-      if (execute[0] === true) {
-        let stateCode;
-        execute[1] === 'Executed' ? stateCode = true : stateCode = false;
-        filteredAgenda = agendas.filter(agenda => (agenda.executed === stateCode));
-      }
-      if (status[0] === true) {
-        const stateCode = statusCode.indexOf(status[1]);
-        filteredAgenda.length === 0 ? filteredAgenda = agendas.filter(agenda => (agenda.status === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-      }
-      // if (this.vote === true) {
-      //   const statusCode = this.getVote();
-      //   filteredAgenda === [] ? filteredAgenda = this.agendas.filter(agenda => (agenda.vote === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-      // }
-      if (result[0] === true) {
-        const stateCode = resultCode.indexOf(result[1]);
-        filteredAgenda.length === 0 ? filteredAgenda = agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-      }
-
-      filteredAgenda.length === 0 ? filteredAgenda = agendas : '';
-      // console.log(filteredAgenda);
-      return filteredAgenda;
-    },
     getAgendaByID: (state) => (agendaId) => {
       if (agendaId === -1) return {};
       const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
       return index > -1 ? state.agendas[index] : {};
-    },
-    getAgendas: (state) => {
-      return state.agendas;
     },
     getVotedListByID: (state) => (agendaId) => {
       const voted = [];
