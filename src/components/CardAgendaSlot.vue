@@ -177,9 +177,6 @@ export default {
       return 'disabled';
     },
   },
-  created () {
-    console.log(this.title);
-  },
   methods: {
     votedResult () {
       if (this.agenda.voting !== undefined) {
