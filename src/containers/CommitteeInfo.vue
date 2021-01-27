@@ -5,8 +5,8 @@
                     :width="'300'"
     /> -->
     <info-committee :title="'Description'" :content="'tokamak netwokr operator1'" :type="'description'" />
-    <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).operator : '-'" :type="'address'" />
-    <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).layer2 : '-'" :type="'address'" />
+    <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" />
+    <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" />
     <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
     <!-- <info-committee :title="'Commit Count'" :content="'66'" /> -->
     <!-- <info-committee :title="'Recent Commit'" :content="'4시간 전'" /> -->
@@ -86,7 +86,7 @@ export default {
 
       if (candidate) {
         const daoCommittee = getContracts('DAOCommittee', this.web3);
-        this.amount = await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
+        this.amount = await daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call();
       }
     },
     WTON (amount) {

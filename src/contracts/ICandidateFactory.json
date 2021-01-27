@@ -9,18 +9,23 @@
           "type": "address"
         },
         {
+          "internalType": "bool",
+          "name": "_isLayer2Candidate",
+          "type": "bool"
+        },
+        {
           "internalType": "string",
           "name": "_name",
           "type": "string"
         },
         {
           "internalType": "address",
-          "name": "_seigManager",
+          "name": "_committee",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_layer2registry",
+          "name": "_seigManager",
           "type": "address"
         }
       ],
@@ -36,7 +41,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_candidate\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_seigManager\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_layer2registry\",\"type\":\"address\"}],\"name\":\"deploy\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol\":\"ICandidateFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol\":{\"keccak256\":\"0x2bdad9040702af7fd0c33a4882856d96b8128918bcef3b24dfe8ad9015405d28\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a2c5e7e23fe55cf4ae8d4642d8290d9ec1d2f3ab792bd7e6ff203d61db037fa0\",\"dweb:/ipfs/QmUK8yL5QLnoMJp6ugjFjGcXhrBrqxk3aVtTHxYcptWTMY\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_candidate\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_isLayer2Candidate\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_committee\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_seigManager\",\"type\":\"address\"}],\"name\":\"deploy\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol\":\"ICandidateFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol\":{\"keccak256\":\"0x78b18cab04be53ace0d77fb2f6e1c61e76bb855f38e29e9dae809894cdb0ce27\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3d16a8385b986c32980cdd809b71327b2cf5028694770e74565a319f015b5097\",\"dweb:/ipfs/QmUWScNY9Gi3p9hE7L9R3pjWNutMwW6ochTs6gF8qMoWXi\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -44,21 +49,21 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\n\ninterface ICandidateFactory {\n    function deploy(address _candidate, string memory _name, address _seigManager, address _layer2registry) external returns (address);\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.6;\n\ninterface ICandidateFactory {\n    function deploy(\n        address _candidate,\n        bool _isLayer2Candidate,\n        string memory _name,\n        address _committee,\n        address _seigManager\n    )\n        external\n        returns (address);\n}\n",
   "sourcePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol",
   "ast": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol",
     "exportedSymbols": {
       "ICandidateFactory": [
-        4389
+        4564
       ]
     },
-    "id": 4390,
+    "id": 4565,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4375,
+        "id": 4548,
         "literals": [
           "solidity",
           "^",
@@ -66,7 +71,7 @@
           ".6"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:10"
+        "src": "32:23:9"
       },
       {
         "abstract": false,
@@ -74,33 +79,33 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 4389,
+        "id": 4564,
         "linearizedBaseContracts": [
-          4389
+          4564
         ],
         "name": "ICandidateFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "functionSelector": "37d5af5f",
-            "id": 4388,
+            "functionSelector": "e64a31f6",
+            "id": 4563,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deploy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4384,
+              "id": 4559,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4377,
+                  "id": 4550,
                   "mutability": "mutable",
                   "name": "_candidate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "107:18:10",
+                  "scope": 4563,
+                  "src": "116:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -108,10 +113,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4376,
+                    "id": 4549,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "107:7:10",
+                    "src": "116:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -122,12 +127,38 @@
                 },
                 {
                   "constant": false,
-                  "id": 4379,
+                  "id": 4552,
+                  "mutability": "mutable",
+                  "name": "_isLayer2Candidate",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4563,
+                  "src": "144:23:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 4551,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "144:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4554,
                   "mutability": "mutable",
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "127:19:10",
+                  "scope": 4563,
+                  "src": "177:19:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -135,10 +166,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 4378,
+                    "id": 4553,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "127:6:10",
+                    "src": "177:6:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -148,12 +179,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4381,
+                  "id": 4556,
                   "mutability": "mutable",
-                  "name": "_seigManager",
+                  "name": "_committee",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "148:20:10",
+                  "scope": 4563,
+                  "src": "206:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -161,10 +192,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4380,
+                    "id": 4555,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "148:7:10",
+                    "src": "206:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -175,12 +206,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4383,
+                  "id": 4558,
                   "mutability": "mutable",
-                  "name": "_layer2registry",
+                  "name": "_seigManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "170:23:10",
+                  "scope": 4563,
+                  "src": "234:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -188,10 +219,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4382,
+                    "id": 4557,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "170:7:10",
+                    "src": "234:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -201,20 +232,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "106:88:10"
+              "src": "106:154:9"
             },
             "returnParameters": {
-              "id": 4387,
+              "id": 4562,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4386,
+                  "id": 4561,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "213:7:10",
+                  "scope": 4563,
+                  "src": "295:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -222,10 +253,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4385,
+                    "id": 4560,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "213:7:10",
+                    "src": "295:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -235,34 +266,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "212:9:10"
+              "src": "294:9:9"
             },
-            "scope": 4389,
-            "src": "91:131:10",
+            "scope": 4564,
+            "src": "91:213:9",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 4390,
-        "src": "57:167:10"
+        "scope": 4565,
+        "src": "57:249:9"
       }
     ],
-    "src": "32:193:10"
+    "src": "32:275:9"
   },
   "legacyAST": {
     "absolutePath": "/Users/sgnoo/Workspace/tokamak-dao-contracts/contracts/interfaces/ICandidateFactory.sol",
     "exportedSymbols": {
       "ICandidateFactory": [
-        4389
+        4564
       ]
     },
-    "id": 4390,
+    "id": 4565,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4375,
+        "id": 4548,
         "literals": [
           "solidity",
           "^",
@@ -270,7 +301,7 @@
           ".6"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:10"
+        "src": "32:23:9"
       },
       {
         "abstract": false,
@@ -278,33 +309,33 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 4389,
+        "id": 4564,
         "linearizedBaseContracts": [
-          4389
+          4564
         ],
         "name": "ICandidateFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "functionSelector": "37d5af5f",
-            "id": 4388,
+            "functionSelector": "e64a31f6",
+            "id": 4563,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deploy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4384,
+              "id": 4559,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4377,
+                  "id": 4550,
                   "mutability": "mutable",
                   "name": "_candidate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "107:18:10",
+                  "scope": 4563,
+                  "src": "116:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -312,10 +343,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4376,
+                    "id": 4549,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "107:7:10",
+                    "src": "116:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -326,12 +357,38 @@
                 },
                 {
                   "constant": false,
-                  "id": 4379,
+                  "id": 4552,
+                  "mutability": "mutable",
+                  "name": "_isLayer2Candidate",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4563,
+                  "src": "144:23:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 4551,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "144:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4554,
                   "mutability": "mutable",
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "127:19:10",
+                  "scope": 4563,
+                  "src": "177:19:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -339,10 +396,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 4378,
+                    "id": 4553,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "127:6:10",
+                    "src": "177:6:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -352,12 +409,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4381,
+                  "id": 4556,
                   "mutability": "mutable",
-                  "name": "_seigManager",
+                  "name": "_committee",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "148:20:10",
+                  "scope": 4563,
+                  "src": "206:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -365,10 +422,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4380,
+                    "id": 4555,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "148:7:10",
+                    "src": "206:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -379,12 +436,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4383,
+                  "id": 4558,
                   "mutability": "mutable",
-                  "name": "_layer2registry",
+                  "name": "_seigManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "170:23:10",
+                  "scope": 4563,
+                  "src": "234:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -392,10 +449,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4382,
+                    "id": 4557,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "170:7:10",
+                    "src": "234:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -405,20 +462,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "106:88:10"
+              "src": "106:154:9"
             },
             "returnParameters": {
-              "id": 4387,
+              "id": 4562,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4386,
+                  "id": 4561,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4388,
-                  "src": "213:7:10",
+                  "scope": 4563,
+                  "src": "295:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -426,10 +483,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4385,
+                    "id": 4560,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "213:7:10",
+                    "src": "295:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -439,20 +496,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "212:9:10"
+              "src": "294:9:9"
             },
-            "scope": 4389,
-            "src": "91:131:10",
+            "scope": 4564,
+            "src": "91:213:9",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 4390,
-        "src": "57:167:10"
+        "scope": 4565,
+        "src": "57:249:9"
       }
     ],
-    "src": "32:193:10"
+    "src": "32:275:9"
   },
   "compiler": {
     "name": "solc",
@@ -460,7 +517,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.1",
-  "updatedAt": "2021-01-20T01:55:31.122Z",
+  "updatedAt": "2021-01-26T09:02:06.567Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

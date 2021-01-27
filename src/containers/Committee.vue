@@ -68,7 +68,7 @@ export default {
       'candidate',
     ]),
     isMember () {
-      return this.members.find(member => member.layer2.toLowerCase() === this.candidate(this.address).layer2.toLowerCase());
+      return this.members.find(member => member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase());
     },
   },
   created () {
@@ -82,24 +82,24 @@ export default {
       return fromNow(timestamp, true);
     },
     prev () {
-      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      let index = this.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === 0) {
         return;
       }
       index--;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
+      this.$router.push(({ path: `/election/${this.candidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
     next () {
       const max = this.candidates.length;
-      let index = this.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(this.address.toLowerCase());
+      let index = this.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === max - 1) {
         return;
       }
       index++;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].layer2}` }));
+      this.$router.push(({ path: `/election/${this.candidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
   },

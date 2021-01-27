@@ -13,7 +13,7 @@
                class="body"
           >
             <div>{{ index + 1 }}</div>
-            <div>{{ data.layer2 | hexSlicer }}</div>
+            <div>{{ data.candidateContract | hexSlicer }}</div>
             <div>{{ data.myVotes | WTON }} TON</div>
           </div>
         </div>

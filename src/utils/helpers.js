@@ -78,3 +78,9 @@ export function toRay (amount) {
   if (!amount) return 0;
   return _WTON(amount).toFixed('ray');
 }
+
+export function pad (n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
