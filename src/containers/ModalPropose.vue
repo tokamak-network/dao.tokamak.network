@@ -50,6 +50,7 @@
 import { getContracts, functionSignature, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
+import web3Utils from 'web3-utils';
 
 import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
@@ -98,6 +99,11 @@ export default {
       this.$emit('on-closed');
     },
     async propose () {
+      const BN = web3Utils.BN;
+      if ((new BN(this.createAgendaFee)).cmp(new BN(this.tonBalance)) === 1) {
+        return alert('Please check your TON amount!');
+      }
+
       const account = this.account.toLowerCase();
 
       const ton = getContracts('TON', this.web3);
