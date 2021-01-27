@@ -48,10 +48,10 @@ export default {
       await daoCommitteeProxy.methods.claimActivityReward().send({
         from: this.account,
       }).on('transactionHash', async (hash) => {
-        alert(hash);
+        this.$store.commit('SET_PENDING_TX', hash);
         this.close();
-      }).on('receipt', (receipt) => {
-        alert(receipt);
+      }).on('receipt', () => {
+        this.$store.commit('SET_PENDING_TX', '');
         this.$store.dispatch('setAgendas');
         this.close();
       });

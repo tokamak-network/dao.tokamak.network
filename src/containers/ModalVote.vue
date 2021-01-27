@@ -49,8 +49,10 @@
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 
+// import Web3 from 'web3';
 import { mapState } from 'vuex';
 import { getContracts } from '@/utils/contracts';
+import candidate from '../contracts/Candidate.json';
 
 export default {
   components: {
@@ -74,6 +76,7 @@ export default {
       'account', // TODO: use nonmembers
       'web3',
       'members',
+      'candidates',
     ]),
   },
   methods: {
@@ -90,7 +93,8 @@ export default {
       }
     },
     async vote () {
-      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      // const daoCommittee = getContracts('Candidate', this.web3);
       // const gasLimit = await daoCommittee.methods.castVote(
       //   this.id,
       //   this.choice,
@@ -99,7 +103,10 @@ export default {
       //   from: this.account,
       // });
 
-      await daoCommittee.methods.castVote(
+      const candidateContract = await committeeProxy.methods.candidateContract(this.account).call();
+      const Candidate = new this.web3.eth.Contract(candidate.abi, candidateContract);
+
+      await Candidate.methods.castVote(
         this.id,
         this.choice,
         this.comment,
@@ -107,30 +114,13 @@ export default {
         from: this.account,
         // gasLimit: Math.floor(gasLimit * 1.2),
       }).on('transactionHash', async (hash) => {
-        alert(hash);
+        this.$store.commit('SET_PENDING_TX', hash);
         this.close();
-      }).on('receipt', (receipt) => {
-        alert(receipt);
+      }).on('receipt', () => {
         this.$store.dispatch('setAgendas');
+        this.$store.commit('SET_PENDING_TX', '');
         this.close();
       });
-      // .on('receipt', (receipt) => {
-      //   if (receipt.status) {
-      //     this.$notify({
-      //       group: 'confirmed',
-      //       title: 'Transaction is confirmed',
-      //       type: 'success',
-      //       duration: 10000,
-      //     });
-      //   } else {
-      //     this.$notify({
-      //       group: 'reverted',
-      //       title: 'Transaction is reverted',
-      //       type: 'error',
-      //       duration: 10000,
-      //     });
-      //   }
-      // });
       this.close();
     },
   },

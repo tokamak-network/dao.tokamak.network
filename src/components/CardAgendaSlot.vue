@@ -35,9 +35,8 @@
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
         />
-        <div class="vote-status">
-          <div v-if="voted !== true">{{ votedResult() }}</div>
-          <div v-else-if="voted === true" class="vote-selected">{{ votedResult() }}</div>
+        <div class="vote-status" :style="voteResultStyle">
+          {{ votedResult() }}
         </div>
       </div>
       <div v-if="agenda.executed === false" class="right-side">
@@ -60,10 +59,8 @@ import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { getContracts } from '@/utils/contracts';
-
-// import moment from 'moment';
 
 export default {
   components: {
@@ -87,7 +84,6 @@ export default {
         'buttonStatus': 'disabled',
       },
       choice: '',
-      voted: true,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       showModal: false,
     };
@@ -100,6 +96,17 @@ export default {
       'myVote',
       'voteCasted',
     ]),
+    ...mapGetters([
+      'agendaVoteResult',
+    ]),
+    voteResultStyle () {
+      if (this.agenda.voting !== undefined) {
+        return {
+          'color': '#2a72e5',
+        };
+      }
+      return 0;
+    },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
     },
@@ -159,29 +166,26 @@ export default {
       return 'disabled';
     },
   },
+  // created () {
+  //   this.votedResult();
+  // },
+  // beforeUpdate () {
+  //   this.votedResult();
+  // },
   methods: {
-    select (item) {
-      this.choice = item;
-      this.voted = true;
-      this.buttonClass.buttonStatus = '';
-    },
     votedResult () {
-      for (const vote of this.myVote) {
       // console.log(vote[2]);
-        if (Number(vote[1]) === this.agenda.agendaid) {
-          switch (vote[2]) {
-          case '0': return 'You have voted to Abstain';
-          case '1': return 'You have voted Yes';
-          case '2': return 'You have voted No';
-          }
+      if (this.agenda.voting !== undefined) {
+        switch (this.agenda.voting) {
+        case '0': return 'You have voted to Abstain';
+        case '1': return 'You have voted Yes';
+        case '2': return 'You have voted No';
         }
+      } else {
+        return 'You have not voted';
       }
-      this.comments();
-      return 'You have not voted';
     },
-    comments () {
-      this.voted = false;
-    },
+
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {
         const operator = [];

@@ -213,11 +213,11 @@ export default new Vuex.Store({
       const addressMembers = (await Promise.all(getMembersProm)).map(member => member.toLowerCase());
 
       const getVotesProm = [];
-      candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call()));
+      candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
       const votes = await Promise.all(getVotesProm);
 
       const getInfosProm = [];
-      candidates.forEach(candidate => getInfosProm.push(daoCommittee.methods.candidateInfos(candidate.operator).call()));
+      candidates.forEach(candidate => getInfosProm.push(daoCommittee.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
 
       for (let i = 0; i < candidates.length; i++) {
@@ -231,7 +231,7 @@ export default new Vuex.Store({
       candidates.forEach(
         candidate => (addressMembers.includes(candidate.candidate.toLowerCase()) ? members : nonmembers).push(candidate),
       );
-      console.log(members);
+
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
@@ -241,7 +241,12 @@ export default new Vuex.Store({
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
       const daoCommittee = getContracts('DAOCommittee', web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
       const account = state.account;
+
+      // const candidateContract = await committeeProxy.methods.candidateContract(account).call();
+
       const [
         agendas,
         events,
@@ -250,35 +255,40 @@ export default new Vuex.Store({
         await getAgendaVoteCasted(),
       ]);
 
-      let activityReward;
+      const voteCasted = [];
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
+      const myVote = [];
+      let activityReward, candidateContract;
       if (account !== '') {
-        [ activityReward ] = await Promise.all([await daoCommittee.methods.getClaimableActivityReward(account).call()]);
+        [
+          activityReward,
+          candidateContract,
+        ] = await Promise.all([
+          await daoCommittee.methods.getClaimableActivityReward(account).call(),
+          await committeeProxy.methods.candidateContract(account).call(),
+        ]);
         activityReward = _TON(activityReward, 'wei').toString();
+        voteCasted.forEach(vote => (vote.from === candidateContract.toLowerCase() ? myVote.push(vote.data) : '')); // check
       } else {
         activityReward = '0 TON';
       }
 
       commit('SET_ACTIVITY_REWARD', activityReward);
-
-      const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
       commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
-      const myVote = [];
-      voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
       const voteRate = (myVote.length / agendas.length) * 100;
 
       if (account !== '') {
         agendas.forEach(agenda => {
           myVote.map(function (vote) {
             if (Number(vote.id) === agenda.agendaid) {
-              agenda = { ...agenda, ...vote };
-              agendas.push(agenda);
+              const index = agendas.indexOf(agenda);
+              const agendaWithVote = { ...agenda, ...vote };
+              agendas.splice(index, 1, agendaWithVote);
             }
           });
         });
       }
-      console.log(agendas);
 
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);
@@ -320,6 +330,10 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    agendaVoteResult: (state) => (agendaId) => {
+      const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
+      return agenda.voting;
+    },
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda ? agenda : {};

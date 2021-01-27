@@ -74,7 +74,7 @@ export default {
       executeCode: ['Executed', 'Not Executed'],
       statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
       resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
-      voteCode: ['Yes', 'No', 'Abstain'],
+      voteCode: ['Abstain', 'Yes', 'No'],
       monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
@@ -139,20 +139,16 @@ export default {
         const stateCode = this.statusCode.indexOf(this.status[1]);
         filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.status === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
       }
-      // if (this.vote === true) {
-      //   const statusCode = this.getVote();
-      //   filteredAgenda === [] ? filteredAgenda = this.agendas.filter(agenda => (agenda.vote === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-      // }
+      if (this.vote[0] === true) {
+        const stateCode = this.voteCode.indexOf(this.vote[1]);
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (Number(agenda.voting) === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
+      }
       if (this.result[0] === true) {
         const stateCode = this.resultCode.indexOf(this.result[1]);
         filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-        console.log(filteredAgenda);
       }
-      // console.log(filteredAgenda);
-      // console.log('result', this.result[0]);
       // console.log('filter', this.execute[0] !== true && this.status[0] !== true && this.result[0] !== true && this.vote[0] !== true);
       if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result[0] !== true) {
-        console.log(filteredAgenda);
         filteredAgenda = this.agendas;
       }
       // console.log('filtering result', filteredAgenda);
@@ -170,18 +166,9 @@ export default {
       item !== 'All' ? this.result = [true, item] : this.result[0] = false ;
       this.agendaFilter();
     },
-    selectVoted () {
-    // if (item === 'Result') {
-    //   this.openAgendas = this.agendas;
-    // } else {
-    //   let itemIndex;
-    //   switch (item) {
-    //   case 'Yes': itemIndex = 0; break;
-    //   case 'No': itemIndex = 1; break;
-    //   case 'Abstain': itemIndex = 2; break;
-    //   }
-    //   this.openAgendas = this.agendas.filter(agenda => (agenda.result === itemIndex));
-    // }
+    selectVoted (item) {
+      item !== 'All' ? this.vote = [true, item] : this.vote[0] = false ;
+      this.agendaFilter();
     },
   },
 };
