@@ -13,6 +13,7 @@
                        :function-name="currentFunction"
                        :params="currentFunctionParams"
                        :explanation="currentFunctionExplanation"
+                       :type="type"
                        @on-closed="showModal=false; currentFunction = ''; currentFunctionParams = []"
         />
       </template>
@@ -410,7 +411,7 @@ export default {
       if (index === 0)      this.currentContract = 'DepositManager';
       else if (index === 1) this.currentContract = 'SeigManager';
       else if (index === 2) this.currentContract = 'DAOCommittee';
-      else if (index === 3) this.currentContract = 'DaoVault2';
+      else if (index === 3) this.currentContract = 'DAOVault2';
     },
     setCurrentContractOfTypeB (index) {
       if (index === 0)      this.currentContract = 'TON';
@@ -420,7 +421,7 @@ export default {
       else if (index === 4) this.currentContract = 'Layer2Registry';
       else if (index === 5) this.currentContract = 'DAOCommitteeProxy';
       else if (index === 6) this.currentContract = 'DAOCommittee';
-      else if (index === 7) this.currentContract = 'DaoVault2';
+      else if (index === 7) this.currentContract = 'DAOVault2';
     },
   },
 };
