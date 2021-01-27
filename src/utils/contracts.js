@@ -2,7 +2,15 @@ const Web3 = require('web3');
 const web3Utils = require('web3-utils');
 const BN = web3Utils.BN;
 
-const { marshalString, unmarshalString } = require('../utils/helpers.js');
+function marshalString (str) {
+  if (str.slice(0, 2) === '0x') return str;
+  return '0x'.concat(str);
+}
+
+function unmarshalString (str) {
+  if (str.slice(0, 2) === '0x') return str.slice(2);
+  return str;
+}
 
 const agendaManager = require('../contracts/DAOAgendaManager.json');
 // const candidate = require('../contracts/Candidate.json');
@@ -295,6 +303,11 @@ module.exports.encodeParameters = function (typesArray, parameters) {
 module.exports.encoded = function (type, value) {
   const types = [
     'uint256',
+    'bool',
+    'address',
+    'address[]',
+    'bytes32',
+    'string',
   ];
 
   const index = types.indexOf(type);
@@ -302,7 +315,35 @@ module.exports.encoded = function (type, value) {
     console.log('bug'); // eslint-disable-line
     return '';
   }
-  if (index === 0) return new BN(value);
+  if (index === 0) return new BN(value); // uint256
+  else if (index === 1) { // bool
+    value = value.toLowerCase();
+
+    if (value === 'true') return true;
+    else if (value === 'false') return false;
+    else return -1;
+  }
+  else if (index === 2) { // address
+    if (value.length !== 42) return -1;
+    else return value;
+  }
+  else if (index === 3) { // address[]
+    let bug = false;
+
+    const values = [];
+    value = value.replace(/\s/g, '');
+    value = value.substring(1, value.length - 1);
+    value.split(',').forEach(address => {
+      if (address.length !== 42) bug = true;
+      else values.push(value);
+    });
+
+    if (bug) return -1;
+    return values;
+  }
+  else {
+    return value;
+  }
 };
 
 const decodeParameters = function (typesArray, hexString) {

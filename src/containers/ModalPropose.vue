@@ -126,6 +126,11 @@ export default {
       for (let i = 0; i < nParams; i++) {
         const type = this.params[i].type;
         const value = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
+        const encodedValue = encoded(type, value);
+        if (encodedValue === -1) {
+          console.log('bug'); // eslint-disable-line
+          return;
+        }
 
         types.push(type);
         values.push(encoded(type, value));
