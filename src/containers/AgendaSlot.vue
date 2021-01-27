@@ -41,9 +41,9 @@
         {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
       </div>
       <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
-      <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
+      <button-comp v-if="hide === false && hideAgendas.length > 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
       <div v-if="hide === true">
-        <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
+        <card-agenda-slot v-for="agenda in hideAgendas" :key="agenda.agendaid" :agenda="agenda" />
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@ export default {
   },
   data (){
     return {
-      openAgendas: this.agendas,
+      openAgendas: [],
       hideAgendas: [],
       hideButton: '',
       hide: false,
@@ -87,7 +87,7 @@ export default {
       'getAgendaByID',
     ]),
     numAgenda () {
-      return this.openAgendas.length;
+      return this.openAgendas.length + this.hideAgendas.length;
     },
     deployedDate () {
       return () => {
@@ -98,7 +98,11 @@ export default {
         const month = date.getMonth();
         const day = date.getDate();
         const hour = date.getHours();
-        const minutes = date.getMinutes();
+        let minutes = date.getMinutes();
+
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
 
         return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year + ', ' + hour + ':' + minutes;
       };
@@ -109,22 +113,23 @@ export default {
   },
   created () {
     this.agendaFilter();
+    this.classify(this.openAgendas);
   },
   beforeUpdate () {
     this.agendaFilter();
   },
   methods: {
-    cassify () {
-      this.openAgendas = this.agendas;
-      // if (this.agendas.length > 5) {
-      //   this.openAgendas = this.agendas.slice(0, 5);
-      //   this.hideAgendas = this.agendas.slice(5, this.agendas.length);
-      //   this.hideButton = 'View more agenda (' + this.hideAgendas.length + ')';
-      // } else {
-      //   this.openAgendas = this.agendas;
-      // }
+    classify (agendas) {
+      // this.openAgendas = this.agendas;
+      if (agendas.length > 5) {
+        this.hideAgendas = agendas.slice(5, agendas.length);
+        this.openAgendas = agendas.slice(0, 5);
+        this.hideButton = 'View more agenda (' + this.hideAgendas.length + ')';
+      }
+
     },
     hideSection () {
+      console.log(this.hideAgendas);
       this.hide = this.hide ? false : true;
     },
     agendaFilter () {
@@ -151,7 +156,8 @@ export default {
       if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result !== true) {
         filteredAgenda = this.agendas;
       }
-      this.openAgendas = filteredAgenda;
+      // this.openAgendas = filteredAgenda;
+      this.classify(filteredAgenda);
     },
     selectExecuted (item) {
       if (item === 'All') {
@@ -163,12 +169,14 @@ export default {
       this.agendaFilter();
     },
     selectStatus (item) {
-      if (item === 'All') {
-        this.status[0] = false;
-      } else {
-        this.status[1] = item;
-        this.status[0] = true;
-      }
+      item !== 'All' ? this.status = [true, item] : this.status[0] = false ;
+      console.log(this.status);
+      // if (item === 'All') {
+      //   this.status[0] = false;
+      // } else {
+      //   this.status[1] = item;
+      //   this.status[0] = true;
+      // }
       this.agendaFilter();
     },
     selectResult (item) {

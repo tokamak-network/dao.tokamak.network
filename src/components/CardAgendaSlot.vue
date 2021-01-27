@@ -36,23 +36,11 @@
           @on-clicked="detail(agenda.agendaid)"
         />
         <div class="vote-status">
-          <div v-if="voted !== true">You have not voted</div>
-          <div v-else-if="voted === true" class="vote-selected">{{ votedResult }}</div>
+          <div v-if="voted !== true">{{ votedResult() }}</div>
+          <div v-else-if="voted === true" class="vote-selected">{{ votedResult() }}</div>
         </div>
-        <!-- <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div> -->
       </div>
       <div v-if="agenda.executed === false" class="right-side">
-        <!-- <div v-if="agenda.status < 3" class="dropdown-section">
-          <div class="your-vote">YOUR VOTE</div>
-          <dropdown
-            :items="['Yes', 'No']"
-            :hint="'Your choice'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="select"
-          />
-        </div> -->
         <button-comp
           v-if="login!==false"
           :name="buttonName"
@@ -69,7 +57,6 @@
 
 <script>
 import Button from '@/components/Button.vue';
-// import Dropdown from '@/components/Dropdown.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
@@ -81,7 +68,6 @@ import { getContracts } from '@/utils/contracts';
 export default {
   components: {
     'button-comp': Button,
-    // 'dropdown': Dropdown,
     'modal': Modal,
     'modal-vote': ModalVote,
   },
@@ -172,6 +158,13 @@ export default {
       }
       return 'disabled';
     },
+  },
+  methods: {
+    select (item) {
+      this.choice = item;
+      this.voted = true;
+      this.buttonClass.buttonStatus = '';
+    },
     votedResult () {
       for (const vote of this.myVote) {
       // console.log(vote[2]);
@@ -183,15 +176,8 @@ export default {
           }
         }
       }
-      // this.comments();
+      this.comments();
       return 'You have not voted';
-    },
-  },
-  methods: {
-    select (item) {
-      this.choice = item;
-      this.voted = true;
-      this.buttonClass.buttonStatus = '';
     },
     comments () {
       this.voted = false;

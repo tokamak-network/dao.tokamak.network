@@ -267,15 +267,15 @@ export default new Vuex.Store({
       voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
       const voteRate = (myVote.length / agendas.length) * 100;
 
-      // if (account !== '') {
-      //   agendas.forEach(agenda => {
-      //     myVote.map(function (vote) {
-      //       if (Number(vote.id) === agenda.agendaid) {
-      //         agenda = { ...agenda, ...vote };
-      //       }
-      //     });
-      //   });
-      // }
+      if (account !== '') {
+        agendas.forEach(agenda => {
+          myVote.map(function (vote) {
+            if (Number(vote.id) === agenda.agendaid) {
+              agenda = { ...agenda, ...vote };
+            }
+          });
+        });
+      }
 
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);

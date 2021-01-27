@@ -73,7 +73,11 @@ export default {
         const month = date.getMonth() + 1;
         const day = date.getDate();
         const hour = date.getHours();
-        const minutes = date.getMinutes();
+        let minutes = date.getMinutes();
+
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
 
         return year + ' / ' + month + ' / ' + day + ' / ' + hour + ':' + minutes;
       };
@@ -124,12 +128,12 @@ export default {
       });
     },
     prev () {
-      let index = Number(this.agendaId) -1 ;
-      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
-    },
-    next () {
       let index = Number(this.agendaId) + 1;
       if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
+    },
+    next () {
+      let index = Number(this.agendaId) -1 ;
+      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
     },
   },
 };
