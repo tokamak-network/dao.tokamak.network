@@ -73,11 +73,7 @@ export async function getCandidateRankByVotes () {
 }
 
 export async function createAgenda (from, txHash, contents) {
-  await instance.post('/agendacontents', { account: from, tx: txHash, contents }, {
-    params: {
-      chainId,
-    },
-  });
+  await instance.post('/agendacontents', { account: from, tx: txHash, contents });
 }
 
 export async function getAgendaContents (agendaId) {
