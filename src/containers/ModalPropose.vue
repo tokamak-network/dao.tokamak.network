@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getContracts, functionSignature, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
+import { getContracts, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 import web3Utils from 'web3-utils';
@@ -77,6 +77,16 @@ export default {
     explanation: {
       type: String,
       default: '',
+    },
+    type: {
+      type: String,
+      default: 'A',
+      validator: (value) => {
+        return [
+          'A',
+          'B',
+        ].indexOf(value) !== -1;
+      },
     },
   },
   data () {
@@ -120,7 +130,7 @@ export default {
         agendaManager.methods.createAgendaFees().call(),
       ]);
 
-      const selector = functionSignature(this.contract, this.functionName);
+      const selector = getFunctionSelector(this.contract, this.functionName, this.type);
 
       const nParams = Object.keys(this.$refs).length;
       if (this.params.length !== nParams) {
@@ -139,7 +149,7 @@ export default {
         }
 
         types.push(type);
-        values.push(encoded(type, value));
+        values.push(encodedValue);
       }
 
       const params = encodeParameters(types, values);

@@ -1,6 +1,5 @@
 const Web3 = require('web3');
-const web3Utils = require('web3-utils');
-const BN = web3Utils.BN;
+const web3EthABI = require('web3-eth-abi');
 
 function marshalString (str) {
   if (str.slice(0, 2) === '0x') return str;
@@ -197,9 +196,11 @@ const daoVaultABIOfTypeB = [];
   const set = (functions, abis, abi) => {
     functions.forEach(func => {
       const f = abi.find(f => f.name === func.name);
+      f.selector = web3EthABI.encodeFunctionSignature(f);
       f.explanation = func.explanation;
       f.prettyName = func.prettyName;
       f.title = func.title;
+
       abis.push(f);
     });
   };
@@ -274,25 +275,31 @@ module.exports.getContractAddress = function (target) {
   return address ? address : '';
 };
 
-module.exports.functionSignature  = function (contract, want, type='A') {
+module.exports.getFunctionSelector  = function (contract, want, type) {
   if (!contract || !want) return '';
 
   if (type === 'A') {
-    if (contract === 'DepositManager')    return (depositManagerABIOfTypeA.find(f => f.name === want)).signature;
-    else if (contract === 'SeigManager')  return (seigManagerABIOfTypeA.find(f => f.name === want)).signature;
-    else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeA.find(f => f.name === want)).signature;
-    else if (contract === 'DAOVault')     return (daoVaultABIOfTypeA.find(f => f.name === want)).signature;
+    if (contract === 'DepositManager')    return (depositManagerABIOfTypeA.find(f => f.name === want)).selector;
+    else if (contract === 'SeigManager')  return (seigManagerABIOfTypeA.find(f => f.name === want)).selector;
+    else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeA.find(f => f.name === want)).selector;
+    else if (contract === 'DAOVault2')    {
+      return (daoVaultABIOfTypeA.find(f => f.name === want)).selector;
+    }
+    else {
+      return '';
+    }
+  } else if (type === 'B') {
+    if (contract === 'TON')                    return (tonABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'WTON')              return (wtonABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DepositManager')    return (depositManagerABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'SeigManager')       return (seigManagerABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'Layer2Registry')    return (layer2RegistryABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOCommittee')      return (daoCommitteeABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOVault2')         return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
     else return '';
   } else {
-    if (contract === 'TON')                    return (tonABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'WTON')              return (wtonABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'DepositManager')    return (depositManagerABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'SeigManager')       return (seigManagerABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'Layer2Registry')    return (layer2RegistryABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'DAOCommittee')      return (daoCommitteeABIOfTypeB.find(f => f.name === want)).signature;
-    else if (contract === 'DaoVault2')         return (daoVaultABIOfTypeB.find(f => f.name === want)).signature;
-    else return '';
+    return '';
   }
 };
 
@@ -316,7 +323,7 @@ module.exports.encoded = function (type, value) {
     console.log('bug'); // eslint-disable-line
     return '';
   }
-  if (index === 0) return new BN(value); // uint256
+  if (index === 0) return String(value); // uint256
   else if (index === 1) { // bool
     value = value.toLowerCase();
 
@@ -353,48 +360,48 @@ const decodeParameters = function (typesArray, hexString) {
 };
 module.exports.decodeParameters = decodeParameters;
 
-const getABIFromSignature = function (signature, type='A') {
+const getABIFromSignature = function (selector, type='A') {
   let abi;
 
   if (type === 'A') {
-    abi = depositManagerABIOfTypeA.find(abi => abi.signature === signature);
+    abi = depositManagerABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = seigManagerABIOfTypeA.find(abi => abi.signature === signature);
+    abi = seigManagerABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoCommitteeABIOfTypeA.find(abi => abi.signature === signature);
+    abi = daoCommitteeABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoVaultABIOfTypeA.find(abi => abi.signature === signature);
+    abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
     if (!abi) {
       // console.log('bug'); // eslint-disable-line
     }
   } else {
-    abi = tonABIOfTypeB.find(abi => abi.signature === signature);
+    abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = wtonABIOfTypeB.find(abi => abi.signature === signature);
+    abi = wtonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = depositManagerABIOfTypeB.find(abi => abi.signature === signature);
+    abi = depositManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = seigManagerABIOfTypeB.find(abi => abi.signature === signature);
+    abi = seigManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = layer2RegistryABIOfTypeB.find(abi => abi.signature === signature);
+    abi = layer2RegistryABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoCommitteeProxyABIOfTypeB.find(abi => abi.signature === signature);
+    abi = daoCommitteeProxyABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoCommitteeABIOfTypeB.find(abi => abi.signature === signature);
+    abi = daoCommitteeABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoVaultABIOfTypeB.find(abi => abi.signature === signature);
+    abi = daoVaultABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
     if (!abi) {
@@ -420,8 +427,8 @@ module.exports.parseAgendaBytecode = function (tx) {
 
   const onChainEffects = [];
   for (let i = 0; i < targets.length; i++) {
-    const signature = commands[i].slice(0, 10);
-    const abi = getABIFromSignature(signature);
+    const selector = commands[i].slice(0, 10);
+    const abi = getABIFromSignature(selector);
 
     if (!abi) {
       // console.log('bug'); // eslint-disable-line
