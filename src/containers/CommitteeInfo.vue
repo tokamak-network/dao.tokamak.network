@@ -24,9 +24,9 @@
     <div style="width: 100%; height: 18px;" />
 
     <info-committee :title="'My Vote'" :content="`${WTON(myVotes(address))} TON`" />
-    <info-committee :title="'Revotable'" :content="`${canRevote(address, 0)} TON`" />
-    <info-committee :title="'Withdrawable'" :content="`${canWithdraw(address, 0)} TON`" />
-    <info-committee :title="'Not Withdrawable'" :content="`${cannotWithdraw} TON`" />
+    <info-committee :title="'Revotable'" :content="`${WTON(canRevote(address, 0))} TON`" />
+    <info-committee :title="'Withdrawable'" :content="`${WTON(canWithdraw(address, 0))} TON`" />
+    <info-committee :title="'Not Withdrawable'" :content="`${WTON(cannotWithdraw)} TON`" />
     <!-- <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'New Commission Rate Changed At'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'Withdrawal Delay'" :content="'0.00 TON'" class="last" /> -->
@@ -63,7 +63,7 @@ export default {
     cannotWithdraw () {
       const requests = this.notWithdrawableRequests(this.address);
       const amount = requests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
-      return WTON(amount);
+      return amount;
     },
   },
   watch: {
