@@ -267,7 +267,7 @@ export default {
       const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
 
       const candidate = this.candidate(this.address);
-      const candidateContract = await committeeProxy.methods.candidateContract(candidate.operator).call();
+      const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
 
       const gasLimit = await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
         .estimateGas({
@@ -323,7 +323,7 @@ export default {
       const depositManager = getContracts('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
-      const candidateContract = await committeeProxy.methods.candidateContract(candidate.operator).call();
+      const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
 
       const data = marshalString(
         [depositManager._address, candidateContract]

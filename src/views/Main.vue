@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { getEvents } from '@/api';
+import { getRecentEvents } from '@/api';
 
 export default {
   data () {
@@ -46,7 +46,7 @@ export default {
     };
   },
   async created () {
-    this.events = await getEvents('AgendaVoteCasted,AgendaExecuted,AgendaCreated');
+    this.events = await getRecentEvents();
   },
   methods: {
     newtab (txhash) {

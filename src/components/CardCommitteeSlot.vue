@@ -95,7 +95,7 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
     desc () {
-      return `${hexSlicer(this.members[this.slotnumber].layer2)} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
+      return `${hexSlicer(this.members[this.slotnumber].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
     },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
@@ -116,7 +116,7 @@ export default {
     detail () {
       if (this.occupied()) {
         this.$router.push({
-          path: `/election/${this.members[this.slotnumber].layer2}`,
+          path: `/election/${this.members[this.slotnumber].candidateContract}`,
         });
       }
     },

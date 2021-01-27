@@ -143,7 +143,7 @@ export default new Vuex.Store({
 
       const myVotesByCandidate = [];
       state.candidates.forEach(async candidate => {
-        const myVotes = await daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call();
+        const myVotes = await daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call();
         candidate.myVotes = myVotes;
         myVotesByCandidate.push(candidate);
       });
@@ -154,17 +154,17 @@ export default new Vuex.Store({
 
       const depositManager = getContracts('DepositManager', state.web3);
       state.candidates.forEach(async candidate => {
-        const numPendingRequests = await depositManager.methods.numPendingRequests(candidate.layer2, state.account).call();
+        const numPendingRequests = await depositManager.methods.numPendingRequests(candidate.candidateContract, state.account).call();
         if (numPendingRequests === 0) {
           return [];
         }
 
         let requestIndex
-            = await depositManager.methods.withdrawalRequestIndex(candidate.layer2, state.account).call();
+            = await depositManager.methods.withdrawalRequestIndex(candidate.candidateContract, state.account).call();
 
         const pendingRequests = [];
         for (let i = 0; i < numPendingRequests; i++) {
-          pendingRequests.push(depositManager.methods.withdrawalRequest(candidate.layer2, state.account, requestIndex).call());
+          pendingRequests.push(depositManager.methods.withdrawalRequest(candidate.candidateContract, state.account, requestIndex).call());
           requestIndex++;
         }
         const requests = await Promise.all(pendingRequests);
@@ -203,19 +203,20 @@ export default new Vuex.Store({
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-      const getMembers = [];
+
+      const getMembersProm = [];
       for (let i = 0; i < maxMember; i++) {
-        getMembers.push(daoCommitteeProxy.methods.members(i).call());
+        getMembersProm.push(daoCommitteeProxy.methods.members(i).call());
       }
-      const addressMembers = (await Promise.all(getMembers)).map(member => member.toLowerCase());
+      const addressMembers = (await Promise.all(getMembersProm)).map(member => member.toLowerCase());
 
-      const getVotes = [];
-      candidates.forEach(candidate => getVotes.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.operator).call()));
-      const votes = await Promise.all(getVotes);
+      const getVotesProm = [];
+      candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
+      const votes = await Promise.all(getVotesProm);
 
-      const getInfos = [];
-      candidates.forEach(candidate => getInfos.push(daoCommittee.methods.candidateInfos(candidate.operator).call()));
-      const infos = await Promise.all(getInfos);
+      const getInfosProm = [];
+      candidates.forEach(candidate => getInfosProm.push(daoCommittee.methods.candidateInfos(candidate.candidate).call()));
+      const infos = await Promise.all(getInfosProm);
 
       for (let i = 0; i < candidates.length; i++) {
         candidates[i].vote = votes[i]; // eslint-disable-line
@@ -226,7 +227,7 @@ export default new Vuex.Store({
       const members = [];
       const nonmembers = [];
       candidates.forEach(
-        candidate => (addressMembers.includes(candidate.operator.toLowerCase()) ? members : nonmembers).push(candidate),
+        candidate => (addressMembers.includes(candidate.candidate.toLowerCase()) ? members : nonmembers).push(candidate),
       );
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
@@ -292,7 +293,8 @@ export default new Vuex.Store({
       const votersByCandidate = [];
 
       state.candidates.forEach(async candidate => {
-        candidate.voters = await getVotersByCandidate(candidate.layer2);
+        const candidateContract = candidate.candidateContract;
+        candidate.voters = await getVotersByCandidate(candidateContract.toLowerCase());
         votersByCandidate.push(candidate);
       });
 
@@ -305,9 +307,8 @@ export default new Vuex.Store({
   },
   getters: {
     getAgendaByID: (state) => (agendaId) => {
-      if (agendaId === -1) return {};
-      const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
-      return index > -1 ? state.agendas[index] : {};
+      const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
+      return agenda ? agenda : {};
     },
     getVotedListByID: (state) => (agendaId) => {
       const voted = [];
@@ -315,15 +316,15 @@ export default new Vuex.Store({
       return voted;
     },
     candidate: (state) => (address) => {
-      const index = state.candidates.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index !== -1 ? state.candidates[index] : null;
     },
     requests: (state) => (address) => {
-      const index = state.requestsByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.requestsByCandidate[index].requests : [];
     },
     voters: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.votersByCandidate[index].voters : [];
     },
     selectedVoters: (_, getters) => (address, page) => {
@@ -331,11 +332,11 @@ export default new Vuex.Store({
       return getters.voters(address) ? getters.voters(address).slice(first, first+4) : [];
     },
     myVotes: (state) => (address) => {
-      const index = state.myVotesByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.myVotesByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
     },
     totalVotesByCandidate: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.layer2.toLowerCase()).indexOf(address.toLowerCase());
+      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       const candidate = state.votersByCandidate[index];
 
       if (!candidate) return 0;
@@ -393,6 +394,10 @@ export default new Vuex.Store({
       const amount = withdrawableRequests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
       return amount;
     },
+    createAgendaFee: (state) => {
+      if (!state.contractState) return 0;
+      return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
+    },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
       if (!agenda) {
@@ -400,10 +405,6 @@ export default new Vuex.Store({
       }
 
       return agenda.onChainEffects ? agenda.onChainEffects : [];
-    },
-    createAgendaFee: (state) => {
-      if (!state.contractState) return 0;
-      return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
     },
     agendaCreator: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);

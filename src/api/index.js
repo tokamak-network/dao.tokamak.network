@@ -8,21 +8,20 @@ function createInstance () {
 const instance = createInstance();
 
 // TODO: check param
-export async function getEvents (eventsnames) {
-  eventsnames;
+export async function getRecentEvents () {
   const res = await instance.get('/events', {
     params: {
       chainId: 4,
       page: 1,
       pagesize: 20,
-      eventNames: 'Deposited,CandidateContractCreated',
+      eventNames: 'AgendaVoteCasted,AgendaExecuted,AgendaCreated',
     },
   });
   return res.data.datas;
 }
 
 export async function getCandidates () {
-  const res = await instance.get('/layer2s/operators', {
+  const res = await instance.get('/layer2s/dao_candidates', {
     params: {
       chainId: 4,
     },
@@ -53,6 +52,9 @@ export async function getAgendas () {
 
 export async function getVotersByCandidate (layer2) {
   const res = await instance.get(`/balances/stakeof?layer2=${layer2}`);
+  if (!res || res.data.data.length === 0) {
+    return [];
+  }
   return res.data.datas;
 }
 

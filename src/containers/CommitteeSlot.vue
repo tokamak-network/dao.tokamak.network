@@ -12,7 +12,7 @@
     >
       Candidates
     </div>
-    <candidate v-for="candidate in nonmembers" :key="candidate.layer2" :candidate="candidate" />
+    <candidate v-for="candidate in nonmembers" :key="candidate.candidateContract" :candidate="candidate" />
   </div>
 </template>
 

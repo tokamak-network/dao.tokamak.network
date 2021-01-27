@@ -139,6 +139,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
               />
             </div>
           </div>
@@ -150,6 +151,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
               />
             </div>
           </div>
@@ -161,6 +163,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
               />
             </div>
           </div>
@@ -172,6 +175,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
               />
             </div>
           </div>
@@ -210,6 +214,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -221,6 +226,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -232,6 +238,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -243,6 +250,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -254,6 +262,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -265,6 +274,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -276,6 +286,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>
@@ -287,6 +298,7 @@
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
               />
             </div>
           </div>

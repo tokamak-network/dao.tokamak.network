@@ -1,9 +1,15 @@
 <template>
-  <div class="box">
-    <!-- <img src="@/assets/box-side.svg" alt="" width="2" height="10"> -->
+  <div class="box"
+       :style="[
+         isHovered && type === 'A' ? { 'border': 'solid 1px #2a72e5' } : {},
+         isHovered && type === 'B' ? { 'border': 'solid 1px #f7981c' } : {},
+       ]"
+       @mouseover="isHovered=true" @mouseleave="isHovered=false"
+  >
     <div class="function-name"
          :style="[
-           status === 'selected' ? { color: '#2a72e5' } : {},
+           status === 'selected' && type === 'A' ? { color: '#2a72e5' } : {},
+           status === 'selected' && type === 'B' ? { color: '#ff7800' } : {},
          ]"
     >
       {{ functionName }}
@@ -19,6 +25,16 @@ export default {
       type: String,
       default: '',
     },
+    type: {
+      type: String,
+      default: 'A',
+      validator: (value) => {
+        return [
+          'A',
+          'B',
+        ].indexOf(value) !== -1;
+      },
+    },
     status: {
       type: String,
       default: 'unselected',
@@ -29,6 +45,11 @@ export default {
         ].indexOf(value) !== -1;
       },
     },
+  },
+  data () {
+    return {
+      isHovered: false,
+    };
   },
 };
 </script>
@@ -54,7 +75,6 @@ export default {
   word-break: break-all;
 
   &:hover {
-    border: solid 1px #2a72e5;
     cursor: pointer;
 
     // .function-name {
