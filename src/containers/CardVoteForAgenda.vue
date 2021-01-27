@@ -12,7 +12,7 @@
       <template #body>
         <div style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
-            DAO Vault is Foward Fund to 0xabcd… - {{ deployDate(agenda) }}
+            {{ title }} - {{ deployDate(agenda) }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
                        :type="'secondary'"
@@ -31,6 +31,7 @@ import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 import { mapState, mapGetters } from 'vuex';
+import { getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
@@ -52,7 +53,19 @@ export default {
     ]),
     ...mapGetters([
       'getAgendaByID',
+      'agendaOnChainEffects',
     ]),
+    target () {
+      const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
+      if (!onChainEffects || onChainEffects.length === 0) return '';
+
+      return onChainEffects[0].target;
+    },
+    title () {
+      const abi = getContractABIFromAddress(this.target);
+      if (!abi || abi.length === 0) return '';
+      return abi[0].title;
+    },
     agenda () {
       return this.getAgendaByID(this.$route.params.id);
     },

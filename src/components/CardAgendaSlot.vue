@@ -10,7 +10,7 @@
     </modal>
     <div class="card-title">
       <div>
-        DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+        {{ title }} {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
       </div>
       <div class="info-slot">
         <span>Agenda </span>
@@ -60,7 +60,7 @@ import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
 import { mapState, mapGetters } from 'vuex';
-import { getContracts } from '@/utils/contracts';
+import { getContracts, getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
@@ -97,8 +97,19 @@ export default {
       'voteCasted',
     ]),
     ...mapGetters([
-      'agendaVoteResult',
+      'agendaOnChainEffects',
     ]),
+    target () {
+      const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
+      if (!onChainEffects || onChainEffects.length === 0) return '';
+
+      return onChainEffects[0].target;
+    },
+    title () {
+      const abi = getContractABIFromAddress(this.target);
+      if (!abi || abi.length === 0) return '';
+      return abi[0].title;
+    },
     voteResultStyle () {
       if (this.agenda.voting !== undefined) {
         return {
@@ -166,15 +177,11 @@ export default {
       return 'disabled';
     },
   },
-  // created () {
-  //   this.votedResult();
-  // },
-  // beforeUpdate () {
-  //   this.votedResult();
-  // },
+  created () {
+    console.log(this.title);
+  },
   methods: {
     votedResult () {
-      // console.log(vote[2]);
       if (this.agenda.voting !== undefined) {
         switch (this.agenda.voting) {
         case '0': return 'You have voted to Abstain';
