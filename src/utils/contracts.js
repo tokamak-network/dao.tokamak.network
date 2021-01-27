@@ -210,7 +210,7 @@ const getABIFromSignature = function (signature, type='A') {
     if (abi) return abi;
 
     if (!abi) {
-      console.log('bug'); // eslint-disable-line
+      // console.log('bug'); // eslint-disable-line
     }
   } else {
     return abi;
@@ -238,7 +238,7 @@ module.exports.parseAgendaBytecode = function (tx) {
     const abi = getABIFromSignature(signature);
 
     if (!abi) {
-      console.log('bug'); // eslint-disable-line
+      // console.log('bug'); // eslint-disable-line
       onChainEffects.push({
         target: '',
         name: '',

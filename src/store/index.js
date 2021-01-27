@@ -8,7 +8,10 @@ import {
   getCandidateRankByVotes,
   getAgendaContents,
 } from '@/api';
-import { getContracts, parseAgendaBytecode } from '@/utils/contracts';
+import {
+  getContracts,
+  parseAgendaBytecode,
+} from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
@@ -187,10 +190,10 @@ export default new Vuex.Store({
       commit('SET_CONTRACT_STATE', contractState);
     },
     async launch ({ dispatch }) {
+      await dispatch('setAgendas');
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
-      await dispatch('setAgendas');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', state.web3);
@@ -232,7 +235,11 @@ export default new Vuex.Store({
       commit('SET_NONMEMBERS', nonmembers);
     },
     async setAgendas ({ state, commit }) {
-      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+      const daoCommittee = getContracts('DAOCommittee', web3);
       const account = state.account;
       const [
         agendas,
@@ -241,7 +248,6 @@ export default new Vuex.Store({
         await getAgendas(),
         await getAgendaVoteCasted(),
       ]);
-      console.log(agendas);
 
       let activityReward;
       if (account !== '') {
@@ -274,10 +280,6 @@ export default new Vuex.Store({
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);
 
-      let web3 = state.web3;
-      if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
-      }
       const promAgendaTx = [];
       const promAgendaContents = [];
       for (let i = 0; i < agendas.length; i++) {
@@ -314,14 +316,6 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    getAgendaByID: (state) => (agendaId) => {
-      if (agendaId === -1) return {};
-      const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
-      return index > -1 ? state.agendas[index] : {};
-    },
-    getAgendas: (state) => {
-      return state.agendas;
-    },
     getAgendasByFilter: (state) => (execute, status, vote, result) => {
       // const executeCode = ['Executed', 'Not Executed'];
       const statusCode = ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'];
@@ -329,7 +323,7 @@ export default new Vuex.Store({
       // const voteCode = ['Yes', 'No', 'Abstain'];
       // execute=[bool, StatusCode]
       const agendas = state.agendas;
-      console.log(agendas);
+      // console.log(status);
       let filteredAgenda = [];
       if (execute[0] === true) {
         let stateCode;
@@ -350,8 +344,16 @@ export default new Vuex.Store({
       }
 
       filteredAgenda.length === 0 ? filteredAgenda = agendas : '';
-      console.log(filteredAgenda);
+      // console.log(filteredAgenda);
       return filteredAgenda;
+    },
+    getAgendaByID: (state) => (agendaId) => {
+      if (agendaId === -1) return {};
+      const index = state.agendas.map(agenda => agenda.agendaid).indexOf(Number(agendaId));
+      return index > -1 ? state.agendas[index] : {};
+    },
+    getAgendas: (state) => {
+      return state.agendas;
     },
     getVotedListByID: (state) => (agendaId) => {
       const voted = [];

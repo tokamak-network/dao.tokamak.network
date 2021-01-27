@@ -40,7 +40,7 @@
       <div class="agenda-info">
         {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
       </div>
-      <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
+      <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
       <button-comp v-if="hide === false && hideAgendas.length !== 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
       <div v-if="hide === true">
         <card-agenda-slot v-for="agenda in agendas" :key="agenda.agendaid" :agenda="agenda" />
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
 import Dropdown from '@/components/Dropdown.vue';
@@ -63,7 +63,7 @@ export default {
   },
   data (){
     return {
-      openAgendas: [],
+      openAgendas: this.agendas,
       hideAgendas: [],
       hideButton: '',
       hide: false,
@@ -71,10 +71,10 @@ export default {
       status: [false, ''],
       vote: [false, ''],
       result: [false, ''],
-      // executeCode: ['Executed', 'Not Executed'],
-      // statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
-      // resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
-      // voteCode: ['Yes', 'No', 'Abstain'],
+      executeCode: ['Executed', 'Not Executed'],
+      statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
+      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
+      voteCode: ['Yes', 'No', 'Abstain'],
       monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
@@ -86,14 +86,8 @@ export default {
       'getAgendasByFilter',
       'getAgendaByID',
     ]),
-    // getAgenda () {
-    //   return this.getAgendaByFilter(this.execute, this.status, this.vote, this.result);
-    // },
-    getAgenda () {
-      return this.getAgendaByID(0);
-    },
     numAgenda () {
-      return this.agendas.length;
+      return this.openAgendas.length;
     },
     deployedDate () {
       return () => {
@@ -109,27 +103,17 @@ export default {
         return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year + ', ' + hour + ':' + minutes;
       };
     },
-    showAgendas () {
-      // (this.openAgendas.length !== 0) ? return this.openAgendas : return this.agendas
-      if (this.openAgendas.length !==0 ) {
-        return this.openAgendas;
-      } else {
-        return this.agendas;
-      }
-    },
+  },
+  beforeCreate () {
+    this.openAgendas = this.agendas;
   },
   created () {
-    this.cassify();
+    this.agendaFilter();
+  },
+  beforeUpdate () {
+    this.agendaFilter();
   },
   methods: {
-    // showAgendas () {
-    //   // (this.openAgendas.length !== 0) ? return this.openAgendas : return this.agendas
-    //   if (this.openAgendas.length !==0 ) {
-    //     return this.openAgendas;
-    //   } else {
-    //     return this.agendas;
-    //   }
-    // },
     cassify () {
       this.openAgendas = this.agendas;
       // if (this.agendas.length > 5) {
@@ -145,36 +129,56 @@ export default {
     },
     agendaFilter () {
       let filteredAgenda = [];
-      if (this.execute === true) {
-        let statusCode;
-        this.curExecCode === 'Executed' ? statusCode = true : statusCode = false;
-        filteredAgenda = this.agendas.filter(agenda => (agenda.executed === statusCode));
+      if (this.execute[0] === true) {
+        let stateCode;
+        this.execute[1] === 'Executed' ? stateCode = true : stateCode = false;
+        filteredAgenda = this.agendas.filter(agenda => (agenda.executed === stateCode));
       }
-      if (this.status === true) {
-        const statusCode = this.statusCode.indexOf(this.curStatCode);
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.status === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      if (this.status[0] === true) {
+        const stateCode = this.statusCode.indexOf(this.status[1]);
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.status === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
       }
       // if (this.vote === true) {
       //   const statusCode = this.getVote();
-      //   filteredAgenda === [] ? filteredAgenda = this.agendas.filter(agenda => (agenda.vote === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      //   filteredAgenda === [] ? filteredAgenda = this.agendas.filter(agenda => (agenda.vote === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
       // }
-      if (this.result === true) {
-        const statusCode = this.resultCode.indexOf(this.curResultCode);
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === statusCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === statusCode));
+      if (this.result[0] === true) {
+        const stateCode = this.resultCode.indexOf(this.result[1]);
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
+      }
+      // console.log(filteredAgenda);
+      // console.log(this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result !== true);
+      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result !== true) {
+        filteredAgenda = this.agendas;
       }
       this.openAgendas = filteredAgenda;
-      this.showAgendas();
     },
     selectExecuted (item) {
-      item === 'All' ? this.execute[0] = false : this.execute[1] = item, this.execute[0] = true;
+      if (item === 'All') {
+        this.execute[0] = false;
+      } else {
+        this.execute[1] = item;
+        this.execute[0] = true;
+      }
       this.agendaFilter();
     },
     selectStatus (item) {
-      item === 'All' ? this.status[0] = false : this.curStatCode[1] = item, this.status[0] = true;
+      if (item === 'All') {
+        this.status[0] = false;
+      } else {
+        this.status[1] = item;
+        this.status[0] = true;
+      }
       this.agendaFilter();
     },
     selectResult (item) {
-      item === 'All' ? this.result[0] = false : this.curResultCode[1] = item, this.result[0] = true;
+      // item === 'All' ? this.result[0] = false : this.result[1] = item, this.result[0] = true;
+      if (item === 'All') {
+        this.result[0] = false;
+      } else {
+        this.result[1] = item;
+        this.result[0] = true;
+      }
       this.agendaFilter();
     },
     selectVoted () {
