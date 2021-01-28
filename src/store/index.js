@@ -128,7 +128,6 @@ export default new Vuex.Store({
       const blockNumber = await web3.eth.getBlockNumber();
       commit('SET_BLOCK_NUMBER', blockNumber);
 
-      // TODO: await?
       await dispatch('setBalance');
       await dispatch('setRequests');
       await dispatch('setContractState');

@@ -22,21 +22,21 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault2.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 
-const deployed = {
-  'TON'              : '0xa68d07eF3254E96103B7dC3f4661D72b68c88683',
-  'WTON'             : '0x72a08Efb6c9c10dE7491CC837b114123b4DB9b32',
-  'Layer2Registry'   : '0xbB974DB3758Fd428058C7cf2384C9f5186264760',
-  'DepositManager'   : '0x727971475F71eC885bDDc0827499c22A6014a327',
-  'CoinageFactory'   : '0x1AAf1EEF5E5F34FDb2865Ca2989ebC3417122EAA',
-  'DaoVault'         : '0xD795C4CC9E37Ac49752020c0B7300648961c553d',
-  'SeigManager'      : '0xc7eF6F6fAbE5501b8E9643b833D2de35232B6eF8',
-  'PowerTON'         : '0x937E45a0d1aec6DA0a59C853260df99FE65AEa9A',
-  'DAOVault2'        : '0x4E1eDdaaAAEE692c63dbdcBc9526b4F288636D2b',
-  'DAOAgendaManager' : '0x98D44C2aE6Db972b8d35dB4E7047778b91DFc850',
-  'DAOCommittee'     : '0xDb0dD01CE5964A816f87211Abb0DBe1DFf25e3b5',
-  'CandidateFactory' : '0xe5281527AAfe9de68AD02d330E5Fdb6A1DD252b1',
-  'DAOCommitteeProxy': '0x1778Ad4A28C406Bab57742e1bdb4D873Db686A98',
-  'EtherToken'       : '0x15928e97bAf0324A714560fe20DCC57a8C8A89Cb',
+const deployed =  {
+  'TON'              : '0x4273285FCb57209B6c5518307648B3357d2Dc180',
+  'WTON'             : '0xA40772a4d1aB2C7b7b67356b3DBD1401Ddf7E930',
+  'Layer2Registry'   : '0xF86e3f956F808C6a015146EA59280758BDB7d369',
+  'DepositManager'   : '0xb463d3AE2106FD44E72a43F5e8cEeC2F8F00164A',
+  'CoinageFactory'   : '0xD7f0F24FC5d63b39ca2353a297e7A160bA3FA935',
+  'DAOVault'         : '0x099D1B4d63eD426ed93b85e5f775794ee3EE3028',
+  'SeigManager'      : '0xc792d10605C4daED4405393dF06B84f0AB570270',
+  'PowerTON'         : '0x0a6DefE120382A7aB0b381425E94716cEca924b3',
+  'DAOVault2'        : '0x11cAE7877790a675EF9b0C30860DDe0F42bdC076',
+  'DAOAgendaManager' : '0x908B05753462Dc3E569Db8132AeFc6e39cacfCA1',
+  'CandidateFactory' : '0x8f78510b524Aea1b523d24bB882eb2A144c0bc39',
+  'DAOCommittee'     : '0xaD1C782E3c16Dc45730DBb45E78b3395d771c89e',
+  'DAOCommitteeProxy': '0xC3c2534AFA3673c3DD82042e6c17930F9CA4C278',
+  'EtherToken'       : '0x6D5bF9764219868a341f1c04F7a082d6A9219D56',
 };
 
 module.exports.getContracts = function (want, web3) {
@@ -360,7 +360,7 @@ const decodeParameters = function (typesArray, hexString) {
 };
 module.exports.decodeParameters = decodeParameters;
 
-const getABIFromSignature = function (selector, type='A') {
+const getABIFromSelector = function (selector, type='A') {
   let abi;
 
   if (type === 'A') {
@@ -377,7 +377,7 @@ const getABIFromSignature = function (selector, type='A') {
     if (abi) return abi;
 
     if (!abi) {
-      // console.log('bug'); // eslint-disable-line
+      console.log('bug'); // eslint-disable-line
     }
   } else {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
@@ -409,7 +409,7 @@ const getABIFromSignature = function (selector, type='A') {
     }
   }
 };
-module.exports.getABIFromSignature = getABIFromSignature;
+module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx) {
   const params1 = marshalString(unmarshalString(tx.input).substring(8));
@@ -428,10 +428,10 @@ module.exports.parseAgendaBytecode = function (tx) {
   const onChainEffects = [];
   for (let i = 0; i < targets.length; i++) {
     const selector = commands[i].slice(0, 10);
-    const abi = getABIFromSignature(selector);
+    const abi = getABIFromSelector(selector);
 
     if (!abi) {
-      // console.log('bug'); // eslint-disable-line
+      console.log('bug'); // eslint-disable-line
       onChainEffects.push({
         target: '',
         name: '',

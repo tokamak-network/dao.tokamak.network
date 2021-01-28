@@ -5,11 +5,11 @@
         <div class="rank-container">
           <div class="header">
             <div>Rank</div>
-            <div>Operators</div>
+            <div>Candidate</div>
             <div>Total Vote</div>
           </div>
           <div class="divide"></div>
-          <div v-for="(data, index) in sortedCandidateRankByVotes" :key="data.layer2"
+          <div v-for="(data, index) in ranks" :key="data.layer2"
                class="body"
           >
             <div>{{ index + 1 }}</div>
@@ -44,7 +44,7 @@ export default {
   },
   data () {
     return {
-      ranks: [],
+      page: 0,
     };
   },
   computed: {
@@ -54,14 +54,14 @@ export default {
     ...mapGetters([
       'sortedCandidateRankByVotes',
     ]),
-  },
-  mounted () {
-    this.ranks = this.candidateRankByVotes.slice(0, 4);
+    ranks () {
+      const first = this.page * 4;
+      return this.sortedCandidateRankByVotes ? this.sortedCandidateRankByVotes.slice(first, first+4) : [];
+    },
   },
   methods: {
     set (page) {
-      const first = page * 4;
-      this.ranks = this.candidateRankByVotes.slice(first, first+4);
+      this.page = page;
     },
   },
 };

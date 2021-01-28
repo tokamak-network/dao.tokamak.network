@@ -1,14 +1,14 @@
 <template>
   <div class="candidate">
     <div class="label"># of Votes</div>
-    <div class="amount">{{ candidate.vote }} TON</div>
+    <div class="amount">{{ wton(candidate.vote) }} TON</div>
     <div class="name">{{ candidate.name }}</div>
     <div class="detail" @click="detail()">View Detail</div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { WTON } from '@/utils/helpers';
 
 export default {
   props: {
@@ -18,10 +18,9 @@ export default {
     },
   },
   computed: {
-    ...mapState([
-      // 'nonmembers', // TODO: use nonmembers
-      'members',
-    ]),
+    wton () {
+      return (amount) => WTON(amount);
+    },
   },
   methods: {
     detail () {
