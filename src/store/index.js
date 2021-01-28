@@ -5,7 +5,6 @@ import {
   getCandidates,
   getAgendas,
   getAgendaVoteCasted,
-  getVotersByCandidate,
   getCandidateRankByVotes,
   getAgendaContents,
 } from '@/api';
@@ -42,7 +41,6 @@ export default new Vuex.Store({
     myVote: [],
     activityReward: [],
     myVotesByCandidate: [],
-    votersByCandidate: [],
     requestsByCandidate: [],
     candidateRankByVotes: [],
 
@@ -85,9 +83,6 @@ export default new Vuex.Store({
     },
     SET_ACTIVITY_REWARD (state, activityReward) {
       state.activityReward = activityReward;
-    },
-    SET_VOTERS_BY_CANDIDATE (state, voters) {
-      state.votersByCandidate = voters;
     },
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
@@ -191,7 +186,6 @@ export default new Vuex.Store({
     },
     async launch ({ dispatch }) {
       await dispatch('setAgendas');
-      await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
     },
@@ -318,17 +312,6 @@ export default new Vuex.Store({
 
       commit('SET_AGENDAS', agendas);
     },
-    async setVotersByCandidate ({ state, commit }) {
-      const votersByCandidate = [];
-
-      state.candidates.forEach(async candidate => {
-        const candidateContract = candidate.candidateContract;
-        candidate.voters = await getVotersByCandidate(candidateContract.toLowerCase());
-        votersByCandidate.push(candidate);
-      });
-
-      commit('SET_VOTERS_BY_CANDIDATE', votersByCandidate);
-    },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();
       commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
@@ -356,28 +339,13 @@ export default new Vuex.Store({
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.requestsByCandidate[index].requests : [];
     },
-    voters: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      return index > -1 ? state.votersByCandidate[index].voters : [];
-    },
-    selectedVoters: (_, getters) => (address, page) => {
-      const first = page * 4;
-      return getters.voters(address) ? getters.voters(address).slice(first, first+4) : [];
-    },
     myVotes: (state) => (address) => {
       const index = state.myVotesByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
     },
-    totalVotesByCandidate: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      const candidate = state.votersByCandidate[index];
-
-      if (!candidate) return 0;
-      const voters = candidate.voters;
-
-      const initialAmount = 0;
-      const reducer = (amount, voter) => amount + voter.balance;
-      return voters.reduce(reducer, initialAmount);
+    totalVotesByCandidate: (_, getters) => (address) => {
+      const candidate = getters.candidate(address);
+      return (!candidate || !candidate.vote) ? 0 : candidate.vote;
     },
     notWithdrawableRequests: (state, getters) => (candidate) => {
       const requests = getters.requests(candidate);
