@@ -18,7 +18,7 @@
 
       <span class="title"># of Votes</span>
       <span> : </span>
-      <span class="content">{{ occupied() ? members[slotnumber].vote : '0' | WTON }}TON</span>
+      <span class="content">{{ occupied() ? members[slotnumber].vote : '0' | WTON }} TON</span>
 
       <div class="info-slot">
         <span>Slot </span>
