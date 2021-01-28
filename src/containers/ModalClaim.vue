@@ -27,7 +27,7 @@
 <script>
 import Button from '@/components/Button.vue';
 import { mapState } from 'vuex';
-import { getContracts } from '@/utils/contracts';
+import { getContract } from '@/utils/contracts';
 
 export default {
   components: {
@@ -43,7 +43,7 @@ export default {
       this.$emit('on-closed');
     },
     async claim () {
-      const daoCommitteeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
 
       await daoCommitteeProxy.methods.claimActivityReward().send({
         from: this.account,

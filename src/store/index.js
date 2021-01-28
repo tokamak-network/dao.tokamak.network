@@ -10,7 +10,7 @@ import {
   getAgendaContents,
 } from '@/api';
 import {
-  getContracts,
+  getContract,
   parseAgendaBytecode,
 } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
@@ -138,7 +138,7 @@ export default new Vuex.Store({
       commit('SET_CHAIN_ID', '');
     },
     async setBalance ({ state, commit }) {
-      const ton = getContracts('TON', state.web3);
+      const ton = getContract('TON', state.web3);
       const daoCommittee = getContracts('DAOCommittee', state.web3);
 
       const tonBalance = await ton.methods.balanceOf(state.account).call();
@@ -155,7 +155,7 @@ export default new Vuex.Store({
     async setRequests ({ state, commit }) {
       const requestsByCandidate = [];
 
-      const depositManager = getContracts('DepositManager', state.web3);
+      const depositManager = getContract('DepositManager', state.web3);
       state.candidates.forEach(async candidate => {
         const numPendingRequests = await depositManager.methods.numPendingRequests(candidate.candidateContract, state.account).call();
         if (numPendingRequests === 0) {
@@ -177,7 +177,7 @@ export default new Vuex.Store({
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
     async setContractState ({ state, commit }) {
-      const agendaManager = getContracts('DAOAgendaManager', state.web3);
+      const agendaManager = getContract('DAOAgendaManager', state.web3);
       const [
         createAgendaFee,
       ] = await Promise.all([
@@ -196,8 +196,8 @@ export default new Vuex.Store({
       await dispatch('setMembersAndNonmembers');
     },
     async setMembersAndNonmembers ({ state, commit }) {
-      const daoCommittee = getContracts('DAOCommittee', state.web3);
-      const daoCommitteeProxy = getContracts('DAOCommitteeProxy', state.web3);
+      const daoCommittee = getContract('DAOCommittee', state.web3);
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
 
       const [
         candidates,

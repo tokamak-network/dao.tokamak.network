@@ -39,7 +39,7 @@ const deployed =  {
   'EtherToken'       : '0x6D5bF9764219868a341f1c04F7a082d6A9219D56',
 };
 
-module.exports.getContracts = function (want, web3, address) {
+module.exports.getContract = function (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
   }

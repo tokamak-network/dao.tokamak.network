@@ -51,7 +51,7 @@ import Button from '@/components/Button.vue';
 
 // import Web3 from 'web3';
 import { mapState } from 'vuex';
-import { getContracts } from '@/utils/contracts';
+import { getContract } from '@/utils/contracts';
 import candidate from '../contracts/Candidate.json';
 
 export default {
@@ -93,8 +93,8 @@ export default {
       }
     },
     async vote () {
-      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
-      // const daoCommittee = getContracts('Candidate', this.web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
+      // const daoCommittee = getContract('Candidate', this.web3);
       // const gasLimit = await daoCommittee.methods.castVote(
       //   this.id,
       //   this.choice,
