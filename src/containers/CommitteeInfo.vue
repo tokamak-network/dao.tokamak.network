@@ -67,7 +67,7 @@ export default {
   watch: {
     '$route.params.address': {
       handler: async function () {
-        await this.set();
+        this.address = this.$route.params.address;
       },
       deep: true,
       immediate: true,
