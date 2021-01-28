@@ -12,7 +12,7 @@ function unmarshalString (str) {
 }
 
 const agendaManager = require('../contracts/DAOAgendaManager.json');
-// const candidate = require('../contracts/Candidate.json');
+const candidate = require('../contracts/Candidate.json');
 const committeeProxy = require('../contracts/DAOCommitteeProxy.json');
 const committee = require('../contracts/DAOCommittee.json');
 const depositManager = require('../contracts/DepositManager.json');
@@ -39,10 +39,11 @@ const deployed =  {
   'EtherToken'       : '0x6D5bF9764219868a341f1c04F7a082d6A9219D56',
 };
 
-module.exports.getContracts = function (want, web3) {
+module.exports.getContracts = function (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
   }
+  const Candidate = new web3.eth.Contract(candidate.abi, address);
   const DAOAgendaManager = new web3.eth.Contract(agendaManager.abi, deployed.DAOAgendaManager);
   const DAOCommitteeProxy = new web3.eth.Contract(committeeProxy.abi, deployed.DAOCommitteeProxy);
   const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
@@ -52,6 +53,7 @@ module.exports.getContracts = function (want, web3) {
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
 
   const contracts = {
+    Candidate,
     DAOAgendaManager,
     DAOCommitteeProxy,
     DAOCommittee,

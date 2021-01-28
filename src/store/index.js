@@ -213,7 +213,12 @@ export default new Vuex.Store({
       const addressMembers = (await Promise.all(getMembersProm)).map(member => member.toLowerCase());
 
       const getVotesProm = [];
-      candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
+      candidates.forEach(candidate => {
+        const candidateContract = getContracts('Candidate', state.web3, candidate.candidateContract);
+        getVotesProm.push(candidateContract.methods.totalStaked().call());
+      });
+      // TODO: fix contract.
+      // candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
       const votes = await Promise.all(getVotesProm);
 
       const getInfosProm = [];
