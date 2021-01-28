@@ -8,7 +8,10 @@ import {
   getCandidateRankByVotes,
   getAgendaContents,
 } from '@/api';
-import { getContracts, parseAgendaBytecode } from '@/utils/contracts';
+import {
+  getContracts,
+  parseAgendaBytecode,
+} from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
@@ -187,10 +190,10 @@ export default new Vuex.Store({
       commit('SET_CONTRACT_STATE', contractState);
     },
     async launch ({ dispatch }) {
-      await dispatch('setMembersAndNonmembers');
+      await dispatch('setAgendas');
       await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
-      await dispatch('setAgendas');
+      await dispatch('setMembersAndNonmembers');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContracts('DAOCommittee', state.web3);
@@ -203,7 +206,6 @@ export default new Vuex.Store({
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-
       const getMembersProm = [];
       for (let i = 0; i < maxMember; i++) {
         getMembersProm.push(daoCommitteeProxy.methods.members(i).call());
@@ -229,12 +231,22 @@ export default new Vuex.Store({
       candidates.forEach(
         candidate => (addressMembers.includes(candidate.candidate.toLowerCase()) ? members : nonmembers).push(candidate),
       );
+
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
     async setAgendas ({ state, commit }) {
-      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+      const daoCommittee = getContracts('DAOCommittee', web3);
+      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+
       const account = state.account;
+
+      // const candidateContract = await committeeProxy.methods.candidateContract(account).call();
+
       const [
         agendas,
         events,
@@ -243,32 +255,44 @@ export default new Vuex.Store({
         await getAgendaVoteCasted(),
       ]);
 
-      let activityReward;
-
-      if (account) {
-        activityReward = await Promise.all(await daoCommittee.methods.getClaimableActivityReward(account).call());
+      const voteCasted = [];
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
+      const myVote = [];
+      let activityReward, candidateContract;
+      if (account !== '') {
+        [
+          activityReward,
+          candidateContract,
+        ] = await Promise.all([
+          await daoCommittee.methods.getClaimableActivityReward(account).call(),
+          await committeeProxy.methods.candidateContract(account).call(),
+        ]);
         activityReward = _TON(activityReward, 'wei').toString();
+        voteCasted.forEach(vote => (vote.from === candidateContract.toLowerCase() ? myVote.push(vote.data) : '')); // check
       } else {
         activityReward = '0 TON';
       }
 
       commit('SET_ACTIVITY_REWARD', activityReward);
-
-      const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
       commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
-      const myVote = [];
-      voteCasted.forEach(vote => (vote.from === account.toLowerCase() ? myVote.push(vote.data) : '')); // check
       const voteRate = (myVote.length / agendas.length) * 100;
+
+      if (account !== '') {
+        agendas.forEach(agenda => {
+          myVote.map(function (vote) {
+            if (Number(vote.id) === agenda.agendaid) {
+              const index = agendas.indexOf(agenda);
+              const agendaWithVote = { ...agenda, ...vote };
+              agendas.splice(index, 1, agendaWithVote);
+            }
+          });
+        });
+      }
 
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);
 
-      let web3 = state.web3;
-      if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
-      }
       const promAgendaTx = [];
       const promAgendaContents = [];
       for (let i = 0; i < agendas.length; i++) {
@@ -306,6 +330,10 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    agendaVoteResult: (state) => (agendaId) => {
+      const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
+      return agenda.voting;
+    },
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda ? agenda : {};

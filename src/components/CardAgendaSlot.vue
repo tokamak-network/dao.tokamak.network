@@ -9,10 +9,16 @@
       </template>
     </modal>
     <div class="card-title">
-      DAO Vault is Foward Fund to {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+      <div>
+        {{ title }} {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+      </div>
+      <div class="info-slot">
+        <span>Agenda </span>
+        <span class="slot">#{{ agenda.agendaid }}</span>
+      </div>
     </div>
     <div class="description">
-      {{ agenda.target }}
+      Created by {{ shortAddress(agenda.creator) }}
     </div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
@@ -29,24 +35,11 @@
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
         />
-        <div class="vote-status">
-          <div v-if="voted !== true">You have not voted</div>
-          <div v-else-if="voted === true" class="vote-selected">{{ votedResult }}</div>
+        <div class="vote-status" :style="voteResultStyle">
+          {{ votedResult() }}
         </div>
-        <!-- <div class="claimable">{{ agenda.claimableTon }} Ton claimable</div> -->
       </div>
       <div v-if="agenda.executed === false" class="right-side">
-        <!-- <div v-if="agenda.status < 3" class="dropdown-section">
-          <div class="your-vote">YOUR VOTE</div>
-          <dropdown
-            :items="['Yes', 'No']"
-            :hint="'Your choice'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="select"
-          />
-        </div> -->
         <button-comp
           v-if="login!==false"
           :name="buttonName"
@@ -63,19 +56,15 @@
 
 <script>
 import Button from '@/components/Button.vue';
-// import Dropdown from '@/components/Dropdown.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
-import { mapState } from 'vuex';
-import { getContracts } from '@/utils/contracts';
-
-// import moment from 'moment';
+import { mapState, mapGetters } from 'vuex';
+import { getContracts, getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
     'button-comp': Button,
-    // 'dropdown': Dropdown,
     'modal': Modal,
     'modal-vote': ModalVote,
   },
@@ -95,7 +84,6 @@ export default {
         'buttonStatus': 'disabled',
       },
       choice: '',
-      voted: true,
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       showModal: false,
     };
@@ -108,6 +96,28 @@ export default {
       'myVote',
       'voteCasted',
     ]),
+    ...mapGetters([
+      'agendaOnChainEffects',
+    ]),
+    target () {
+      const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
+      if (!onChainEffects || onChainEffects.length === 0) return '';
+
+      return onChainEffects[0].target;
+    },
+    title () {
+      const abi = getContractABIFromAddress(this.target);
+      if (!abi || abi.length === 0) return '';
+      return abi[0].title;
+    },
+    voteResultStyle () {
+      if (this.agenda.voting !== undefined) {
+        return {
+          'color': '#2a72e5',
+        };
+      }
+      return 0;
+    },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
     },
@@ -166,29 +176,20 @@ export default {
       }
       return 'disabled';
     },
-    votedResult () {
-      for (const vote of this.myVote) {
-        if (Number(vote[1]) === this.agenda.agendaid) {
-          switch (vote[2]) {
-          case '0': return 'You have voted to Abstain';
-          case '1': return 'You have voted Yes';
-          case '2': return 'You have voted No';
-          }
-        }
-      }
-      this.comment();
-      return 'You have not voted';
-    },
   },
   methods: {
-    select (item) {
-      this.choice = item;
-      this.voted = true;
-      this.buttonClass.buttonStatus = '';
+    votedResult () {
+      if (this.agenda.voting !== undefined) {
+        switch (this.agenda.voting) {
+        case '0': return 'You have voted to Abstain';
+        case '1': return 'You have voted Yes';
+        case '2': return 'You have voted No';
+        }
+      } else {
+        return 'You have not voted';
+      }
     },
-    comment () {
-      this.voted = false;
-    },
+
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {
         const operator = [];
@@ -198,11 +199,6 @@ export default {
         this.execute();
       }
       this.$store.dispatch('setAgendas');
-    },
-    async start () {
-      const agendaManager = getContracts('DAOAgendaManager', this.web3);
-
-      agendaManager.methods.startVoting(this.agenda.agendaid).send({ from:this.account });
     },
     async execute () {
       const daoCommittee = getContracts('DAOCommittee', this.web3);
@@ -250,6 +246,31 @@ export default {
   font-size: 20px;
   text-align: left;
   color: #3e495c;
+
+  display: flex;
+}
+
+.info-slot {
+  flex: 1;
+
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+.info-slot > span {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #3e495c;
+
+  white-space: pre-wrap;
+}
+.info-slot > .slot {
+  color: #2a72e5;
 }
 .description {
   font-size: 14px;

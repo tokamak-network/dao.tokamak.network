@@ -17,7 +17,7 @@
           <span> {{ dDay(creationTime) }}</span>
         </div>
       </div>
-      <div class="title">DAO Vault is Foward Fund to 0xabcd… - {{ deployDate(creationTime) }}</div>
+      <div class="title">{{ title }} - {{ deployDate(creationTime) }}</div>
       <div class="selector">
         <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">On-Chain Effects</div>
@@ -37,6 +37,7 @@ import AgendaComments from '@/containers/AgendaComments.vue';
 import AgendaInfo from '@/containers/AgendaInfo.vue';
 import AgendaOnChain from '@/containers/AgendaOnChain.vue';
 import { mapState, mapGetters } from 'vuex';
+import { getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
@@ -59,7 +60,19 @@ export default {
     ...mapGetters([
       'getAgendaByID',
       'getVotedListByID',
+      'agendaOnChainEffects',
     ]),
+    target () {
+      const onChainEffects = this.agendaOnChainEffects(this.agendaId);
+      if (!onChainEffects || onChainEffects.length === 0) return '';
+
+      return onChainEffects[0].target;
+    },
+    title () {
+      const abi = getContractABIFromAddress(this.target);
+      if (!abi || abi.length === 0) return '';
+      return abi[0].title;
+    },
     voted () {
       return this.getVotedListByID(this.agendaId).length;
     },
@@ -73,7 +86,11 @@ export default {
         const month = date.getMonth() + 1;
         const day = date.getDate();
         const hour = date.getHours();
-        const minutes = date.getMinutes();
+        let minutes = date.getMinutes();
+
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
 
         return year + ' / ' + month + ' / ' + day + ' / ' + hour + ':' + minutes;
       };
@@ -124,12 +141,12 @@ export default {
       });
     },
     prev () {
-      let index = Number(this.agendaId) -1 ;
-      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
-    },
-    next () {
       let index = Number(this.agendaId) + 1;
       if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
+    },
+    next () {
+      let index = Number(this.agendaId) -1 ;
+      if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
     },
   },
 };

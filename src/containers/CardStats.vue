@@ -8,7 +8,7 @@
         </div>
         <div class="stats">
           <div class="title"># of Agendas</div>
-          <!-- <div class="content">{{ myVote.length }} Agendas</div> -->
+          <div class="content">{{ myVote.length }} Agendas</div>
         </div>
       </template>
     </card-container>
@@ -18,7 +18,6 @@
 <script>
 import Card from '@/components/Card.vue';
 import { mapState } from 'vuex';
-// import { getContracts } from '@/utils/contracts';
 
 export default {
   components: {
@@ -32,14 +31,6 @@ export default {
       'activityReward',
     ]),
   },
-  // created () {
-  //   this.claimableTON();
-  // },
-  // methods: {
-  //   async claimableTON () {
-  //     console.log(this.myVote);
-  //   },
-  // },
 };
 </script>
 
