@@ -64,7 +64,7 @@ export async function getVotersByCandidate (layer2) {
 }
 
 export async function getCandidateRankByVotes () {
-  const res = await instance.get('/balances/sums', {
+  const res = await instance.get('/layer2coinages/dao_latest', {
     params: {
       chainId,
     },

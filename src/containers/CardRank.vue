@@ -9,16 +9,16 @@
             <div>Total Vote</div>
           </div>
           <div class="divide"></div>
-          <div v-for="(data, index) in candidateRankByVotes" :key="data._id"
+          <div v-for="(data, index) in sortedCandidateRankByVotes" :key="data.layer2"
                class="body"
           >
             <div>{{ index + 1 }}</div>
-            <div>{{ data._id | hexSlicer }}</div>
-            <div>{{ data.balance | WTON }} TON</div>
+            <div>{{ data.layer2 | hexSlicer }}</div>
+            <div>{{ data.coinageTotalSupply | WTON }} TON</div>
           </div>
         </div>
         <div class="button-container">
-          <button-pagination class="button-pagination" :datas="candidateRankByVotes" @on-selected="set" />
+          <button-pagination class="button-pagination" :datas="sortedCandidateRankByVotes" @on-selected="set" />
         </div>
       </template>
     </card-container>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import ButtonPagination from '@/components/ButtonPagination.vue';
 import Card from '@/components/Card.vue';
 
@@ -50,6 +50,9 @@ export default {
   computed: {
     ...mapState([
       'candidateRankByVotes',
+    ]),
+    ...mapGetters([
+      'sortedCandidateRankByVotes',
     ]),
   },
   mounted () {
