@@ -40,7 +40,7 @@ export default new Vuex.Store({
     voteRate: 0,
     myVote: [],
     activityReward: [],
-    myVotesByCandidate: [],
+
     requestsByCandidate: [],
     candidateRankByVotes: [],
 
@@ -91,9 +91,7 @@ export default new Vuex.Store({
       state.contractState = contractState;
     },
 
-    SET_MY_VOTES_BY_CANDIDATE (state, myVotesByCandidate) {
-      state.myVotesByCandidate = myVotesByCandidate;
-    },
+
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
     },
@@ -134,18 +132,20 @@ export default new Vuex.Store({
     },
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
-      const daoCommittee = getContracts('DAOCommittee', state.web3);
-
       const tonBalance = await ton.methods.balanceOf(state.account).call();
       commit('SET_TON_BALANCE', tonBalance);
 
-      const myVotesByCandidate = [];
+      const myVotesByCandidateProm = [];
       state.candidates.forEach(async candidate => {
-        const myVotes = await daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call();
-        candidate.myVotes = myVotes;
-        myVotesByCandidate.push(candidate);
+        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        myVotesByCandidateProm.push(candidateContract.methods.stakedOf(state.account).call());
       });
-      commit('SET_MY_VOTES_BY_CANDIDATE', myVotesByCandidate);
+
+      const myVotesByCandidate = await Promise.all(myVotesByCandidateProm);
+      for (let i = 0; i < state.candidates.length; i++) {
+        state.candidates[i].myVotes = myVotesByCandidate[i];
+      }
+      commit('SET_CANDIDATES', state.candidates);
     },
     async setRequests ({ state, commit }) {
       const requestsByCandidate = [];
@@ -208,11 +208,11 @@ export default new Vuex.Store({
 
       const getVotesProm = [];
       candidates.forEach(candidate => {
-        const candidateContract = getContracts('Candidate', state.web3, candidate.candidateContract);
+        // TODO: fix contract.
+        // daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()
+        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
         getVotesProm.push(candidateContract.methods.totalStaked().call());
       });
-      // TODO: fix contract.
-      // candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
       const votes = await Promise.all(getVotesProm);
 
       const getInfosProm = [];
@@ -239,13 +239,10 @@ export default new Vuex.Store({
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
-      const daoCommittee = getContracts('DAOCommittee', web3);
-      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const daoCommittee = getContract('DAOCommittee', web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', web3);
 
       const account = state.account;
-
-      // const candidateContract = await committeeProxy.methods.candidateContract(account).call();
-
       const [
         agendas,
         events,
@@ -340,8 +337,8 @@ export default new Vuex.Store({
       return index > -1 ? state.requestsByCandidate[index].requests : [];
     },
     myVotes: (state) => (address) => {
-      const index = state.myVotesByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
+      const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index > -1 ? state.candidates[index].myVotes : 0;
     },
     totalVotesByCandidate: (_, getters) => (address) => {
       const candidate = getters.candidate(address);
