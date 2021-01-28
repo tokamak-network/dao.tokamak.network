@@ -2,19 +2,19 @@
   <div class="committee-info-vote">
     <div class="review">
       <div class="container-title">Review</div>
-      <div v-for="voter in selectedVoters(address, page)" :key="voter.account" class="voted-account">
+      <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
           <div>{{ voter.account }}</div>
           <div>{{ voter.balance | WTON }} TON Voted</div>
         </div>
         <vote-poll class="vote-poll"
-                   :pct="calcPct(voter.balance, totalVotesByCandidate(address))"
+                   :pct="calcPct(voter.balance, sumOfVotes)"
                    :margin="0"
         />
       </div>
     </div>
     <button-pagination class="committee-info-vote-pagination"
-                       :datas="voters(address) ? voters(address) : []"
+                       :datas="voters"
                        @on-selected="set"
     />
     <div class="line" />
@@ -22,19 +22,19 @@
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Vote</span>
-        <span class="voting-stat-content">{{ totalVotesByCandidate(address) ? totalVotesByCandidate(address) : 0 | WTON }} TON</span>
+        <span class="voting-stat-content">{{ sumOfVotes | WTON }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
-        <span class="voting-stat-content">
-          {{ voters(address) ? voters(address).length : 0 }}
-        </span>
+        <span class="voting-stat-content">{{ voters.length }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getVotersByCandidate } from '@/api';
+
 import { mapState, mapGetters } from 'vuex';
 import VotePoll from '@/components/VotePoll.vue';
 import ButtonPagination from '@/components/ButtonPagination.vue';
@@ -48,6 +48,8 @@ export default {
     return {
       address: '',
       page: 0,
+      voters: [],
+      sumOfVotes: 0,
     };
   },
   computed: {
@@ -56,10 +58,11 @@ export default {
     ]),
     ...mapGetters([
       'candidate',
-      'totalVotesByCandidate',
-      'voters',
-      'selectedVoters',
     ]),
+    selectedVoters () {
+      const first = this.page*4;
+      return this.voters ? this.voters.slice(first, first+4) : [];
+    },
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;
     },
@@ -71,6 +74,13 @@ export default {
     '$route.params.address': {
       handler: async function () {
         this.address = this.$route.params.address;
+
+        const voters = await getVotersByCandidate(this.address.toLowerCase());
+        this.voters = (!voters || voters.length === 0) ? [] : voters;
+
+        const initialAmount = 0;
+        const reducer = (amount, voter) => amount + voter.balance;
+        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
       },
       deep: true,
       immediate: true,
