@@ -35,7 +35,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getContracts } from '@/utils/contracts';
 import { WTON } from '@/utils/helpers';
 
 import InfoCommittee from '@/components/InfoCommittee.vue';
@@ -46,7 +45,6 @@ export default {
   },
   data () {
     return {
-      amount: 0,
       address: '',
     };
   },
@@ -75,20 +73,7 @@ export default {
       immediate: true,
     },
   },
-  async created () {
-    await this.set();
-  },
   methods: {
-    async set () {
-      // TODO
-      this.address = this.$route.params.address;
-      const candidate = this.candidate(this.address);
-
-      if (candidate) {
-        const daoCommittee = getContracts('DAOCommittee', this.web3);
-        this.amount = await daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call();
-      }
-    },
     WTON (amount) {
       return WTON(amount);
     },

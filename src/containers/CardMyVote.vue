@@ -5,7 +5,7 @@
         <div class="rank-container">
           <div class="header">
             <div>Rank</div>
-            <div>Operators</div>
+            <div>Candidate</div>
             <div>Total Vote</div>
           </div>
           <div class="divide"></div>
@@ -62,8 +62,6 @@ export default {
   methods: {
     set (page) {
       this.page = page;
-      // const first = page * 4;
-      // this.ranks = this.myVotes.slice(first, first+4);
     },
   },
 };
