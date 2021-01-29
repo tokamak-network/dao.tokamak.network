@@ -48,6 +48,7 @@ export function TON (amount) {
 }
 
 export function WTON (amount) {
+  if (!amount) amount = 0;
   const wton = _WTON.ray(String(amount));
   const value = wton.toString();
   const length = value.length;

@@ -136,7 +136,7 @@ export default {
       return amount;
     },
     wton () {
-      return (amount) => WTON(amount);
+      return (amount) => !amount ? WTON(0) : WTON(amount);
     },
   },
   watch: {

@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     wton () {
-      return (amount) => WTON(amount);
+      return (amount) => !amount ? WTON(0) : WTON(amount);
     },
   },
   methods: {
