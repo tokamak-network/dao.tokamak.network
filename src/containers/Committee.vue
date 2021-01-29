@@ -31,7 +31,10 @@
       </div>
       <div class="divider" />
       <committee-info v-if="currentSelector === 0" />
-      <committee-info-vote v-else-if="currentSelector === 1" />
+      <committee-info-vote v-else-if="currentSelector === 1"
+                           :voters="voters"
+                           :sum-of-votes="sumOfVotes"
+      />
       <committee-vote v-else-if="currentSelector === 2" />
     </div>
   </div>
@@ -39,6 +42,7 @@
 
 <script>
 import { date1, fromNow } from '@/utils/helpers';
+import { getVotersByCandidate } from '@/api';
 
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
@@ -56,7 +60,10 @@ export default {
   data () {
     return {
       currentSelector: 0,
+
       address: '',
+      voters: [],
+      sumOfVotes: 0,
     };
   },
   computed: {
@@ -71,8 +78,21 @@ export default {
       return this.members.find(member => member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase());
     },
   },
-  created () {
-    this.address = this.$route.params.address;
+  watch: {
+    '$route.params.address': {
+      handler: async function () {
+        this.address = this.$route.params.address;
+
+        const voters = await getVotersByCandidate(this.address.toLowerCase());
+        this.voters = (!voters || voters.length === 0) ? [] : voters;
+
+        const initialAmount = 0;
+        const reducer = (amount, voter) => amount + voter.balance;
+        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
     electedAt (timestamp) {

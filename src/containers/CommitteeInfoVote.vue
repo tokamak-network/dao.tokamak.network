@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import { getVotersByCandidate } from '@/api';
-
 import { mapState, mapGetters } from 'vuex';
 import VotePoll from '@/components/VotePoll.vue';
 import ButtonPagination from '@/components/ButtonPagination.vue';
@@ -44,12 +42,20 @@ export default {
     'vote-poll': VotePoll,
     'button-pagination': ButtonPagination,
   },
+  props: {
+    voters: {
+      type: Array,
+      default: () => [],
+    },
+    sumOfVotes: {
+      type: Number,
+      default: 0,
+    },
+  },
   data () {
     return {
       address: '',
       page: 0,
-      voters: [],
-      sumOfVotes: 0,
     };
   },
   computed: {
@@ -68,22 +74,6 @@ export default {
     },
     calcPct () {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
-    },
-  },
-  watch: {
-    '$route.params.address': {
-      handler: async function () {
-        this.address = this.$route.params.address;
-
-        const voters = await getVotersByCandidate(this.address.toLowerCase());
-        this.voters = (!voters || voters.length === 0) ? [] : voters;
-
-        const initialAmount = 0;
-        const reducer = (amount, voter) => amount + voter.balance;
-        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
-      },
-      deep: true,
-      immediate: true,
     },
   },
   methods: {
