@@ -205,7 +205,7 @@ export default new Vuex.Store({
       for (let i = 0; i < maxMember; i++) {
         const memberAddress = await daoCommitteeProxy.methods.members(i).call();
         if (!memberAddress) {
-          console.log('bug', 'NO MEMBER ADDRESS');
+          console.log('bug', 'NO MEMBER ADDRESS'); // eslint-disable-line
         }
         const member = {
           address: memberAddress.toLowerCase(),
