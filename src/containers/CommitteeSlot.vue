@@ -4,9 +4,9 @@
     <!-- <div class="slot-info">
       3 slot
     </div> -->
-    <card-committee-slot :slotnumber="0" />
-    <card-committee-slot :slotnumber="1" />
-    <card-committee-slot :slotnumber="2" />
+    <card-committee-slot :member-index="0" />
+    <card-committee-slot :member-index="1" />
+    <card-committee-slot :member-index="2" />
     <div class="title"
          style="margin-top: 30px; margin-bottom: 20px;"
     >
