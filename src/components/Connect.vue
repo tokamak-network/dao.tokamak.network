@@ -39,10 +39,14 @@ export default {
       default: false,
     },
   },
+  data () {
+    return {
+      account: '',
+    };
+  },
   computed: {
     ...mapState([
       'web3',
-      'account',
       'pendingTx',
     ]),
     shortAddress () {
@@ -59,9 +63,14 @@ export default {
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
+          const accounts = await web3.eth.getAccounts();
+          this.account = accounts[0];
+          this.$nextTick(() => {
+            this.setIcon();
+          });
+
+          await this.$store.dispatch('launch');
           await this.$store.dispatch('connectEthereum', web3);
-          await this.$store.dispatch('setAgendas');
-          this.setIcon();
         } catch (e) {
           // User deny to connect MetaMask wallet.
         }
@@ -70,8 +79,14 @@ export default {
           if (accounts.length === 0) {
             this.$store.dispatch('disconnectEthereum');
           } else {
+            const accounts = await web3.eth.getAccounts();
+            this.account = accounts[0];
+            this.$nextTick(() => {
+              this.setIcon();
+            });
+
+            await this.$store.dispatch('launch');
             await this.$store.dispatch('connectEthereum', web3);
-            this.setIcon();
           }
         };
         const handleNetworkChanged = () => {

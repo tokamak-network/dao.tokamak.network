@@ -2,9 +2,9 @@
   <div class="table">
     <table>
       <tbody>
-        <tr v-for="supporter in voters(address)" :key="supporter.account">
+        <tr v-for="supporter in voters" :key="supporter.account">
           <div class="table-content">
-            <div>{{ calcPct(supporter.balance, totalVotes(voters(address))) }}%</div>
+            <div>{{ calcPct(supporter.balance, sumOfVotes) }}%</div>
             <div>({{ supporter.balance | WTON }} TON)</div>
             <div>{{ supporter.account | hexSlicer }}</div>
           </div>
@@ -15,18 +15,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { getVotersByCandidate } from '@/api';
 
 export default {
   data () {
     return {
       address: '',
+      voters: [],
+      sumOfVotes: 0,
     };
   },
   computed: {
-    ...mapGetters([
-      'voters',
-    ]),
     calcPct () {
       return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);
     },
@@ -35,6 +34,13 @@ export default {
     '$route.params.address': {
       handler: async function () {
         this.address = this.$route.params.address;
+
+        const voters = await getVotersByCandidate(this.address.toLowerCase());
+        this.voters = (!voters || voters.length === 0) ? [] : voters;
+
+        const initialAmount = 0;
+        const reducer = (amount, voter) => amount + voter.balance;
+        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
       },
       deep: true,
       immediate: true,
@@ -42,13 +48,6 @@ export default {
   },
   mounted () {
     this.address = this.$route.params.address;
-  },
-  methods: {
-    totalVotes (voters) {
-      const initialAmount = 0;
-      const reducer = (amount, voter) => amount + voter.balance;
-      return voters.reduce(reducer, initialAmount);
-    },
   },
 };
 </script>

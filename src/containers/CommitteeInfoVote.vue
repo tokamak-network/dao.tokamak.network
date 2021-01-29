@@ -2,19 +2,19 @@
   <div class="committee-info-vote">
     <div class="review">
       <div class="container-title">Review</div>
-      <div v-for="voter in selectedVoters(address, page)" :key="voter.account" class="voted-account">
+      <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
           <div>{{ voter.account }}</div>
           <div>{{ voter.balance | WTON }} TON Voted</div>
         </div>
         <vote-poll class="vote-poll"
-                   :pct="calcPct(voter.balance, totalVotesByCandidate(address))"
+                   :pct="calcPct(voter.balance, sumOfVotes)"
                    :margin="0"
         />
       </div>
     </div>
     <button-pagination class="committee-info-vote-pagination"
-                       :datas="voters(address) ? voters(address) : []"
+                       :datas="voters"
                        @on-selected="set"
     />
     <div class="line" />
@@ -22,13 +22,11 @@
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Vote</span>
-        <span class="voting-stat-content">{{ totalVotesByCandidate(address) ? totalVotesByCandidate(address) : 0 | WTON }} TON</span>
+        <span class="voting-stat-content">{{ sumOfVotes | WTON }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
-        <span class="voting-stat-content">
-          {{ voters(address) ? voters(address).length : 0 }}
-        </span>
+        <span class="voting-stat-content">{{ voters.length }}</span>
       </div>
     </div>
   </div>
@@ -44,6 +42,16 @@ export default {
     'vote-poll': VotePoll,
     'button-pagination': ButtonPagination,
   },
+  props: {
+    voters: {
+      type: Array,
+      default: () => [],
+    },
+    sumOfVotes: {
+      type: Number,
+      default: 0,
+    },
+  },
   data () {
     return {
       address: '',
@@ -56,24 +64,16 @@ export default {
     ]),
     ...mapGetters([
       'candidate',
-      'totalVotesByCandidate',
-      'voters',
-      'selectedVoters',
     ]),
+    selectedVoters () {
+      const first = this.page*4;
+      return this.voters ? this.voters.slice(first, first+4) : [];
+    },
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;
     },
     calcPct () {
       return (vote, totalVotes) => Number(vote * 100 / totalVotes);
-    },
-  },
-  watch: {
-    '$route.params.address': {
-      handler: async function () {
-        this.address = this.$route.params.address;
-      },
-      deep: true,
-      immediate: true,
     },
   },
   methods: {

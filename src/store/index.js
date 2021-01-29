@@ -5,12 +5,11 @@ import {
   getCandidates,
   getAgendas,
   getAgendaVoteCasted,
-  getVotersByCandidate,
   getCandidateRankByVotes,
   getAgendaContents,
 } from '@/api';
 import {
-  getContracts,
+  getContract,
   parseAgendaBytecode,
 } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
@@ -41,8 +40,7 @@ export default new Vuex.Store({
     voteRate: 0,
     myVote: [],
     activityReward: [],
-    myVotesByCandidate: [],
-    votersByCandidate: [],
+
     requestsByCandidate: [],
     candidateRankByVotes: [],
 
@@ -86,9 +84,6 @@ export default new Vuex.Store({
     SET_ACTIVITY_REWARD (state, activityReward) {
       state.activityReward = activityReward;
     },
-    SET_VOTERS_BY_CANDIDATE (state, voters) {
-      state.votersByCandidate = voters;
-    },
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
@@ -96,9 +91,7 @@ export default new Vuex.Store({
       state.contractState = contractState;
     },
 
-    SET_MY_VOTES_BY_CANDIDATE (state, myVotesByCandidate) {
-      state.myVotesByCandidate = myVotesByCandidate;
-    },
+
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
     },
@@ -138,24 +131,26 @@ export default new Vuex.Store({
       commit('SET_CHAIN_ID', '');
     },
     async setBalance ({ state, commit }) {
-      const ton = getContracts('TON', state.web3);
-      const daoCommittee = getContracts('DAOCommittee', state.web3);
-
+      const ton = getContract('TON', state.web3);
       const tonBalance = await ton.methods.balanceOf(state.account).call();
       commit('SET_TON_BALANCE', tonBalance);
 
-      const myVotesByCandidate = [];
+      const myVotesByCandidateProm = [];
       state.candidates.forEach(async candidate => {
-        const myVotes = await daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call();
-        candidate.myVotes = myVotes;
-        myVotesByCandidate.push(candidate);
+        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        myVotesByCandidateProm.push(candidateContract.methods.stakedOf(state.account).call());
       });
-      commit('SET_MY_VOTES_BY_CANDIDATE', myVotesByCandidate);
+
+      const myVotesByCandidate = await Promise.all(myVotesByCandidateProm);
+      for (let i = 0; i < state.candidates.length; i++) {
+        state.candidates[i].myVotes = myVotesByCandidate[i];
+      }
+      commit('SET_CANDIDATES', state.candidates);
     },
     async setRequests ({ state, commit }) {
       const requestsByCandidate = [];
 
-      const depositManager = getContracts('DepositManager', state.web3);
+      const depositManager = getContract('DepositManager', state.web3);
       state.candidates.forEach(async candidate => {
         const numPendingRequests = await depositManager.methods.numPendingRequests(candidate.candidateContract, state.account).call();
         if (numPendingRequests === 0) {
@@ -177,7 +172,7 @@ export default new Vuex.Store({
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
     async setContractState ({ state, commit }) {
-      const agendaManager = getContracts('DAOAgendaManager', state.web3);
+      const agendaManager = getContract('DAOAgendaManager', state.web3);
       const [
         createAgendaFee,
       ] = await Promise.all([
@@ -191,13 +186,12 @@ export default new Vuex.Store({
     },
     async launch ({ dispatch }) {
       await dispatch('setAgendas');
-      await dispatch('setVotersByCandidate');
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
     },
     async setMembersAndNonmembers ({ state, commit }) {
-      const daoCommittee = getContracts('DAOCommittee', state.web3);
-      const daoCommitteeProxy = getContracts('DAOCommitteeProxy', state.web3);
+      const daoCommittee = getContract('DAOCommittee', state.web3);
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
 
       const [
         candidates,
@@ -213,7 +207,12 @@ export default new Vuex.Store({
       const addressMembers = (await Promise.all(getMembersProm)).map(member => member.toLowerCase());
 
       const getVotesProm = [];
-      candidates.forEach(candidate => getVotesProm.push(daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()));
+      candidates.forEach(candidate => {
+        // TODO: fix contract.
+        // daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()
+        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        getVotesProm.push(candidateContract.methods.totalStaked().call());
+      });
       const votes = await Promise.all(getVotesProm);
 
       const getInfosProm = [];
@@ -240,13 +239,10 @@ export default new Vuex.Store({
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
-      const daoCommittee = getContracts('DAOCommittee', web3);
-      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const daoCommittee = getContract('DAOCommittee', web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', web3);
 
       const account = state.account;
-
-      // const candidateContract = await committeeProxy.methods.candidateContract(account).call();
-
       const [
         agendas,
         events,
@@ -313,17 +309,6 @@ export default new Vuex.Store({
 
       commit('SET_AGENDAS', agendas);
     },
-    async setVotersByCandidate ({ state, commit }) {
-      const votersByCandidate = [];
-
-      state.candidates.forEach(async candidate => {
-        const candidateContract = candidate.candidateContract;
-        candidate.voters = await getVotersByCandidate(candidateContract.toLowerCase());
-        votersByCandidate.push(candidate);
-      });
-
-      commit('SET_VOTERS_BY_CANDIDATE', votersByCandidate);
-    },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();
       commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
@@ -351,28 +336,13 @@ export default new Vuex.Store({
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.requestsByCandidate[index].requests : [];
     },
-    voters: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      return index > -1 ? state.votersByCandidate[index].voters : [];
-    },
-    selectedVoters: (_, getters) => (address, page) => {
-      const first = page * 4;
-      return getters.voters(address) ? getters.voters(address).slice(first, first+4) : [];
-    },
     myVotes: (state) => (address) => {
-      const index = state.myVotesByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      return index > -1 ? state.myVotesByCandidate[index].myVotes : 0;
+      const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index > -1 ? state.candidates[index].myVotes : 0;
     },
-    totalVotesByCandidate: (state) => (address) => {
-      const index = state.votersByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      const candidate = state.votersByCandidate[index];
-
-      if (!candidate) return 0;
-      const voters = candidate.voters;
-
-      const initialAmount = 0;
-      const reducer = (amount, voter) => amount + voter.balance;
-      return voters.reduce(reducer, initialAmount);
+    totalVotesByCandidate: (_, getters) => (address) => {
+      const candidate = getters.candidate(address);
+      return (!candidate || !candidate.vote) ? 0 : candidate.vote;
     },
     notWithdrawableRequests: (state, getters) => (candidate) => {
       const requests = getters.requests(candidate);

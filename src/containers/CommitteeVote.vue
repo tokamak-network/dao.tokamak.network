@@ -91,7 +91,7 @@
 
 <script>
 import { TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
-import { getContracts } from '@/utils/contracts';
+import { getContract } from '@/utils/contracts';
 import web3Utils from 'web3-utils';
 
 import { mapState, mapGetters } from 'vuex';
@@ -136,7 +136,7 @@ export default {
       return amount;
     },
     wton () {
-      return (amount) => WTON(amount);
+      return (amount) => !amount ? WTON(0) : WTON(amount);
     },
   },
   watch: {
@@ -185,8 +185,8 @@ export default {
       if (!this.account) return;
       const BN = web3Utils.BN;
 
-      const ton = getContracts('TON', this.web3);
-      const wton = getContracts('WTON', this.web3);
+      const ton = getContract('TON', this.web3);
+      const wton = getContract('WTON', this.web3);
 
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
       if (String(amount) === '0') {
@@ -224,7 +224,7 @@ export default {
       if (!this.account) return;
       const BN = web3Utils.BN;
 
-      const depositManager = getContracts('DepositManager', this.web3);
+      const depositManager = getContract('DepositManager', this.web3);
 
       const layer2 = this.address;
       const amount = toRay(this.$refs.tonunvote.$refs.input.value);
@@ -263,8 +263,8 @@ export default {
     async revote () {
       if (!this.account) return;
 
-      const depositManager = getContracts('DepositManager', this.web3);
-      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
+      const depositManager = getContract('DepositManager', this.web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
 
       const candidate = this.candidate(this.address);
       const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
@@ -294,7 +294,7 @@ export default {
     async withdraw () {
       if (!this.account) return;
 
-      const depositManager = getContracts('DepositManager', this.web3);
+      const depositManager = getContract('DepositManager', this.web3);
 
       const layer2 = this.address;
 
@@ -319,8 +319,8 @@ export default {
         });
     },
     async dataForDeposit () {
-      const committeeProxy = getContracts('DAOCommitteeProxy', this.web3);
-      const depositManager = getContracts('DepositManager', this.web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
+      const depositManager = getContract('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
       const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();

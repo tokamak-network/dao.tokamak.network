@@ -3,15 +3,15 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
-const { encoded, getContracts } = require('./contracts.js');
+const { encoded, getContract } = require('./contracts.js');
 
-const contracts = getContracts();
+const contracts = getContract();
 console.log(contracts);
 
-const singleContract = getContracts('daoAgendaManager', web3);
+const singleContract = getContract('daoAgendaManager', web3);
 console.log(singleContract);
 
-const strangeContract = getContracts('stranger', web3);
+const strangeContract = getContract('stranger', web3);
 console.log(strangeContract);
 
 const types = [

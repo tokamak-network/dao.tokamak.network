@@ -55,6 +55,7 @@
 
 <script>
 import moment from 'moment';
+import { getContract } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
 
 import { mapState } from 'vuex';

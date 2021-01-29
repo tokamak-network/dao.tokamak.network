@@ -20,13 +20,13 @@
                     :width="'317'"
     /> -->
     <!-- <info-committee :title="'Reward'" :content="`${amount} TON`" /> -->
-    <info-committee :title="'Total Vote'" :content="`${WTON(totalVotesByCandidate(address))} TON`" />
+    <info-committee :title="'Total Vote'" :content="`${wton(totalVotesByCandidate(address))} TON`" />
     <div style="width: 100%; height: 18px;" />
 
-    <info-committee :title="'My Vote'" :content="`${WTON(myVotes(address))} TON`" />
-    <info-committee :title="'Revotable'" :content="`${WTON(canRevote(address, 0))} TON`" />
-    <info-committee :title="'Withdrawable'" :content="`${WTON(canWithdraw(address, 0))} TON`" />
-    <info-committee :title="'Not Withdrawable'" :content="`${WTON(cannotWithdraw)} TON`" />
+    <info-committee :title="'My Vote'" :content="`${wton(myVotes(address))} TON`" />
+    <info-committee :title="'Revotable'" :content="`${wton(canRevote(address, 0))} TON`" />
+    <info-committee :title="'Withdrawable'" :content="`${wton(canWithdraw(address, 0))} TON`" />
+    <info-committee :title="'Not Withdrawable'" :content="`${wton(cannotWithdraw)} TON`" />
     <!-- <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'New Commission Rate Changed At'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'Withdrawal Delay'" :content="'0.00 TON'" class="last" /> -->
@@ -67,14 +67,15 @@ export default {
   watch: {
     '$route.params.address': {
       handler: async function () {
-        await this.set();
+        this.address = this.$route.params.address;
       },
       deep: true,
       immediate: true,
     },
   },
   methods: {
-    WTON (amount) {
+    wton (amount) {
+      if (!amount) return WTON(0);
       return WTON(amount);
     },
   },

@@ -60,7 +60,7 @@ import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 
 import { mapState, mapGetters } from 'vuex';
-import { getContracts, getContractABIFromAddress } from '@/utils/contracts';
+import { getContract, getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
@@ -201,7 +201,7 @@ export default {
       this.$store.dispatch('setAgendas');
     },
     async execute () {
-      const daoCommittee = getContracts('DAOCommittee', this.web3);
+      const daoCommittee = getContract('DAOCommittee', this.web3);
       const gasLimit = await daoCommittee.methods.executeAgenda(
         this.agenda.agendaid,
       ).send({

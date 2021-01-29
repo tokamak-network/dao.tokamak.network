@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getContracts, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
+import { getContract, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 import web3Utils from 'web3-utils';
@@ -116,9 +116,9 @@ export default {
 
       const account = this.account.toLowerCase();
 
-      const ton = getContracts('TON', this.web3);
-      const agendaManager = getContracts('DAOAgendaManager', this.web3);
-      const proxy = getContracts('DAOCommitteeProxy', this.web3);
+      const ton = getContract('TON', this.web3);
+      const agendaManager = getContract('DAOAgendaManager', this.web3);
+      const proxy = getContract('DAOCommitteeProxy', this.web3);
 
       const [
         noticePeriod,
