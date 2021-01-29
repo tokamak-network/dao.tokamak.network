@@ -45,8 +45,8 @@ module.exports.getContract = function (want, web3, address) {
   }
   const Candidate = new web3.eth.Contract(candidate.abi, address);
   const DAOAgendaManager = new web3.eth.Contract(agendaManager.abi, deployed.DAOAgendaManager);
-  const DAOCommitteeProxy = new web3.eth.Contract(committeeProxy.abi, deployed.DAOCommitteeProxy);
-  const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // Use proxy address.
+  const DAOCommitteeProxy = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // NOTE: use committee abi.
+  const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommittee); // NOTE: not used.
   const DepositManager = new web3.eth.Contract(depositManager.abi, deployed.DepositManager);
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
