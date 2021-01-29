@@ -200,11 +200,20 @@ export default new Vuex.Store({
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-      const getMembersProm = [];
+
+      const addressMembers = [];
       for (let i = 0; i < maxMember; i++) {
-        getMembersProm.push(daoCommitteeProxy.methods.members(i).call());
+        const memberAddress = await daoCommitteeProxy.methods.members(i).call();
+        if (!memberAddress) {
+          console.log('bug', 'NO MEMBER ADDRESS');
+        }
+        const member = {
+          address: memberAddress.toLowerCase(),
+          memberIndex: i,
+        };
+
+        addressMembers.push(member);
       }
-      const addressMembers = (await Promise.all(getMembersProm)).map(member => member.toLowerCase());
 
       const getVotesProm = [];
       candidates.forEach(candidate => {
@@ -225,12 +234,19 @@ export default new Vuex.Store({
       }
       commit('SET_CANDIDATES', candidates);
 
-      const members = [];
+      const members = new Array(maxMember);
       const nonmembers = [];
-      candidates.forEach(
-        candidate => (addressMembers.includes(candidate.candidate.toLowerCase()) ? members : nonmembers).push(candidate),
-      );
+      candidates.forEach(candidate => {
+        addressMembers.forEach(member => {
+          if (member.address.includes(candidate.candidate.toLowerCase())) {
+            candidate.memberIndex = member.memberIndex;
+            members[member.memberIndex] = candidate;
 
+            return;
+          }
+        });
+        nonmembers.push(candidate);
+      });
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
@@ -318,6 +334,17 @@ export default new Vuex.Store({
     agendaVoteResult: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda.voting;
+    },
+    candidateContractFromAccount: (state) => {
+      const account = state.account.toLowerCase();
+      if (!account) return '';
+
+      const candidate = state.candidates.find(candidate => candidate.candidate.toLowerCase() === account);
+      const operator = state.candidates.find(candidate => candidate.operator.toLowerCase() === account);
+
+      if (candidate)     return candidate.candidateContract;
+      else if (operator) return operator.candidateContract;
+      else               return '';
     },
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));

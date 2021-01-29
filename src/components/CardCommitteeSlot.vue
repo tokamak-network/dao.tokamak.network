@@ -43,11 +43,12 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
-      <button-comp v-if="login!==false"
+      <button-comp v-if="candidateContractFromAccount"
                    :name="'Challenge'"
                    :type="'secondary'"
                    :width="'118px'"
                    class="right"
+                   @on-clicked="challenge"
       />
     </div>
   </div>
@@ -58,7 +59,7 @@ import moment from 'moment';
 import { getContract } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
 
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 
 export default {
@@ -78,7 +79,12 @@ export default {
   },
   computed: {
     ...mapState([
+      'account',
+      'web3',
       'members',
+    ]),
+    ...mapGetters([
+      'candidateContractFromAccount',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -107,7 +113,8 @@ export default {
   },
   methods: {
     occupied () {
-      return this.members[this.memberIndex];
+      if (!this.members[this.memberIndex]) return false;
+      else return this.members[this.memberIndex].memberIndex === this.memberIndex;
     },
     etherscan (address) {
       address ?
@@ -122,16 +129,15 @@ export default {
       }
     },
     async challenge () {
-      // TODO: use candidate contract.
-      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
       const memberIndex = this.memberIndex;
 
-      const gasLimit = await committeeProxy.methods.changeMember(memberIndex)
+      const gasLimit = await candidateContract.methods.changeMember(memberIndex)
         .estimateGas({
           from: this.account,
         });
 
-      await committeeProxy.methods.changeMember(memberIndex)
+      await candidateContract.methods.changeMember(memberIndex)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
