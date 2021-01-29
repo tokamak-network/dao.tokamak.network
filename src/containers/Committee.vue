@@ -50,6 +50,8 @@ import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
 import CommitteeInfoVote from '@/containers/CommitteeInfoVote.vue';
 
+import EventBus from '../utils/eventBus';
+
 export default {
   components: {
     'button-step': ButtonStep,
@@ -93,6 +95,14 @@ export default {
       deep: true,
       immediate: true,
     },
+  },
+  created (){
+    EventBus.$on('message', (payload)=>{
+      console.log(payload);
+    });
+  },
+  beforeDestroy (){
+    EventBus.$off('message');
   },
   methods: {
     electedAt (timestamp) {

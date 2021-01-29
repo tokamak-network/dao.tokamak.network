@@ -54,6 +54,7 @@ import { mapState } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
 import Dropdown from '@/components/Dropdown.vue';
+import EventBus from '../utils/eventBus';
 
 export default {
   components: {
@@ -110,9 +111,18 @@ export default {
   created () {
     this.agendaFilter();
     this.classify(this.openAgendas);
+    EventBus.$on('message', (payload)=>{
+      console.log('EventBus get message ', payload);
+      if(payload.command==='agendaEvent' && payload.data==='AgendaCreated' ){
+        alert('AgendaCreated !! we can reload automatically .');
+      }
+    });
   },
   beforeUpdate () {
     this.agendaFilter();
+  },
+  beforeDestroy (){
+    EventBus.$off('message');
   },
   methods: {
     classify (agendas) {

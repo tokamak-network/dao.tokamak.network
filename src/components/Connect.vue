@@ -31,6 +31,12 @@
 import Web3 from 'web3';
 import { mapState } from 'vuex';
 import jazzicon from '@metamask/jazzicon';
+import EventBus from '../utils/eventBus';
+import {
+  getContractAddress,
+  deployedFirstBlock,
+  eventInfos,
+} from '@/utils/contracts';
 
 export default {
   props: {
@@ -40,8 +46,9 @@ export default {
     },
   },
   data () {
-    return {
+    return{
       account: '',
+      currentBlock: deployedFirstBlock,
     };
   },
   computed: {
@@ -57,24 +64,30 @@ export default {
     },
   },
   methods: {
+    hello (){
+      console.log('hello');
+    },
     async connect () {
+      console.log('connect');
       if (typeof window.ethereum !== 'undefined') {
-        const web3 = new Web3(ethereum);
+        //const web3 = new Web3(ethereum);
+        const web3 = new Web3(window.ethereum);
+        //console.log('web3');
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const accounts = await web3.eth.getAccounts();
           this.account = accounts[0];
+          console.log('accounts1', this.account);
+          this.currentBlock = await await web3.eth.getBlockNumber();
           this.$nextTick(() => {
             this.setIcon();
           });
-
           await this.$store.dispatch('launch');
           await this.$store.dispatch('connectEthereum', web3);
         } catch (e) {
           // User deny to connect MetaMask wallet.
         }
-
         const handleAccountsChanged = async (accounts) => {
           if (accounts.length === 0) {
             this.$store.dispatch('disconnectEthereum');
@@ -87,13 +100,188 @@ export default {
 
             await this.$store.dispatch('launch');
             await this.$store.dispatch('connectEthereum', web3);
+            EventBus.$emit('message', { command:'accountsChanged', data:'accountsChanged-data' });
           }
         };
         const handleNetworkChanged = () => {
           this.$store.dispatch('disconnectEthereum');
         };
+        const getAgendaEvents = () => {
+          console.log('getAgendaEvents in ');
+          function includeEvent (element) {
+            const TOPICS_NAME={
+              'AgendaCreated': 'AgendaCreated',
+              'AgendaExecuted': 'AgendaExecuted',
+              'AgendaVoteCasted': 'AgendaVoteCasted',
+              'ApplyMemberSuccess': 'ApplyMemberSuccess',
+              'CandidateContractCreated': 'CandidateContractCreated',
+              'ChangedMember': 'ChangedMember',
+              'ChangedSlotMaximum': 'ChangedSlotMaximum',
+              'ClaimedActivityReward': 'ClaimedActivityReward',
+              'OperatorRegistered': 'OperatorRegistered',
+              'AgendaStatusChanged': 'AgendaStatusChanged',
+              'AgendaResultChanged': 'AgendaResultChanged',
+            };
+            return (  element!=null &&
+            ( element.event===TOPICS_NAME.AgendaCreated
+                || element.event===TOPICS_NAME.AgendaStatusChanged
+                || element.event===TOPICS_NAME.AgendaResultChanged
+                || element.event===TOPICS_NAME.AgendaExecuted
+                || element.event===TOPICS_NAME.AgendaVoteCasted
+            ) );
+          }
+          try {
+            const abi = require('../contracts/DAOCommittee.json').abi;
+            const myContract  = new web3.eth.Contract(abi, getContractAddress('DAOCommitteeProxy') );
+            if(myContract!=null){
+              myContract.getPastEvents('allEvents',
+                {
+                  fromBlock: deployedFirstBlock,
+                  toBlock: 'latest',
+                }, function (e, l){
+                  //console.log('DAOCommittee getPastEvents: ', l);
+                  const datas = l.filter(includeEvent);
+                  console.log('DAOCommittee getPastEvents: filter datas ',  datas);
+                  //console.log('getPastEventsExchangeTokenIsold: mydatas ', datas);
+                },
+              );
+            }else{
+              console.log('myContract is null ' );
+            }
+          } catch (err) {
+            console.log('getAgendaEvents error ', err ) ;
+            //return null;
+          }
+        };
+        const onWatch = () => {
+          const subscription =  web3.eth.subscribe('logs', {
+            fromBlock: deployedFirstBlock,
+            address: getContractAddress('DAOCommitteeProxy'),
+          }, async (error, result) => {
+            //console.log('logs result',result);
+
+            if(error!=null) {
+              console.log('onWatch error1', error);
+            }
+            if(result!=null) {
+              if(result.blockNumber==='undefined' || result.transactionHash ==='result.transactionHash'){
+                console.log('onWatch error2', error);
+              } else{
+                if(this.currentBlock < result.blockNumber){
+                  //console.log('onWatch', result);
+                  const eventName = getEventName(result.topics[0]);
+                  console.log('onWatch   ', eventName);
+                  if(eventName==='AgendaCreated') {
+                    // 아젠다 데이타를 갱신하고, 메세지 부스로 알려줍니다.
+                    EventBus.$emit('message', { command:'agendaEvent', data: eventName });
+                  }
+                }
+              }
+            }
+            //console.log('result',result);
+          }).on('connected', function (subscriptionId){
+            console.log('connected', subscriptionId);
+          }).on('data', function (log){
+            console.log('data', log);
+          }).on('changed', function (log){
+            console.log('changed', log);
+          });
+
+          subscription.unsubscribe(async function (error, success){
+            console.log('unsubscribed!  error:', error, 'success: ', success );
+            if(error){
+              console.log('err unsubscribed!', error);
+            }
+            if(success)
+              console.log('***** Successfully unsubscribed!');
+          });
+        };
+        const getEventName = (topics)=>{
+          let eventname = null;
+          switch(topics){
+          case  eventInfos.Transfer.signature:
+            eventname = eventInfos.Transfer.event;
+            break;
+          case eventInfos.Deposited.signature:
+            eventname =  eventInfos.Deposited.event;
+            break;
+          case eventInfos.WithdrawalRequested.signature:
+            eventname =  eventInfos.WithdrawalRequested.event;
+            break;
+          case eventInfos.WithdrawalProcessed.signature:
+            eventname =  eventInfos.WithdrawalProcessed.event;
+            break;
+            /*
+              case eventInfos.SeigGiven.signature:
+                eventname =  eventInfos.SeigGiven.event;
+                break;
+              case eventInfos.CommitLog1.signature:
+                eventname =  eventInfos.CommitLog1.event;
+                break;
+                */
+          case eventInfos.Comitted.signature:
+            eventname =  eventInfos.Comitted.event;
+            break;
+            /*
+              case eventInfos.UnstakeLog.signature:
+                eventname =  eventInfos.UnstakeLog.event;
+                break;
+                */
+            //---
+          case eventInfos.AgendaCreated.signature:
+            eventname = eventInfos.AgendaCreated.event;
+            break;
+          case eventInfos.AgendaExecuted.signature:
+            eventname = eventInfos.AgendaExecuted.event;
+            break;
+          case eventInfos.AgendaExecuteds.signature:
+            eventname = eventInfos.AgendaExecuteds.event;
+            break;
+          case eventInfos.AgendaVoteCasted.signature:
+            eventname =  eventInfos.AgendaVoteCasted.event;
+            break;
+          case eventInfos.ApplyMemberSuccess.signature:
+            eventname =  eventInfos.ApplyMemberSuccess.event;
+            break;
+          case eventInfos.CandidateContractCreated.signature:
+            eventname =  eventInfos.CandidateContractCreated.event;
+            break;
+          case eventInfos.ChangedMember.signature:
+            eventname =  eventInfos.ChangedMember.event;
+            break;
+          case eventInfos.ChangedSlotMaximum.signature:
+            eventname =  eventInfos.ChangedSlotMaximum.event;
+            break;
+          case eventInfos.ClaimedActivityReward.signature:
+            eventname =  eventInfos.ClaimedActivityReward.event;
+            break;
+          case eventInfos.OperatorRegistered.signature:
+            eventname =  eventInfos.OperatorRegistered.event;
+            break;
+          case eventInfos.AgendaStatusChanged.signature:
+            eventname = eventInfos.AgendaStatusChanged.event;
+            break;
+          case eventInfos.AgendaResultChanged.signature:
+            eventname = eventInfos.AgendaResultChanged.event;
+            break;
+          default:
+            break;
+          }
+          return eventname;
+        };
+
         ethereum.on('accountsChanged', handleAccountsChanged);
-        ethereum.on('networkChanged', handleNetworkChanged);
+        //ethereum.on('networkChanged', handleNetworkChanged);
+        ethereum.on('chainChanged', handleNetworkChanged);
+        //
+        ethereum.on('message', (message) => {
+          // Handle the new chain.
+          // Correctly handling chain changes can be complicated.
+          // We recommend reloading the page unless you have a very good reason not to.
+          console.log('ethereum.message ', message) ;
+        });
+        getAgendaEvents();
+        onWatch();
       } else {
         // MetaMask need to be installed.
       }

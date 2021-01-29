@@ -39,6 +39,12 @@ const deployed =  {
   'EtherToken'       : '0x6D5bF9764219868a341f1c04F7a082d6A9219D56',
 };
 
+module.exports.deployedFirstBlock=7972539;
+
+module.exports.getContractAddress = function (name){
+  return this.deployed[name];
+};
+
 module.exports.getContract = function (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
@@ -457,4 +463,546 @@ module.exports.parseAgendaBytecode = function (tx) {
     onChainEffects.push(onChainEffect);
   }
   return onChainEffects;
+};
+
+const DepositManagerAbi = require('../contracts/DepositManager.json').abi;
+const SeigManagerAbi = require('../contracts/SeigManager.json').abi;
+const DAOCommitteeAbi = require('../contracts/DAOCommittee.json').abi;
+const DAOAgendaManagerAbi = require('../contracts/DAOAgendaManager.json').abi;
+const WTONAbi = require('../contracts/WTON.json').abi;
+module.exports.eventInfos = {
+  Transfer :
+  {
+    event:'Transfer',
+    interface: WTONAbi,
+    functions:'Transfer(address,address,uint256)',
+    signature:'0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'from',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'to',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'value',
+        'type': 'uint256',
+      },
+    ],
+  },
+  Deposited :
+    {
+      event:'Deposited',
+      interface: DepositManagerAbi,
+      functions:'Deposited(address,address,uint256)',
+      signature:'0x8752a472e571a816aea92eec8dae9baf628e840f4929fbcc2d155e6233ff68a7',
+      params: [
+        {
+          'indexed': true,
+          'internalType': 'address',
+          'name': 'layer2',
+          'type': 'address',
+        },
+        {
+          'indexed': false,
+          'internalType': 'address',
+          'name': 'depositor',
+          'type': 'address',
+        },
+        {
+          'indexed': false,
+          'internalType': 'uint256',
+          'name': 'amount',
+          'type': 'uint256',
+        },
+      ],
+    },
+  WithdrawalProcessed :{
+    event:'WithdrawalProcessed',
+    interface: DepositManagerAbi,
+    functions:'WithdrawalProcessed(address,address,uint256)',
+    signature:'0xcd1fce47d5ad89dd70b04c75bd6bdb8114d4d4ff7b4393f9fb5937e733ba9582',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'layer2',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'depositor',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'amount',
+        'type': 'uint256',
+      },
+    ],
+  },
+  WithdrawalRequested: {
+    event:'WithdrawalRequested',
+    interface: DepositManagerAbi,
+    functions:'WithdrawalRequested(address,address,uint256)',
+    signature:'0x04c56a409d50971e45c5a2d96e5d557d2b0f1d66d40f14b141e4c958b0f39b32',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'layer2',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'depositor',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'amount',
+        'type': 'uint256',
+      },
+    ],
+  },
+  SeigGiven: {
+    event:'SeigGiven',
+    interface: SeigManagerAbi,
+    functions:'SeigGiven(address,uint256,uint256,uint256,uint256,uint256)',
+    signature:'0x0264534168fa7304ade59fc89758924d2288c7dcfd242dd680b668c80449c282',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'layer2',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'totalSeig',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'stakedSeig',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'unstakedSeig',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'powertonSeig',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'pseig',
+        'type': 'uint256',
+      },
+    ],
+  },
+  CommitLog1: {
+    event:'CommitLog1',
+    interface: SeigManagerAbi,
+    functions:'CommitLog1(uint256,uint256,uint256,uint256)',
+    signature:'0x41a79a497d1457df24c25ab99f22349ae9aef4468429f0a781216e8dcf80c628',
+    params: [
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'totalStakedAmount',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'totalSupplyOfWTON',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'prevTotalSupply',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'nextTotalSupply',
+        'type': 'uint256',
+      },
+    ],
+  },
+  Comitted: {
+    event:'Comitted',
+    interface: SeigManagerAbi,
+    functions:'Comitted(address)',
+    signature:'0x521cc65179761533a7c8d7a973291dd7baebb99a67edf5ef78e9c2b61a533d95',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'layer2',
+        'type': 'address',
+      },
+    ],
+  },
+  UnstakeLog: {
+    event:'UnstakeLog',
+    interface: SeigManagerAbi,
+    functions:'UnstakeLog(uint256,uint256)',
+    signature:'0x650f673bb96a43afff4620ecc3f3e38e0cbfddebde9894e951ba2ceff7472f60',
+    params: [
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'coinageBurnAmount',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'totBurnAmount',
+        'type': 'uint256',
+      },
+    ],
+  },
+  AgendaCreated :
+  {
+    event:'AgendaCreated',
+    interface: DAOCommitteeAbi,
+    functions:'AgendaCreated(address,uint256,address,uint256,uint256)',
+    signature:'0xb0c20bab69de391cff8f119cf876e708b1b41868e0fd397cbcd2b4d3c623b5b8',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'from',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'id',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address[]',
+        'name': 'targets',
+        'type': 'address[]',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'noticePeriodSeconds',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'votingPeriodSeconds',
+        'type': 'uint256',
+      },
+    ],
+  },
+  AgendaExecuted :
+  {
+    event:'AgendaExecuted',
+    interface: DAOCommitteeAbi,
+    functions:'AgendaExecuted(uint256,address)',
+    signature:'0xabacb4960b672b8a872a0ed3c20b92ff0a6fb7de6932d8d44b3458f8553f5752',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'id',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'target',
+        'type': 'address',
+      },
+    ],
+  },
+  AgendaExecuteds :
+  {
+    event:'AgendaExecuted',
+    interface: DAOCommitteeAbi,
+    functions:'AgendaExecuted(uint256,address[])',
+    signature:'0x785146be3266678a3f4ea454b310ff1f8c91d0ad9a7997bcd0619940d4d67fe6',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'id',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address[]',
+        'name': 'target',
+        'type': 'address[]',
+      },
+    ],
+  },
+  AgendaVoteCasted :
+  {
+    event:'AgendaVoteCasted',
+    interface: DAOCommitteeAbi,
+    functions:'AgendaVoteCasted(address,uint256,uint256,string)',
+    signature:'0xfa0761008653bc7bf9fa040fb7e07672ad3e17a976eb452c44e81dd782a6214b',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'from',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'id',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'voting',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'string',
+        'name': 'comment',
+        'type': 'string',
+      },
+    ],
+  },
+  ApplyMemberSuccess :
+  {
+    event:'ApplyMemberSuccess',
+    interface: DAOCommitteeAbi,
+    functions:'ApplyMemberSuccess(address,address,uint256,uint256)',
+    signature:'0xda6c16eb4f8fb6ec38ec7e9454e1c4edc683be68090430dad446a152fa719789',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'from',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'member',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'totalbalance',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'memberIndex',
+        'type': 'uint256',
+      },
+    ],
+  },
+  CandidateContractCreated :
+  {
+    event:'CandidateContractCreated',
+    interface: DAOCommitteeAbi,
+    functions:'CandidateContractCreated(address,address,string)',
+    signature:'0x7cf8db18d9a5c7f44156bfabdbb59ac982a8a004e461ca1b87ee71a5cdfbc5ef',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'candidate',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'candidateContract',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'string',
+        'name': 'memo',
+        'type': 'string',
+      },
+    ],
+  },
+  ChangedMember :
+  {
+    event:'ChangedMember',
+    interface: DAOCommitteeAbi,
+    functions:'ChangedMember(uint256,address,address)',
+    signature:'0x663b98adf1afa777e36528b3293a057803f87ed00d2d2518dccfe5d7a6e99ccf',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'slotIndex',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'prevMember',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'newMember',
+        'type': 'address',
+      },
+    ],
+  },
+  ChangedSlotMaximum :
+  {
+    event:'ChangedSlotMaximum',
+    interface: DAOCommitteeAbi,
+    functions:'ChangedSlotMaximum(uint256,uint256)',
+    signature:'0x8c0366d1e3a335a312d012257ee764723c38ec2dd5e74cbfad372513521f9771',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'prevSlotMax',
+        'type': 'uint256',
+      },
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'slotMax',
+        'type': 'uint256',
+      },
+    ],
+  },
+  ClaimedActivityReward :
+  {
+    event:'ClaimedActivityReward',
+    interface: DAOCommitteeAbi,
+    functions:'ClaimedActivityReward(address,uint256)',
+    signature:'0xe013459a1c3162ae04cb4b22feaa126a5d302e283c7333f41d1ebe1b2cd7384b',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'candidate',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'amount',
+        'type': 'uint256',
+      },
+    ],
+  },
+  OperatorRegistered :
+  {
+    event:'OperatorRegistered',
+    interface: DAOCommitteeAbi,
+    functions:'OperatorRegistered(address,address,string)',
+    signature:'0x574651c4b47831128b9ed5b0c878675fc9c8e14d7119b755a31c7fef6065e970',
+    params: [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'candidate',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'candidateContract',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'internalType': 'string',
+        'name': 'memo',
+        'type': 'string',
+      },
+    ],
+  },
+  AgendaStatusChanged :
+  {
+    event:'AgendaStatusChanged',
+    interface: DAOAgendaManagerAbi,
+    functions:'AgendaStatusChanged(uint256,uint256,uint256)',
+    signature:'0x27e1508d1d92ba0e1e406fad0138e0f3dd44688f5018dbe7f5718da02931eb7c',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'agendaID',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'prevStatus',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'newStatus',
+        'type': 'uint256',
+      },
+    ],
+  },
+  AgendaResultChanged :
+  {
+    event:'AgendaResultChanged',
+    interface: DAOAgendaManagerAbi,
+    functions:'AgendaResultChanged(uint256,uint256)',
+    signature:'0xf874b3fe678e8c9f4bd9dd7051e2bd81708e378e98526f16586e7bf60b77effc',
+    params:[
+      {
+        'indexed': true,
+        'internalType': 'uint256',
+        'name': 'agendaID',
+        'type': 'uint256',
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'result',
+        'type': 'uint256',
+      },
+    ],
+  },
 };
