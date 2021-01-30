@@ -80,7 +80,7 @@ const seigManagerFunctionsOfTypeA = [
   { 'name': 'setAdjustDelay', 'title':'Adjust delay will be changed', 'prettyName': '', 'explanation': 'It decides how much time should be wait until new commission rate is applied.' },
   { 'name': 'setMinimumAmount', 'title':'Minimum amount to staking TON will be changed.', 'prettyName': '', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.' },
 ];
-const daoCommitteeFunctionsOfTypeA = [
+const daoCommitteeProxyFunctionsOfTypeA = [
   { 'name': 'setActivityRewardPerSecond', 'title':'', 'prettyName': '', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.' },
   { 'name': 'increaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It increases maximum number of Committee Members.' },
   { 'name': 'decreaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It decreased maximum number of Committee Members.' },
@@ -181,7 +181,7 @@ const daoVaultFunctionsOfTypeB = [
 
 const depositManagerABIOfTypeA = [];
 const seigManagerABIOfTypeA = [];
-const daoCommitteeABIOfTypeA = [];
+const daoCommitteeProxyABIOfTypeA = [];
 const daoVaultABIOfTypeA = [];
 
 const tonABIOfTypeB = [];
@@ -209,7 +209,7 @@ const daoVaultABIOfTypeB = [];
 
   set(depositManagerFunctionsOfTypeA, depositManagerABIOfTypeA, depositManager.abi);
   set(seigManagerFunctionsOfTypeA, seigManagerABIOfTypeA, seigManager.abi);
-  set(daoCommitteeFunctionsOfTypeA, daoCommitteeABIOfTypeA, committee.abi);
+  set(daoCommitteeProxyFunctionsOfTypeA, daoCommitteeProxyABIOfTypeA, committee.abi);
   set(daoVaultFunctionsOfTypeA, daoVaultABIOfTypeA, daoVault.abi);
 
   set(tonFunctionsOfTypeB, tonABIOfTypeB, ton.abi);
@@ -229,7 +229,7 @@ module.exports.getContractABI = function (want, type='A') {
   if (type === 'A') {
     if (want === 'DepositManager')    return depositManagerABIOfTypeA;
     else if (want === 'SeigManager')  return seigManagerABIOfTypeA;
-    else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeA;
+    else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeA;
     else if (want === 'DAOVault2')    return daoVaultABIOfTypeA;
     else return [];
   } else {
@@ -253,7 +253,7 @@ module.exports.getContractABIFromAddress = function (address, type='A') {
   if (type === 'A') {
     if (address === deployed.DepositManager.toLowerCase())    return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase())  return seigManagerABIOfTypeA;
-    else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeA;
+    else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault2.toLowerCase())    return daoVaultABIOfTypeA;
     else return [];
   } else {
@@ -283,7 +283,7 @@ module.exports.getFunctionSelector  = function (contract, want, type) {
   if (type === 'A') {
     if (contract === 'DepositManager')    return (depositManagerABIOfTypeA.find(f => f.name === want)).selector;
     else if (contract === 'SeigManager')  return (seigManagerABIOfTypeA.find(f => f.name === want)).selector;
-    else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeA.find(f => f.name === want)).selector;
+    else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeA.find(f => f.name === want)).selector;
     else if (contract === 'DAOVault2')    {
       return (daoVaultABIOfTypeA.find(f => f.name === want)).selector;
     }
@@ -372,7 +372,7 @@ const getABIFromSelector = function (selector, type='A') {
     abi = seigManagerABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
-    abi = daoCommitteeABIOfTypeA.find(abi => abi.selector === selector);
+    abi = daoCommitteeProxyABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
 
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
