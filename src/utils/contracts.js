@@ -475,11 +475,15 @@ const WTONAbi = require('../contracts/WTON.json').abi;
 module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
   let isVotableStatus = false;
   try{
-    const AgendaManager = new _web3.eth.Contract(DAOAgendaManagerAbi, deployed.DAOAgendaManager);
-    if(AgendaManager!=null){
-      isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
+    if(_web3==null){
+      alert('Check Connect Wallet !');
     }else{
-      console.log('Utils.isVotableStatus AgendaManager is null') ;
+      const AgendaManager = new _web3.eth.Contract(DAOAgendaManagerAbi, deployed.DAOAgendaManager);
+      if(AgendaManager!=null){
+        isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
+      }else{
+        console.log('Utils.isVotableStatus AgendaManager is null') ;
+      }
     }
   }catch(err){
     console.log('Utils.isVotableStatus err', err) ;
