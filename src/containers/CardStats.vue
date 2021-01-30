@@ -4,7 +4,7 @@
       <template #body>
         <div class="stats">
           <div class="title">Claimable TON</div>
-          <div class="content">{{ activityReward }}</div>
+          <div class="content">{{ claimableAmount | TON }} TON</div>
         </div>
         <div class="stats">
           <div class="title"># of Agendas</div>
@@ -17,7 +17,7 @@
 
 <script>
 import Card from '@/components/Card.vue';
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
@@ -28,7 +28,9 @@ export default {
       'account',
       'web3',
       'myVote',
-      'activityReward',
+    ]),
+    ...mapGetters([
+      'claimableAmount',
     ]),
   },
 };

@@ -173,14 +173,18 @@ export default new Vuex.Store({
     },
     async setContractState ({ state, commit }) {
       const agendaManager = getContract('DAOAgendaManager', state.web3);
+      const committeeProxy = getContract('DAOCommitteeProxy', state.web3);
       const [
         createAgendaFee,
+        claimableAmount,
       ] = await Promise.all([
         agendaManager.methods.createAgendaFees().call(),
+        committeeProxy.methods.getClaimableActivityReward(state.account).call(),
       ]);
 
       const contractState = {
         createAgendaFee,
+        claimableAmount,
       };
       commit('SET_CONTRACT_STATE', contractState);
     },
@@ -422,6 +426,10 @@ export default new Vuex.Store({
     createAgendaFee: (state) => {
       if (!state.contractState) return 0;
       return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
+    },
+    claimableAmount: (state) => {
+      if (!state.contractState) return 0;
+      return state.contractState.claimableAmount;
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);

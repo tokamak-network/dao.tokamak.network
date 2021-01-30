@@ -40,6 +40,7 @@ export function fromNow (timestamp, suffix=false) {
 }
 
 export function TON (amount) {
+  if (!amount) amount = 0;
   const ton = _TON.wei(amount);
   const value = ton.toString();
   const length = value.length;
