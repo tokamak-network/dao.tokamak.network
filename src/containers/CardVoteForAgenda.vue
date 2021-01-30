@@ -17,7 +17,7 @@
           <button-comp :name="'Vote for this Agenda'"
                        :type="'secondary'"
                        :width="'100%'"
-                       @on-clicked="showModal=true"
+                       @on-clicked="openModel()"
           />
         </div>
       </template>
@@ -31,7 +31,7 @@ import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 import { mapState, mapGetters } from 'vuex';
-import { getContractABIFromAddress } from '@/utils/contracts';
+import { getContractABIFromAddress, isVotableStatusOfAgenda } from '@/utils/contracts';
 
 export default {
   components: {
@@ -41,15 +41,17 @@ export default {
     'modal-vote': ModalVote,
   },
   data () {
+    console.log('this.$route.params', this.$route.params);
     return {
       showModal: false,
-      id: Number(this.$route.params.address),
+      id: Number(this.$route.params.id),
       monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
   computed: {
     ...mapState([
       'account',
+      'web3',
     ]),
     ...mapGetters([
       'getAgendaByID',
@@ -82,9 +84,19 @@ export default {
   },
   methods: {
     vote (index, address) {
+      console.log('vote ', index, address);
       this.$router.push({
         path: `/agenda/${index}/${address}`,
       });
+    },
+    async openModel (){
+      if(this.web3==null) {
+        alert('Check Connect Wallet!');
+        return;
+      }
+      const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
+      if(isVotableStatus) this.showModal=true;
+      else alert('This Agenda is not in a state to vote.');
     },
   },
 };

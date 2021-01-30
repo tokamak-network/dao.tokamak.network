@@ -64,21 +64,15 @@ export default {
     },
   },
   methods: {
-    hello (){
-      console.log('hello');
-    },
     async connect () {
-      console.log('connect');
       if (typeof window.ethereum !== 'undefined') {
         //const web3 = new Web3(ethereum);
         const web3 = new Web3(window.ethereum);
-        //console.log('web3');
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const accounts = await web3.eth.getAccounts();
           this.account = accounts[0];
-          console.log('accounts1', this.account);
           this.currentBlock = await await web3.eth.getBlockNumber();
           this.$nextTick(() => {
             this.setIcon();
@@ -142,7 +136,6 @@ export default {
                   //console.log('DAOCommittee getPastEvents: ', l);
                   const datas = l.filter(includeEvent);
                   console.log('DAOCommittee getPastEvents: filter datas ',  datas);
-                  //console.log('getPastEventsExchangeTokenIsold: mydatas ', datas);
                 },
               );
             }else{
@@ -159,7 +152,6 @@ export default {
             address: getContractAddress('DAOCommitteeProxy'),
           }, async (error, result) => {
             //console.log('logs result',result);
-
             if(error!=null) {
               console.log('onWatch error1', error);
             }
@@ -168,11 +160,9 @@ export default {
                 console.log('onWatch error2', error);
               } else{
                 if(this.currentBlock < result.blockNumber){
-                  //console.log('onWatch', result);
                   const eventName = getEventName(result.topics[0]);
                   console.log('onWatch   ', eventName);
                   if(eventName==='AgendaCreated') {
-                    // 아젠다 데이타를 갱신하고, 메세지 부스로 알려줍니다.
                     EventBus.$emit('message', { command:'agendaEvent', data: eventName });
                   }
                 }

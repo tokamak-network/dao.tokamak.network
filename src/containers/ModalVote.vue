@@ -3,7 +3,7 @@
     <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
          @click="close"
     >
-    <div class="function">Confirm Vote</div>
+    <div class="function">Agenda#{{ id }} Confirm Vote </div>
     <div class="sub-title">
       <span>
         You are voting for the following candidate/commitee<br>
@@ -51,7 +51,7 @@ import Button from '@/components/Button.vue';
 
 // import Web3 from 'web3';
 import { mapState } from 'vuex';
-import { getContract } from '@/utils/contracts';
+import { isVotableStatusOfAgenda } from '@/utils/contracts';
 import candidate from '../contracts/Candidate.json';
 
 export default {
@@ -92,7 +92,23 @@ export default {
         this.choice = 0;
       }
     },
+    findCandidateContractByOperator (){
+      let _candidateContract = null;
+      console.log('findCandidateContractByOperator', this.candidates );
+      if(this.candidates!=null && this.candidates.length > 0 ){
+        for(let i=0; i< this.candidates.length; i++){
+          if( this.candidates[i].operator.toLowerCase() === this.account.toLowerCase() ) _candidateContract = this.candidates[i].candidateContract;
+        }
+      }
+      return _candidateContract;
+    },
     async vote () {
+      if(this.web3==null) {
+        alert('Check Connect Wallet!');
+        return;
+      }
+      const candidateContract = this.findCandidateContractByOperator();
+      /*
       const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
       // const daoCommittee = getContract('Candidate', this.web3);
       // const gasLimit = await daoCommittee.methods.castVote(
@@ -104,24 +120,38 @@ export default {
       // });
 
       const candidateContract = await committeeProxy.methods.candidateContract(this.account).call();
-      const Candidate = new this.web3.eth.Contract(candidate.abi, candidateContract);
+      */
+      try{
+        const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
+        if(!isVotableStatus){
+          alert('This Agenda is not in a state to vote.');
+          this.close();
+        }else{
+          const Candidate = new this.web3.eth.Contract(candidate.abi, candidateContract);
+          if(Candidate!=null){
+            await Candidate.methods.castVote(
+              this.id,
+              this.choice,
+              this.comment,
+            ).send({
+              from: this.account,
+              // gasLimit: Math.floor(gasLimit * 1.2),
+            }).on('transactionHash', async (hash) => {
+              this.$store.commit('SET_PENDING_TX', hash);
+              this.close();
+            }).on('receipt', () => {
+              this.$store.dispatch('setAgendas');
+              this.$store.commit('SET_PENDING_TX', '');
+              this.close();
+            });
+            this.close();
 
-      await Candidate.methods.castVote(
-        this.id,
-        this.choice,
-        this.comment,
-      ).send({
-        from: this.account,
-        // gasLimit: Math.floor(gasLimit * 1.2),
-      }).on('transactionHash', async (hash) => {
-        this.$store.commit('SET_PENDING_TX', hash);
-        this.close();
-      }).on('receipt', () => {
-        this.$store.dispatch('setAgendas');
-        this.$store.commit('SET_PENDING_TX', '');
-        this.close();
-      });
-      this.close();
+          }
+        }
+
+      }catch(error){
+        console.log('castVote error', error);
+      }
     },
   },
 };
