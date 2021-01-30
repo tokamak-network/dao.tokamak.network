@@ -100,7 +100,7 @@ export default {
 
             await this.$store.dispatch('launch');
             await this.$store.dispatch('connectEthereum', web3);
-            EventBus.$emit('message', { command:'accountsChanged', data:'accountsChanged-data' });
+            EventBus.$emit('metamask', { command:'accountsChanged', data:this.account });
           }
         };
         const handleNetworkChanged = () => {

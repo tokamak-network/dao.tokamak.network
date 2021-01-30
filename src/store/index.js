@@ -16,6 +16,7 @@ import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+import EventBus from '../utils/eventBus';
 
 const _TON = createCurrency('TON');
 
@@ -142,10 +143,24 @@ export default new Vuex.Store({
       });
 
       const myVotesByCandidate = await Promise.all(myVotesByCandidateProm);
+
       for (let i = 0; i < state.candidates.length; i++) {
         state.candidates[i].myVotes = myVotesByCandidate[i];
       }
+      const BN = web3Utils.BN;
+      state.candidates.sort(function (a, b) {
+        if (new BN(a.myVotes).gt(new BN(b.myVotes))) {
+          return -1;
+        }
+        if (new BN(a.myVotes).lt(new BN(b.myVotes))) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+
       commit('SET_CANDIDATES', state.candidates);
+      EventBus.$emit('statechange', { command:'candidate', data:state.candidates });
     },
     async setRequests ({ state, commit }) {
       const requestsByCandidate = [];
@@ -192,14 +207,21 @@ export default new Vuex.Store({
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommittee = getContract('DAOCommittee', state.web3);
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-
+      let candidates = null;
+      if(state.candidates==null || state.candidates.length === 0 ){
+        candidates = await getCandidates();
+      }else{
+        candidates = state.candidates;
+      }
+      const maxMember = await daoCommitteeProxy.methods.maxMember().call();
+      /*
       const [
         candidates,
         maxMember,
       ] = await Promise.all([
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
-      ]);
+      ]); */
 
       const addressMembers = [];
       for (let i = 0; i < maxMember; i++) {

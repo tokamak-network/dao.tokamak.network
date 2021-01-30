@@ -14,7 +14,7 @@
           >
             <div>{{ index + 1 }}</div>
             <div>{{ data.candidateContract | hexSlicer }}</div>
-            <div>{{ data.myVotes | WTON }} TON</div>
+            <div>{{ data.myVotes | WTON }} TON </div>
           </div>
         </div>
         <div class="button-container">
@@ -50,13 +50,15 @@ export default {
   computed: {
     ...mapState([
       'myVotesByCandidate',
+      'candidates',
     ]),
     myVotes () {
       return this.myVotesByCandidate ? this.myVotesByCandidate.filter(candidate => candidate.myVotes > 0) : [];
     },
     ranks () {
       const first = this.page * 4;
-      return this.myVotes ? this.myVotes.slice(first, first+4) : [];
+      //return this.myVotes ? this.myVotes.slice(first, first+4) : [];
+      return this.candidates ? this.candidates.slice(first, first+4) : [];
     },
   },
   methods: {
