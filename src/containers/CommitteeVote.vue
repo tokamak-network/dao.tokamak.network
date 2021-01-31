@@ -182,7 +182,7 @@ export default {
       this.withdrawIndex + 1 === requests.length ? this.withdrawIndex = 0 : this.withdrawIndex++;
     },
     async vote () {
-      if (!this.account) return;
+      if (!this.account || this.web3==null ) { alert('Check Connect Wallet!'); return;}
       const BN = web3Utils.BN;
 
       const ton = getContract('TON', this.web3);
@@ -199,26 +199,29 @@ export default {
         return alert('Please check your TON amount!');
       }
       const data = await this.dataForDeposit();
+      if(data!=null){
+        const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
+          .estimateGas({
+            from: this.account,
+          });
+        await ton.methods.approveAndCall(wton._address, amount, data)
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$refs.tonvote.$refs.input.value = null;
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('receipt', async () => {
+            await this.update();
 
-      const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
-        .estimateGas({
-          from: this.account,
-        });
+            this.$store.commit('SET_PENDING_TX', '');
+          });
+      }else{
+        alert('an error occurs, check the network and try again.');
+      }
 
-      await ton.methods.approveAndCall(wton._address, amount, data)
-        .send({
-          from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
-        })
-        .on('transactionHash', (hash) => {
-          this.$refs.tonvote.$refs.input.value = null;
-          this.$store.commit('SET_PENDING_TX', hash);
-        })
-        .on('receipt', async () => {
-          await this.update();
-
-          this.$store.commit('SET_PENDING_TX', '');
-        });
     },
     async unvote () {
       if (!this.account) return;
@@ -319,19 +322,26 @@ export default {
         });
     },
     async dataForDeposit () {
-      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
+      //const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
       const depositManager = getContract('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
-      const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
-
-      const data = marshalString(
-        [depositManager._address, candidateContract]
-          .map(unmarshalString)
-          .map(str => padLeft(str, 64))
-          .join(''),
-      );
-      return data;
+      console.log('dataForDeposit candidate', candidate);
+      let layer2Address=null;
+      if(candidate.kind ==='candidate') layer2Address = candidate.candidateContract;
+      else if (candidate.kind ==='layer2') layer2Address = candidate.layer2;
+      if(layer2Address!=null){
+        //const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
+        const data = marshalString(
+          [depositManager._address, layer2Address]
+            .map(unmarshalString)
+            .map(str => padLeft(str, 64))
+            .join(''),
+        );
+        return data;
+      }else{
+        return null;
+      }
     },
     async update () {
       await this.$store.dispatch('launch');
