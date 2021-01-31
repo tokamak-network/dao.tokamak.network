@@ -56,7 +56,7 @@
 
 <script>
 import moment from 'moment';
-import { getContract } from '@/utils/contracts';
+import { getContract, metamaskErrorMessage } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
 
 import { mapGetters, mapState } from 'vuex';
@@ -131,25 +131,40 @@ export default {
     async challenge () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
       const memberIndex = this.memberIndex;
+      console.log('challenge start', memberIndex);
 
-      const gasLimit = await candidateContract.methods.changeMember(memberIndex)
-        .estimateGas({
-          from: this.account,
-        });
+      try{
+        const gasLimit = await candidateContract.methods.changeMember(memberIndex)
+          .estimateGas({
+            from: this.account,
+          });
+        console.log('challenge gasLimit', gasLimit);
 
-      await candidateContract.methods.changeMember(memberIndex)
-        .send({
-          from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
-        })
-        .on('transactionHash', (hash) => {
-          this.$store.commit('SET_PENDING_TX', hash);
-        })
-        .on('receipt', async () => {
-          this.$store.commit('SET_PENDING_TX', '');
+        await candidateContract.methods.changeMember(memberIndex)
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            console.log('challenge transactionHash', hash);
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('receipt', async (receipt) => {
+            this.$store.commit('SET_PENDING_TX', '');
+            console.log('receipt', receipt) ;
+            await this.$store.dispatch('launch');
+          })
+          .on('error', (error) =>{
+            //alert('error');
+            console.log('error', error) ;
+          });
 
-          await this.$store.dispatch('launch');
-        });
+      }catch(err){
+        //console.log('challenge err', err, err.message ) ;
+        const msg = metamaskErrorMessage(err.message);
+        if(msg!=null && msg.length > 0 ) alert(msg) ;
+      }
+
     },
   },
 };

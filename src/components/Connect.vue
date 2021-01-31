@@ -151,7 +151,7 @@ export default {
             fromBlock: deployedFirstBlock,
             address: getContractAddress('DAOCommitteeProxy'),
           }, async (error, result) => {
-            //console.log('logs result',result);
+            //console.log('onWatch logs result', result);
             if(error!=null) {
               console.log('onWatch error1', error);
             }

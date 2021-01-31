@@ -465,6 +465,19 @@ module.exports.parseAgendaBytecode = function (tx) {
   return onChainEffects;
 };
 
+module.exports.metamaskErrorMessage = function (errorString) {
+  let errString='';
+  //"message": "execution reverted: DAOCommittee: already member"
+
+  if(errorString!=null && errorString.length > 0 ){
+    const key='message';
+    const positionKey = errorString.indexOf(key);
+    const startMessage = errorString.indexOf('"', positionKey+key.length+2);
+    const endMessage = errorString.indexOf('"', startMessage+3);
+    errString = errorString.substring(startMessage+1, endMessage);
+  }
+  return errString;
+};
 
 const DepositManagerAbi = require('../contracts/DepositManager.json').abi;
 const SeigManagerAbi = require('../contracts/SeigManager.json').abi;
