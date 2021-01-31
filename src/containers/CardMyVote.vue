@@ -9,7 +9,7 @@
             <div>Total Vote</div>
           </div>
           <div class="divide"></div>
-          <div v-for="(data, index) in ranks" :key="data.operator"
+          <div v-for="(data, index) in ranks" :key="data.transactionHash"
                class="body"
           >
             <div>{{ index + 1 }}</div>
