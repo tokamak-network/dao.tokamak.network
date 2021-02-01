@@ -43,11 +43,13 @@ export default new Vuex.Store({
     voteRate: 0,
     myVote: [],
     activityReward: [],
+    votedCandidatesFromAccount: [],
 
     requestsByCandidate: [],
     candidateRankByVotes: [],
 
     pendingTx: '',
+    confirmBlock: 3,
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -99,6 +101,9 @@ export default new Vuex.Store({
     SET_MY_VOTES (state, myVotes) {
       state.myVotes = myVotes;
     },
+    SET_VOTED_CANDIDATES_FROM_ACCOUNT (state, votedCandidatesFromAccount) {
+      state.votedCandidatesFromAccount = votedCandidatesFromAccount;
+    },
 
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
@@ -130,6 +135,7 @@ export default new Vuex.Store({
       commit('SET_BLOCK_NUMBER', blockNumber);
 
       await dispatch('setBalance');
+      await dispatch('setVotedCandidatesFromAccount');
       await dispatch('setRequests');
       await dispatch('setContractState');
     },
@@ -339,6 +345,28 @@ export default new Vuex.Store({
       const voters = await getVotersByCandidate(address.toLowerCase());
       commit('SET_VOTERS', voters);
     },
+    async setVotedCandidatesFromAccount ({ state, commit }) {
+      const myVotesProm = [];
+      state.candidates.forEach(candidate => {
+        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        myVotesProm.push(candidateContract.methods.stakedOf(state.account).call());
+      });
+      const myVotes = await Promise.all(myVotesProm);
+
+      const votedCandidatesFromAccount = [];
+      for (let i = 0; i < state.candidates.length; i++) {
+        const candidate = state.candidates[i];
+        if (myVotes[i] > 0) {
+          votedCandidatesFromAccount.push({
+            name: candidate.name,
+            myVotes: myVotes[i],
+            candidate: candidate.candidate,
+            candidateContract: candidate.candidateContract,
+          });
+        }
+      }
+      commit('SET_VOTED_CANDIDATES_FROM_ACCOUNT', votedCandidatesFromAccount);
+    },
   },
   getters: {
     agendaVoteResult: (state) => (agendaId) => {
@@ -469,6 +497,21 @@ export default new Vuex.Store({
         a = web3Utils.toBN(a);
 
         b = b.coinageTotalSupply.toString(16);
+        b = web3Utils.toBN(b);
+
+        if (a.cmp(b) === 1)      return -1;
+        else if (a.cmp(b) === 0) return 0;
+        else                     return 1;
+      });
+    },
+    sortedVotedCandidatesFromAccountByVotes: (state) => {
+      if (!state.votedCandidatesFromAccount || state.votedCandidatesFromAccount.length === 0) return [];
+
+      return state.votedCandidatesFromAccount.sort(function (a, b)  {
+        a = a.myVotes.toString(16);
+        a = web3Utils.toBN(a);
+
+        b = b.myVotes.toString(16);
         b = web3Utils.toBN(b);
 
         if (a.cmp(b) === 1)      return -1;
