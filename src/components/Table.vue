@@ -15,39 +15,19 @@
 </template>
 
 <script>
-import { getVotersByCandidate } from '@/api';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
-  data () {
-    return {
-      address: '',
-      voters: [],
-      sumOfVotes: 0,
-    };
-  },
   computed: {
+    ...mapState([
+      'voters',
+    ]),
+    ...mapGetters([
+      'sumOfVotes',
+    ]),
     calcPct () {
       return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);
     },
-  },
-  watch: {
-    '$route.params.address': {
-      handler: async function () {
-        this.address = this.$route.params.address;
-
-        const voters = await getVotersByCandidate(this.address.toLowerCase());
-        this.voters = (!voters || voters.length === 0) ? [] : voters;
-
-        const initialAmount = 0;
-        const reducer = (amount, voter) => amount + voter.balance;
-        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  mounted () {
-    this.address = this.$route.params.address;
   },
 };
 </script>

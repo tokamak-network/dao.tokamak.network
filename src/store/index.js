@@ -7,6 +7,7 @@ import {
   getAgendaVoteCasted,
   getCandidateRankByVotes,
   getAgendaContents,
+  getVotersByCandidate,
 } from '@/api';
 import {
   getContract,
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     candidates: [],
     members: [],
     nonmembers: [],
+    voters: [],
     myVotes: 0,
 
     agendas: [],
@@ -91,10 +93,12 @@ export default new Vuex.Store({
     SET_CONTRACT_STATE (state, contractState) {
       state.contractState = contractState;
     },
+    SET_VOTERS (state, voters) {
+      state.voters = voters;
+    },
     SET_MY_VOTES (state, myVotes) {
       state.myVotes = myVotes;
     },
-
 
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
@@ -331,6 +335,10 @@ export default new Vuex.Store({
       const candidateRankByVotes = await getCandidateRankByVotes();
       commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
     },
+    async setVoters ({ commit }, address) {
+      const voters = await getVotersByCandidate(address.toLowerCase());
+      commit('SET_VOTERS', voters);
+    },
   },
   getters: {
     agendaVoteResult: (state) => (agendaId) => {
@@ -467,6 +475,11 @@ export default new Vuex.Store({
         else if (a.cmp(b) === 0) return 0;
         else                     return 1;
       });
+    },
+    sumOfVotes: (state) => {
+      const initialAmount = 0;
+      const reducer = (amount, voter) => amount + voter.balance;
+      return state.voters.reduce(reducer, initialAmount);
     },
   },
 });

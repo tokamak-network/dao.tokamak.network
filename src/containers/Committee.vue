@@ -31,10 +31,7 @@
       </div>
       <div class="divider" />
       <committee-info v-if="currentSelector === 0" />
-      <committee-info-vote v-else-if="currentSelector === 1"
-                           :voters="voters"
-                           :sum-of-votes="sumOfVotes"
-      />
+      <committee-info-vote v-else-if="currentSelector === 1" />
       <committee-vote v-else-if="currentSelector === 2" />
     </div>
   </div>
@@ -42,7 +39,6 @@
 
 <script>
 import { date1, fromNow } from '@/utils/helpers';
-import { getVotersByCandidate } from '@/api';
 
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
@@ -59,20 +55,20 @@ export default {
   },
   data () {
     return {
-      currentSelector: 0,
-
       address: '',
-      voters: [],
-      sumOfVotes: 0,
+      currentSelector: 0,
     };
   },
   computed: {
     ...mapState([
+      'account',
       'candidates',
       'members',
+      'voters',
     ]),
     ...mapGetters([
       'candidate',
+      'sumOfVotes',
     ]),
     isMember () {
       return this.members.find(member => member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase());
@@ -82,13 +78,9 @@ export default {
     '$route.params.address': {
       handler: async function () {
         this.address = this.$route.params.address;
+        await this.$store.dispatch('setVoters', this.address);
 
-        const voters = await getVotersByCandidate(this.address.toLowerCase());
-        this.voters = (!voters || voters.length === 0) ? [] : voters;
-
-        const initialAmount = 0;
-        const reducer = (amount, voter) => amount + voter.balance;
-        this.sumOfVotes = this.voters.reduce(reducer, initialAmount);
+        if (this.account) await this.$store.dispatch('setMyVotes', this.address);
       },
       deep: true,
       immediate: true,
