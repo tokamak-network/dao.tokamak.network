@@ -197,7 +197,7 @@ export default {
         return;
       }
       if (this.agenda.status === 2 || this.agenda.status === 1) {
-        const isVotableStatus = await isVotableStatusOfAgenda( this.agenda.id, this.web3);
+        const isVotableStatus = await isVotableStatusOfAgenda( this.agenda.agendaid, this.web3);
         if(!isVotableStatus) {
           alert('This Agenda is not in a state to vote.');
           return;
