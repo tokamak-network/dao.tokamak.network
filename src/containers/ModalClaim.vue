@@ -27,7 +27,10 @@
 <script>
 import Button from '@/components/Button.vue';
 import { mapState } from 'vuex';
-import { getContract } from '@/utils/contracts';
+//import { getContract } from '@/utils/contracts';
+import { getContractAddress } from '@/utils/contracts';
+import committee from '../contracts/DAOCommittee.json';
+import Web3 from 'web3';
 
 export default {
   components: {
@@ -36,6 +39,8 @@ export default {
   computed: {
     ...mapState([
       'activityReward',
+      'web',
+      'account',
     ]),
   },
   methods: {
@@ -43,8 +48,10 @@ export default {
       this.$emit('on-closed');
     },
     async claim () {
-      const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
-
+      let web3 = this.web3;
+      if(web3  ==null) web3 = new Web3(window.ethereum);
+      //const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3, getContractAddress('DAOCommitteeProxy'));
+      const daoCommitteeProxy = new web3.eth.Contract(committee.abi, getContractAddress('DAOCommitteeProxy'));
       await daoCommitteeProxy.methods.claimActivityReward().send({
         from: this.account,
       }).on('transactionHash', async (hash) => {
@@ -53,6 +60,10 @@ export default {
       }).on('receipt', () => {
         this.$store.commit('SET_PENDING_TX', '');
         this.$store.dispatch('setAgendas');
+        this.close();
+      }).on('error', (error) =>{
+        //alert('error');
+        console.log('error', error) ;
         this.close();
       });
     },

@@ -167,6 +167,9 @@ export default {
               this.$store.dispatch('setAgendas');
               this.$store.commit('SET_PENDING_TX', '');
               this.close();
+            }).on('error', (error) =>{
+              //alert('error');
+              console.log('error', error) ;
             });
             this.close();
 
