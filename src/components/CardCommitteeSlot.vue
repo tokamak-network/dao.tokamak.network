@@ -82,6 +82,7 @@ export default {
       'account',
       'web3',
       'members',
+      'confirmBlock',
     ]),
     ...mapGetters([
       'candidateContractFromAccount',
@@ -149,6 +150,9 @@ export default {
           this.$store.commit('SET_PENDING_TX', '');
 
           await this.$store.dispatch('launch');
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
         });
     },
   },

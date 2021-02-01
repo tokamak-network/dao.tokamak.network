@@ -118,6 +118,7 @@ export default {
       'account',
       'web3',
       'tonBalance',
+      'confirmBlock',
       'myVotes',
     ]),
     ...mapGetters([
@@ -214,9 +215,15 @@ export default {
           this.$refs.tonvote.$refs.input.value = null;
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
-
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
@@ -253,9 +260,16 @@ export default {
           this.$refs.tonunvote.$refs.input.value = null;
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
 
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
@@ -281,13 +295,19 @@ export default {
         .on('transactionHash', (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
 
-          this.revoteIndex = 0;
+            this.revoteIndex = 0;
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
-
-          this.$forceUpdate();
         });
     },
     async withdraw () {
@@ -310,10 +330,18 @@ export default {
         .on('transactionHash', async (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
 
-          this.withdrawIndex = 0;
+            this.withdrawIndex = 0;
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },

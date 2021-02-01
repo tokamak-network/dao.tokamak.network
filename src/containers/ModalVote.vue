@@ -77,6 +77,7 @@ export default {
       'web3',
       'members',
       'candidates',
+      'confirmBlock',
     ]),
   },
   methods: {
@@ -113,14 +114,24 @@ export default {
       ).send({
         from: this.account,
         // gasLimit: Math.floor(gasLimit * 1.2),
-      }).on('transactionHash', async (hash) => {
-        this.$store.commit('SET_PENDING_TX', hash);
-        this.close();
-      }).on('receipt', () => {
-        this.$store.dispatch('setAgendas');
-        this.$store.commit('SET_PENDING_TX', '');
-        this.close();
-      });
+      })
+        .on('transactionHash', async (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
+        .on('receipt', () => {
+          this.$store.dispatch('setAgendas');
+          this.$store.commit('SET_PENDING_TX', '');
+          this.close();
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
       this.close();
     },
   },

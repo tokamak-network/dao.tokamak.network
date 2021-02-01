@@ -220,6 +220,9 @@ export default {
         })
         .on('receipt', () => {
           this.$store.commit('SET_PENDING_TX', '');
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
         });
     },
     detail (id) {

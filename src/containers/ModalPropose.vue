@@ -99,6 +99,7 @@ export default {
       'web3',
       'account',
       'tonBalance',
+      'confirmBlock',
     ]),
     ...mapGetters([
       'createAgendaFee',
@@ -183,7 +184,15 @@ export default {
           await this.$store.dispatch('launch');
           await this.$store.dispatch('connectEthereum', this.web3);
         })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
         .on('receipt', async () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
