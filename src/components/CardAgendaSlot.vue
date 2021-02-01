@@ -122,7 +122,7 @@ export default {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
-      return address => 'https://etherscan.io/address/' + address;
+      return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
     deployedDate () {
       return (timestamp) => {

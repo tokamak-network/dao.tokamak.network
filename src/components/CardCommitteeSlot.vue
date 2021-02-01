@@ -108,7 +108,7 @@ export default {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
-      return address => 'https://etherscan.io/address/' + address;
+      return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
   },
   methods: {
@@ -118,8 +118,8 @@ export default {
     },
     etherscan (address) {
       address ?
-        window.open('https://etherscan.io/address/' + address, '_blank') : // eslint-disable-line
-        window.open('https://etherscan.io/address/' + this.members[this.memberIndex].operator, '_blank');  // eslint-disable-line
+        window.open('https://rinkeby.etherscan.io/address/' + address, '_blank') : // eslint-disable-line
+        window.open('https://rinkeby.etherscan.io/address/' + this.members[this.memberIndex].operator, '_blank');  // eslint-disable-line
     },
     detail () {
       if (this.occupied()) {
