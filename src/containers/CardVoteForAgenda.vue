@@ -41,7 +41,6 @@ export default {
     'modal-vote': ModalVote,
   },
   data () {
-    console.log('this.$route.params', this.$route.params);
     return {
       showModal: false,
       id: Number(this.$route.params.id),
@@ -84,7 +83,6 @@ export default {
   },
   methods: {
     vote (index, address) {
-      console.log('vote ', index, address);
       this.$router.push({
         path: `/agenda/${index}/${address}`,
       });

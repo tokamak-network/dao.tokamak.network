@@ -101,7 +101,7 @@ export default {
           this.$store.dispatch('disconnectEthereum');
         };
         const getAgendaEvents = () => {
-          console.log('getAgendaEvents in ');
+
           function includeEvent (element) {
             const TOPICS_NAME={
               'AgendaCreated': 'AgendaCreated',
@@ -135,13 +135,13 @@ export default {
                 }, function (e, l){
                   //console.log('DAOCommittee getPastEvents: ', l);
                   const datas = l.filter(includeEvent);
+                  // eslint-disable-line
                   console.log('DAOCommittee getPastEvents: filter datas ',  datas);
                 },
               );
-            }else{
-              console.log('myContract is null ' );
             }
           } catch (err) {
+            // eslint-disable-line
             console.log('getAgendaEvents error ', err ) ;
             //return null;
           }
@@ -151,39 +151,46 @@ export default {
             fromBlock: deployedFirstBlock,
             address: getContractAddress('DAOCommitteeProxy'),
           }, async (error, result) => {
-            //console.log('onWatch logs result', result);
             if(error!=null) {
+              // eslint-disable-line
               console.log('onWatch error1', error);
             }
             if(result!=null) {
               if(result.blockNumber==='undefined' || result.transactionHash ==='result.transactionHash'){
+                // eslint-disable-line
                 console.log('onWatch error2', error);
               } else{
                 if(this.currentBlock < result.blockNumber){
                   const eventName = getEventName(result.topics[0]);
-                  console.log('onWatch   ', eventName);
+                  //console.log('onWatch   ', eventName);
                   if(eventName==='AgendaCreated') {
                     EventBus.$emit('message', { command:'agendaEvent', data: eventName });
                   }
                 }
               }
             }
-            //console.log('result',result);
           }).on('connected', function (subscriptionId){
+           // eslint-disable-line
             console.log('connected', subscriptionId);
           }).on('data', function (log){
+            // eslint-disable-line
             console.log('data', log);
           }).on('changed', function (log){
+            // eslint-disable-line
             console.log('changed', log);
           });
 
           subscription.unsubscribe(async function (error, success){
+            // eslint-disable-line
             console.log('unsubscribed!  error:', error, 'success: ', success );
             if(error){
+              // eslint-disable-line
               console.log('err unsubscribed!', error);
             }
-            if(success)
+            if(success){
+              // eslint-disable-line
               console.log('***** Successfully unsubscribed!');
+            }
           });
         };
         const getEventName = (topics)=>{
@@ -268,6 +275,7 @@ export default {
           // Handle the new chain.
           // Correctly handling chain changes can be complicated.
           // We recommend reloading the page unless you have a very good reason not to.
+           // eslint-disable-line
           console.log('ethereum.message ', message) ;
         });
         getAgendaEvents();

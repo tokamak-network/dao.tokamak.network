@@ -256,7 +256,7 @@ export default new Vuex.Store({
         candidates[i].info = infos[i]; // eslint-disable-line
       }
       commit('SET_CANDIDATES', candidates);
-      console.log('candidates:', candidates);
+      //console.log('candidates:', candidates);
       const members = new Array(maxMember);
       const nonmembers = [];
       candidates.forEach(candidate => {
@@ -366,6 +366,7 @@ export default new Vuex.Store({
           }
         }
       }catch(error){
+        // eslint-disable-line
         console.log('setActivityReward error', error);
       }
 

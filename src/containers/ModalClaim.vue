@@ -62,7 +62,7 @@ export default {
         this.$store.dispatch('setAgendas');
         this.close();
       }).on('error', (error) =>{
-        //alert('error');
+        // eslint-disable-line
         console.log('error', error) ;
         this.close();
       });

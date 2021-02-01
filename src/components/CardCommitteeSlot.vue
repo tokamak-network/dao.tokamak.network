@@ -131,13 +131,13 @@ export default {
     async challenge () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
       const memberIndex = this.memberIndex;
-      console.log('challenge start', memberIndex);
 
       try{
         const gasLimit = await candidateContract.methods.changeMember(memberIndex)
           .estimateGas({
             from: this.account,
           });
+          // eslint-disable-line
         console.log('challenge gasLimit', gasLimit);
 
         await candidateContract.methods.changeMember(memberIndex)
@@ -146,21 +146,18 @@ export default {
             gasLimit: Math.floor(gasLimit * 1.2),
           })
           .on('transactionHash', (hash) => {
-            console.log('challenge transactionHash', hash);
             this.$store.commit('SET_PENDING_TX', hash);
           })
-          .on('receipt', async (receipt) => {
+          .on('receipt', async () => {
             this.$store.commit('SET_PENDING_TX', '');
-            console.log('receipt', receipt) ;
             await this.$store.dispatch('launch');
           })
           .on('error', (error) =>{
-            //alert('error');
+            // eslint-disable-line
             console.log('error', error) ;
           });
 
       }catch(err){
-        //console.log('challenge err', err, err.message ) ;
         const msg = metamaskErrorMessage(err.message);
         if(msg!=null && msg.length > 0 ) alert(msg) ;
       }

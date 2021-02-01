@@ -112,7 +112,7 @@ export default {
     this.agendaFilter();
     this.classify(this.openAgendas);
     EventBus.$on('message', (payload)=>{
-      console.log('EventBus get message ', payload);
+      //console.log('EventBus get message ', payload);
       if(payload.command==='agendaEvent' && payload.data==='AgendaCreated' ){
         alert('AgendaCreated !! we can reload automatically .');
       }

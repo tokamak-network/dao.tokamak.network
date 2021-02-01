@@ -95,7 +95,6 @@ export default {
     async findCandidateContractByOperator (){
       let _candidateContract = null;
       let returnCandidateContract = null;
-      console.log('findCandidateContractByOperator', this.candidates );
       if(this.candidates!=null && this.candidates.length > 0 ){
         for(let i=0; i< this.candidates.length; i++){
           if(_candidateContract==null) _candidateContract=[];
@@ -104,12 +103,10 @@ export default {
       }
       if(_candidateContract!=null && _candidateContract.length===1) returnCandidateContract=_candidateContract[0];
       else if(_candidateContract!=null){
-        console.log('this.members', this.members) ;
         if(this.members!=null && this.members.length> 0){
           for(let i=0; i< _candidateContract.length ; i++ ){
             for(let j=0; j< this.members.length ; j++){
               if(_candidateContract[i].toLowerCase() === this.members[j].candidateContract.toLowerCase()){
-                console.log('compare', _candidateContract[i], this.members[j].candidateContract) ;
                 return _candidateContract[i];
               }
             }
@@ -124,7 +121,6 @@ export default {
         return;
       }
       const candidateContract = await this.findCandidateContractByOperator();
-      console.log('castVote candidateContract ==>>  ', candidateContract) ;
 
       /*
       const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
@@ -145,9 +141,6 @@ export default {
           alert('This Agenda is not in a state to vote.');
           this.close();
         }else{
-
-          console.log('castVote this.account ', this.account ) ;
-          console.log('castVote ',  this.id, this.choice, this.comment) ;
           const Candidate = new this.web3.eth.Contract(candidate.abi, candidateContract);
           if(Candidate!=null){
             await Candidate.methods.castVote(
@@ -158,25 +151,24 @@ export default {
               from: this.account,
               // gasLimit: Math.floor(gasLimit * 1.2),
             }).on('transactionHash', async (hash) => {
-              console.log('castVote transactionHash ', hash) ;
-
               this.$store.commit('SET_PENDING_TX', hash);
               this.close();
-            }).on('receipt', (receipt) => {
-              console.log('castVote receipt ',  receipt) ;
+            }).on('receipt', () => {
+              //console.log('castVote receipt ',  receipt) ;
               this.$store.dispatch('setAgendas');
               this.$store.commit('SET_PENDING_TX', '');
               this.close();
             }).on('error', (error) =>{
               //alert('error');
+              // eslint-disable-line
               console.log('error', error) ;
             });
             this.close();
 
           }
         }
-
       }catch(error){
+        // eslint-disable-line
         console.log('castVote error', error);
       }
     },

@@ -98,6 +98,7 @@ export default {
   },
   created (){
     EventBus.$on('message', (payload)=>{
+      // eslint-disable-line
       console.log(payload);
     });
   },
