@@ -34,6 +34,7 @@ export default new Vuex.Store({
     candidates: [],
     members: [],
     nonmembers: [],
+    myVotes: 0,
 
     agendas: [],
     voteCasted: [],
@@ -90,6 +91,9 @@ export default new Vuex.Store({
     SET_CONTRACT_STATE (state, contractState) {
       state.contractState = contractState;
     },
+    SET_MY_VOTES (state, myVotes) {
+      state.myVotes = myVotes;
+    },
 
 
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
@@ -134,18 +138,12 @@ export default new Vuex.Store({
       const ton = getContract('TON', state.web3);
       const tonBalance = await ton.methods.balanceOf(state.account).call();
       commit('SET_TON_BALANCE', tonBalance);
+    },
+    async setMyVotes ({ state, commit }, candidateContractAddress) {
+      const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
+      const myVotes = await candidateContract.methods.stakedOf(state.account).call();
 
-      const myVotesByCandidateProm = [];
-      state.candidates.forEach(async candidate => {
-        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
-        myVotesByCandidateProm.push(candidateContract.methods.stakedOf(state.account).call());
-      });
-
-      const myVotesByCandidate = await Promise.all(myVotesByCandidateProm);
-      for (let i = 0; i < state.candidates.length; i++) {
-        state.candidates[i].myVotes = myVotesByCandidate[i];
-      }
-      commit('SET_CANDIDATES', state.candidates);
+      commit('SET_MY_VOTES', myVotes);
     },
     async setRequests ({ state, commit }) {
       const requestsByCandidate = [];
@@ -366,10 +364,6 @@ export default new Vuex.Store({
     requests: (state) => (address) => {
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.requestsByCandidate[index].requests : [];
-    },
-    myVotes: (state) => (address) => {
-      const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
-      return index > -1 ? state.candidates[index].myVotes : 0;
     },
     totalVotesByCandidate: (_, getters) => (address) => {
       const candidate = getters.candidate(address);

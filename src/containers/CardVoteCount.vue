@@ -10,7 +10,7 @@
         <div class="divide" />
         <div class="content">
           <span>Voted</span>
-          <span>{{ myVotes(address) | WTON }} TON</span>
+          <span>{{ myVotes | WTON }} TON</span>
         </div>
       </template>
     </card-container>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import Card from '@/components/Card.vue';
 
 export default {
@@ -32,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapState([
       'myVotes',
     ]),
   },
