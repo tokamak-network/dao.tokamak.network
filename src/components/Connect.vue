@@ -63,6 +63,12 @@ export default {
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
+          // TODO: delete after internal test
+          const chainId = await web3.eth.getChainId();
+          if (chainId !== 4) {
+            return alert('Please use rinkeby network for internal test');
+          }
+
           const accounts = await web3.eth.getAccounts();
           this.account = accounts[0];
 
@@ -70,6 +76,7 @@ export default {
             this.setIcon();
           });
 
+          // TODO: if there is no candidates, reopen.
           await this.$store.dispatch('connectEthereum', web3);
 
           if (this.$route.params.address) {
