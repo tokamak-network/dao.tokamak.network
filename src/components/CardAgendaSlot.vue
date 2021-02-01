@@ -211,7 +211,7 @@ export default {
       this.$store.dispatch('setAgendas');
     },
     async execute () {
-      const daoCommittee = getContract('DAOCommittee', this.web3);
+      const daoCommittee = getContract('DAOCommitteeProxy', this.web3);
       const gasLimit = await daoCommittee.methods.executeAgenda(
         this.agenda.agendaid,
       ).send({
