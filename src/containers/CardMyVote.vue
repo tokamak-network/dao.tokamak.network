@@ -12,7 +12,7 @@
           <div v-for="(data, index) in ranks" :key="data.operator"
                class="body"
           >
-            <div>{{ index + 1 }}</div>
+            <div>{{ (page*4) + index + 1 }}</div>
             <div>{{ data.candidateContract | hexSlicer }}</div>
             <div>{{ data.myVotes | WTON }} TON</div>
           </div>

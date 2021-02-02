@@ -12,7 +12,7 @@
           <div v-for="(data, index) in ranks" :key="data.layer2"
                class="body"
           >
-            <div>{{ index + 1 }}</div>
+            <div>{{ (page*4) + index + 1 }}</div>
             <div>{{ data.layer2 | hexSlicer }}</div>
             <div>{{ data.coinageTotalSupply | WTON }} TON</div>
           </div>
