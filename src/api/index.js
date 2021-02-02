@@ -15,7 +15,7 @@ export async function getRecentEvents () {
       chainId,
       page: 1,
       pagesize: 20,
-      eventNames: 'AgendaVoteCasted,AgendaExecuted,AgendaCreated',
+      eventNames: 'AgendaCreated,AgendaExecuted,AgendaVoteCasted,ApplyMemberSuccess,CandidateContractCreated,ChangedMember,ChangedSlotMaximum,ClaimedActivityReward,OperatorRegistered,AgendaStatusChanged,AgendaResultChanged',
     },
   });
   return res.data.datas;

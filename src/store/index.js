@@ -276,13 +276,9 @@ export default new Vuex.Store({
       const committeeProxy = getContract('DAOCommitteeProxy', web3);
 
       const account = state.account;
-      const [
-        agendas,
-        events,
-      ] = await Promise.all([
-        await getAgendas(),
-        await getAgendaVoteCasted(),
-      ]);
+      const [agendas, events] = await Promise.all([
+        await getAgendas(), await getAgendaVoteCasted()],
+      );
 
       const voteCasted = [];
       events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check

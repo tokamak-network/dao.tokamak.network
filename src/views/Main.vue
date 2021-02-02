@@ -26,7 +26,7 @@
           {{ event.transactionHash | hexSlicer }}
         </div>
         <div class="event">
-          ETH-B Debt Ceiling Instant Access Module - December 7, 2020
+          {{ explanation(event) }}
         </div>
         <div>
           {{ event.blockTimestamp | fromNow }}
@@ -51,6 +51,61 @@ export default {
   methods: {
     newtab (txhash) {
       window.open(`https://rinkeby.etherscan.io/tx/${txhash}`, '_blank'); // eslint-disable-line
+    },
+    explanation (event) {
+      const eventName = event.eventName;
+
+      if      (eventName === 'AgendaCreated') return `Agenda #${event.data.id} Created`;
+      else if (eventName === 'AgendaExecuted') return `Agenda #${event.data.id} Executed`;
+      else if (eventName === 'AgendaVoteCasted') return `Agenda #${event.data.id} is Voted ${this.agendaVoted(event.data.voting)}`;
+      else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';
+      else if (eventName === 'ChangedMember') return 'Committee Member Changed';
+      else if (eventName === 'ChangedSlotMaximum') return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
+      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${event.data.candidate}`;
+      else if (eventName === 'OperatorRegistered') return `Operator ${event.data.candidateContract} Registered`; // TODO: OperatorRegistered -> Layer2Registered
+      else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
+      else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
+      else {
+        return '-';
+        console.log('bug', 'events'); // eslint-disable-line
+      }
+    },
+    agendaStatus (status) {
+      status = parseInt(status);
+
+      if (status === 0) return '"NONE"';
+      else if (status === 1) return '"NOTICE"';
+      else if (status === 2) return '"VOTING"';
+      else if (status === 3) return '"WAITING"';
+      else if (status === 4) return '"EXECUTED"';
+      else if (status === 5) return '"ENDED"';
+      else {
+        console.log('bug', 'agenda status'); // eslint-disable-line
+        return '""';
+      }
+    },
+    agendaResult (result) {
+      result = parseInt(result);
+
+      if (result === 0) return '"PENDING"';
+      else if (result === 1) return '"ACCEPT"';
+      else if (result === 2) return '"REJECT"';
+      else if (result === 3) return '"DISMISS"';
+      else {
+        console.log('bug', 'agenda result'); // eslint-disable-line
+        return '""';
+      }
+    },
+    agendaVoted (voted) {
+      voted = parseInt(voted);
+
+      if (voted === 0) return '"ABSTAIN"';
+      else if (voted === 1) return '"YES"';
+      else if (voted === 2) return '"NO"';
+      else {
+        console.log('bug', 'agenda voted'); // eslint-disable-line
+        return '""';
+      }
     },
   },
 };
