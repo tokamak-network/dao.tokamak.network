@@ -1,6 +1,6 @@
 <template>
-  <div class="candidate">
-    <div class="label"># of Votes</div>
+  <div class="candidate" :class="{ mine: myCandidate }">
+    <div class="label"># of Votes </div>
     <div class="amount">{{ wton(candidate.vote) }} TON</div>
     <div class="name">{{ candidate.name }}</div>
     <div class="detail" @click="detail()">View Detail</div>
@@ -9,6 +9,7 @@
 
 <script>
 import { WTON } from '@/utils/helpers';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   props: {
@@ -18,8 +19,20 @@ export default {
     },
   },
   computed: {
+    ...mapState([
+      'account',
+      'web3',
+    ]),
+    ...mapGetters([
+      'myCandidateContracts',
+    ]),
     wton () {
       return (amount) => !amount ? WTON(0) : WTON(amount);
+    },
+    myCandidate (){
+      if( this.candidate!=null && this.myCandidateContracts.indexOf(this.candidate.candidateContract) > -1 ){
+        return true;
+      }else return false;
     },
   },
   methods: {
@@ -104,4 +117,8 @@ export default {
     }
   }
 }
+.mine {
+    box-shadow: 0 5px 5px 0 rgba(96, 97, 112, 0.16);
+    background: linear-gradient(80deg, #EDEFF4, #FFFFFF);
+  }
 </style>

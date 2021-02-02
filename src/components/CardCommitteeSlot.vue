@@ -1,5 +1,5 @@
 <template>
-  <div class="card-committee-slot">
+  <div class="card-committee-slot" :class="{ mine: myCandidate }">
     <div class="info-committee">
       <span class="title">Status</span>
       <span> : </span>
@@ -43,6 +43,14 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
+      <button-comp v-if="myCandidate"
+                   :name="'Retire'"
+                   :type="'primary'"
+                   :width="'118px'"
+                   class="right"
+                   :disabled="!myCandidate"
+                   @on-clicked="retire"
+      />
       <button-comp v-if="isCandidate"
                    :name="'Challenge'"
                    :type="'secondary'"
@@ -58,7 +66,7 @@
 <script>
 import { toBN } from 'web3-utils';
 import moment from 'moment';
-import { getContract } from '@/utils/contracts';
+import { getContract, metamaskErrorMessage } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
 
 import { mapGetters, mapState } from 'vuex';
@@ -91,6 +99,8 @@ export default {
       'candidateContractFromEOA',
       'totalVotesForCandidate',
       'isMember',
+      'myCandidateContracts',
+      'candidateContractFromEOA',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -108,7 +118,8 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
     desc () {
-      return `${hexSlicer(this.members[this.memberIndex].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.memberIndex].info.memberJoinedTime)}`;
+      if(this.members[this.memberIndex])  return `${hexSlicer(this.members[this.memberIndex].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.memberIndex].info.memberJoinedTime)}`;
+      else return '';
     },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
@@ -118,7 +129,8 @@ export default {
     },
 
     totalVotes () {
-      return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
+      if(this.members[this.memberIndex]) return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
+      else return 0;
     },
     totalVotesForEOA () {
       return this.totalVotesForCandidate(this.candidateContractFromEOA);
@@ -131,6 +143,11 @@ export default {
       const totalVotesForEOA = toBN(this.totalVotesForEOA);
 
       return totalVotesForEOA.cmp(totalVotes) > 1;
+    },
+    myCandidate (){
+      if( this.members[this.memberIndex]!=null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1 ){
+        return true;
+      }else return false;
     },
   },
   methods: {
@@ -180,6 +197,33 @@ export default {
         .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
+    },
+    async retire () {
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
+      try{
+        const gasLimit = await candidateContract.methods.retireMember()
+          .estimateGas({
+            from: this.account,
+          });
+        await candidateContract.methods.retireMember()
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('receipt', async () => {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+          })
+          .on('error', (error) =>{
+            console.log('error', error) ;// eslint-disable-line
+          });
+      }catch(err){
+        const msg = metamaskErrorMessage(err.message);
+        if(msg!=null && msg.length > 0 ) alert(msg) ;
+      }
     },
   },
 };
@@ -296,4 +340,8 @@ export default {
 .card-committee-slot > .button > .right {
   width: 110px;
 }
+.mine {
+    box-shadow: 0 5px 5px 0 rgba(96, 97, 112, 0.16);
+    background: linear-gradient(80deg, #EDEFF4, #FFFFFF);
+  }
 </style>
