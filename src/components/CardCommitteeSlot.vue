@@ -43,6 +43,13 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
+      <button-comp v-if="canRetire"
+                   :name="'Retire'"
+                   :type="'secondary'"
+                   :width="'118px'"
+                   class="right"
+                   @on-clicked="retire"
+      />
       <button-comp v-if="candidateContractFromAccount"
                    :name="'Challenge'"
                    :type="'secondary'"
@@ -85,7 +92,15 @@ export default {
     ]),
     ...mapGetters([
       'candidateContractFromAccount',
+      'myCandidateContracts',
     ]),
+    canRetire (){
+      if( this.members[this.memberIndex]!=null
+        && this.myCandidateContracts!=null
+        && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1 ){
+        return true;
+      }else return false;
+    },
     deployedDate () {
       return (timestamp) => {
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -161,8 +176,40 @@ export default {
         const msg = metamaskErrorMessage(err.message);
         if(msg!=null && msg.length > 0 ) alert(msg) ;
       }
-
     },
+    async retire () {
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
+      //const memberIndex = this.memberIndex;
+
+      try{
+        const gasLimit = await candidateContract.methods.retireMember()
+          .estimateGas({
+            from: this.account,
+          });
+        console.log('challenge gasLimit', gasLimit); // eslint-disable-line
+
+        await candidateContract.methods.retireMember()
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('receipt', async () => {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+          })
+          .on('error', (error) =>{
+            console.log('error', error) ;// eslint-disable-line
+          });
+
+      }catch(err){
+        const msg = metamaskErrorMessage(err.message);
+        if(msg!=null && msg.length > 0 ) alert(msg) ;
+      }
+    },
+
   },
 };
 </script>

@@ -491,9 +491,11 @@ module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
     if(_web3==null){
       alert('Check Connect Wallet !');
     }else{
+      console.log('isVotableStatusOfAgenda', agendaId);
       const AgendaManager = new _web3.eth.Contract(DAOAgendaManagerAbi, deployed.DAOAgendaManager);
       if(AgendaManager!=null){
         isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
+        console.log('isVotableStatusOfAgenda isVotableStatus', isVotableStatus);
       }else{
         console.log('Utils.isVotableStatus AgendaManager is null') ;
       }

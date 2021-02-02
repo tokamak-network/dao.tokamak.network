@@ -388,6 +388,25 @@ export default new Vuex.Store({
       else if (operator) return operator.candidateContract;
       else               return '';
     },
+    myCandidateContracts: (state) => {
+      const account = state.account.toLowerCase();
+      console.log('myCandidateContracts ', account);
+
+      if (!account) return '';
+      const myCandidateContracts =[];
+      for(let i=0; i< state.candidates.length; i++ ){
+        if( state.candidates[i].operator.toLowerCase()  === account  ){
+          console.log('candidateContracts ', i, state.candidates[i]);
+          myCandidateContracts.push(state.candidates[i].candidateContract);
+        }
+      }
+      console.log('myCandidateContracts find:', myCandidateContracts);
+      if(myCandidateContracts.length === 0 ) return '';
+      else {
+        console.log('myCandidateContracts.toString():', myCandidateContracts.toString());
+        return myCandidateContracts.toString();
+      }
+    },
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda ? agenda : {};
