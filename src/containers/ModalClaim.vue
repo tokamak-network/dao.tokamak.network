@@ -4,14 +4,15 @@
          @click="close"
     >
     <div class="title">You can claim {{ activityReward }}</div>
-    <div class="question">Do you wish to continue?</div>
+    <div v-if="canClaimValue" class="question">Do you wish to continue?</div>
+    <div v-else class="question">There is no activity fee to be paid.</div>
     <div class="button">
-      <button-comp
-        :name="'OK'"
-        :type="'primary'"
-        class="left"
-        :width="'110px'"
-        @on-clicked="claim"
+      <button-comp v-if="canClaimValue"
+                   :name="'OK'"
+                   :type="'primary'"
+                   class="left"
+                   :width="'110px'"
+                   @on-clicked="claim"
       />
       <button-comp
         :name="'Close'"
@@ -28,6 +29,7 @@
 import Button from '@/components/Button.vue';
 import { mapState } from 'vuex';
 import { getContract } from '@/utils/contracts';
+import Web3 from 'web3';
 
 export default {
   components: {
@@ -37,33 +39,49 @@ export default {
     ...mapState([
       'activityReward',
       'confirmBlock',
+      'web',
+      'account',
     ]),
+    canClaimValue (){
+      let _amount = this.activityReward;
+      _amount = _amount.replaceAll('TON', '');
+      _amount =_amount.replaceAll(' ', '');
+      if( _amount !== '0.000000000000000000' && _amount !== '0' && _amount !== '0.00' ){
+        return true;
+      }else return false;
+    },
   },
   methods: {
     close () {
       this.$emit('on-closed');
     },
     async claim () {
-      const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
-
-      await daoCommitteeProxy.methods.claimActivityReward().send({
-        from: this.account,
-      })
-        .on('transactionHash', async (hash) => {
-          this.$store.commit('SET_PENDING_TX', hash);
-          this.close();
+      let web3 = this.web3;
+      if(web3  == null) web3 = new Web3(window.ethereum);
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', web3);
+      try{
+        await daoCommitteeProxy.methods.claimActivityReward().send({
+          from: this.account,
         })
-        .on('confirmation', async (confirmationNumber) => {
-          if (this.confirmBlock === confirmationNumber) {
-            this.$store.dispatch('setAgendas');
-          }
-        })
-        .on('receipt', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        })
-        .on('error', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        });
+          .on('transactionHash', async (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+            this.close();
+          })
+          .on('confirmation', async (confirmationNumber) => {
+            if (this.confirmBlock === confirmationNumber) {
+              this.$store.dispatch('setAgendas');
+            }
+          })
+          .on('receipt', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+            this.$store.dispatch('setActivityReward');
+          })
+          .on('error', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+          });
+      }catch(err){
+        //console.log('err', err); // eslint-disable-line
+      }
     },
   },
 };

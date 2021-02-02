@@ -143,6 +143,7 @@ export default new Vuex.Store({
       await dispatch('setVotedCandidatesFromAccount');
       await dispatch('setRequests');
       await dispatch('setContractState');
+      await dispatch('setActivityReward');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -367,6 +368,24 @@ export default new Vuex.Store({
         }
       }
       commit('SET_VOTED_CANDIDATES_FROM_ACCOUNT', votedCandidatesFromAccount);
+    },
+    async setActivityReward ({ state, commit }) {
+      const web3 = state.web3;
+      const account = state.account;
+      try{
+        if (web3!=null) {
+          let activityReward;
+          if(account!=null && account.length > 0 ){
+            const committeeProxy = await getContract('DAOCommitteeProxy', web3);
+            activityReward = await committeeProxy.methods.getClaimableActivityReward(account).call();
+            activityReward = _TON(activityReward, 'wei').toString(18);
+            commit('SET_ACTIVITY_REWARD', activityReward);
+          }
+        }
+      }catch(error){
+        console.log('setActivityReward error', error);  // eslint-disable-line
+      }
+
     },
   },
   getters: {
