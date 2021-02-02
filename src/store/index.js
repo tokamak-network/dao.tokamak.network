@@ -385,6 +385,9 @@ export default new Vuex.Store({
       const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index !== -1 ? state.candidates[index] : null;
     },
+    isCandidate: (_, getters) => {
+      return getters.candidateContractFromEOA;
+    },
     candidateContractFromEOA: (state) => {
       const account = state.account.toLowerCase();
       if (!account) return '';
@@ -401,6 +404,13 @@ export default new Vuex.Store({
         if (!member || !member.candidateContract) return false;
         return member.candidateContract.toLowerCase() === getters.candidate(candidateContract).candidateContract.toLowerCase();
       });
+    },
+    isMember: (_, getters) => {
+      const candidateContract = getters.candidateContractFromEOA;
+      if (!candidateContract) return false;
+
+      const member = getters.member(candidateContract);
+      return member;
     },
     requests: (state) => (address) => {
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());

@@ -4,8 +4,8 @@
       <agenda-slot />
     </div>
     <div>
-      <card-vote />
-      <card-stats />
+      <card-vote v-if="isCandidate" />
+      <card-stats v-if="isCandidate" />
       <card-stats-committee />
       <card-resource />
     </div>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import AgendaSlot from '@/containers/AgendaSlot.vue';
 import CardResource from '@/containers/CardResource.vue';
 import CardStats from '@/containers/CardStats.vue';
@@ -26,6 +27,11 @@ export default {
     'card-resource': CardResource,
     'card-stats-committee': CardStatsCommittee,
     'agenda-slot': AgendaSlot,
+  },
+  computed: {
+    ...mapGetters([
+      'isCandidate',
+    ]),
   },
 };
 </script>

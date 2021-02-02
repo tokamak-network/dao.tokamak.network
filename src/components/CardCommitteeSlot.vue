@@ -43,7 +43,7 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
-      <button-comp v-if="candidateContractFromEOA"
+      <button-comp v-if="isCandidate"
                    :name="'Challenge'"
                    :type="'secondary'"
                    :width="'118px'"
@@ -87,9 +87,10 @@ export default {
       'confirmBlock',
     ]),
     ...mapGetters([
+      'isCandidate',
       'candidateContractFromEOA',
       'totalVotesForCandidate',
-      'member',
+      'isMember',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -116,12 +117,6 @@ export default {
       return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
 
-    isMember () {
-      const candidateContract = this.candidateContractFromEOA;
-      const member = this.member(candidateContract);
-
-      return member;
-    },
     totalVotes () {
       return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
     },
