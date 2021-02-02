@@ -46,6 +46,7 @@ export default {
   },
   computed: {
     ...mapState([
+      'launched',
       'web3',
       'pendingTx',
     ]),
@@ -76,7 +77,10 @@ export default {
             this.setIcon();
           });
 
-          // TODO: if there is no candidates, reopen.
+          for(;;) {
+            await new Promise(r => setTimeout(r, 500));
+            if (this.launched) break;
+          }
           await this.$store.dispatch('connectEthereum', web3);
 
           if (this.$route.params.address) {
@@ -98,6 +102,10 @@ export default {
               this.setIcon();
             });
 
+            for(;;) {
+              await new Promise(r => setTimeout(r, 500));
+              if (this.launched) break;
+            }
             await this.$store.dispatch('connectEthereum', web3);
             if (this.$route.params.address) {
               const candidateContractAddress = this.$route.params.address;

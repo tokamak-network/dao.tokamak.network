@@ -24,6 +24,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    launched: false,
+
     web3: null,
     account: '',
     chainId: '',
@@ -115,6 +117,9 @@ export default new Vuex.Store({
     SET_PENDING_TX (state, pendingTx) {
       state.pendingTx = pendingTx;
     },
+    LAUNCHED (state) {
+      state.launched = true;
+    },
   },
   actions: {
     async connectEthereum ({ commit, dispatch }, web3) {
@@ -196,10 +201,11 @@ export default new Vuex.Store({
       };
       commit('SET_CONTRACT_STATE', contractState);
     },
-    async launch ({ dispatch }) {
+    async launch ({ commit, dispatch }) {
       await dispatch('setAgendas');
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
+      commit('LAUNCHED');
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
