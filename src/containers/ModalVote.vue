@@ -121,11 +121,10 @@ export default {
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
-            //
+            this.$store.dispatch('setAgendas');
           }
         })
         .on('receipt', () => {
-          this.$store.dispatch('setAgendas');
           this.$store.commit('SET_PENDING_TX', '');
           this.close();
         })

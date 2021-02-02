@@ -218,10 +218,10 @@ export default {
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
             await this.update();
-            this.$store.commit('SET_PENDING_TX', '');
           }
         })
         .on('receipt', () => {
+          this.$store.commit('SET_PENDING_TX', '');
         })
         .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
@@ -263,11 +263,10 @@ export default {
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
             await this.update();
-            this.$store.commit('SET_PENDING_TX', '');
           }
         })
         .on('receipt', () => {
-
+          this.$store.commit('SET_PENDING_TX', '');
         })
         .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
@@ -300,11 +299,10 @@ export default {
             await this.update();
 
             this.revoteIndex = 0;
-            this.$store.commit('SET_PENDING_TX', '');
           }
         })
         .on('receipt', () => {
-
+          this.$store.commit('SET_PENDING_TX', '');
         })
         .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
@@ -335,11 +333,10 @@ export default {
             await this.update();
 
             this.withdrawIndex = 0;
-            this.$store.commit('SET_PENDING_TX', '');
           }
         })
         .on('receipt', () => {
-
+          this.$store.commit('SET_PENDING_TX', '');
         })
         .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');

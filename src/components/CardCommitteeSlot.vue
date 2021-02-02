@@ -167,6 +167,11 @@ export default {
         .on('transactionHash', (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
         })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
         .on('receipt', async () => {
           this.$store.commit('SET_PENDING_TX', '');
 
