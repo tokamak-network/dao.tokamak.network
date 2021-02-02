@@ -100,7 +100,6 @@ export default {
       'totalVotesForCandidate',
       'isMember',
       'myCandidateContracts',
-      'candidateContractFromEOA',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -141,8 +140,8 @@ export default {
       }
       const totalVotes = toBN(this.totalVotes);
       const totalVotesForEOA = toBN(this.totalVotesForEOA);
-
-      return totalVotesForEOA.cmp(totalVotes) > 1;
+      //return totalVotesForEOA.cmp(totalVotes) > 1;
+      return totalVotesForEOA.gt(totalVotes);
     },
     myCandidate (){
       if( this.members[this.memberIndex]!=null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1 ){
