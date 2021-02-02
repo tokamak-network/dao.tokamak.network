@@ -3,16 +3,9 @@
     <span>For the spell at address </span>
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
     <div>{{ explanation }} </div><br />
-    <div style="display: flex;">
-      <div v-for="input in inputs" :key="input.name"
-           class="name"
-      >
-        {{ input.name }}:
-      </div>
-      <div v-for="(input, index) in inputs" :key="input.name"
-           class="value"
-      >
-        {{ Object.values(values)[index] }}
+    <div>
+      <div v-for="(input, index) in inputs" :key="input.name" class="name">
+        <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
     </div>
   </div>
