@@ -85,3 +85,20 @@ export async function getAgendaContents (agendaId) {
   });
   return res.data.datas[0];
 }
+
+export async function updateAgendaContents (from, txHash, contents, sig) {
+  const res = await instance.put('/agendacontents', {
+    tx: txHash,
+    contents: contents,
+    account: from,
+    sig: sig,
+  });
+  return res.data;
+}
+
+export async function getRandomKey (from) {
+  const res = await instance.post('/randomkey', {
+    account: from,
+  });
+  return res.data.data.randomvalue;
+}
