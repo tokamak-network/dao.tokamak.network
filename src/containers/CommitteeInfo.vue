@@ -23,7 +23,7 @@
     <info-committee :title="'Total Vote'" :content="`${wton(totalVotesByCandidate(address))} TON`" />
     <div style="width: 100%; height: 18px;" />
 
-    <info-committee :title="'My Vote'" :content="`${wton(myVotes(address))} TON`" />
+    <info-committee :title="'My Vote'" :content="`${wton(myVotes)} TON`" />
     <info-committee :title="'Revotable'" :content="`${wton(canRevote(address, 0))} TON`" />
     <info-committee :title="'Withdrawable'" :content="`${wton(canWithdraw(address, 0))} TON`" />
     <info-committee :title="'Not Withdrawable'" :content="`${wton(cannotWithdraw)} TON`" />
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { WTON } from '@/utils/helpers';
 
 import InfoCommittee from '@/components/InfoCommittee.vue';
@@ -49,11 +49,13 @@ export default {
     };
   },
   computed: {
+    ...mapState([
+      'myVotes',
+    ]),
     ...mapGetters([
       'candidate',
 
       'totalVotesByCandidate',
-      'myVotes',
       'canRevote',
       'canWithdraw',
       'notWithdrawableRequests',

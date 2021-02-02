@@ -47,7 +47,7 @@
         />
       </div>
       <div v-if="currentSelector === 2" class="unvote-container">
-        <div>Available Balance {{ myVotes(address) | WTON }} TON</div>
+        <div>Available Balance {{ myVotes | WTON }} TON</div>
         <div>
           <text-input ref="tonunvote"
                       class="unvote-input"
@@ -118,6 +118,8 @@ export default {
       'account',
       'web3',
       'tonBalance',
+      'confirmBlock',
+      'myVotes',
     ]),
     ...mapGetters([
       'candidate',
@@ -128,7 +130,6 @@ export default {
       'numCanWithdraw',
       'canWithdraw',
       'requests',
-      'myVotes',
     ]),
     cannotWithdraw () {
       const requests = this.notWithdrawableRequests(this.address);
@@ -169,8 +170,8 @@ export default {
       }
     },
     wtonMax () {
-      if (this.myVotes(this.address) && this.myVotes(this.address) > 0) {
-        this.$refs.tonunvote.$refs.input.value = WTON(this.myVotes(this.address));
+      if (this.myVotes && this.myVotes > 0) {
+        this.$refs.tonunvote.$refs.input.value = WTON(this.myVotes);
       }
     },
     setRevoteAmount () {
@@ -214,9 +215,15 @@ export default {
           this.$refs.tonvote.$refs.input.value = null;
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
-
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
@@ -229,14 +236,13 @@ export default {
       const layer2 = this.address;
       const amount = toRay(this.$refs.tonunvote.$refs.input.value);
 
-      this.myVotes(this.address);
       if (String(amount) === '0') {
         return alert('Please input amount!');
       }
-      if (String(this.myVotes(this.address)) === '0') {
+      if (String(this.myVotes) === '0') {
         return alert('Please check your TON amount!');
       }
-      if ((new BN(amount)).cmp(new BN(this.myVotes(this.address))) === 1) {
+      if ((new BN(amount)).cmp(new BN(this.myVotes)) === 1) {
         return alert('Please check your TON amount!!');
       }
 
@@ -254,9 +260,16 @@ export default {
           this.$refs.tonunvote.$refs.input.value = null;
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
 
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
@@ -282,13 +295,19 @@ export default {
         .on('transactionHash', (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
 
-          this.revoteIndex = 0;
+            this.revoteIndex = 0;
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
-
-          this.$forceUpdate();
         });
     },
     async withdraw () {
@@ -311,10 +330,18 @@ export default {
         .on('transactionHash', async (hash) => {
           this.$store.commit('SET_PENDING_TX', hash);
         })
-        .on('receipt', async () => {
-          await this.update();
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            await this.update();
 
-          this.withdrawIndex = 0;
+            this.withdrawIndex = 0;
+            this.$store.commit('SET_PENDING_TX', '');
+          }
+        })
+        .on('receipt', () => {
+
+        })
+        .on('error', () => {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
@@ -336,6 +363,7 @@ export default {
     async update () {
       await this.$store.dispatch('launch');
       await this.$store.dispatch('connectEthereum', this.web3);
+      await this.$store.dispatch('setMyVotes', this.address);
     },
   },
 };

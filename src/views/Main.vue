@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     newtab (txhash) {
-      window.open(`https://etherscan.io/tx/${txhash}`, '_blank'); // eslint-disable-line
+      window.open(`https://rinkeby.etherscan.io/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
   },
 };

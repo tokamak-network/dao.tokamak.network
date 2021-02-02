@@ -36,6 +36,7 @@ export default {
   computed: {
     ...mapState([
       'activityReward',
+      'confirmBlock',
     ]),
   },
   methods: {
@@ -47,14 +48,24 @@ export default {
 
       await daoCommitteeProxy.methods.claimActivityReward().send({
         from: this.account,
-      }).on('transactionHash', async (hash) => {
-        this.$store.commit('SET_PENDING_TX', hash);
-        this.close();
-      }).on('receipt', () => {
-        this.$store.commit('SET_PENDING_TX', '');
-        this.$store.dispatch('setAgendas');
-        this.close();
-      });
+      })
+        .on('transactionHash', async (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
+        .on('receipt', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+          this.$store.dispatch('setAgendas');
+          this.close();
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
   },
 };

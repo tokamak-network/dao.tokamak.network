@@ -42,16 +42,6 @@ export default {
     'vote-poll': VotePoll,
     'button-pagination': ButtonPagination,
   },
-  props: {
-    voters: {
-      type: Array,
-      default: () => [],
-    },
-    sumOfVotes: {
-      type: Number,
-      default: 0,
-    },
-  },
   data () {
     return {
       address: '',
@@ -61,9 +51,11 @@ export default {
   computed: {
     ...mapState([
       'votersByCandidate',
+      'voters',
     ]),
     ...mapGetters([
       'candidate',
+      'sumOfVotes',
     ]),
     selectedVoters () {
       const first = this.page*4;

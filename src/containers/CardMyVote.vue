@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="button-container">
-          <button-pagination class="button-pagination" :datas="myVotes" @on-selected="set" />
+          <button-pagination class="button-pagination" :datas="sortedVotedCandidatesFromAccountByVotes" @on-selected="set" />
         </div>
       </template>
     </card-container>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import ButtonPagination from '@/components/ButtonPagination.vue';
 import Card from '@/components/Card.vue';
 
@@ -48,15 +48,12 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      'myVotesByCandidate',
+    ...mapGetters([
+      'sortedVotedCandidatesFromAccountByVotes',
     ]),
-    myVotes () {
-      return this.myVotesByCandidate ? this.myVotesByCandidate.filter(candidate => candidate.myVotes > 0) : [];
-    },
     ranks () {
       const first = this.page * 4;
-      return this.myVotes ? this.myVotes.slice(first, first+4) : [];
+      return this.sortedVotedCandidatesFromAccountByVotes ? this.sortedVotedCandidatesFromAccountByVotes.slice(first, first+4) : [];
     },
   },
   methods: {

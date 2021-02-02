@@ -95,6 +95,7 @@ export default {
       'members',
       'myVote',
       'voteCasted',
+      'confirmBlock',
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
@@ -122,7 +123,7 @@ export default {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
-      return address => 'https://etherscan.io/address/' + address;
+      return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
     deployedDate () {
       return (timestamp) => {
@@ -201,19 +202,28 @@ export default {
       this.$store.dispatch('setAgendas');
     },
     async execute () {
-      const daoCommittee = getContract('DAOCommittee', this.web3);
-      const gasLimit = await daoCommittee.methods.executeAgenda(
-        this.agenda.agendaid,
-      ).send({
-        from: this.account,
-      });
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
+      const gasLimit = await daoCommitteeProxy.methods.executeAgenda(this.agenda.agendaid).send({ from: this.account });
 
-      await daoCommittee.methods.executeAgenda(
-        this.agenda.agendaid,
-      ).send({
-        from: this.account,
-        gasLimit: Math.floor(gasLimit * 1.2),
-      });
+      await daoCommitteeProxy.methods.executeAgenda(this.agenda.agendaid)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
+        .on('receipt', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
     detail (id) {
       this.$router.push({

@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     toEtherscan () {
-      window.open('https://etherscan.io/address/' + this.target, '_blank'); // eslint-disable-line
+      window.open('https://rinkeby.etherscan.io/address/' + this.target, '_blank'); // eslint-disable-line
     },
   },
 };

@@ -159,7 +159,7 @@
         </div>
         <div v-if="index === 2" class="box-container">
           <div>
-            <div v-for="func in daoCommitteeFunctionsOfTypeA" :key="func.name"
+            <div v-for="func in daoCommitteeProxyFunctionsOfTypeA" :key="func.name"
                  @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
@@ -350,7 +350,7 @@ export default {
 
       depositManagerFunctionsOfTypeA: [],
       seigManagerFunctionsOfTypeA: [],
-      daoCommitteeFunctionsOfTypeA: [],
+      daoCommitteeProxyFunctionsOfTypeA: [],
       daoVaultFunctionsOfTypeA: [],
 
       tonFunctionsOfTypeB: [],
@@ -375,7 +375,7 @@ export default {
   created () {
     this.depositManagerFunctionsOfTypeA    = getContractABI('DepositManager', 'A');
     this.seigManagerFunctionsOfTypeA       = getContractABI('SeigManager', 'A');
-    this.daoCommitteeFunctionsOfTypeA      = getContractABI('DAOCommittee', 'A');
+    this.daoCommitteeProxyFunctionsOfTypeA = getContractABI('DAOCommitteeProxy', 'A');
     this.daoVaultFunctionsOfTypeA          = getContractABI('DAOVault2', 'A');
 
     this.tonFunctionsOfTypeB               = getContractABI('TON', 'B');
@@ -392,7 +392,7 @@ export default {
     numFunctions (index) {
       if (index === 0)      return this.depositManagerFunctionsOfTypeA.length;
       else if (index === 1) return this.seigManagerFunctionsOfTypeA.length;
-      else if (index === 2) return this.daoCommitteeFunctionsOfTypeA.length;
+      else if (index === 2) return this.daoCommitteeProxyFunctionsOfTypeA.length;
       else if (index === 3) return this.daoVaultFunctionsOfTypeA.length;
       else                  return 0;
     },
@@ -410,7 +410,7 @@ export default {
     setCurrentContract (index) {
       if (index === 0)      this.currentContract = 'DepositManager';
       else if (index === 1) this.currentContract = 'SeigManager';
-      else if (index === 2) this.currentContract = 'DAOCommittee';
+      else if (index === 2) this.currentContract = 'DAOCommitteeProxy';
       else if (index === 3) this.currentContract = 'DAOVault2';
     },
     setCurrentContractOfTypeB (index) {

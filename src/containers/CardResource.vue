@@ -9,7 +9,7 @@
           <a class="link"
              target="_blank" rel="noopener noreferrer"
           >
-            Tokamak Forum (In ready)
+            Tokamak Forum (TBD)
           </a>
         </div>
         <div class="resource">
@@ -19,7 +19,7 @@
           <a class="link"
              target="_blank" rel="noopener noreferrer"
           >
-            Governance FAQs (In ready)
+            Governance FAQs (TBD)
           </a>
         </div>
         <div class="resource">

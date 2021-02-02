@@ -12,20 +12,20 @@
             :class="{ 'link': occupied() }"
             @click="etherscan()"
       >
-        {{ (occupied() ? members[slotnumber].layer2 : '-') | hexSlicer }}
+        {{ (occupied() ? members[memberIndex].layer2 : '-') | hexSlicer }}
       </span>
       <span> | </span>
 
       <span class="title"># of Votes</span>
       <span> : </span>
-      <span class="content">{{ occupied() ? members[slotnumber].vote : '0' | WTON }} TON</span>
+      <span class="content">{{ occupied() ? members[memberIndex].vote : '0' | WTON }} TON</span>
 
       <div class="info-slot">
-        <span>Slot </span>
-        <span class="slot">#{{ slotnumber }}</span>
+        <span>Member </span>
+        <span class="slot">#{{ memberIndex }}</span>
       </div>
     </div>
-    <div class="operator-name">{{ occupied() ? members[slotnumber].name : '-' }}</div>
+    <div class="operator-name">{{ occupied() ? members[memberIndex].name : '-' }}</div>
     <div class="card-title">
       {{ occupied() ? desc : '-' }}
     </div>
@@ -33,7 +33,7 @@
       <img src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ occupied() ? fromNow(members[slotnumber].info.memberJoinedTime) : '-' }}</span>
+      <span>{{ occupied() ? fromNow(members[memberIndex].info.memberJoinedTime) : '-' }}</span>
     </div>
     <div class="button">
       <button-comp :name="'View Detail'"
@@ -43,11 +43,12 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
-      <button-comp v-if="login!==false"
+      <button-comp v-if="candidateContractFromAccount"
                    :name="'Challenge'"
                    :type="'secondary'"
                    :width="'118px'"
                    class="right"
+                   @on-clicked="challenge"
       />
     </div>
   </div>
@@ -58,7 +59,7 @@ import moment from 'moment';
 import { getContract } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
 
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 
 export default {
@@ -66,7 +67,7 @@ export default {
     'button-comp': Button,
   },
   props: {
-    slotnumber: {
+    memberIndex: {
       type: Number,
       default: 0,
     },
@@ -78,7 +79,13 @@ export default {
   },
   computed: {
     ...mapState([
+      'account',
+      'web3',
       'members',
+      'confirmBlock',
+    ]),
+    ...mapGetters([
+      'candidateContractFromAccount',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -96,30 +103,57 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
     desc () {
-      return `${hexSlicer(this.members[this.slotnumber].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.slotnumber].info.memberJoinedTime)}`;
+      return `${hexSlicer(this.members[this.memberIndex].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.memberIndex].info.memberJoinedTime)}`;
     },
     shortAddress () {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
-      return address => 'https://etherscan.io/address/' + address;
+      return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
   },
   methods: {
     occupied () {
-      return this.members[this.slotnumber];
+      if (!this.members[this.memberIndex]) return false;
+      else return this.members[this.memberIndex].memberIndex === this.memberIndex;
     },
     etherscan (address) {
       address ?
-        window.open('https://etherscan.io/address/' + address, '_blank') : // eslint-disable-line
-        window.open('https://etherscan.io/address/' + this.members[this.slotnumber].operator, '_blank');  // eslint-disable-line
+        window.open('https://rinkeby.etherscan.io/address/' + address, '_blank') : // eslint-disable-line
+        window.open('https://rinkeby.etherscan.io/address/' + this.members[this.memberIndex].operator, '_blank');  // eslint-disable-line
     },
     detail () {
       if (this.occupied()) {
         this.$router.push({
-          path: `/election/${this.members[this.slotnumber].candidateContract}`,
+          path: `/election/${this.members[this.memberIndex].candidateContract}`,
         });
       }
+    },
+    async challenge () {
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
+      const memberIndex = this.memberIndex;
+
+      const gasLimit = await candidateContract.methods.changeMember(memberIndex)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await candidateContract.methods.changeMember(memberIndex)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('receipt', async () => {
+          this.$store.commit('SET_PENDING_TX', '');
+
+          await this.$store.dispatch('launch');
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
   },
 };
