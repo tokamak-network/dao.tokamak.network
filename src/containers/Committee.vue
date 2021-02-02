@@ -10,17 +10,17 @@
       </div>
     </div>
     <div class="content">
-      <div v-if="member" class="timeline">
+      <div v-if="member(address)" class="timeline">
         <div class="date">
-          Elected at {{ member.info.memberJoinedTime | date1 }}
+          Elected at {{ member(address).info.memberJoinedTime | date1 }}
         </div>
         <div>
           <img src="@/assets/poll-time-active-icon.svg" alt=""
                width="14" height="14"
           >
           <span class="black">Member </span>
-          <span class="blue">{{ member.memberIndex }} </span>
-          <span>in Office {{ member.info.memberJoinedTime | fromNow }}</span>
+          <span class="blue">{{ member(address).memberIndex }} </span>
+          <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
         </div>
       </div>
       <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
@@ -66,14 +66,9 @@ export default {
     ]),
     ...mapGetters([
       'candidate',
+      'member',
       'sumOfVotes',
     ]),
-    member () {
-      return this.members.find(member => {
-        if (!member || !member.candidateContract) return false;
-        return member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase();
-      });
-    },
   },
   watch: {
     '$route.params.address': {

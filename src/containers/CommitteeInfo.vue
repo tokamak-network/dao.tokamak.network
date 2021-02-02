@@ -20,7 +20,7 @@
                     :width="'317'"
     /> -->
     <!-- <info-committee :title="'Reward'" :content="`${amount} TON`" /> -->
-    <info-committee :title="'Total Vote'" :content="`${wton(totalVotesByCandidate(address))} TON`" />
+    <info-committee :title="'Total Vote'" :content="`${wton(totalVotesForCandidate(address))} TON`" />
     <div style="width: 100%; height: 18px;" />
 
     <info-committee :title="'My Vote'" :content="`${wton(myVotes)} TON`" />
@@ -55,7 +55,7 @@ export default {
     ...mapGetters([
       'candidate',
 
-      'totalVotesByCandidate',
+      'totalVotesForCandidate',
       'canRevote',
       'canWithdraw',
       'notWithdrawableRequests',

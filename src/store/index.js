@@ -202,7 +202,6 @@ export default new Vuex.Store({
       await dispatch('setMembersAndNonmembers');
     },
     async setMembersAndNonmembers ({ state, commit }) {
-      const daoCommittee = getContract('DAOCommittee', state.web3);
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
 
       const [
@@ -237,7 +236,7 @@ export default new Vuex.Store({
       const votes = await Promise.all(getVotesProm);
 
       const getInfosProm = [];
-      candidates.forEach(candidate => getInfosProm.push(daoCommittee.methods.candidateInfos(candidate.candidate).call()));
+      candidates.forEach(candidate => getInfosProm.push(daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
 
       for (let i = 0; i < candidates.length; i++) {
@@ -373,17 +372,6 @@ export default new Vuex.Store({
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda.voting;
     },
-    candidateContractFromAccount: (state) => {
-      const account = state.account.toLowerCase();
-      if (!account) return '';
-
-      const candidate = state.candidates.find(candidate => candidate.candidate.toLowerCase() === account);
-      const operator = state.candidates.find(candidate => candidate.operator.toLowerCase() === account);
-
-      if (candidate)     return candidate.candidateContract;
-      else if (operator) return operator.candidateContract;
-      else               return '';
-    },
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda ? agenda : {};
@@ -397,11 +385,28 @@ export default new Vuex.Store({
       const index = state.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index !== -1 ? state.candidates[index] : null;
     },
+    candidateContractFromEOA: (state) => {
+      const account = state.account.toLowerCase();
+      if (!account) return '';
+
+      const candidate = state.candidates.find(candidate => candidate.candidate.toLowerCase() === account);
+      const operator = state.candidates.find(candidate => candidate.operator.toLowerCase() === account);
+
+      if (candidate)     return candidate.candidateContract;
+      else if (operator) return operator.candidateContract;
+      else               return '';
+    },
+    member: (state, getters) => (candidateContract) => {
+      return state.members.find(member => {
+        if (!member || !member.candidateContract) return false;
+        return member.candidateContract.toLowerCase() === getters.candidate(candidateContract).candidateContract.toLowerCase();
+      });
+    },
     requests: (state) => (address) => {
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
       return index > -1 ? state.requestsByCandidate[index].requests : [];
     },
-    totalVotesByCandidate: (_, getters) => (address) => {
+    totalVotesForCandidate: (_, getters) => (address) => {
       const candidate = getters.candidate(address);
       return (!candidate || !candidate.vote) ? 0 : candidate.vote;
     },

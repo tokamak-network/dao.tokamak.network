@@ -43,11 +43,12 @@
                    :width="'118px'"
                    @on-clicked="detail()"
       />
-      <button-comp v-if="candidateContractFromAccount"
+      <button-comp v-if="candidateContractFromEOA"
                    :name="'Challenge'"
                    :type="'secondary'"
                    :width="'118px'"
                    class="right"
+                   :disabled="!canChallenge"
                    @on-clicked="challenge"
       />
     </div>
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import { toBN } from 'web3-utils';
 import moment from 'moment';
 import { getContract } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
@@ -85,7 +87,9 @@ export default {
       'confirmBlock',
     ]),
     ...mapGetters([
-      'candidateContractFromAccount',
+      'candidateContractFromEOA',
+      'totalVotesForCandidate',
+      'member',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -111,6 +115,28 @@ export default {
     href () {
       return address => 'https://rinkeby.etherscan.io/address/' + address;
     },
+
+    isMember () {
+      const candidateContract = this.candidateContractFromEOA;
+      const member = this.member(candidateContract);
+
+      return member;
+    },
+    totalVotes () {
+      return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
+    },
+    totalVotesForEOA () {
+      return this.totalVotesForCandidate(this.candidateContractFromEOA);
+    },
+    canChallenge () {
+      if (this.isMember) {
+        return false;
+      }
+      const totalVotes = toBN(this.totalVotes);
+      const totalVotesForEOA = toBN(this.totalVotesForEOA);
+
+      return totalVotesForEOA.cmp(totalVotes) > 1;
+    },
   },
   methods: {
     occupied () {
@@ -130,7 +156,7 @@ export default {
       }
     },
     async challenge () {
-      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromAccount);
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
       const memberIndex = this.memberIndex;
 
       const gasLimit = await candidateContract.methods.changeMember(memberIndex)
