@@ -3,7 +3,7 @@
     <card-container :title="'Your Vote'">
       <template #body>
         <div class="label">
-          <span>You Voted for this Slot</span>
+          <span>You Voted for this Candidate</span>
           <!-- <span class="blue"> Voted </span>
           <span>for this Slot</span> -->
         </div>

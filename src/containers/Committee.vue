@@ -10,17 +10,17 @@
       </div>
     </div>
     <div class="content">
-      <div v-if="isMember" class="timeline">
+      <div v-if="member" class="timeline">
         <div class="date">
-          Elected at {{ candidate(address) ? electedAt(candidate(address).info.memberJoinedTime) : '-' }}
+          Elected at {{ member.info.memberJoinedTime | date1 }}
         </div>
         <div>
           <img src="@/assets/poll-time-active-icon.svg" alt=""
                width="14" height="14"
           >
-          <span class="black">Slot</span>
-          <span class="blue"> #0 </span>
-          <span>in Office {{ candidate(address) ? fromNow(candidate(address).info.memberJoinedTime) : '-' }}</span>
+          <span class="black">Member </span>
+          <span class="blue">{{ member.memberIndex }} </span>
+          <span>in Office {{ member.info.memberJoinedTime | fromNow }}</span>
         </div>
       </div>
       <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import { date1, fromNow } from '@/utils/helpers';
-
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
@@ -70,8 +68,11 @@ export default {
       'candidate',
       'sumOfVotes',
     ]),
-    isMember () {
-      return this.members.find(member => member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase());
+    member () {
+      return this.members.find(member => {
+        if (!member || !member.candidateContract) return false;
+        return member.candidateContract.toLowerCase() === this.candidate(this.address).candidateContract.toLowerCase();
+      });
     },
   },
   watch: {
@@ -87,12 +88,6 @@ export default {
     },
   },
   methods: {
-    electedAt (timestamp) {
-      return date1(timestamp);
-    },
-    fromNow (timestamp) {
-      return fromNow(timestamp, true);
-    },
     prev () {
       let index = this.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === 0) {
