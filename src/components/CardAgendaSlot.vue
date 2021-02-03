@@ -20,7 +20,7 @@
     </div>
     <div class="card-title">
       <div>
-        {{ title }} - {{ deployedDate(agenda.tCreationDate) }}
+        {{ title }}
       </div>
       <div class="info-slot">
         <span>Agenda </span>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="description">
-      {{ `This agenda was made by ${shortAddress(agenda.creator)} on ${deployedDate(agenda.tCreationDate)}` }}
+      {{ `This agenda was made by ${shortAddress(agenda.creator)} on` }} {{ agenda.tCreationDate | date1 }}
     </div>
     <div class="info-time">
       <img v-if="agendaType(agenda.agendaid) === 'A'"
@@ -40,7 +40,7 @@
            src="@/assets/poll-time-active-icon-typeB.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ dDay() }}</span>
+      <span>{{ agenda | votingTime }}</span>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -133,9 +133,11 @@ export default {
     },
     voteResultStyle () {
       if (this.agenda.voting !== undefined) {
-        return {
-          'color': '#2a72e5',
-        };
+        if (this.agendaType(this.agenda.agendaid) === 'A') {
+          return { 'color': '#2a72e5' };
+        } else {
+          return { 'color': '#ff7800' };
+        }
       }
       return 0;
     },
@@ -144,35 +146,6 @@ export default {
     },
     href () {
       return address => this.etherscanAddress + '/address/' + address;
-    },
-    deployedDate () {
-      return (timestamp) => {
-        const date = new Date(timestamp * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-
-        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
-      };
-    },
-    dDay () {
-      return () => {
-        if (this.agenda.tNoticeEndTime * 1000 > new Date().getTime() || this.agenda.tVotingEndTime === 0) {
-          return 'VOTING IS NOT STARTED';
-        } else {
-          const dDay = new Date(this.agenda.tVotingEndTime);
-          const now = new Date();
-          const gap = dDay.getTime() * 1000 - now.getTime();
-          if (gap < 0) {
-            return 'POLL ENDED';
-          } else {
-            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((gap - days * 86400000) / 3600000);
-
-            return days + 'D ' + hours + 'H REMAINING';
-          }
-        }
-      };
     },
     buttonName () {
       switch (this.agenda.status) {

@@ -144,6 +144,7 @@ export default new Vuex.Store({
       commit('SET_BLOCK_NUMBER', blockNumber);
 
       await dispatch('setBalance');
+      await dispatch('setAgendas');
       await dispatch('setVotedCandidatesFromAccount');
       await dispatch('setRequests');
       await dispatch('setContractState');

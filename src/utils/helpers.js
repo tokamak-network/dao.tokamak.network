@@ -32,7 +32,29 @@ export function date1 (timestamp) {
 }
 
 export function date2 (timestamp) {
-  return moment.utc(timestamp*1000).local().format('MMM D, YYYY, HH:mm');
+  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
+}
+
+export function date3 (timestamp) {
+  return moment.utc(timestamp * 1000).local().format('YYYY / MM / DD / HH:mm');
+}
+
+export function votingTime (agenda) {
+  if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
+    return 'VOTING IS NOT STARTED';
+  } else {
+    const dDay = new Date(agenda.tVotingEndTime);
+    const now = new Date();
+    const gap = dDay.getTime() * 1000 - now.getTime();
+    if (gap < 0) {
+      return 'POLL ENDED';
+    } else {
+      const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((gap - days * 86400000) / 3600000);
+
+      return days + 'D ' + hours + 'H REMAINING';
+    }
+  }
 }
 
 export function fromNow (timestamp, suffix=false) {
