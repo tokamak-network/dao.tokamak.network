@@ -6,15 +6,49 @@
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Privacy Policy</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Status</a>
     </div>
-    <div class="menu">
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/telegram.svg" alt=""><img v-else src="@/assets/telegram-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/discord.svg" alt=""><img v-else src="@/assets/discord-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/github.svg" alt=""><img v-else src="@/assets/github-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/facebook.svg" alt=""><img v-else src="@/assets/facebook-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/youtube.svg" alt=""><img v-else src="@/assets/youtube-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/twitter.svg" alt=""><img v-else src="@/assets/twitter-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/linkedin.svg" alt=""><img v-else src="@/assets/linkedin-sub.png" alt=""></a>
-      <a href="" target="_blank"><img v-if="!isSub" src="@/assets/medium.svg" alt=""><img v-else src="@/assets/medium-sub.png" alt=""></a>
+    <div class="sns-container">
+      <div class="sns">
+        <a href="https://t.me/tokamak_network" target="_blank">
+          <img v-if="isSub" src="@/assets/telegram.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/telegram-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://discord.gg/SZw2WSR" target="_blank">
+          <img v-if="isSub" src="@/assets/discord.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/discord-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://github.com/Onther-Tech" target="_blank">
+          <img v-if="isSub" src="@/assets/github.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/github-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ" target="_blank">
+          <img v-if="isSub" src="@/assets/youtube.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/youtube-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://twitter.com/tokamak_network" target="_blank">
+          <img v-if="isSub" src="@/assets/twitter.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/twitter-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://www.linkedin.com/company/onther-tech/" target="_blank">
+          <img v-if="isSub" src="@/assets/linkedin.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/linkedin-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
+      <div class="sns">
+        <a href="https://medium.com/onther-tech" target="_blank">
+          <img v-if="isSub" src="@/assets/medium.svg" alt="" width="20" height="20">
+          <img v-else src="@/assets/medium-white.svg" alt="" width="20" height="20">
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +63,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .footer {
   display: flex;
   justify-content: space-between;
@@ -110,13 +144,24 @@ export default {
 .menu img {
   width: 20px;
   height: 20px;
-  padding: 4px;
   margin-right: 14px;
 }
 
 a:hover {
   text-decoration: underline;
   color: #ffffff;
+}
+
+.sns-container {
+  display: flex;
+  align-items: center;
+
+  .sns {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    margin-left: 4px;
+  }
 }
 
 @media all and (min-width: 361px) and (max-width: 1024px) {
