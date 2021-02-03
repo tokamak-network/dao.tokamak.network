@@ -108,13 +108,13 @@ export default {
     dDay () {
       return (agenda) => {
         if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
-          return 'VOTE IS NOT STARTED';
+          return 'VOTING IS NOT STARTED';
         } else {
           const dDay = new Date(agenda.tVotingEndTime);
           const now = new Date();
           const gap = dDay.getTime() * 1000 - now.getTime();
           if (gap < 0) {
-            return 'ENDED POLL';
+            return 'POLL ENDED';
           } else {
             const days = Math.floor(gap / (1000 * 60 * 60 * 24));
             const hours = Math.floor((gap - days * 86400000) / 3600000);
