@@ -4,7 +4,8 @@
       <tbody>
         <tr v-for="supporter in voters" :key="supporter.account">
           <div class="table-content">
-            <div>{{ calcPct(supporter.balance, sumOfVotes) }}%</div>
+            <div v-if="sumOfVotes > 0 ">{{ calcPct(supporter.balance, sumOfVotes) }}%</div>
+            <div v-else> 0 %</div>
             <div>({{ supporter.balance | WTON }} TON)</div>
             <div>{{ supporter.account | hexSlicer }}</div>
           </div>
