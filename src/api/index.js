@@ -30,6 +30,15 @@ export async function getCandidates () {
   return res.data.datas;
 }
 
+export async function getMembers () {
+  const res = await instance.get('/layer2s/dao_members', {
+    params: {
+      chainId,
+    },
+  });
+  return res.data.datas;
+}
+
 export async function getAgendaVoteCasted () {
   const res = await instance.get('/events', {
     params: {
@@ -72,8 +81,8 @@ export async function getCandidateRankByVotes () {
   return res.data.datas;
 }
 
-export async function createAgenda (from, txHash, contents) {
-  await instance.post('/agendacontents', { account: from, tx: txHash, contents });
+export async function createAgenda (from, txHash, contents, type) {
+  await instance.post('/agendacontents', { account: from, tx: txHash, contents, type });
 }
 
 export async function getAgendaContents (agendaId) {
@@ -105,4 +114,21 @@ export async function getAgendaVotesByVoter (voter) {
     },
   });
   return res.data.datas;
+}
+
+export async function updateAgendaContents (from, txHash, contents, sig) {
+  const res = await instance.put('/agendacontents', {
+    tx: txHash,
+    contents: contents,
+    account: from,
+    sig: sig,
+  });
+  return res.data;
+}
+
+export async function getRandomKey (from) {
+  const res = await instance.post('/randomkey', {
+    account: from,
+  });
+  return res.data.data.randomvalue;
 }

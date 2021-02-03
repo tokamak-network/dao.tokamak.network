@@ -93,6 +93,8 @@ export default {
       'web3',
       'members',
       'confirmBlock',
+
+      'etherscanAddress',
     ]),
     ...mapGetters([
       'isCandidate',
@@ -126,7 +128,7 @@ export default {
       return account => `${account.slice(0, 7)}...`;
     },
     href () {
-      return address => 'https://rinkeby.etherscan.io/address/' + address;
+      return address => this.etherscanAddress + '/address/' + address;
     },
 
     totalVotes () {
@@ -158,8 +160,8 @@ export default {
     },
     etherscan (address) {
       address ?
-        window.open('https://rinkeby.etherscan.io/address/' + address, '_blank') : // eslint-disable-line
-        window.open('https://rinkeby.etherscan.io/address/' + this.members[this.memberIndex].operator, '_blank');  // eslint-disable-line
+        window.open(this.etherscanAddress + '/address/' + address, '_blank') : // eslint-disable-line
+        window.open(this.etherscanAddress + '/address/' + this.members[this.memberIndex].operator, '_blank');  // eslint-disable-line
     },
     detail () {
       if (this.occupied()) {

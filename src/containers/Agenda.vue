@@ -8,20 +8,46 @@
       </div>
     </div>
     <div class="content">
-      <div class="timeline">
-        <div class="date">Posted {{ deployedDate(creationTime) }}</div>
-        <div>
-          <img src="@/assets/poll-time-active-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <span> {{ dDay(creationTime) }}</span>
+      <div class="content-sub-container">
+        <div class="agenda-label">Type</div>
+        <div :class="{
+          'agenda-typeA': agendaType(agendaId) === 'A',
+          'agenda-typeB': agendaType(agendaId) === 'B',
+        }"
+        >
+          {{ agendaType(agendaId) }}
         </div>
+        <div class="content-sub-date">Posted {{ deployedDate(creationTime) }}</div>
+        <img v-if="agendaType(agendaId) === 'A'"
+             src="@/assets/poll-time-active-icon.svg" alt=""
+             width="14" height="14"
+        >
+        <img v-else
+             src="@/assets/poll-time-active-icon-typeB.svg" alt=""
+             width="14" height="14"
+        >
+        <span class="content-sub-spare-time"> {{ dDay(creationTime) }}</span>
       </div>
       <div class="title">{{ title }} - {{ deployDate(creationTime) }}</div>
       <div class="selector">
-        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
-        <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">On-Chain Effects</div>
-        <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Comments ({{ voted }})</div>
+        <div :class="{ 'selected': currentSelector === 0,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
+             @click="currentSelector = 0"
+        >
+          Detail
+        </div>
+        <div :class="{ 'selected': currentSelector === 1,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 1 }"
+             @click="currentSelector = 1"
+        >
+          On-Chain Effects
+        </div>
+        <div :class="{ 'selected': currentSelector === 2,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 2 }"
+             @click="currentSelector = 2"
+        >
+          Comments ({{ voted }})
+        </div>
       </div>
       <div class="divider" />
       <agenda-info v-if="currentSelector === 0" />
@@ -61,6 +87,7 @@ export default {
       'getAgendaByID',
       'getVotedListByID',
       'agendaOnChainEffects',
+      'agendaType',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
@@ -108,13 +135,13 @@ export default {
     dDay () {
       return (agenda) => {
         if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
-          return 'VOTE IS NOT STARTED';
+          return 'VOTING IS NOT STARTED';
         } else {
           const dDay = new Date(agenda.tVotingEndTime);
           const now = new Date();
           const gap = dDay.getTime() * 1000 - now.getTime();
           if (gap < 0) {
-            return 'ENDED POLL';
+            return 'POLL ENDED';
           } else {
             const days = Math.floor(gap / (1000 * 60 * 60 * 24));
             const hours = Math.floor((gap - days * 86400000) / 3600000);
@@ -152,7 +179,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .content {
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
@@ -193,6 +220,9 @@ export default {
   color: #2a72e5;
   font-weight: 500;
 }
+.selector .selected-typeB {
+  color: #ff7800;
+}
 .selector > div {
   font-family: Roboto;
   font-size: 14px;
@@ -220,20 +250,124 @@ export default {
   margin-bottom: 25px;
 }
 
+.content-sub-container {
+  display: flex;
+  align-items: center;
+
+  .agenda-label {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+
+    white-space: pre-wrap;
+  }
+  .agenda-typeA {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #2a72e5;
+
+    white-space: pre-wrap;
+
+    margin-right: 2px;
+  }
+
+  .agenda-typeB {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ff7800;
+
+    white-space: pre-wrap;
+
+    margin-right: 2px;
+  }
+
+  .content-sub-date {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+
+    flex: 1;
+  }
+
+  .content-sub-spare-time {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #86929d;
+
+    margin-left: 7px;
+  }
+}
+
 .timeline {
   display: flex;
+
+  .agenda-label {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+
+    white-space: pre-wrap;
+  }
+
+  .agenda-type {
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: var(--slate);
+
+    white-space: pre-wrap;
+  }
 }
-.timeline > div:nth-child(2) {
+.timeline > div:nth-child(3) {
   flex: 1;
 
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
-.timeline > div:nth-child(2) > img {
+.timeline > div:nth-child(3) > img {
   margin-right: 7px;
 }
-.timeline > div:nth-child(2) > span {
+.timeline > div:nth-child(3) > span {
   font-family: Roboto;
   font-size: 10px;
   font-weight: normal;

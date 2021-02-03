@@ -8,20 +8,36 @@
         <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
       </template>
     </modal>
+
+    <div class="type-container">
+      <span class="type-label">TYPE </span>
+      <span v-if="agendaType(agenda.agendaid) === 'A'"
+            class="typeA"
+      >{{ agendaType(agenda.agendaid) }}</span>
+      <span v-else
+            class="typeB"
+      >{{ agendaType(agenda.agendaid) }}</span>
+    </div>
     <div class="card-title">
       <div>
-        {{ title }} {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+        {{ title }} - {{ deployedDate(agenda.tCreationDate) }}
       </div>
       <div class="info-slot">
         <span>Agenda </span>
-        <span class="slot">#{{ agenda.agendaid }}</span>
+        <span v-if="agendaType(agenda.agendaid) === 'A'" class="slot">#{{ agenda.agendaid }}</span>
+        <span v-else class="slot-typeB">#{{ agenda.agendaid }}</span>
       </div>
     </div>
     <div class="description">
       {{ `This agenda was made by ${shortAddress(agenda.creator)} on ${deployedDate(agenda.tCreationDate)}` }}
     </div>
     <div class="info-time">
-      <img src="@/assets/poll-time-active-icon.svg" alt=""
+      <img v-if="agendaType(agenda.agendaid) === 'A'"
+           src="@/assets/poll-time-active-icon.svg" alt=""
+           width="14" height="14"
+      >
+      <img v-else
+           src="@/assets/poll-time-active-icon-typeB.svg" alt=""
            width="14" height="14"
       >
       <span>{{ dDay() }}</span>
@@ -30,7 +46,7 @@
       <div class="left-side">
         <button-comp
           :name="'View Detail'"
-          :type="'primary'"
+          :type="agendaType(agenda.agendaid) === 'A' ? 'primary' : 'primary-typeB'"
           class="left"
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
@@ -97,9 +113,12 @@ export default {
       'myVote',
       'voteCasted',
       'confirmBlock',
+
+      'etherscanAddress',
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
+      'agendaType',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -124,7 +143,7 @@ export default {
       return account => hexSlicer(account);
     },
     href () {
-      return address => 'https://rinkeby.etherscan.io/address/' + address;
+      return address => this.etherscanAddress + '/address/' + address;
     },
     deployedDate () {
       return (timestamp) => {
@@ -139,13 +158,13 @@ export default {
     dDay () {
       return () => {
         if (this.agenda.tNoticeEndTime * 1000 > new Date().getTime() || this.agenda.tVotingEndTime === 0) {
-          return 'VOTE IS NOT STARTED';
+          return 'VOTING IS NOT STARTED';
         } else {
           const dDay = new Date(this.agenda.tVotingEndTime);
           const now = new Date();
           const gap = dDay.getTime() * 1000 - now.getTime();
           if (gap < 0) {
-            return 'ENDED POLL';
+            return 'POLL ENDED';
           } else {
             const days = Math.floor(gap / (1000 * 60 * 60 * 24));
             const hours = Math.floor((gap - days * 86400000) / 3600000);
@@ -235,7 +254,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-agenda-slot {
   flex: 1;
   padding: 25px 0 25px 30px;
@@ -251,6 +270,52 @@ export default {
   font-style: normal;
   letter-spacing: normal;
 }
+
+.type-container {
+  display: flex;
+  margin-bottom: 4px;
+
+  .type-label {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    color: #3e495c;
+
+    white-space: pre-wrap;
+  }
+  .typeA {
+    font-family: Roboto;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    font-weight: bold;
+    color: #2a72e5;
+
+    white-space: pre-wrap;
+  }
+  .typeB {
+    font-family: Roboto;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    font-weight: bold;
+    color: #f7981c;
+
+    white-space: pre-wrap;
+  }
+}
+
 .card-title {
   height: 26px;
   margin: 0 0 5px;
@@ -282,6 +347,9 @@ export default {
 }
 .info-slot > .slot {
   color: #2a72e5;
+}
+.info-slot > .slot-typeB {
+  color: #ff7800;
 }
 .description {
   font-size: 14px;
