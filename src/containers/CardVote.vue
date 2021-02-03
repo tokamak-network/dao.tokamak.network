@@ -38,7 +38,6 @@ export default {
       }
     },
     getAgendas () {
-      console.log('agendas', this.agendas);
       return this.agendas;
     },
     candidateContract (){
