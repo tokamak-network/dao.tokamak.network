@@ -51,7 +51,7 @@
                    :disabled="!myCandidate"
                    @on-clicked="retire"
       />
-      <button-comp v-if="isCandidate"
+      <button-comp v-if="isCandidate && !myCandidate"
                    :name="'Challenge'"
                    :type="'secondary'"
                    :width="'118px'"
