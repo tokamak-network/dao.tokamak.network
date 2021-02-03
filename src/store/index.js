@@ -4,10 +4,10 @@ import web3Utils from 'web3-utils';
 import {
   getCandidates,
   getAgendas,
-  getAgendaVoteCasted,
   getCandidateRankByVotes,
   getAgendaContents,
   getVotersByCandidate,
+  getAgendaVotesByVoter,
 } from '@/api';
 import {
   getContract,
@@ -44,6 +44,7 @@ export default new Vuex.Store({
     voteCasted: [],
     voteRate: 0,
     myVote: [],
+    agendaVotesByCandidates: [],
     activityReward: [],
     votedCandidatesFromAccount: [],
 
@@ -66,7 +67,6 @@ export default new Vuex.Store({
     SET_BLOCK_NUMBER (state, blockNumber) {
       state.blockNumber = blockNumber;
     },
-
     SET_CANDIDATES (state, candidates) {
       state.candidates = candidates;
     },
@@ -84,6 +84,9 @@ export default new Vuex.Store({
     },
     SET_VOTE_RATE (state, voteRate) {
       state.voteRate = voteRate;
+    },
+    SET_VOTES_AGENDAS (state, agendaVotesByCandidates) {
+      state.agendaVotesByCandidates = agendaVotesByCandidates;
     },
     SET_MY_VOTE (state, myVote) {
       state.myVote = myVote;
@@ -144,6 +147,7 @@ export default new Vuex.Store({
       await dispatch('setRequests');
       await dispatch('setContractState');
       await dispatch('setActivityReward');
+      await dispatch('setVoteAgendas');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
@@ -268,15 +272,17 @@ export default new Vuex.Store({
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
-    async setAgendas ({ state, commit }) {
+    async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
-      const committeeProxy = getContract('DAOCommitteeProxy', web3);
+      //const committeeProxy = getContract('DAOCommitteeProxy', web3);
 
       const account = state.account;
+      const agendas = await await getAgendas();
+      /*
       const [agendas, events] = await Promise.all([
         await getAgendas(), await getAgendaVoteCasted()],
       );
@@ -294,13 +300,13 @@ export default new Vuex.Store({
           await committeeProxy.methods.candidateContract(account).call(),
         ]);
         activityReward = _TON(activityReward, 'wei').toString();
-        voteCasted.forEach(vote => (vote.from === candidateContract.toLowerCase() ? myVote.push(vote.data) : '')); // check
+        //voteCasted.forEach(vote => (vote.from === candidateContract.toLowerCase() ? myVote.push(vote.data) : '')); // check
       } else {
         activityReward = '0 TON';
       }
 
       commit('SET_ACTIVITY_REWARD', activityReward);
-      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+      //commit('SET_AGENDA_VOTE_CASTED', voteCasted);
 
       const voteRate = (myVote.length / agendas.length) * 100;
 
@@ -318,6 +324,16 @@ export default new Vuex.Store({
 
       commit('SET_MY_VOTE', myVote);
       commit('SET_VOTE_RATE', voteRate);
+      */
+
+      let activityReward ;
+      if (account !== '') {
+        activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
+        activityReward = _TON(activityReward, 'wei').toString();
+      } else {
+        activityReward = '0 TON';
+      }
+      commit('SET_ACTIVITY_REWARD', activityReward);
 
       const promAgendaTx = [];
       const promAgendaContents = [];
@@ -336,8 +352,8 @@ export default new Vuex.Store({
         agendas[i].contents = agendaContents[i].contents;
         agendas[i].creator = agendaContents[i].creator;
       }
-
       commit('SET_AGENDAS', agendas);
+      await dispatch('setVoteAgendas');
     },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();
@@ -389,7 +405,46 @@ export default new Vuex.Store({
       }catch(error){
         console.log('setActivityReward error', error);  // eslint-disable-line
       }
-
+    },
+    async setVoteAgendas ({ state, commit }){
+      const account = state.account;
+      const agendas = state.agendas;
+      const myCandidateContracts =[];
+      try{
+        if ( agendas!=null && account!=null && account.length > 0 && agendas.length > 0 ) {
+          if(state.candidates!=null && state.candidates.length > 0 ){
+            state.candidates.forEach(candidate=>{
+              if( candidate.operator.toLowerCase()  === account.toLowerCase()  )
+                myCandidateContracts.push({
+                  candidateContract:  candidate.candidateContract,
+                  candidate:  candidate.candidate,
+                  operator:  candidate.operator,
+                  layer2:  candidate.layer2,
+                  canVoteAgendas: [],
+                  agendaVote:[],
+                  countCanVoteAgendas:  0,
+                  countAgendaVote:  0,
+                });
+            });
+          }
+          myCandidateContracts.forEach( async function (candidateContract){
+            //console.log('setVoteAgendas myCandidateContracts in account', account, 'candidateContract', candidateContract);
+            agendas.forEach(agenda => {
+              agenda.voters.forEach(voter=>{
+                if(voter!=null && voter.toLowerCase() === candidateContract.candidate.toLowerCase()) {
+                  candidateContract.canVoteAgendas.push(agenda.agendaid);
+                  candidateContract.countCanVoteAgendas ++;
+                }
+              });
+            });
+            candidateContract.agendaVote = await getAgendaVotesByVoter(candidateContract.candidateContract);
+            candidateContract.countAgendaVote = candidateContract.agendaVote.length ;
+          });
+          commit('SET_VOTES_AGENDAS', myCandidateContracts );
+        }
+      }catch(error){
+        console.log('setVoteAgendas error', error);  // eslint-disable-line
+      }
     },
   },
   getters: {
@@ -577,6 +632,9 @@ export default new Vuex.Store({
       const initialAmount = 0;
       const reducer = (amount, voter) => amount + voter.balance;
       return state.voters.reduce(reducer, initialAmount);
+    },
+    agendaVotesByCandidates (state){
+      return state.agendaVotesByCandidates;
     },
   },
 });

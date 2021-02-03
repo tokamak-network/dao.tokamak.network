@@ -24,10 +24,10 @@ export default {
       default: 0,
       type: Number,
     },
-    remain: {
+    /*remain: {
       default: false,
       type: Boolean,
-    },
+    },*/
     margin: {
       default: 0,
       type: Number,
@@ -61,6 +61,10 @@ export default {
           return pct;
         }
       };
+    },
+    remain () {
+      if(this.pct===0) return true;
+      else return false;
     },
   },
 };

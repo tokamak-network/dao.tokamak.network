@@ -4,7 +4,7 @@
       <agenda-slot />
     </div>
     <div>
-      <card-vote v-if="isCandidate" />
+      <card-vote v-for="(candidateAgendaInfo, index) in agendaVotesByCandidates" :key="index" :agendas="candidateAgendaInfo" />
       <card-stats v-if="isCandidate" />
       <card-stats-committee />
       <card-resource />
@@ -31,6 +31,7 @@ export default {
   computed: {
     ...mapGetters([
       'isCandidate',
+      'agendaVotesByCandidates',
     ]),
   },
 };
