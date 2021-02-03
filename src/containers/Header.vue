@@ -29,7 +29,7 @@
         Agenda
       </router-link>
       <connect-wallet :is-sub="isSub" />
-      <div v-if="account!=='' && checkRoute === true">
+      <div v-if="account!=='' && isCandidate && checkRoute === true">
         <button
           class="claim"
           @click="showModal=true"
@@ -45,7 +45,7 @@
 import Connect from '@/components/Connect.vue';
 import Modal from '@/components/Modal.vue';
 import ModalClaim from '@/containers/ModalClaim.vue';
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
@@ -61,6 +61,9 @@ export default {
   computed: {
     ...mapState([
       'account',
+    ]),
+    ...mapGetters([
+      'isCandidate',
     ]),
     isSub () {
       return this.$route.path !== '/';

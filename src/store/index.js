@@ -402,7 +402,7 @@ export default new Vuex.Store({
           const committeeProxy = await getContract('DAOCommitteeProxy', web3);
           let activityReward;
           const accounts = candidates.split(',');
-          if(accounts!=null && accounts.length > 0 ){
+          if(candidates!=null && candidates.length > 0 && accounts!=null && accounts.length > 0 ){
             const agendaVotesByCandidates = state.agendaVotesByCandidates;
             accounts.forEach( async function (account){
               activityReward = await committeeProxy.methods.getClaimableActivityReward(account).call();

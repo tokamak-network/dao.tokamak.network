@@ -93,7 +93,6 @@ export default {
       'web3',
       'members',
       'confirmBlock',
-
       'etherscanAddress',
     ]),
     ...mapGetters([
