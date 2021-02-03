@@ -1,12 +1,36 @@
 <template>
   <div class="agenda-info">
-    <!-- TODO: how to edit? -->
-    <markdown-viewer :content="agendaContents(agendaId)" />
-    <button-comp v-if="account === getAgendaByID(agendaId).operator"
-                 :name="'Agenda Edit'"
-                 :type="'primary'"
-                 :width="'110px'"
-    />
+    <div v-if="edit===false">
+      <markdown-viewer :content="agendaContents(agendaId)" />
+      <div>
+        <button-comp v-if="account.toLowerCase() === getAgendaByID(agendaId).creator"
+                     :name="'Agenda Edit'"
+                     :type="'primary'"
+                     :width="'110px'"
+                     @on-clicked="editButton()"
+        />
+      </div>
+    </div>
+    <div v-if="edit===true" class="edit">
+      <div>
+        <textarea v-model="desc" cols="30" rows="10" />
+      </div>
+      <div>
+        <button-comp
+          :name="'Edit'"
+          :type="'primary'"
+          :width="'110px'"
+          class="left"
+          @on-clicked="update()"
+        />
+        <button-comp
+          :name="'Cancel'"
+          :type="'hide'"
+          :width="'110px'"
+          @on-clicked="edit=false"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,6 +38,11 @@
 import { mapGetters, mapState } from 'vuex';
 import Button from '@/components/Button.vue';
 import MarkdownViewer from '@/components/MarkdownViewer.vue';
+import {
+  getRandomKey,
+  updateAgendaContents,
+} from '@/api';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
@@ -23,11 +52,14 @@ export default {
   data () {
     return {
       agendaId: -1,
+      edit: false,
+      desc: '',
     };
   },
   computed: {
     ...mapState([
       'account',
+      'web3',
     ]),
     ...mapGetters([
       'getAgendaByID',
@@ -43,16 +75,52 @@ export default {
       immediate: true,
     },
   },
+  methods: {
+    async editButton () {
+      this.desc = this.agendaContents(this.agendaId);
+      this.edit=true;
+    },
+    async update () {
+      const txHash = this.getAgendaByID(this.agendaId).transactionHash;
+      const sig = await this.generateSig(txHash, this.account.toLowerCase());
+      await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig);
+
+      this.edit=false;
+      await this.$store.dispatch('launch');
+    },
+    async generateSig (txHash, from) {
+      const randomvalue = await getRandomKey(from);
+      if(randomvalue!=null){
+        const randomBn = new BigNumber(randomvalue).toFixed(0);
+        const soliditySha3 = await this.web3.utils.soliditySha3(
+          { type: 'string', value: from },
+          { type: 'uint256', value: randomBn },
+          { type: 'string', value: txHash },
+        );
+
+        const sig = await this.web3.eth.personal.sign(soliditySha3, from, '');
+
+        return sig;
+      } else {
+        return null;
+      }
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .agenda-info {
   width: 100%;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.agenda-info > div:first-child > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .divider {
@@ -108,5 +176,45 @@ export default {
   align-items: center;
   justify-content: center;
 }
-</style>
 
+textarea {
+    width: 100%;
+
+    border: solid 1px #dfe4ee;
+    border-radius: 4px;
+
+    outline: none;
+
+    padding: 8px 16px;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: 0.22px;
+    color: #3e495c;
+
+    resize: none;
+
+    &::placeholder {
+      color: #86929d;
+    }
+
+    &:hover {
+      border: 1px solid #c9d1d8;
+    }
+
+    &:focus {
+      border: 1px solid #2a72e5;
+    }
+  }
+.edit > div:nth-child(2) {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+.left {
+  margin-right: 15px;
+}
+</style>

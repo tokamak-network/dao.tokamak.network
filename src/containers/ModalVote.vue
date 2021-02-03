@@ -4,13 +4,7 @@
          @click="close"
     >
     <div class="function">Confirm Vote</div>
-    <div class="sub-title">
-      <span>
-        You are voting for the following candidate/commitee<br>
-        ** withdrawal takes at least 2 weeks **
-      </span>
-    </div>
-    <div class="content">
+    <!-- <div class="content">
       <span>
         <span class="blue">
           0xabc..
@@ -21,7 +15,7 @@
         </span>
         to Committee member
       </span>
-    </div>
+    </div> -->
     <div class="select">
       <div class="hint">Yes / No / Abstain</div>
       <dropdown :items="['Yes', 'No', 'Abstain']"
@@ -164,7 +158,7 @@ export default {
     color: #3e495c;
 
     padding-top: 25px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
   }
 
   > .sub-title {
