@@ -34,11 +34,19 @@
         class="dropdown"
         @on-selected="selectExecuted"
       />
+      <dropdown
+        :items="['All', 'My']"
+        :hint="'My Proposal'"
+        :button-type="'a'"
+        :selector-type="'a'"
+        class="dropdown"
+        @on-selected="selectProposal"
+      />
     </div>
     <div>
       <div class="title">Agenda</div>
       <div class="agenda-info">
-        {{ numAgenda }} Agendas - POSTED {{ deployedDate() }}
+        {{ numAgenda }} Agendas - POSTED {{ agendas[0].tCreationDate | date2 }} UTC
       </div>
       <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
       <button-comp v-if="hide === false && hideAgendas.length > 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
@@ -71,37 +79,20 @@ export default {
       status: [false, ''],
       vote: [false, ''],
       result: [false, ''],
+      proposal: [false, ''],
       executeCode: ['Executed', 'Not Executed'],
       statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
       resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
       voteCode: ['Abstain', 'Yes', 'No'],
-      monthNames: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
     };
   },
   computed: {
     ...mapState([
       'agendas',
+      'account',
     ]),
     numAgenda () {
       return this.openAgendas.length + this.hideAgendas.length;
-    },
-    deployedDate () {
-      return () => {
-        const latest = this.agendas[0];
-        if (!latest) return 0;
-        const date = new Date(latest.tCreationDate * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const hour = date.getHours();
-        let minutes = date.getMinutes();
-
-        if (minutes < 10) {
-          minutes = '0' + minutes;
-        }
-
-        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year + ', ' + hour + ':' + minutes;
-      };
     },
   },
   beforeCreate () {
@@ -113,6 +104,7 @@ export default {
   },
   beforeUpdate () {
     this.agendaFilter();
+    this.classify(this.openAgendas);
   },
   methods: {
     classify (agendas) {
@@ -147,11 +139,14 @@ export default {
         const stateCode = this.resultCode.indexOf(this.result[1]);
         filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
       }
-      // console.log('filter', this.execute[0] !== true && this.status[0] !== true && this.result[0] !== true && this.vote[0] !== true);
-      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result[0] !== true) {
+      if (this.proposal[0] === true) {
+        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.creator === this.account.toLowerCase())) : filteredAgenda = filteredAgenda.filter(agenda => agenda.creator === this.account.toLowerCase());
+      }
+
+      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result[0] !== true && this.proposal[0] !== true) {
         filteredAgenda = this.agendas;
       }
-      // console.log('filtering result', filteredAgenda);
+
       this.classify(filteredAgenda);
     },
     selectExecuted (item) {
@@ -168,6 +163,10 @@ export default {
     },
     selectVoted (item) {
       item !== 'All' ? this.vote = [true, item] : this.vote[0] = false ;
+      this.agendaFilter();
+    },
+    selectProposal (item) {
+      item !== 'All' ? this.proposal = [true, item] : this.proposal[0] = false ;
       this.agendaFilter();
     },
   },
