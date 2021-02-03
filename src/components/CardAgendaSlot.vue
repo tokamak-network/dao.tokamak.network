@@ -130,9 +130,11 @@ export default {
     },
     voteResultStyle () {
       if (this.agenda.voting !== undefined) {
-        return {
-          'color': '#2a72e5',
-        };
+        if (this.agendaType(this.agenda.agendaid) === 'A') {
+          return { 'color': '#2a72e5' };
+        } else {
+          return { 'color': '#ff7800' };
+        }
       }
       return 0;
     },
