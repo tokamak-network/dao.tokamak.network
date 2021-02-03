@@ -17,7 +17,7 @@
         >
           {{ agendaType(agendaId) }}
         </div>
-        <div class="content-sub-date">Posted {{ deployedDate(creationTime) }}</div>
+        <div class="content-sub-date">Posted {{ creationTime.tCreationDate | date3 }} UTC</div>
         <img v-if="agendaType(agendaId) === 'A'"
              src="@/assets/poll-time-active-icon.svg" alt=""
              width="14" height="14"
@@ -26,9 +26,9 @@
              src="@/assets/poll-time-active-icon-typeB.svg" alt=""
              width="14" height="14"
         >
-        <span class="content-sub-spare-time"> {{ dDay(creationTime) }}</span>
+        <span class="content-sub-spare-time"> {{ creationTime.tNoticeEndTime | votingTime }}</span>
       </div>
-      <div class="title">{{ title }} - {{ deployDate(creationTime) }}</div>
+      <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
       <div class="selector">
         <div :class="{ 'selected': currentSelector === 0,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
@@ -105,51 +105,6 @@ export default {
     },
     creationTime () {
       return this.getAgendaByID(this.agendaId);
-    },
-    deployedDate () {
-      return (agenda) => {
-        const date = new Date(agenda.tCreationDate * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const hour = date.getHours();
-        let minutes = date.getMinutes();
-
-        if (minutes < 10) {
-          minutes = '0' + minutes;
-        }
-
-        return year + ' / ' + month + ' / ' + day + ' / ' + hour + ':' + minutes;
-      };
-    },
-    deployDate () {
-      return (agenda) => {
-        const date = new Date(agenda.tCreationDate * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-
-        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
-      };
-    },
-    dDay () {
-      return (agenda) => {
-        if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
-          return 'VOTING IS NOT STARTED';
-        } else {
-          const dDay = new Date(agenda.tVotingEndTime);
-          const now = new Date();
-          const gap = dDay.getTime() * 1000 - now.getTime();
-          if (gap < 0) {
-            return 'POLL ENDED';
-          } else {
-            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((gap - days * 86400000) / 3600000);
-
-            return days + 'D ' + hours + 'H REMAINING';
-          }
-        }
-      };
     },
   },
   watch: {

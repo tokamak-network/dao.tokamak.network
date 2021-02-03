@@ -1,7 +1,7 @@
 <template>
   <div class="agenda-comment">
     <div class="date">
-      {{ votedAt | date2 }}
+      {{ votedAt | date2 }} UTC
     </div>
     <div class="vote-status">
       <span>
