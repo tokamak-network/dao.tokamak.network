@@ -10,13 +10,14 @@
     </modal>
     <card-container :title="'Your Vote'">
       <template #body>
-        <div style="padding: 15px;">
+        <div class="vote-for-agenda" style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
             {{ title }} - {{ deployDate(agenda) }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
                        :type="'secondary'"
                        :width="'100%'"
+                       style="height: 43px; font-size: 14px; color: #ffffff;"
                        @on-clicked="showModal=true"
           />
         </div>
@@ -91,5 +92,15 @@ export default {
 </script>
 
 <style scoped>
-
+.vote-for-agenda {
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
+}
 </style>

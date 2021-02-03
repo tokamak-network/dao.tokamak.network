@@ -10,7 +10,7 @@
     </modal>
     <div class="card-title">
       <div>
-        {{ title }} {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
+        {{ title }} - {{ deployedDate(agenda.tCreationDate) }}
       </div>
       <div class="info-slot">
         <span>Agenda </span>
