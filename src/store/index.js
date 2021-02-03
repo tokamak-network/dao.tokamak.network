@@ -402,7 +402,7 @@ export default new Vuex.Store({
           const committeeProxy = await getContract('DAOCommitteeProxy', web3);
           let activityReward;
           const accounts = candidates.split(',');
-          if(accounts!=null && accounts.length > 1 ){
+          if(accounts!=null && accounts.length > 0 ){
             const agendaVotesByCandidates = state.agendaVotesByCandidates;
             accounts.forEach( async function (account){
               activityReward = await committeeProxy.methods.getClaimableActivityReward(account).call();
@@ -413,10 +413,13 @@ export default new Vuex.Store({
             } );
             //console.log('SET_VOTES_AGENDAS', agendaVotesByCandidates);
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates );
-          }else if(accounts!=null && accounts.length === 1 ) {
-            activityReward = await committeeProxy.methods.getClaimableActivityReward(accounts[0]).call();
-            activityReward = _TON(activityReward, 'wei').toString(18);
-            commit('SET_ACTIVITY_REWARD', activityReward);
+            //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
+
+            if(accounts[0]!=null  ) {
+              activityReward = await committeeProxy.methods.getClaimableActivityReward(accounts[0]).call();
+              activityReward = _TON(activityReward, 'wei').toString(18);
+              commit('SET_ACTIVITY_REWARD', activityReward);
+            }
           }
         }
       }catch(error){
