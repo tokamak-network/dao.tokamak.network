@@ -13,7 +13,7 @@
 
 <script>
 import { getContractABIFromAddress } from '@/utils/contracts';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   data () {
@@ -22,6 +22,9 @@ export default {
     };
   },
   computed: {
+    ...mapState([
+      'etherscanAddress',
+    ]),
     ...mapGetters([
       'agendaOnChainEffects',
       'agendaCreator',
@@ -62,7 +65,7 @@ export default {
   },
   methods: {
     toEtherscan () {
-      window.open('https://rinkeby.etherscan.io/address/' + this.target, '_blank'); // eslint-disable-line
+      window.open(this.etherscanAddress + '/address/' + this.target, '_blank'); // eslint-disable-line
     },
   },
 };

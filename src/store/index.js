@@ -25,6 +25,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     launched: false,
+    etherscanAddress: 'https://rinkeby.etherscan.io',
 
     web3: null,
     account: '',

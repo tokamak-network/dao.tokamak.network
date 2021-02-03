@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { getRecentEvents } from '@/api';
 
 export default {
@@ -45,12 +46,17 @@ export default {
       events: [],
     };
   },
+  computed: {
+    ...mapState([
+      'etherscanAddress',
+    ]),
+  },
   async created () {
     this.events = await getRecentEvents();
   },
   methods: {
     newtab (txhash) {
-      window.open(`https://rinkeby.etherscan.io/tx/${txhash}`, '_blank'); // eslint-disable-line
+      window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
     explanation (event) {
       const eventName = event.eventName;

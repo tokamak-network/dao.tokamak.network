@@ -112,6 +112,8 @@ export default {
       'myVote',
       'voteCasted',
       'confirmBlock',
+
+      'etherscanAddress',
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
@@ -140,7 +142,7 @@ export default {
       return account => hexSlicer(account);
     },
     href () {
-      return address => 'https://rinkeby.etherscan.io/address/' + address;
+      return address => this.etherscanAddress + '/address/' + address;
     },
     deployedDate () {
       return (timestamp) => {

@@ -49,6 +49,8 @@ export default {
       'launched',
       'web3',
       'pendingTx',
+
+      'etherscanAddress',
     ]),
     shortAddress () {
       return `${this.account.slice(0, 7)}...${this.account.slice(-4)}`;
@@ -133,7 +135,7 @@ export default {
       }
     },
     etherscan () {
-      window.open('https://rinkeby.etherscan.io/tx/' + this.pendingTx, '_blank'); // eslint-disable-line
+      window.open(this.etherscanAddress + '/tx/' + this.pendingTx, '_blank'); // eslint-disable-line
     },
   },
 };
