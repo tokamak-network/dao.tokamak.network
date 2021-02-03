@@ -4,7 +4,7 @@
       <template #body>
         <div class="vote-percentage-container">
           <div class="vote-percentage">{{ roundNumber(voteRate) }}% of Agenda is voted</div>
-          <vote-poll :pct="voteRate" :margin="16" :remain="remain" />
+          <vote-poll :pct="voteRate" :margin="20" :remain="remain" />
         </div>
       </template>
     </card-container>
@@ -47,6 +47,7 @@ export default {
 }
 
 .vote-percentage-container {
+  height: 126px;
   padding-top: 16px;
   padding-bottom: 16px;
 }
@@ -60,8 +61,8 @@ export default {
   text-align: left;
   color: #3e495c;
 
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-bottom: 16px;
+  padding-left: 20px;
+  /* padding-right: 16px; */
+  margin: 10px 0 25px;
 }
 </style>

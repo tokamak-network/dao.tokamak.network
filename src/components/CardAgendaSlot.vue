@@ -154,6 +154,7 @@ export default {
     },
     buttonType () {
       switch (this.agenda.status) {
+      case 3: return 'secondary';
       case 4: return 'secondary';
       case 5: return 'secondary';
       }
