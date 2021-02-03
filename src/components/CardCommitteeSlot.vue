@@ -117,7 +117,9 @@ export default {
       return (timestamp, suffix) => moment.unix(timestamp).fromNow(suffix);
     },
     desc () {
-      if(this.members[this.memberIndex])  return `${hexSlicer(this.members[this.memberIndex].candidateContract)} is elected to Committee member since ${this.deployedDate(this.members[this.memberIndex].info.memberJoinedTime)}`;
+      if (this.members[this.memberIndex]) {
+        return `${hexSlicer(this.members[this.memberIndex].candidateContract)} was elected as a member on ${this.deployedDate(this.members[this.memberIndex].info.memberJoinedTime)}`;
+      }
       else return '';
     },
     shortAddress () {

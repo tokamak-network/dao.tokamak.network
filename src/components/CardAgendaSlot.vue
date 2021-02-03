@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="description">
-      Created by {{ shortAddress(agenda.creator) }}
+      {{ `This agenda was made by ${shortAddress(agenda.creator)} on ${deployedDate(agenda.tCreationDate)}` }}
     </div>
     <div class="info-time">
       <img src="@/assets/poll-time-active-icon.svg" alt=""
@@ -61,6 +61,7 @@ import ModalVote from '@/containers/ModalVote.vue';
 
 import { mapState, mapGetters } from 'vuex';
 import { getContract, getContractABIFromAddress } from '@/utils/contracts';
+import { hexSlicer } from '@/utils/helpers';
 
 export default {
   components: {
@@ -120,7 +121,7 @@ export default {
       return 0;
     },
     shortAddress () {
-      return account => `${account.slice(0, 7)}...`;
+      return account => hexSlicer(account);
     },
     href () {
       return address => 'https://rinkeby.etherscan.io/address/' + address;
