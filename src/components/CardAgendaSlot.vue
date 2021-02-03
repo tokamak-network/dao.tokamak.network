@@ -95,6 +95,7 @@ export default {
   },
   data () {
     return {
+      now : parseInt(Date.now()/1000),
       endedShow: false,
       login: true,
       buttonClass: {
@@ -174,19 +175,27 @@ export default {
       return 'disabled';
     },
     canVote (){
-      if ( this.isMember && this.agenda && this.agenda.status === 1 && this.agenda.tNoticeEndTime < parseInt(Date.now()/1000)) {
+      //console.log('canVote', this.agenda.agendaid, this.isMember, this.agenda  );
+      //console.log('tVoting', this.agenda.status, this.now, this.agenda.tVotingStartTime, this.agenda.tVotingEndTime );
+      if ( this.isMember && this.agenda && this.agenda.status === 1 && this.agenda.tNoticeEndTime < this.now)
         return true;
-      } else if( this.isVoter ){
+      else if( this.isVoter )
         return true;
-      }else return false;
+      else
+        return false;
     },
     isVoter (){
-      if( this.myCandidates && this.agenda && this.agenda.status === 2 && this.agenda.voters  && this.agenda.voters.length > 0 ){
+      //console.log('isVoter', 'myCandidates', this.myCandidates, 'voters', this.agenda.voters );
+      let returnValue = false;
+      if( this.myCandidates && this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
+        && this.agenda.tVotingEndTime > this.now
+        && this.agenda.voters  && this.agenda.voters.length > 0 ){
         this.agenda.voters.forEach(voter=>{
-          if(voter && this.myCandidates.indexOf(voter.toLowerCase()) > -1 ) return true;
+          if(voter!=null && (this.myCandidates.indexOf(voter.toLowerCase()) > -1 ) )
+            returnValue= true;
         });
-        return false;
-      }else return false;
+        return returnValue;
+      }else return returnValue;
     },
   },
   methods: {

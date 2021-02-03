@@ -3,7 +3,7 @@
     <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
          @click="close"
     >
-    <div class="function">Confirm Vote</div>
+    <div class="function">Agenda#{{ id }} Confirm Vote</div>
     <!-- <div class="content">
       <span>
         <span class="blue">
@@ -44,9 +44,8 @@ import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 
 // import Web3 from 'web3';
-import { mapState } from 'vuex';
-import { getContract } from '@/utils/contracts';
-import candidate from '../contracts/Candidate.json';
+import { mapGetters, mapState } from 'vuex';
+import { getContract, isVotableStatusOfAgenda } from '@/utils/contracts';
 
 export default {
   components: {
@@ -72,7 +71,15 @@ export default {
       'members',
       'candidates',
       'confirmBlock',
+      'agendas',
     ]),
+    ...mapGetters([
+      'myCandidates',
+      'isMember',
+    ]),
+    findAgenda (){
+      return this.agendas.find(agenda=> agenda.agendaid === this.id );
+    },
   },
   methods: {
     close () {
@@ -87,45 +94,76 @@ export default {
         this.choice = 0;
       }
     },
+    findCandidateContractByOperator (){
+      let _candidateContract = null;
+      console.log('findCandidateContractByOperator', this.candidates );
+      if(this.candidates!=null && this.candidates.length > 0 ){
+        for(let i=0; i< this.candidates.length; i++){
+          if( this.candidates[i].operator.toLowerCase() === this.account.toLowerCase() ) _candidateContract = this.candidates[i].candidateContract;
+        }
+      }
+      return _candidateContract;
+    },
+
     async vote () {
-      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
-      // const daoCommittee = getContract('Candidate', this.web3);
-      // const gasLimit = await daoCommittee.methods.castVote(
-      //   this.id,
-      //   this.choice,
-      //   this.comment,
-      // ).estimateGas({
-      //   from: this.account,
-      // });
-
-      const candidateContract = await committeeProxy.methods.candidateContract(this.account).call();
-      const Candidate = new this.web3.eth.Contract(candidate.abi, candidateContract);
-
-      await Candidate.methods.castVote(
-        this.id,
-        this.choice,
-        this.comment,
-      ).send({
-        from: this.account,
-        // gasLimit: Math.floor(gasLimit * 1.2),
-      })
-        .on('transactionHash', async (hash) => {
-          this.$store.commit('SET_PENDING_TX', hash);
-          this.close();
-        })
-        .on('confirmation', async (confirmationNumber) => {
-          if (this.confirmBlock === confirmationNumber) {
-            this.$store.dispatch('setAgendas');
+      if(this.web3==null) {
+        alert('Check Connect Wallet!');
+        return;
+      }
+      const agenda = this.findAgenda;
+      //console.log('agenda', agenda, 'myCandidates', this.myCandidates, 'isMember', this.isMember, 'account', this.account) ;
+      let candidateContract = null;
+      let _myCandidates = null;
+      if(this.myCandidates) _myCandidates =this.myCandidates.split(',');
+      if(agenda.status===1 && this.isMember && _myCandidates){
+        candidateContract = _myCandidates.find(candidate=>candidate.toLowerCase()===this.isMember.candidate.toLowerCase());
+        if(candidateContract!=null  ) candidateContract = this.isMember.candidateContract.toLowerCase();
+      } else if (agenda.status===2 && _myCandidates && agenda.voters && agenda.voters.length > 0){
+        const findVoter  =  _myCandidates.find( candidate =>{
+          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.toLowerCase());
+          //console.log('agenda.voters', agenda.voters, 'voter', voter, 'candidate', candidate) ;
+          return voter;
+        } );
+        //console.log('findVoter', findVoter, 'candidates', this.candidates) ;
+        const findCandidate = this.candidates.find(candidate=> candidate.candidate.toLowerCase() === findVoter );
+        if(findCandidate) candidateContract = findCandidate.candidateContract.toLowerCase();
+      }
+      try{
+        //console.log('candidateContract', candidateContract) ;
+        if(candidateContract){
+          const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
+          if(!isVotableStatus){
+            alert('This Agenda is not in a state to vote.');
+            this.close();
+          }else{
+            const Candidate = await getContract('Candidate', this.web3, candidateContract);
+            if(Candidate!=null){
+              await Candidate.methods.castVote(
+                this.id,
+                this.choice,
+                this.comment,
+              ).send({
+                from: this.account,
+                // gasLimit: Math.floor(gasLimit * 1.2),
+              }).on('transactionHash', async (hash) => {
+                this.$store.commit('SET_PENDING_TX', hash);
+                this.close();
+              }).on('receipt', () => {
+                this.$store.dispatch('setAgendas');
+                this.$store.commit('SET_PENDING_TX', '');
+                this.close();
+              }).on('error', () => {
+                this.$store.commit('SET_PENDING_TX', '');
+              });
+              this.close();
+            }
           }
-        })
-        .on('receipt', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-          this.close();
-        })
-        .on('error', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        });
-      this.close();
+        }else{
+          alert('Can\'t find Candidate.');
+        }
+      }catch(err){
+        console.log(err) ; // eslint-disable-line
+      }
     },
   },
 };
