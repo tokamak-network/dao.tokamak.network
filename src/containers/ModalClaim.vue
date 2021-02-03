@@ -41,6 +41,7 @@ export default {
       'confirmBlock',
       'web',
       'account',
+      'agendaVotesByCandidates',
     ]),
     canClaimValue (){
       let _amount = this.activityReward;

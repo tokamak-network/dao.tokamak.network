@@ -3,7 +3,7 @@
     <card-container :title="'Your Vote'">
       <template #body>
         <div class="vote-percentage-container">
-          <div class="vote-percentage">{{ candidateContract }}</div>
+          <div v-if="clength > 1" class="vote-percentage">{{ candidateContract }}</div>
           <div class="vote-percentage">{{ voteRates }}% of Agenda is voted </div>
           <vote-poll :pct="parseInt(voteRates)" :margin="16" />
         </div>
@@ -22,7 +22,12 @@ export default {
     'vote-poll': VotePoll,
   },
   props: {
-    agendas: {
+    clength:{
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    candidates: {
       type: Object,
       default: null,
       required: true,
@@ -30,18 +35,15 @@ export default {
   },
   computed: {
     voteRates () {
-      if(this.agendas.countCanVoteAgendas > 0 && this.agendas.countAgendaVote > 0  ){
-        const voteRate = ( this.agendas.countAgendaVote / this.agendas.countCanVoteAgendas) * 100;
+      if(this.candidates.countCanVoteAgendas > 0 && this.candidates.countAgendaVote > 0  ){
+        const voteRate = ( this.candidates.countAgendaVote / this.candidates.countCanVoteAgendas) * 100;
         return voteRate.toFixed(2);
       }else {
         return 0;
       }
     },
-    getAgendas () {
-      return this.agendas;
-    },
     candidateContract (){
-      return this.agendas.candidateContract;
+      return this.candidates.candidateContract;
     },
   },
 };
