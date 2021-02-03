@@ -76,7 +76,7 @@
 import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
-
+import { isVotableStatusOfAgenda } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 import { getContract, getContractABIFromAddress } from '@/utils/contracts';
 import { hexSlicer } from '@/utils/helpers';
@@ -201,8 +201,17 @@ export default {
         return 'You have not voted';
       }
     },
-    click () {
+    async click () {
+      if ( !this.web3 ){
+        alert('Check Connect Wallet !');
+        return;
+      }
       if (this.agenda.status === 2 || this.agenda.status === 1) {
+        const isVotableStatus = await isVotableStatusOfAgenda( this.agenda.agendaid, this.web3);
+        if(!isVotableStatus) {
+          alert('This Agenda is not in a state to vote.');
+          return;
+        }
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));
         (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);

@@ -39,7 +39,7 @@ const deployed =  {
   'EtherToken'       : '0x6D5bF9764219868a341f1c04F7a082d6A9219D56',
 };
 
-module.exports.getContract = function (want, web3, address) {
+function getContract (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
   }
@@ -68,7 +68,9 @@ module.exports.getContract = function (want, web3, address) {
   } else {
     return contracts;
   }
-};
+}
+
+module.exports.getContract = getContract;
 
 const depositManagerFunctionsOfTypeA = [
   { 'name': 'setGlobalWithdrawalDelay', 'title':'Global withdrawal delay will be changed.', 'prettyName': '', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.' },
@@ -469,4 +471,23 @@ module.exports.metamaskErrorMessage = function (errorString) {
     errString = errorString.substring(startMessage+1, endMessage);
   }
   return errString;
+};
+
+module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
+  let isVotableStatus = false;
+  try{
+    if(_web3==null){
+      alert('Check Connect Wallet !');
+    }else{
+      const AgendaManager =  await getContract('DAOAgendaManager', _web3 );
+      if(AgendaManager!=null){
+        isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
+      }else{
+        console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
+      }
+    }
+  }catch(err){
+    console.log('Utils.isVotableStatus err', err) ; // eslint-disable-line
+  }
+  return isVotableStatus;
 };
