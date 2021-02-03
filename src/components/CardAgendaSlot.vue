@@ -59,7 +59,7 @@
       </div>
       <div v-if="agenda.executed === false" class="right-side">
         <button-comp
-          v-if="login!==false"
+          v-if="login!==false && canVote"
           :name="buttonName"
           :type="buttonType"
           :status="buttonStatus"
@@ -115,12 +115,13 @@ export default {
       'myVote',
       'voteCasted',
       'confirmBlock',
-
       'etherscanAddress',
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
       'agendaType',
+      'isMember',
+      'myCandidates',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -172,6 +173,21 @@ export default {
       }
       return 'disabled';
     },
+    canVote (){
+      if ( this.isMember && this.agenda && this.agenda.status === 1 && this.agenda.tNoticeEndTime < parseInt(Date.now()/1000)) {
+        return true;
+      } else if( this.isVoter ){
+        return true;
+      }else return false;
+    },
+    isVoter (){
+      if( this.myCandidates && this.agenda && this.agenda.status === 2 && this.agenda.voters  && this.agenda.voters.length > 0 ){
+        this.agenda.voters.forEach(voter=>{
+          if(voter && this.myCandidates.indexOf(voter.toLowerCase()) > -1 ) return true;
+        });
+        return false;
+      }else return false;
+    },
   },
   methods: {
     votedResult () {
@@ -185,7 +201,6 @@ export default {
         return 'You have not voted';
       }
     },
-
     click () {
       if (this.agenda.status === 2 || this.agenda.status === 1) {
         const operator = [];
