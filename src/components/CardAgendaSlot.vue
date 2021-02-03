@@ -8,24 +8,25 @@
         <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
       </template>
     </modal>
-
-    <div class="type-container">
-      <span class="type-label">TYPE </span>
-      <span v-if="agendaType(agenda.agendaid) === 'A'"
-            class="typeA"
-      >{{ agendaType(agenda.agendaid) }}</span>
-      <span v-else
-            class="typeB"
-      >{{ agendaType(agenda.agendaid) }}</span>
-    </div>
-    <div class="card-title">
-      <div>
-        {{ title }}
-      </div>
+    <div class="sub-container">
       <div class="info-slot">
         <span>Agenda </span>
         <span v-if="agendaType(agenda.agendaid) === 'A'" class="slot">#{{ agenda.agendaid }}</span>
         <span v-else class="slot-typeB">#{{ agenda.agendaid }}</span>
+      </div>
+      <div class="type-container">
+        <span class="type-label">TYPE </span>
+        <span v-if="agendaType(agenda.agendaid) === 'A'"
+              class="typeA"
+        >{{ agendaType(agenda.agendaid) }}</span>
+        <span v-else
+              class="typeB"
+        >{{ agendaType(agenda.agendaid) }}</span>
+      </div>
+    </div>
+    <div class="card-title">
+      <div>
+        {{ title }}
       </div>
     </div>
     <div class="description">
@@ -244,9 +245,13 @@ export default {
   letter-spacing: normal;
 }
 
+.title {
+  flex: 1;
+}
 .type-container {
   display: flex;
-  margin-bottom: 4px;
+
+  margin-right: 30px;
 
   .type-label {
     font-family: Roboto;
@@ -289,6 +294,11 @@ export default {
   }
 }
 
+.sub-container {
+  display: flex;
+  margin-bottom: 8px;
+}
+
 .card-title {
   height: 26px;
   margin: 0 0 5px;
@@ -300,10 +310,9 @@ export default {
 }
 
 .info-slot {
+  display: flex;
   flex: 1;
 
-  display: flex;
-  justify-content: flex-end;
   margin-right: 30px;
 }
 .info-slot > span {
