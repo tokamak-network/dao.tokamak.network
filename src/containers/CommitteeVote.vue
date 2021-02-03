@@ -232,8 +232,9 @@ export default {
       const BN = web3Utils.BN;
 
       const depositManager = getContract('DepositManager', this.web3);
+      const candidate = this.candidate(this.address);
 
-      const layer2 = this.address;
+      const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
       const amount = toRay(this.$refs.tonunvote.$refs.input.value);
 
       if (String(amount) === '0') {
@@ -246,12 +247,12 @@ export default {
         return alert('Please check your TON amount!!');
       }
 
-      const gasLimit = await depositManager.methods.requestWithdrawal(layer2, amount)
+      const gasLimit = await depositManager.methods.requestWithdrawal(candidateContract, amount)
         .estimateGas({
           from: this.account,
         });
 
-      await depositManager.methods.requestWithdrawal(layer2, amount)
+      await depositManager.methods.requestWithdrawal(candidateContract, amount)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
@@ -276,10 +277,9 @@ export default {
       if (!this.account) return;
 
       const depositManager = getContract('DepositManager', this.web3);
-      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
 
       const candidate = this.candidate(this.address);
-      const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
+      const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
 
       const gasLimit = await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
         .estimateGas({
@@ -313,14 +313,15 @@ export default {
 
       const depositManager = getContract('DepositManager', this.web3);
 
-      const layer2 = this.address;
+      const candidate = this.candidate(this.address);
+      const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
 
-      const gasLimit = await depositManager.methods.processRequests(layer2, this.numCanWithdraw, true)
+      const gasLimit = await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw, true)
         .estimateGas({
           from: this.account,
         });
 
-      await depositManager.methods.processRequests(layer2, this.numCanWithdraw, true)
+      await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw, true)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
@@ -343,11 +344,10 @@ export default {
         });
     },
     async dataForDeposit () {
-      const committeeProxy = getContract('DAOCommitteeProxy', this.web3);
       const depositManager = getContract('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
-      const candidateContract = await committeeProxy.methods.candidateContract(candidate.candidate).call();
+      const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
 
       const data = marshalString(
         [depositManager._address, candidateContract]

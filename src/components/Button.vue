@@ -128,7 +128,7 @@ button:hover {
 }
 
 .primary-typeB, .primary-running-typeB {
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  box-shadow: 0 3px 8px 0 rgba(247, 152, 28, 0.15);
   background-image: linear-gradient(to bottom, #f7981c, #ff7800);
 
   color: #ffffff;
@@ -148,7 +148,7 @@ button:hover {
   color: #86929d
 }
 .primary-running-typeB:hover {
-  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  box-shadow: 0 3px 8px 0 rgba(247, 152, 28, 0.15);
   background-image: linear-gradient(to bottom, #f7981c, #ff7800);
 
   color: #ffffff;

@@ -3,8 +3,9 @@
     <card-container :title="'Your Vote'">
       <template #body>
         <div class="vote-percentage-container">
-          <div class="vote-percentage">{{ roundNumber(voteRate) }}% of Agenda is voted</div>
-          <vote-poll :pct="voteRate" :margin="20" :remain="remain" />
+          <div v-if="clength > 1" class="vote-percentage">{{ candidateContract }}</div>
+          <div class="vote-percentage">{{ voteRates }}% of Agenda is voted </div>
+          <vote-poll :pct="parseInt(voteRates)" :margin="16" />
         </div>
       </template>
     </card-container>
@@ -15,28 +16,34 @@
 import Card from '@/components/Card.vue';
 import VotePoll from '@/components/VotePoll.vue';
 
-import { mapState } from 'vuex';
-
 export default {
   components: {
     'card-container': Card,
     'vote-poll': VotePoll,
   },
-  computed: {
-    ...mapState([
-      'voteRate',
-    ]),
-    remain () {
-      return this.voteRate === 0 ? true : false;
+  props: {
+    clength:{
+      type: Number,
+      default: 0,
+      required: true,
     },
-    roundNumber () {
-      return pct => {
-        if(isNaN (pct) === false && Number.isInteger(pct) === false) {
-          return pct.toFixed(2);
-        } else {
-          return pct;
-        }
-      };
+    candidates: {
+      type: Object,
+      default: null,
+      required: true,
+    },
+  },
+  computed: {
+    voteRates () {
+      if(this.candidates.countCanVoteAgendas > 0 && this.candidates.countAgendaVote > 0  ){
+        const voteRate = ( this.candidates.countAgendaVote / this.candidates.countCanVoteAgendas) * 100;
+        return voteRate.toFixed(2);
+      }else {
+        return 0;
+      }
+    },
+    candidateContract (){
+      return this.candidates.candidateContract;
     },
   },
 };

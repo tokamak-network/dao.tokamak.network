@@ -95,6 +95,27 @@ export async function getAgendaContents (agendaId) {
   return res.data.datas[0];
 }
 
+
+export async function getCanAgendasByVoter (voter) {
+  const res = await instance.get('/agendas/canVoteAgendas', {
+    params: {
+      chainId,
+      voter:voter,
+    },
+  });
+  return res.data.datas;
+}
+
+export async function getAgendaVotesByVoter (voter) {
+  const res = await instance.get('/agendavotes', {
+    params: {
+      chainId,
+      voter:voter,
+    },
+  });
+  return res.data.datas;
+}
+
 export async function updateAgendaContents (from, txHash, contents, sig) {
   const res = await instance.put('/agendacontents', {
     tx: txHash,

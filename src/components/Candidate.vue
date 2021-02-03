@@ -74,6 +74,8 @@ export default {
     padding-right: 8px;
   }
   .amount {
+    width: 94px;
+
     font-family: Roboto;
     font-size: 9px;
     font-weight: normal;
@@ -94,8 +96,6 @@ export default {
     letter-spacing: normal;
     text-align: left;
     color: #3e495c;
-
-    padding-left: 45px;
   }
   .detail {
     font-family: Roboto;
