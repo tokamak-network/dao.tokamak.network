@@ -172,17 +172,18 @@ export default new Vuex.Store({
 
       const depositManager = getContract('DepositManager', state.web3);
       state.candidates.forEach(async candidate => {
-        const numPendingRequests = await depositManager.methods.numPendingRequests(candidate.candidateContract, state.account).call();
+        const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+        const numPendingRequests = await depositManager.methods.numPendingRequests(candidateContract, state.account).call();
         if (numPendingRequests === 0) {
           return [];
         }
 
         let requestIndex
-            = await depositManager.methods.withdrawalRequestIndex(candidate.candidateContract, state.account).call();
+            = await depositManager.methods.withdrawalRequestIndex(candidateContract, state.account).call();
 
         const pendingRequests = [];
         for (let i = 0; i < numPendingRequests; i++) {
-          pendingRequests.push(depositManager.methods.withdrawalRequest(candidate.candidateContract, state.account, requestIndex).call());
+          pendingRequests.push(depositManager.methods.withdrawalRequest(candidateContract, state.account, requestIndex).call());
           requestIndex++;
         }
         const requests = await Promise.all(pendingRequests);
