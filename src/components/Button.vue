@@ -137,7 +137,7 @@ button:hover {
   box-shadow: 0 1px 4px 0 rgba(247, 152, 28, 0.15);
 }
 .primary-typeB:active {
-  background: #2a72e5;
+  background: #ff7800;
   box-shadow: 0 1px 4px 0 rgba(247, 152, 28, 0.15);
 }
 .primary-typeB:disabled {
