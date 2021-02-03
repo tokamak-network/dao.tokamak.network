@@ -24,7 +24,8 @@
       </div>
       <div class="info-slot">
         <span>Agenda </span>
-        <span class="slot">#{{ agenda.agendaid }}</span>
+        <span v-if="agendaType(agenda.agendaid) === 'A'" class="slot">#{{ agenda.agendaid }}</span>
+        <span v-else class="slot-typeB">#{{ agenda.agendaid }}</span>
       </div>
     </div>
     <div class="description">
@@ -346,6 +347,9 @@ export default {
 }
 .info-slot > .slot {
   color: #2a72e5;
+}
+.info-slot > .slot-typeB {
+  color: #ff7800;
 }
 .description {
   font-size: 14px;
