@@ -55,6 +55,8 @@ export default {
           'url',
           'description',
           'address',
+          'name',
+          'website',
         ].indexOf(value) !== -1;
       },
     },
@@ -176,6 +178,16 @@ export default {
 
   text-decoration: underline;
   cursor: pointer;
+}
+.name {
+  font-size: 14px;
+  color: #3e495c;
+  font-weight: 500;
+}
+.website {
+  font-size: 14px;
+  color: #3e495c;
+  font-weight: 500;
 }
 .description {
   font-size: 14px;

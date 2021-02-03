@@ -4,7 +4,9 @@
                     :tooltip="`Website of the operator who runs the staking`"
                     :width="'300'"
     /> -->
-    <info-committee :title="'Description'" :content="'tokamak netwokr operator1'" :type="'description'" />
+    <info-committee v-if="candidate(address) && candidate(address).name" :title="'Name'" :content="candidate(address) ? candidate(address).name :'-'" :type="'name'" />
+    <info-committee v-if="candidate(address) && candidate(address).website" :title="'Website'" :content="candidate(address) ? candidate(address).website :'-'" :type="'website'" />
+    <info-committee v-if="candidate(address) && candidate(address).description" :title="'Description'" :content="candidate(address) ? candidate(address).description :'-'" :type="'description'" />
     <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" />
     <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" />
     <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
