@@ -343,9 +343,13 @@ export default new Vuex.Store({
       const candidateRankByVotes = await getCandidateRankByVotes();
       commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
     },
-    async setVoters ({ commit }, address) {
-      const voters = await getVotersByCandidate(address.toLowerCase());
-      commit('SET_VOTERS', voters);
+    async setVoters ({ commit }, _candidate) {
+      if(_candidate!=null ){
+        let address=_candidate.candidateContract;
+        if(_candidate.kind === 'layer2') address=_candidate.layer2;
+        const voters = await getVotersByCandidate(address.toLowerCase());
+        commit('SET_VOTERS', voters);
+      }
     },
     async setVotedCandidatesFromAccount ({ state, commit }) {
       const myVotesProm = [];

@@ -74,8 +74,8 @@ export default {
     '$route.params.address': {
       handler: async function () {
         this.address = this.$route.params.address;
-        await this.$store.dispatch('setVoters', this.address);
-
+        const foundcandidate = this.candidates.find(element => element.candidateContract===this.address );
+        await this.$store.dispatch('setVoters', foundcandidate);
         if (this.account) await this.$store.dispatch('setMyVotes', this.address);
       },
       deep: true,
