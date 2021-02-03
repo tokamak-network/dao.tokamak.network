@@ -1,17 +1,20 @@
 <template>
   <button :class="{
             primary: type === 'primary',
+            'primary-typeB': type === 'primary-typeB',
             secondary: type === 'secondary',
             vote: type === 'vote',
             voteV2: type === 'voteV2',
             hide: type === 'hide',
 
             'primary-running': type === 'primary' && status === 'running',
+            'primary-running-typeB': type === 'primary-typeB' && status === 'running',
             'secondary-running': type === 'secondary' && status === 'running',
             'vote-running': type === 'vote' && status === 'running',
             'voteV2-running': type === 'voteV2' && status === 'running',
 
             'primary-disabled': type === 'primary' && status === 'disabled',
+            'primary-disabled-typeB': type === 'primary-typeB' && status === 'disabled',
             'secondary-disabled': type === 'secondary' && status === 'disabled',
             'vote-disabled': type === 'vote' && status === 'disabled',
             'voteV2-disabled': type === 'voteV2' && status === 'disabled',
@@ -54,6 +57,7 @@ export default {
           'primary',
           'secondary',
           'vote',
+          'primary-typeB',
           'hide',
         ].indexOf(value) !== -1;
       },
@@ -119,6 +123,33 @@ button:hover {
 .primary-running:hover {
   box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
   background-image: linear-gradient(to bottom, #1f8efa, #2a72e5);
+
+  color: #ffffff;
+}
+
+.primary-typeB, .primary-running-typeB {
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #f7981c, #ff7800);
+
+  color: #ffffff;
+}
+.primary-typeB:hover {
+  box-shadow: 0 1px 4px 0 rgba(247, 152, 28, 0.15);
+}
+.primary-typeB:active {
+  background: #2a72e5;
+  box-shadow: 0 1px 4px 0 rgba(247, 152, 28, 0.15);
+}
+.primary-typeB:disabled {
+  background: #e9edf1;
+  cursor: not-allowed;
+  box-shadow: none;
+
+  color: #86929d
+}
+.primary-running-typeB:hover {
+  box-shadow: 0 3px 8px 0 rgba(49, 127, 203, 0.25);
+  background-image: linear-gradient(to bottom, #f7981c, #ff7800);
 
   color: #ffffff;
 }

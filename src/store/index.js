@@ -335,6 +335,7 @@ export default new Vuex.Store({
 
         agendas[i].contents = agendaContents[i].contents;
         agendas[i].creator = agendaContents[i].creator;
+        agendas[i].type = agendaContents[i].type;
       }
 
       commit('SET_AGENDAS', agendas);
@@ -538,6 +539,14 @@ export default new Vuex.Store({
       }
 
       return agenda.contents ? agenda.contents : '';
+    },
+    agendaType: (_, getters) => (agendaId) => {
+      const agenda = getters.getAgendaByID(agendaId);
+      if (!agenda) {
+        return '';
+      }
+
+      return agenda.type ? agenda.type : 'A'; // TODO: 'A' -> ''
     },
     comments: (state) => (agendaId) => {
       if (!state.voteCasted) return [];

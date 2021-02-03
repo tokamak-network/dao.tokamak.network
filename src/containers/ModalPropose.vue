@@ -30,7 +30,7 @@
     <textarea v-model="desc" name="" cols="30" rows="10" />
     <div class="button-container">
       <button-comp :name="account ? 'Propose' : 'Please Connect Wallet'"
-                   :type="'primary'"
+                   :type="type === 'A' ? 'primary' : 'primary-typeB'"
                    :width="'160px'"
                    :status="account ? '' : 'disabled'"
                    style="margin-right: 7.5px;"
@@ -176,7 +176,7 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
-          await createAgenda(account, hash, this.desc);
+          await createAgenda(account, hash, this.desc, this.type);
 
           this.$store.commit('SET_PENDING_TX', hash);
           this.close();

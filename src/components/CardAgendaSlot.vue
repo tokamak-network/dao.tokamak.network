@@ -8,6 +8,16 @@
         <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
       </template>
     </modal>
+
+    <div class="type-container">
+      <span class="type-label">TYPE </span>
+      <span v-if="agendaType(agenda.agendaid) === 'A'"
+            class="typeA"
+      >{{ agendaType(agenda.agendaid) }}</span>
+      <span v-else
+            class="typeB"
+      >{{ agendaType(agenda.agendaid) }}</span>
+    </div>
     <div class="card-title">
       <div>
         {{ title }} {{ shortAddress(agenda.creator) }} - {{ deployedDate(agenda.tCreationDate) }}
@@ -21,7 +31,12 @@
       {{ `This agenda was made by ${shortAddress(agenda.creator)} on ${deployedDate(agenda.tCreationDate)}` }}
     </div>
     <div class="info-time">
-      <img src="@/assets/poll-time-active-icon.svg" alt=""
+      <img v-if="agendaType(agenda.agendaid) === 'A'"
+           src="@/assets/poll-time-active-icon.svg" alt=""
+           width="14" height="14"
+      >
+      <img v-else
+           src="@/assets/poll-time-active-icon-typeB.svg" alt=""
            width="14" height="14"
       >
       <span>{{ dDay() }}</span>
@@ -30,7 +45,7 @@
       <div class="left-side">
         <button-comp
           :name="'View Detail'"
-          :type="'primary'"
+          :type="agendaType(agenda.agendaid) === 'A' ? 'primary' : 'primary-typeB'"
           class="left"
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
@@ -100,6 +115,7 @@ export default {
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
+      'agendaType',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -235,7 +251,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-agenda-slot {
   flex: 1;
   padding: 25px 0 25px 30px;
@@ -251,6 +267,52 @@ export default {
   font-style: normal;
   letter-spacing: normal;
 }
+
+.type-container {
+  display: flex;
+  margin-bottom: 4px;
+
+  .type-label {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    color: #3e495c;
+
+    white-space: pre-wrap;
+  }
+  .typeA {
+    font-family: Roboto;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    font-weight: bold;
+    color: #2a72e5;
+
+    white-space: pre-wrap;
+  }
+  .typeB {
+    font-family: Roboto;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.3px;
+    text-align: left;
+    font-weight: bold;
+    color: #f7981c;
+
+    white-space: pre-wrap;
+  }
+}
+
 .card-title {
   height: 26px;
   margin: 0 0 5px;
