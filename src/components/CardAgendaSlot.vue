@@ -25,8 +25,9 @@
       </div>
     </div>
     <div class="card-title">
-      <div>
-        {{ title }}
+      <div class="title">
+        <!-- TODO: delete, if title is determined -->
+        {{ title ? title : 'there is no title.' }}
       </div>
     </div>
     <div class="description">
