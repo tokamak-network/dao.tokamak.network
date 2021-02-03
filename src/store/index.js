@@ -53,7 +53,7 @@ export default new Vuex.Store({
     candidateRankByVotes: [],
 
     pendingTx: '',
-    confirmBlock: 3,
+    confirmBlock: 1,
   },
   mutations: {
     SET_WEB3 (state, web3) {
