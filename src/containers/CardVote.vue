@@ -54,6 +54,7 @@ export default {
 }
 
 .vote-percentage-container {
+  height: 126px;
   padding-top: 16px;
   padding-bottom: 16px;
 }
@@ -67,8 +68,8 @@ export default {
   text-align: left;
   color: #3e495c;
 
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-bottom: 16px;
+  padding-left: 20px;
+  /* padding-right: 16px; */
+  margin: 10px 0 25px;
 }
 </style>
