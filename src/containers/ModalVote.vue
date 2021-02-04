@@ -96,7 +96,7 @@ export default {
     },
     findCandidateContractByOperator (){
       let _candidateContract = null;
-      console.log('findCandidateContractByOperator', this.candidates );
+      //console.log('findCandidateContractByOperator', this.candidates );
       if(this.candidates!=null && this.candidates.length > 0 ){
         for(let i=0; i< this.candidates.length; i++){
           if( this.candidates[i].operator.toLowerCase() === this.account.toLowerCase() ) _candidateContract = this.candidates[i].candidateContract;
