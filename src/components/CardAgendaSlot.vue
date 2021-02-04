@@ -67,6 +67,15 @@
           :width="'124px'"
           @on-clicked="click"
         />
+        <button-comp
+          v-if="login!==false && canExecute"
+          :name="buttonName"
+          :type="buttonType"
+          :status="buttonStatus"
+          class="right"
+          :width="'124px'"
+          @on-clicked="click"
+        />
       </div>
     </div>
   </div>
@@ -175,8 +184,6 @@ export default {
       return 'disabled';
     },
     canVote (){
-      //console.log('canVote', this.agenda.agendaid, this.isMember, this.agenda  );
-      //console.log('tVoting', this.agenda.status, this.now, this.agenda.tVotingStartTime, this.agenda.tVotingEndTime );
       if ( this.isMember && this.agenda && this.agenda.status === 1 && this.agenda.tNoticeEndTime < this.now)
         return true;
       else if( this.isVoter )
@@ -185,7 +192,6 @@ export default {
         return false;
     },
     isVoter (){
-      //console.log('isVoter', 'myCandidates', this.myCandidates, 'voters', this.agenda.voters );
       let returnValue = false;
       if( this.myCandidates && this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
         && this.agenda.tVotingEndTime > this.now
@@ -196,6 +202,12 @@ export default {
         });
         return returnValue;
       }else return returnValue;
+    },
+    canExecute (){
+      if ( this.agenda && this.agenda.result === 1 && this.agenda.tNoticeEndTime < this.now)
+        return true;
+      else
+        return false;
     },
   },
   methods: {
