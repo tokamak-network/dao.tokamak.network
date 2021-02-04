@@ -670,6 +670,10 @@ export default new Vuex.Store({
         else                     return 1;
       });
     },
+    votersWithBalance: (state) => {
+      if (!state.voters) return [];
+      return state.voters.filter(v => v.balance > 0);
+    },
     sumOfVotes: (state) => {
       const initialAmount = 0;
       const reducer = (amount, voter) => amount + voter.balance;

@@ -62,7 +62,6 @@ export default {
       'account',
       'candidates',
       'members',
-      'voters',
       'launched',
     ]),
     ...mapGetters([
