@@ -63,6 +63,7 @@ export default {
       'candidates',
       'members',
       'voters',
+      'launched',
     ]),
     ...mapGetters([
       'candidate',
@@ -74,6 +75,10 @@ export default {
     '$route.params.address': {
       handler: async function () {
         this.address = this.$route.params.address;
+        for(;;) {
+          await new Promise(r => setTimeout(r, 500));
+          if (this.launched) break;
+        }
         const foundcandidate = this.candidates.find(element => element.candidateContract===this.address );
         await this.$store.dispatch('setVoters', foundcandidate);
         if (this.account) await this.$store.dispatch('setMyVotes', this.address);
