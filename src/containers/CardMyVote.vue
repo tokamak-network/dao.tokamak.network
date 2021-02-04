@@ -107,7 +107,7 @@ export default {
 }
 .header > div:nth-child(2), .body > div:nth-child(2) {
   flex: 1;
-  margin-left: 25px;
+  margin-left: 13px;
 }
 .header > div:last-child, .body > div:last-child {
   margin-right: 20px;
