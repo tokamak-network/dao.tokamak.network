@@ -14,7 +14,7 @@
       </div>
     </div>
     <button-pagination class="committee-info-vote-pagination"
-                       :datas="voters"
+                       :datas="votersWithBalance"
                        @on-selected="set"
     />
     <div class="line" />
@@ -26,7 +26,7 @@
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>
-        <span class="voting-stat-content">{{ voters.length }}</span>
+        <span class="voting-stat-content">{{ votersWithBalance.length }}</span>
       </div>
     </div>
   </div>
@@ -51,15 +51,15 @@ export default {
   computed: {
     ...mapState([
       'votersByCandidate',
-      'voters',
     ]),
     ...mapGetters([
       'candidate',
       'sumOfVotes',
+      'votersWithBalance',
     ]),
     selectedVoters () {
       const first = this.page*4;
-      return this.voters ? this.voters.slice(first, first+4) : [];
+      return this.votersWithBalance ? this.votersWithBalance.slice(first, first+4) : [];
     },
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;

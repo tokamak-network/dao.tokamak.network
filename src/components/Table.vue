@@ -2,11 +2,11 @@
   <div class="table">
     <table>
       <tbody>
-        <tr v-for="supporter in voters" :key="supporter.account">
-          <div v-if="sumOfVotes > 0 && supporter.balance!=0" class="table-content">
-            <div>{{ calcPct(supporter.balance, sumOfVotes) }}% </div>
-            <div>({{ supporter.balance | WTON }} TON)</div>
-            <div>{{ supporter.account | hexSlicer }}</div>
+        <tr v-for="voter in votersWithBalance" :key="voter.account">
+          <div v-if="sumOfVotes > 0 && voter.balance!=0" class="table-content">
+            <div>{{ calcPct(voter.balance, sumOfVotes) }}% </div>
+            <div>({{ voter.balance | WTON }} TON)</div>
+            <div>{{ voter.account | hexSlicer }}</div>
           </div>
         </tr>
       </tbody>
@@ -15,15 +15,13 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapState([
-      'voters',
-    ]),
     ...mapGetters([
       'sumOfVotes',
+      'votersWithBalance',
     ]),
     calcPct () {
       return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);

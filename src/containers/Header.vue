@@ -29,9 +29,9 @@
         Agenda
       </router-link>
       <connect-wallet :is-sub="isSub" />
-      <div v-if="account!=='' && isCandidate && checkRoute === true">
+      <div v-if="account!=='' && isCandidate">
         <button
-          class="claim"
+          :class="{ 'claim': isSub }"
           @click="showModal=true"
         >
           Claim
@@ -67,12 +67,6 @@ export default {
     ]),
     isSub () {
       return this.$route.path !== '/';
-    },
-    checkRoute () {
-      if (this.$route.path === '/') {
-        return true;
-      }
-      return false;
     },
   },
 };
@@ -124,6 +118,11 @@ button {
 }
 button:hover {
   cursor: pointer;
+}
+
+.claim {
+  background: #2a72e5;
+  color: #ffffff;
 }
 
 .logo img {

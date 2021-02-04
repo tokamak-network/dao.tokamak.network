@@ -641,13 +641,13 @@ export default new Vuex.Store({
       return state.voteCasted.filter(v => v.data.id === agendaId);
     },
     sortedCandidateRankByVotes: (state) => {
-      if (!state.candidateRankByVotes || state.candidateRankByVotes.length === 0) return [];
+      if (!state.candidates || state.candidates.length === 0) return [];
 
-      return state.candidateRankByVotes.sort(function (a, b)  {
-        a = a.coinageTotalSupply.toString(16);
+      return state.candidates.sort(function (a, b)  {
+        a = a.vote.toString(16);
         a = web3Utils.toBN(a);
 
-        b = b.coinageTotalSupply.toString(16);
+        b = b.vote.toString(16);
         b = web3Utils.toBN(b);
 
         if (a.cmp(b) === 1)      return -1;
@@ -669,6 +669,10 @@ export default new Vuex.Store({
         else if (a.cmp(b) === 0) return 0;
         else                     return 1;
       });
+    },
+    votersWithBalance: (state) => {
+      if (!state.voters) return [];
+      return state.voters.filter(v => v.balance > 0);
     },
     sumOfVotes: (state) => {
       const initialAmount = 0;

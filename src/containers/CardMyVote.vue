@@ -13,7 +13,7 @@
                class="body"
           >
             <div>{{ (page*4) + index + 1 }}</div>
-            <div>{{ data.candidateContract | hexSlicer }}</div>
+            <div>{{ data.name | slice }}... ({{ data.candidateContract | hexSlicer }})</div>
             <div>{{ data.myVotes | WTON }} TON</div>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default {
 }
 .header > div:nth-child(2), .body > div:nth-child(2) {
   flex: 1;
-  margin-left: 30px;
+  margin-left: 25px;
 }
 .header > div:last-child, .body > div:last-child {
   margin-right: 20px;
