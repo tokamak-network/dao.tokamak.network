@@ -26,7 +26,7 @@
              src="@/assets/poll-time-active-icon-typeB.svg" alt=""
              width="14" height="14"
         >
-        <span class="content-sub-spare-time"> {{ creationTime.tNoticeEndTime | votingTime }}</span>
+        <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
       <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
       <div class="selector">
