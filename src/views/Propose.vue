@@ -123,7 +123,10 @@
             >
               {{ pad(numFunctions(i)) }}
             </div>
-            <img src="@/assets/propose1.svg" alt="" width="50" height="50">
+            <img v-if="i === 0" src="@/assets/icon-deposit-manager-typeA.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 1" src="@/assets/icon-seig-manager-typeA.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 2" src="@/assets/icon-dao-committee-typeA.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 3" src="@/assets/icon-dao-vault-typeA.svg" alt="" width="50" height="50">
             <div>
               <div class="contract-name"
                    :style="[index === i ? { color: '#ffffff' } : {}]"
@@ -198,7 +201,14 @@
             >
               {{ pad(numFunctionsOfTypeB(i)) }}
             </div>
-            <img src="@/assets/propose1.svg" alt="" width="50" height="50">
+            <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt="" width="50" height="50">
+            <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt="" width="50" height="50">
             <div>
               <div class="contract-name"
                    :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"
@@ -654,8 +664,8 @@ export default {
 
       > img {
         position: absolute;
-        right: 30px;
-        top: 30px;
+        right: 20px;
+        top: 35px;
       }
 
       .function-count {
@@ -689,7 +699,9 @@ export default {
       font-weight: 300;
       font-stretch: normal;
       font-style: normal;
+      line-height: 1.33;
       letter-spacing: normal;
+      text-align: left;
       color: #3e495c;
 
       white-space: pre-wrap;
