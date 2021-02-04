@@ -115,6 +115,23 @@ export default {
         return alert('Please check your TON amount!');
       }
 
+      const nParams = Object.keys(this.$refs).length;
+      if (this.params.length !== nParams) {
+        console.log('bug'); // eslint-disable-line
+      }
+
+      let setParams = true;
+      for (let i = 0; i < nParams; i++) {
+        const value = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
+        if (!value) {
+          this.$refs[Object.keys(this.$refs)[i]][0].error = true;
+          setParams = false;
+        }
+      }
+      if (!setParams) {
+        return alert('The parameter value must be set.');
+      }
+
       const account = this.account.toLowerCase();
 
       const ton = getContract('TON', this.web3);
@@ -132,11 +149,6 @@ export default {
       ]);
 
       const selector = getFunctionSelector(this.contract, this.functionName, this.type);
-
-      const nParams = Object.keys(this.$refs).length;
-      if (this.params.length !== nParams) {
-        console.log('bug'); // eslint-disable-line
-      }
 
       const types = [];
       const values = [];
