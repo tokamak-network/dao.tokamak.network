@@ -13,8 +13,8 @@
                class="body"
           >
             <div>{{ (page*4) + index + 1 }}</div>
-            <div>{{ data.layer2 | hexSlicer }}</div>
-            <div>{{ data.coinageTotalSupply | WTON }} TON</div>
+            <div>{{ data.name | slice }}... ({{ data.layer2 | hexSlicer }})</div>
+            <div>{{ data.vote | WTON }} TON</div>
           </div>
         </div>
         <div class="button-container">
@@ -110,7 +110,7 @@ export default {
 }
 .header > div:nth-child(2), .body > div:nth-child(2) {
   flex: 1;
-  margin-left: 30px;
+  margin-left: 25px;
 }
 .header > div:last-child, .body > div:last-child {
   margin-right: 20px;
