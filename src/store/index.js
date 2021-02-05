@@ -196,17 +196,21 @@ export default new Vuex.Store({
     async setContractState ({ state, commit }) {
       const agendaManager = getContract('DAOAgendaManager', state.web3);
       const committeeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const seigManager = getContract('SeigManager', state.web3);
       const [
         createAgendaFee,
         claimableAmount,
+        minimumAmount,
       ] = await Promise.all([
         agendaManager.methods.createAgendaFees().call(),
         committeeProxy.methods.getClaimableActivityReward(state.account).call(),
+        seigManager.methods.minimumAmount().call(),
       ]);
 
       const contractState = {
         createAgendaFee,
         claimableAmount,
+        minimumAmount,
       };
       commit('SET_CONTRACT_STATE', contractState);
     },
@@ -242,19 +246,25 @@ export default new Vuex.Store({
       }
 
       const getVotesProm = [];
+      const getSelfVotesProm = []; // NOTE: candidate self votes
       candidates.forEach(candidate => {
         // TODO: fix contract.
         // daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()
         const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
         getVotesProm.push(candidateContract.methods.totalStaked().call());
+
+        const self = candidate.kind === 'layer2' ? candidate.operator : candidate.candidate;
+        getSelfVotesProm.push(candidateContract.methods.stakedOf(self).call());
       });
       const votes = await Promise.all(getVotesProm);
+      const selfVotes = await Promise.all(getSelfVotesProm);
 
       const getInfosProm = [];
       candidates.forEach(candidate => getInfosProm.push(daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
 
       for (let i = 0; i < candidates.length; i++) {
+        candidates[i].selfVote = selfVotes[i]; // eslint-disable-line
         candidates[i].vote = votes[i]; // eslint-disable-line
         candidates[i].info = infos[i]; // eslint-disable-line
       }
@@ -607,6 +617,18 @@ export default new Vuex.Store({
     claimableAmount: (state) => {
       if (!state.contractState) return 0;
       return state.contractState.claimableAmount;
+    },
+    minimumAmount: (state) => {
+      if (!state.contractState) return 0;
+      return state.contractState.minimumAmount;
+    },
+    canUpdateReward: (_, getters) => (address) => {
+      const candidate = getters.candidate(address);
+      if (!candidate || !getters.minimumAmount) return false;
+
+      const minimumAmount = web3Utils.toBN(getters.minimumAmount);
+      const selfVote = web3Utils.toBN(candidate.selfVote);
+      return selfVote.cmp(minimumAmount) >= 0;
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);

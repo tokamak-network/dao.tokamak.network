@@ -28,6 +28,17 @@
         <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
         <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
         <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+
+        <span class="space" />
+        <button v-if="account"
+                class="update-btn"
+                :class="{
+                  'update-btn-disabled': !canUpdateReward(address),
+                }"
+                @click="updateReward()"
+        >
+          Update Reward
+        </button>
       </div>
       <div class="divider" />
       <committee-info v-if="currentSelector === 0" />
@@ -38,6 +49,8 @@
 </template>
 
 <script>
+import { getContract } from '@/utils/contracts';
+
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
@@ -63,12 +76,15 @@ export default {
       'candidates',
       'members',
       'launched',
+      'web3',
     ]),
     ...mapGetters([
       'candidate',
       'member',
       'sumOfVotes',
       'sortedCandidates',
+      'minimumAmount',
+      'canUpdateReward',
     ]),
   },
   watch: {
@@ -109,11 +125,46 @@ export default {
       this.$router.push(({ path: `/election/${this.sortedCandidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
+    async updateReward () {
+      if (!this.canUpdateReward(this.address)) return alert('no deposit for this candidate');
+      const candidate = this.candidate(this.address);
+      if (!candidate) {
+        console.log('bug', 'no candidate'); // eslint-disable-line
+        return;
+      }
+
+      // TODO: for layer2
+      const candidateContract = getContract('Candidate', this.web3, candidate.candidateContract);
+      const gasLimit = await candidateContract.methods.updateSeigniorage()
+        .estimateGas({
+          from: this.account,
+        });
+
+      await candidateContract.methods.updateSeigniorage()
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            //
+          }
+        })
+        .on('receipt', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-committee-info {
 }
 .content {
@@ -229,5 +280,59 @@ export default {
 }
 .button .next {
   width: 165px;
+}
+
+.space {
+  flex: 1;
+}
+
+.update-btn {
+  outline: none;
+
+  width: 126px;
+  height: 25px;
+
+  border-radius: 4px;
+  border: solid 1px #257eee;
+
+  background: #ffffff;
+
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: #2a72e5;
+
+  &:hover {
+    border-radius: 4px;
+    background-color: #257eee;
+
+    color: #ffffff;
+    cursor: pointer;
+  }
+}
+
+.update-btn-disabled {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #86929d;
+
+  &:hover {
+    border: solid 1px #dfe4ee;
+    background-color: #ffffff;
+
+    color: #86929d;
+  }
 }
 </style>
