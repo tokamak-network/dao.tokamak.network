@@ -1,5 +1,13 @@
 <template>
   <div class="agenda-info">
+    <info-committee :title="'Agenda Creator'" :content="getAgendaByID(agendaId).creator" :type="'address'" />
+    <info-committee :title="'Agenda Creation Time'" :content="getAgendaByID(agendaId).tCreationDate" :type="'time'" />
+    <info-committee :title="'Notice End Time'" :content="getAgendaByID(agendaId).tNoticeEndTime" :type="'time'" />
+    <info-committee :title="'Voting Start Time'" :content="getAgendaByID(agendaId).tVotingStartTime" :type="'time'" />
+    <info-committee :title="'Voting End Time'" :content="getAgendaByID(agendaId).tVotingEndTime" :type="'time'" />
+    <info-committee :title="'Agenda Status'" :content="checkStatusCode" :type="'description'" />
+    <info-committee :title="'Agenda Result'" :content="checkResultCode" :type="'description'" />
+    <info-committee :title="'Executed Time'" :content="getAgendaByID(agendaId).tExecTime" :type="'time'" />
     <div v-if="edit===false">
       <markdown-viewer :content="agendaContents(agendaId)" />
       <div>
@@ -43,17 +51,21 @@ import {
   updateAgendaContents,
 } from '@/api';
 import BigNumber from 'bignumber.js';
+import InfoCommittee from '@/components/InfoCommittee.vue';
 
 export default {
   components: {
     'button-comp': Button,
     'markdown-viewer': MarkdownViewer,
+    'info-committee': InfoCommittee,
   },
   data () {
     return {
       agendaId: -1,
       edit: false,
       desc: '',
+      statusCode: ['', 'Notice', 'Voting', 'Waiting Execute', 'Executed', 'Ended'],
+      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
     };
   },
   computed: {
@@ -65,6 +77,17 @@ export default {
       'getAgendaByID',
       'agendaContents',
     ]),
+    checkStatusCode () {
+      return this.statusCode[this.getAgendaByID(this.agendaId).status];
+    },
+    checkResultCode () {
+      return this.resultCode[this.getAgendaByID(this.agendaId).result];
+    },
+    // execTime () {
+    //   if ()
+    //   this.getAgendaByID(this.agendaId)
+    //   return
+    // }
   },
   watch: {
     '$route.params.id': {

@@ -42,6 +42,7 @@ export default new Vuex.Store({
     myVotes: 0,
 
     agendas: [],
+    votersOfAgenda: [],
     voteCasted: [],
     voteRate: 0,
     myVote: [],
@@ -79,6 +80,9 @@ export default new Vuex.Store({
     },
     SET_AGENDAS (state, agendas) {
       state.agendas = agendas;
+    },
+    SET_VOTERS_OF_AGENDA (state, votersOfAgenda) {
+      state.votersOfAgenda = votersOfAgenda;
     },
     SET_AGENDA_VOTE_CASTED (state, voteCasted) {
       state.voteCasted = voteCasted;
@@ -214,6 +218,7 @@ export default new Vuex.Store({
       await dispatch('setAgendas');
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
+      await dispatch('setVotersOfAgenda');
       commit('LAUNCHED');
     },
     async setMembersAndNonmembers ({ state, commit }) {
@@ -276,6 +281,48 @@ export default new Vuex.Store({
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
     },
+    async setVotersOfAgenda ({ state, commit }) {
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+      const votersOfAgenda = [];
+      const daoAgendaManager = getContract('DAOAgendaManager', web3);
+
+      const agendas = state.agendas;
+      const members = state.members;
+
+      agendas.forEach(async function (agenda) {
+        if (agenda.voters.length !== 0) {
+          for (const voter of agenda.voters) {
+            const result = await daoAgendaManager.methods.getVoteStatus(agenda.agendaid, voter).call();
+            const data = {
+              id: agenda.agendaid,
+              voter: voter,
+              result: result,
+            };
+            votersOfAgenda.push(data);
+          }
+        } else {
+          for (const member of members) {
+            const data = {
+              id: agenda.agendaid,
+              voter: member.operator,
+              result: { 0: false, 1: '0' },
+            };
+            votersOfAgenda.push(data);
+          }
+        }
+      });
+      // for (const agenda of agendas) {
+      //   if (agenda.voters) {
+
+      //   }
+      // }
+      // console.log(voters);
+      console.log(votersOfAgenda);
+      commit('SET_VOTERS_OF_AGENDA', votersOfAgenda);
+    },
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
@@ -286,6 +333,9 @@ export default new Vuex.Store({
 
       const account = state.account;
       const agendas = await await getAgendas();
+      // const daoAgendaManager = getContract('DAOAgendaManager', web3);
+      // const a = await daoAgendaManager.methods.getVoteStatus(46, '0xe84Da28128a48Dd5585d1aBB1ba67276FdD70776').call();
+      // console.log(a);
       /*
       const [agendas, events] = await Promise.all([
         await getAgendas(), await getAgendaVoteCasted()],
@@ -470,6 +520,10 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    getVotersOfAgenda: (state) => (agendaId) => {
+      const currentVoter = state.votersOfAgenda.filter(voter => String(voter.id) === String(agendaId));
+      return currentVoter;
+    },
     agendaVoteResult: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda.voting;

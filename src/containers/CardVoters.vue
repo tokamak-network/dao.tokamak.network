@@ -7,8 +7,8 @@
             <tbody>
               <tr v-for="(data, index) in voters" :key="index">
                 <div class="table-content">
-                  <div>{{ toResult(data[2]) }}</div>
-                  <div>{{ shortAddress(data[0]) }}</div>
+                  <div>{{ toResult(data.result) }}</div>
+                  <div>{{ shortAddress(data.voter) }}</div>
                 </div>
               </tr>
             </tbody>
@@ -40,12 +40,16 @@ export default {
   computed: {
     toResult () {
       return (result) => {
-        if (result === '0') {
-          return 'Abstain';
-        } else if (result === '1') {
-          return 'Yes';
+        if (result[0] === false) {
+          return 'Not Voted';
         } else {
-          return 'No';
+          if (result[1] === '0') {
+            return 'Abstain';
+          } else if (result[1] === '1') {
+            return 'Yes';
+          } else {
+            return 'No';
+          }
         }
       };
     },

@@ -35,12 +35,18 @@ export default {
     ...mapState([
       'account',
       'voteCasted',
+      'members',
+      'votersOfAgenda',
     ]),
     ...mapGetters([
       'getVotedListByID',
+      'getAgendaByID',
+      'getVotersOfAgenda ',
     ]),
     voted () {
-      return this.getVotedListByID(this.$route.params.id);
+      // console.log(this.votersOfAgenda);
+      console.log(this.votersOfAgenda.filter(voter => String(voter.id) === String(this.$route.params.id)));
+      return this.votersOfAgenda.filter(voter => String(voter.id) === String(this.$route.params.id));
     },
   },
 };

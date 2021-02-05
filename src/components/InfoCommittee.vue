@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="content">
+      <div v-if="type !== 'time'" class="content">
         <span :class="{
                 'url': type === 'url',
                 'description': type === 'description',
@@ -27,6 +27,11 @@
               @click="redirect(content)"
         >
           {{ content }}
+        </span>
+      </div>
+      <div v-if="type === 'time'" class="content">
+        <span :class="{ 'description': type === 'time' }">
+          {{ content | date2 }}
         </span>
       </div>
     </div>
@@ -42,7 +47,7 @@ export default {
       required: true,
     },
     content: {
-      type: String,
+      type: [String, Number],
       default: '',
       required: true,
     },
@@ -57,6 +62,7 @@ export default {
           'address',
           'name',
           'website',
+          'time',
         ].indexOf(value) !== -1;
       },
     },
