@@ -9,7 +9,24 @@
       <div v-for="(param, index) in params" :key="param.name"
            class="argument"
       >
-        <div class="label">{{ param.name }} ({{ param.type }})</div>
+        <div class="param-container">
+          <div class="label">{{ param.name }} ({{ param.type }})</div>
+          <img v-if="tooltip(param) !== ''"
+               class="tooltip-img"
+               src="@/assets/tooltip.png" alt=""
+               width="16" height="16"
+          >
+          <div class="tooltip-container">
+            <div class="tooltip">
+              <img src="@/assets/arrow-tooltip.png" alt=""
+                   width="4" height="6"
+              >
+              <div class="tooltip-content">
+                {{ tooltip(param) }}
+              </div>
+            </div>
+          </div>
+        </div>
         <text-input :ref="`param${index}`"
                     :hint="`${param.name} (${param.type})`"
         />
@@ -106,6 +123,10 @@ export default {
     ]),
   },
   methods: {
+    tooltip (param) {
+      param;
+      return '';
+    },
     close () {
       this.$emit('on-closed');
     },
@@ -358,6 +379,54 @@ export default {
 
     &:focus {
       border: 1px solid #2a72e5;
+    }
+  }
+
+  .tooltip {
+    width: 200px;
+    position: absolute;
+
+    left: 5px;
+    top: -3px;
+
+    z-index: 999;
+  }
+  .tooltip-content {
+    max-width: 317px;
+    background: #353c48;
+    border-radius: 3px;
+
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+
+    padding: 8px;
+
+    margin-top: -21px;
+    margin-left: 4px;
+  }
+
+  .param-container {
+    display: flex;
+
+    .tooltip-img {
+      margin-top: 2x;
+      margin-left: 4px;
+
+      &:hover ~ .tooltip-container {
+        display: flex;
+        background: yellow;
+      }
+    }
+
+    .tooltip-container {
+      display: none;
+      position: relative;
     }
   }
 }
