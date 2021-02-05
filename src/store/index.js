@@ -262,16 +262,20 @@ export default new Vuex.Store({
 
       const members = new Array(maxMember);
       const nonmembers = [];
+      let isMember = false;
       candidates.forEach(candidate => {
         addressMembers.forEach(member => {
           if (member.address.includes(candidate.candidate.toLowerCase())) {
             candidate.memberIndex = member.memberIndex;
             members[member.memberIndex] = candidate;
-
+            isMember = true;
             return;
           }
         });
-        nonmembers.push(candidate);
+        if (!isMember) {
+          nonmembers.push(candidate);
+        }
+        isMember = false;
       });
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
@@ -640,10 +644,34 @@ export default new Vuex.Store({
       if (!state.voteCasted) return [];
       return state.voteCasted.filter(v => v.data.id === agendaId);
     },
+    sortedCandidates: (state, getters) => {
+      const candidates = [];
+      state.members.forEach(member => {
+        if (member.candidateContract) candidates.push(member);
+      });
+
+      const nonmembers = getters.sortedNonmembersByVotes;
+      return candidates.concat(nonmembers);
+    },
     sortedCandidateRankByVotes: (state) => {
       if (!state.candidates || state.candidates.length === 0) return [];
 
       return state.candidates.sort(function (a, b)  {
+        a = a.vote.toString(16);
+        a = web3Utils.toBN(a);
+
+        b = b.vote.toString(16);
+        b = web3Utils.toBN(b);
+
+        if (a.cmp(b) === 1)      return -1;
+        else if (a.cmp(b) === 0) return 0;
+        else                     return 1;
+      });
+    },
+    sortedNonmembersByVotes: (state) => {
+      if (!state.nonmembers || state.nonmembers.length === 0) return [];
+
+      return state.nonmembers.sort(function (a, b)  {
         a = a.vote.toString(16);
         a = web3Utils.toBN(a);
 

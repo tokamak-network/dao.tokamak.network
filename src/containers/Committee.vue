@@ -68,6 +68,7 @@ export default {
       'candidate',
       'member',
       'sumOfVotes',
+      'sortedCandidates',
     ]),
   },
   watch: {
@@ -88,24 +89,24 @@ export default {
   },
   methods: {
     prev () {
-      let index = this.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
+      let index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === 0) {
         return;
       }
       index--;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].candidateContract}` }));
+      this.$router.push(({ path: `/election/${this.sortedCandidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
     next () {
-      const max = this.candidates.length;
-      let index = this.candidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
+      const max = this.sortedCandidates.length;
+      let index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === max - 1) {
         return;
       }
       index++;
 
-      this.$router.push(({ path: `/election/${this.candidates[index].candidateContract}` }));
+      this.$router.push(({ path: `/election/${this.sortedCandidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
   },
