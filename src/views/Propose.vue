@@ -41,7 +41,7 @@
                hoverOn === 'B' ? { 'color': '#e8ebed' } : {},
              ]"
         >
-          You can create a healthy Tokamak network environment.
+          You can create a sound Tokamak Network ecosystem.
         </div>
         <div class="explanation-2"
              :style="[
@@ -74,7 +74,7 @@
                hoverOn === 'A' ? { 'color': '#e8ebed' } : {},
              ]"
         >
-          Tokamak network system environment may be affected.
+          Tokamak Network infrastructure may be affected.
         </div>
         <div class="explanation-2"
              :style="[
@@ -105,8 +105,8 @@
       </div>
       <div class="type-explanation">
         {{ type === 'A' ?
-          'You can create a healthy Tokamak network environment. Please participate in various suggestions.' :
-          'Tokamak network system environment may be affected. Careful suggestions are required.' }}
+          'You can create a sound Tokamak Network ecosystem. Please participate in various suggestions.' :
+          'Tokamak Network infrastructure may be affected. Careful suggestions are required.' }}
       </div>
       <!-- typeA -->
       <div v-if="type === 'A'">
