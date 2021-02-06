@@ -42,7 +42,6 @@ export default {
     ...mapState([
       'account',
       'web3',
-      'myVote',
     ]),
     candidateContract (){
       return this.candidates.candidateContract;

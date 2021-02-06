@@ -18,18 +18,19 @@
           </div>
         </div>
       </div>
-      <div v-if="type !== 'time'" class="content">
+      <div v-if="typeof(content) === 'string'" class="content">
         <span :class="{
                 'url': type === 'url',
                 'description': type === 'description',
                 'address': type === 'address',
+                'description2': type === 'time',
               }"
               @click="redirect(content)"
         >
           {{ content }}
         </span>
       </div>
-      <div v-if="type === 'time'" class="content">
+      <div v-if="type === 'time' && typeof(content) === 'number'" class="content">
         <span :class="{ 'description': type === 'time' }">
           {{ content | date2 }}
         </span>
@@ -59,6 +60,7 @@ export default {
           '',
           'url',
           'description',
+          'description2',
           'address',
           'name',
           'website',
@@ -196,6 +198,11 @@ export default {
   font-weight: 500;
 }
 .description {
+  font-size: 14px;
+  color: #3e495c;
+  font-weight: 500;
+}
+.description2 {
   font-size: 14px;
   color: #3e495c;
   font-weight: 500;

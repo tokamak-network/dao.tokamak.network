@@ -122,8 +122,6 @@ export default {
       'web3',
       'account',
       'members',
-      'myVote',
-      'voteCasted',
       'confirmBlock',
       'etherscanAddress',
     ]),

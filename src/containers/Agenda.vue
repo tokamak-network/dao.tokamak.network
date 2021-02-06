@@ -34,25 +34,32 @@
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
              @click="currentSelector = 0"
         >
-          Detail
+          Info
         </div>
         <div :class="{ 'selected': currentSelector === 1,
-                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 1 }"
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 1 }"
              @click="currentSelector = 1"
         >
-          On-Chain Effects
+          Description
         </div>
         <div :class="{ 'selected': currentSelector === 2,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 2 }"
              @click="currentSelector = 2"
+        >
+          On-Chain Effects
+        </div>
+        <div :class="{ 'selected': currentSelector === 3,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 3 }"
+             @click="currentSelector = 3"
         >
           Comments ({{ voted }})
         </div>
       </div>
       <div class="divider" />
       <agenda-info v-if="currentSelector === 0" />
-      <agenda-info-vote v-else-if="currentSelector === 1" />
-      <agenda-vote v-else-if="currentSelector === 2" />
+      <agenda-description v-else-if="currentSelector === 1" />
+      <agenda-info-vote v-else-if="currentSelector === 2" />
+      <agenda-vote v-else-if="currentSelector === 3" />
     </div>
   </div>
 </template>
@@ -62,6 +69,7 @@ import ButtonStep from '@/components/ButtonStep.vue';
 import AgendaComments from '@/containers/AgendaComments.vue';
 import AgendaInfo from '@/containers/AgendaInfo.vue';
 import AgendaOnChain from '@/containers/AgendaOnChain.vue';
+import AgendaDescription from '@/containers/AgendaDescription.vue';
 import { mapState, mapGetters } from 'vuex';
 import { getContractABIFromAddress } from '@/utils/contracts';
 
@@ -71,6 +79,7 @@ export default {
     'agenda-info': AgendaInfo,
     'agenda-info-vote': AgendaOnChain,
     'agenda-vote': AgendaComments,
+    'agenda-description': AgendaDescription,
   },
   data () {
     return {
@@ -195,7 +204,9 @@ export default {
   margin-left: 35px;
   margin-right: 35px;
 }
-
+.selector > div:nth-child(3) {
+  margin-right: 35px;
+}
 .divider {
   width: 100%;
   height: 1px;

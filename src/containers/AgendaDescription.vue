@@ -1,31 +1,59 @@
 <template>
   <div class="agenda-info">
-    <info-committee :title="'Agenda Creator'" :content="getAgendaByID(agendaId).creator" :type="'address'" />
-    <info-committee :title="'Agenda Creation Time'" :content="getAgendaByID(agendaId).tCreationDate" :type="'time'" />
-    <info-committee :title="'Notice End Time'" :content="getAgendaByID(agendaId).tNoticeEndTime" :type="'time'" />
-    <info-committee :title="'Voting Start Time'" :content="checkVotingTime('tVotingStartTime')" :type="'time'" />
-    <info-committee :title="'Voting End Time'" :content="checkVotingTime('tVotingEndTime')" :type="'time'" />
-    <info-committee :title="'Agenda Status'" :content="checkStatusCode" :type="'description'" />
-    <info-committee :title="'Agenda Result'" :content="checkResultCode" :type="'description'" />
-    <info-committee :title="'Executed Time'" :content="checkVotingTime('tExecTime')" :type="'time'" />
+    <div v-if="edit===false">
+      <markdown-viewer :content="agendaContents(agendaId)" />
+      <div>
+        <button-comp v-if="account.toLowerCase() === getAgendaByID(agendaId).creator"
+                     :name="'Agenda Edit'"
+                     :type="'primary'"
+                     :width="'110px'"
+                     @on-clicked="editButton()"
+        />
+      </div>
+    </div>
+    <div v-if="edit===true" class="edit">
+      <div>
+        <textarea v-model="desc" cols="30" rows="10" />
+      </div>
+      <div>
+        <button-comp
+          :name="'Edit'"
+          :type="'primary'"
+          :width="'110px'"
+          class="left"
+          @on-clicked="update()"
+        />
+        <button-comp
+          :name="'Cancel'"
+          :type="'hide'"
+          :width="'110px'"
+          @on-clicked="edit=false"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import InfoCommittee from '@/components/InfoCommittee.vue';
+import Button from '@/components/Button.vue';
+import MarkdownViewer from '@/components/MarkdownViewer.vue';
+import {
+  getRandomKey,
+  updateAgendaContents,
+} from '@/api';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
-    'info-committee': InfoCommittee,
+    'button-comp': Button,
+    'markdown-viewer': MarkdownViewer,
   },
   data () {
     return {
       agendaId: -1,
       edit: false,
       desc: '',
-      statusCode: ['', 'Notice', 'Voting', 'Waiting Execute', 'Executed', 'Ended'],
-      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
     };
   },
   computed: {
@@ -37,25 +65,6 @@ export default {
       'getAgendaByID',
       'agendaContents',
     ]),
-    checkStatusCode () {
-      return this.statusCode[this.getAgendaByID(this.agendaId).status];
-    },
-    checkResultCode () {
-      return this.resultCode[this.getAgendaByID(this.agendaId).result];
-    },
-    checkVotingTime () {
-      return (time) => {
-        if (this.getAgendaByID(this.agendaId)[time] === 0) {
-          if (time === 'tVotingStartTime' || time === 'tVotingEndTime') {
-            return 'Not Started Yet';
-          } else {
-            return 'Not Executed Yet';
-          }
-        } else {
-          return this.getAgendaByID(this.agendaId)[time];
-        }
-      };
-    },
   },
   watch: {
     '$route.params.id': {
@@ -64,6 +73,37 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+  },
+  methods: {
+    async editButton () {
+      this.desc = this.agendaContents(this.agendaId);
+      this.edit=true;
+    },
+    async update () {
+      const txHash = this.getAgendaByID(this.agendaId).transactionHash;
+      const sig = await this.generateSig(txHash, this.account.toLowerCase());
+      await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig);
+
+      this.edit=false;
+      await this.$store.dispatch('launch');
+    },
+    async generateSig (txHash, from) {
+      const randomvalue = await getRandomKey(from);
+      if(randomvalue!=null){
+        const randomBn = new BigNumber(randomvalue).toFixed(0);
+        const soliditySha3 = await this.web3.utils.soliditySha3(
+          { type: 'string', value: from },
+          { type: 'uint256', value: randomBn },
+          { type: 'string', value: txHash },
+        );
+
+        const sig = await this.web3.eth.personal.sign(soliditySha3, from, '');
+
+        return sig;
+      } else {
+        return null;
+      }
     },
   },
 };

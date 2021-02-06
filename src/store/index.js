@@ -314,13 +314,6 @@ export default new Vuex.Store({
           }
         }
       });
-      // for (const agenda of agendas) {
-      //   if (agenda.voters) {
-
-      //   }
-      // }
-      // console.log(voters);
-      console.log(votersOfAgenda);
       commit('SET_VOTERS_OF_AGENDA', votersOfAgenda);
     },
     async setAgendas ({ state, commit, dispatch }) {

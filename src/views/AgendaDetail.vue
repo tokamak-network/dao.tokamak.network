@@ -44,8 +44,6 @@ export default {
       'getVotersOfAgenda ',
     ]),
     voted () {
-      // console.log(this.votersOfAgenda);
-      console.log(this.votersOfAgenda.filter(voter => String(voter.id) === String(this.$route.params.id)));
       return this.votersOfAgenda.filter(voter => String(voter.id) === String(this.$route.params.id));
     },
   },
