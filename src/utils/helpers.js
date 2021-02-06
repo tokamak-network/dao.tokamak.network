@@ -26,22 +26,15 @@ export function shortAddress (address = '') {
 }
 
 export function date1 (timestamp) {
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  const date = new Date(timestamp * 1000);
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-
-  return monthNames[parseInt(month)] + ' ' + day + ', ' + year;
+  return moment.utc(timestamp * 1000).format('MMM D, YYYY');
 }
 
 export function date2 (timestamp) {
-  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
+  return moment.utc(timestamp * 1000).format('MMM D, YYYY, HH:mm');
 }
 
 export function date3 (timestamp) {
-  return moment.utc(timestamp * 1000).local().format('YYYY / MM / DD / HH:mm');
+  return moment.utc(timestamp * 1000).format('YYYY / MM / DD / HH:mm');
 }
 
 export function votingTime (agenda) {
