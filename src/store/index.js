@@ -200,17 +200,21 @@ export default new Vuex.Store({
     async setContractState ({ state, commit }) {
       const agendaManager = getContract('DAOAgendaManager', state.web3);
       const committeeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const seigManager = getContract('SeigManager', state.web3);
       const [
         createAgendaFee,
         claimableAmount,
+        minimumAmount,
       ] = await Promise.all([
         agendaManager.methods.createAgendaFees().call(),
         committeeProxy.methods.getClaimableActivityReward(state.account).call(),
+        seigManager.methods.minimumAmount().call(),
       ]);
 
       const contractState = {
         createAgendaFee,
         claimableAmount,
+        minimumAmount,
       };
       commit('SET_CONTRACT_STATE', contractState);
     },
@@ -247,19 +251,25 @@ export default new Vuex.Store({
       }
 
       const getVotesProm = [];
+      const getSelfVotesProm = []; // NOTE: candidate self votes
       candidates.forEach(candidate => {
         // TODO: fix contract.
         // daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()
         const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
         getVotesProm.push(candidateContract.methods.totalStaked().call());
+
+        const self = candidate.kind === 'layer2' ? candidate.operator : candidate.candidate;
+        getSelfVotesProm.push(candidateContract.methods.stakedOf(self).call());
       });
       const votes = await Promise.all(getVotesProm);
+      const selfVotes = await Promise.all(getSelfVotesProm);
 
       const getInfosProm = [];
       candidates.forEach(candidate => getInfosProm.push(daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
 
       for (let i = 0; i < candidates.length; i++) {
+        candidates[i].selfVote = selfVotes[i]; // eslint-disable-line
         candidates[i].vote = votes[i]; // eslint-disable-line
         candidates[i].info = infos[i]; // eslint-disable-line
       }
@@ -267,16 +277,20 @@ export default new Vuex.Store({
 
       const members = new Array(maxMember);
       const nonmembers = [];
+      let isMember = false;
       candidates.forEach(candidate => {
         addressMembers.forEach(member => {
           if (member.address.includes(candidate.candidate.toLowerCase())) {
             candidate.memberIndex = member.memberIndex;
             members[member.memberIndex] = candidate;
-
+            isMember = true;
             return;
           }
         });
-        nonmembers.push(candidate);
+        if (!isMember) {
+          nonmembers.push(candidate);
+        }
+        isMember = false;
       });
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
@@ -651,6 +665,18 @@ export default new Vuex.Store({
       if (!state.contractState) return 0;
       return state.contractState.claimableAmount;
     },
+    minimumAmount: (state) => {
+      if (!state.contractState) return 0;
+      return state.contractState.minimumAmount;
+    },
+    canUpdateReward: (_, getters) => (address) => {
+      const candidate = getters.candidate(address);
+      if (!candidate || !getters.minimumAmount) return false;
+
+      const minimumAmount = web3Utils.toBN(getters.minimumAmount);
+      const selfVote = web3Utils.toBN(candidate.selfVote);
+      return selfVote.cmp(minimumAmount) >= 0;
+    },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
       if (!agenda) {
@@ -687,10 +713,34 @@ export default new Vuex.Store({
       if (!state.voteCasted) return [];
       return state.voteCasted.filter(v => v.data.id === agendaId);
     },
+    sortedCandidates: (state, getters) => {
+      const candidates = [];
+      state.members.forEach(member => {
+        if (member.candidateContract) candidates.push(member);
+      });
+
+      const nonmembers = getters.sortedNonmembersByVotes;
+      return candidates.concat(nonmembers);
+    },
     sortedCandidateRankByVotes: (state) => {
       if (!state.candidates || state.candidates.length === 0) return [];
 
       return state.candidates.sort(function (a, b)  {
+        a = a.vote.toString(16);
+        a = web3Utils.toBN(a);
+
+        b = b.vote.toString(16);
+        b = web3Utils.toBN(b);
+
+        if (a.cmp(b) === 1)      return -1;
+        else if (a.cmp(b) === 0) return 0;
+        else                     return 1;
+      });
+    },
+    sortedNonmembersByVotes: (state) => {
+      if (!state.nonmembers || state.nonmembers.length === 0) return [];
+
+      return state.nonmembers.sort(function (a, b)  {
         a = a.vote.toString(16);
         a = web3Utils.toBN(a);
 

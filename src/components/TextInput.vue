@@ -2,11 +2,13 @@
   <div class="text-input"
        :class="{
          'clickable': clickable,
+         'error': error && !realValue,
        }"
        @click="click()"
   >
     <span v-if="label !== ''" class="label">{{ label }}</span>
     <input ref="input"
+           v-model="realValue"
            :placeholder="hint"
            :style="inputPadding"
            :class="{
@@ -14,7 +16,6 @@
              'big': big,
            }"
            :readonly="readonly"
-           :value="value"
            @keypress="keypress"
     >
     <div v-if="unit !== ''" ref="unit">{{ unit }}</div>
@@ -52,11 +53,16 @@ export default {
       type: String,
       default: '',
     },
+    error: {
+      type: Boolean,
+      default: false,
+    },
   },
   data () {
     return {
       unitWidth: 0,
       index: 0,
+      realValue: '',
     };
   },
   computed: {
@@ -67,6 +73,7 @@ export default {
     },
   },
   mounted () {
+    this.realValue = this.value;
     if (this.unit !== '') {
       this.unitWidth = this.$refs.unit.clientWidth;
     }
@@ -93,13 +100,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .text-input {
   display: flex;
   align-items: center;
   position: relative;
 }
-.text-input input {
+
+input {
   width: 100%;
   height: 32px;
 
@@ -118,16 +126,26 @@ export default {
 
   padding-left: 16px;
   padding-right: 16px;
+
+  &::placeholder {
+    color: #86929d;
+  }
 }
-.text-input input::placeholder {
-  color: #86929d;
-}
-.text-input input:hover {
+
+input:hover {
   border: 1px solid #c9d1d8;
 }
-.text-input input:focus {
+input:focus {
   border: 1px solid #2a72e5;
 }
+
+.error {
+  input {
+    border: 1px solid #ff3b3b;
+    color: #ff3b3b;
+  }
+}
+
 .text-input > div {
   position: absolute;
   font-family: Roboto;

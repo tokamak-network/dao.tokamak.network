@@ -34,7 +34,11 @@
       {{ `This agenda was made by ${shortAddress(agenda.creator)} on` }} {{ agenda.tCreationDate | date1 }}
     </div>
     <div class="info-time">
-      <img v-if="agendaType(agenda.agendaid) === 'A'"
+      <img v-if="votingTime(agenda) === 'POLL ENDED'"
+           src="@/assets/poll-time-inactive-icon.svg" alt=""
+           width="14" height="14"
+      >
+      <img v-else-if="agendaType(agenda.agendaid) === 'A'"
            src="@/assets/poll-time-active-icon.svg" alt=""
            width="14" height="14"
       >
@@ -42,7 +46,10 @@
            src="@/assets/poll-time-active-icon-typeB.svg" alt=""
            width="14" height="14"
       >
-      <span>{{ agenda | votingTime }}</span>
+      <span :style="[
+        votingTime(agenda) === 'POLL ENDED' ? { color: '#d8dee3' } : {},
+      ]"
+      >{{ votingTime(agenda) }}</span>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -88,7 +95,7 @@ import ModalVote from '@/containers/ModalVote.vue';
 import { isVotableStatusOfAgenda } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 import { getContract, getContractABIFromAddress } from '@/utils/contracts';
-import { hexSlicer } from '@/utils/helpers';
+import { hexSlicer, votingTime } from '@/utils/helpers';
 
 export default {
   components: {
@@ -207,6 +214,9 @@ export default {
         return true;
       else
         return false;
+    },
+    votingTime () {
+      return agenda => votingTime(agenda);
     },
   },
   methods: {

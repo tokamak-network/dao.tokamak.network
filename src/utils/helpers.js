@@ -4,6 +4,11 @@ import { createCurrency } from '@makerdao/currency';
 const _TON = createCurrency('TON');
 const _WTON = createCurrency('WTON');
 
+export function slice (str) {
+  str = String(str);
+  return str.slice(0, 6);
+}
+
 export function hexSlicer (address = '') {
   if (address.length < 11) {
     return address;

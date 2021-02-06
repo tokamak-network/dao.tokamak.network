@@ -36,8 +36,7 @@ export default {
   },
   created () {
     this.$store.dispatch('launch');
-
-    this.poll();
+    // this.poll();
   },
   methods: {
     poll () {
