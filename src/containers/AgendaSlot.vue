@@ -46,10 +46,10 @@
     <div>
       <div class="title">Agenda</div>
       <div class="agenda-info">
-        {{ numAgenda }} Agendas - POSTED {{ agendas[0].tCreationDate | date2 }} UTC
+        {{ numAgenda }} Agendas - POSTED {{ agendas[0].tCreationDate | date2 }}
       </div>
       <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
-      <button-comp v-if="hide === false && hideAgendas.length > 0" :name="hideButton" :type="'hide'" @on-clicked="hideSection" />
+      <button-comp v-if="hide === false" :name="hideButton" :type="'hide'" @on-clicked="hide=true" />
       <div v-if="hide === true">
         <card-agenda-slot v-for="agenda in hideAgendas" :key="agenda.agendaid" :agenda="agenda" />
       </div>
@@ -74,7 +74,7 @@ export default {
       openAgendas: [],
       hideAgendas: [],
       hideButton: '',
-      hide: false,
+      hide: true,
       execute: [false, ''],
       status: [false, ''],
       vote: [false, ''],

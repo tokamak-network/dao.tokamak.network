@@ -17,7 +17,15 @@
         >
           {{ agendaType(agendaId) }}
         </div>
-        <div class="content-sub-date">Posted {{ creationTime.tCreationDate | date3 }} UTC</div>
+        <div class="content-sub-date">
+          Agenda
+          <span :class="{
+            'agenda-typeA': agendaType(agendaId) === 'A',
+            'agenda-typeB': agendaType(agendaId) === 'B',
+          }"
+          >
+            #{{ $route.params.id }} </span>is Posted {{ creationTime.tCreationDate | date3 }}
+        </div>
         <img v-if="agendaType(agendaId) === 'A'"
              src="@/assets/poll-time-active-icon.svg" alt=""
              width="14" height="14"

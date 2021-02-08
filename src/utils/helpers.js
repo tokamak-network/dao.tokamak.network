@@ -26,15 +26,15 @@ export function shortAddress (address = '') {
 }
 
 export function date1 (timestamp) {
-  return moment.utc(timestamp * 1000).format('MMM D, YYYY');
+  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY');
 }
 
 export function date2 (timestamp) {
-  return moment.utc(timestamp * 1000).format('MMM D, YYYY, HH:mm');
+  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
 }
 
 export function date3 (timestamp) {
-  return moment.utc(timestamp * 1000).format('YYYY / MM / DD / HH:mm');
+  return moment.utc(timestamp * 1000).local().format('YYYY / MM / DD / HH:mm');
 }
 
 export function votingTime (agenda) {

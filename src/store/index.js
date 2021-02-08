@@ -319,12 +319,14 @@ export default new Vuex.Store({
           }
         } else {
           for (const member of members) {
-            const data = {
-              id: agenda.agendaid,
-              voter: member.operator,
-              result: { 0: false, 1: '0' },
-            };
-            votersOfAgenda.push(data);
+            if (typeof(member) === 'object') {
+              const data = {
+                id: agenda.agendaid,
+                voter: member.candidate,
+                result: { 0: false, 1: '0' },
+              };
+              votersOfAgenda.push(data);
+            }
           }
         }
       });
