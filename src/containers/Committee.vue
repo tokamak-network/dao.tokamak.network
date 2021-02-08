@@ -33,7 +33,7 @@
         <button v-if="account"
                 class="update-btn"
                 :class="{
-                  'update-btn-disabled': !canUpdateReward(address),
+                  'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
                 }"
                 @click="updateReward()"
         >
@@ -135,13 +135,18 @@ export default {
         return a.add(v2).toString();
       };
 
-      if (!this.canUpdateReward(this.address)) return alert('no deposit for this candidate');
+      if (!this.canUpdateReward(this.address)) {
+        return alert('no deposit for this candidate');
+      }
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
         return;
       }
       if (candidate.kind === 'layer2') {
+        if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
+          alert('only candidate owner can update reward');
+        }
         const layer2Contract = getContract('Layer2', this.web3, candidate.layer2);
         const [
           costNRB,
