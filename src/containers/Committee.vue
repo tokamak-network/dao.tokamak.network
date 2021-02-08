@@ -50,6 +50,7 @@
 
 <script>
 import { getContract } from '@/utils/contracts';
+import { toBN } from 'web3-utils';
 
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
@@ -126,39 +127,106 @@ export default {
       this.address = this.$route.params.address;
     },
     async updateReward () {
+      const makePos = (v1, v2) => {
+        v1 = toBN(v1);
+        v2 = toBN(v2);
+
+        const a = v1.mul(toBN(2).pow(toBN(128)));
+        return a.add(v2).toString();
+      };
+
       if (!this.canUpdateReward(this.address)) return alert('no deposit for this candidate');
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
         return;
       }
+      if (candidate.kind === 'layer2') {
+        const layer2Contract = getContract('Layer2', this.web3, candidate.layer2);
+        const [
+          costNRB,
+          NRELength,
+          currentForkNumber,
+        ] = await Promise.all([
+          layer2Contract.methods.COST_NRB().call(),
+          layer2Contract.methods.NRELength().call(),
+          layer2Contract.methods.currentFork().call(),
+        ]);
+        const fork = await layer2Contract.methods.forks(currentForkNumber).call();
+        const epochNumber = parseInt(fork.lastEpoch) + 1;
+        const startBlockNumber = parseInt(fork.lastBlock) + 1;
+        const endBlockNumber = parseInt(startBlockNumber) + parseInt(NRELength) - 1;
 
-      // TODO: for layer2
-      const candidateContract = getContract('Candidate', this.web3, candidate.candidateContract);
-      const gasLimit = await candidateContract.methods.updateSeigniorage()
-        .estimateGas({
+        // pos1 = fork number * 2^128 + epoch number
+        // pos2 = start block number * 2^128 + end block number
+        const pos1 = makePos(currentForkNumber, epochNumber);
+        const pos2 = makePos(startBlockNumber, endBlockNumber);
+        const dummyBytes = '0xdb431b544b2f5468e3f771d7843d9c5df3b4edcf8bc1c599f18f0b4ea8709bc3';
+
+        const gasLimit = await layer2Contract.methods.submitNRE(
+          pos1,
+          pos2,
+          dummyBytes, // epochStateRoot
+          dummyBytes, // epochTransactionsRoot
+          dummyBytes, // epochReceiptsRoot
+        ).estimateGas({
           from: this.account,
+          value: costNRB,
         });
 
-      await candidateContract.methods.updateSeigniorage()
-        .send({
-          from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
-        })
-        .on('transactionHash', (hash) => {
-          this.$store.commit('SET_PENDING_TX', hash);
-        })
-        .on('confirmation', async (confirmationNumber) => {
-          if (this.confirmBlock === confirmationNumber) {
-            //
-          }
-        })
-        .on('receipt', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        })
-        .on('error', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        });
+        await layer2Contract.methods.submitNRE(
+          pos1,
+          pos2,
+          dummyBytes, // epochStateRoot
+          dummyBytes, // epochTransactionsRoot
+          dummyBytes, // epochReceiptsRoot
+        )
+          .send({
+            from: this.account,
+            value: costNRB,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('confirmation', async (confirmationNumber) => {
+            if (this.confirmBlock === confirmationNumber) {
+              //
+            }
+          })
+          .on('receipt', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+          })
+          .on('error', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+          });
+      } else {
+        const candidateContract = getContract('Candidate', this.web3, candidate.candidateContract);
+        const gasLimit = await candidateContract.methods.updateSeigniorage()
+          .estimateGas({
+            from: this.account,
+          });
+
+        await candidateContract.methods.updateSeigniorage()
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('confirmation', async (confirmationNumber) => {
+            if (this.confirmBlock === confirmationNumber) {
+              //
+            }
+          })
+          .on('receipt', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+          })
+          .on('error', () => {
+            this.$store.commit('SET_PENDING_TX', '');
+          });
+      }
     },
   },
 };

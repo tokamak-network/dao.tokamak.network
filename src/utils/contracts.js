@@ -21,6 +21,7 @@ const wton = require('../contracts/WTON.json');
 const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault2.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
+const layer2 = require('../contracts/Layer2.json');
 
 const deployed = {
   'TON'              : '0x122594eFc1653C86B97065d1B7C29d2Ca8db9081',
@@ -44,6 +45,7 @@ function getContract (want, web3, address) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
   }
   const Candidate = new web3.eth.Contract(candidate.abi, address);
+  const Layer2 = new web3.eth.Contract(layer2.abi, address);
   const DAOAgendaManager = new web3.eth.Contract(agendaManager.abi, deployed.DAOAgendaManager);
   const DAOCommitteeProxy = new web3.eth.Contract(committee.abi, deployed.DAOCommitteeProxy); // NOTE: use committee abi.
   const DAOCommittee = new web3.eth.Contract(committee.abi, deployed.DAOCommittee); // NOTE: not used.
@@ -54,6 +56,7 @@ function getContract (want, web3, address) {
 
   const contracts = {
     Candidate,
+    Layer2,
     DAOAgendaManager,
     DAOCommitteeProxy,
     DAOCommittee,
