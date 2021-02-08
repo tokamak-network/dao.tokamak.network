@@ -12,12 +12,12 @@
     >
       Candidates
     </div>
-    <candidate v-for="candidate in nonmembers" :key="candidate.candidateContract" :candidate="candidate" />
+    <candidate v-for="candidate in sortedNonmembersByVotes" :key="candidate.candidateContract" :candidate="candidate" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import CardCommitteeSlot from '@/components/CardCommitteeSlot.vue';
 import Candidate from '@/components/Candidate.vue';
 
@@ -27,8 +27,8 @@ export default {
     'candidate': Candidate,
   },
   computed: {
-    ...mapState([
-      'nonmembers',
+    ...mapGetters([
+      'sortedNonmembersByVotes',
     ]),
   },
 };
