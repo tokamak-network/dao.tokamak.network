@@ -22,21 +22,21 @@ const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault2.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 
-const deployed =  {
-  'TON': '0x122594eFc1653C86B97065d1B7C29d2Ca8db9081',
-  'WTON': '0xC3c44E2F55A093Eb67C6B2A0A936bF1B3DA8D17F',
-  'Layer2Registry': '0xbb20a7A837616dAB58E54dBfdc03F258aC27791a',
-  'DepositManager': '0x0430e7138F4981479F43F6e7d67081900028EEdD',
-  'CoinageFactory': '0x1C6bc7841303c3dc5c5D6bc0D6428a58B6F8190D',
-  'OldDAOVaultMock': '0x0a915BD4aD8b684f730012a12B52A629f842D5c4',
-  'SeigManager': '0x5bCbE9e523707200869FaeAac9C903786bD0fD57',
-  'PowerTON': '0x4C0946e3aEaDFD36ab7f09755d6b9CFDF081defb',
-  'DAOVault': '0x45cc5238047834C7CA7C3782E2EB4Af7544D2aAC',
-  'DAOAgendaManager': '0x7Ce981B536d49Fe08bf876b2d699b240052DC058',
-  'CandidateFactory': '0x78e1916595BFbb9D396f7bd3B5D4529cE9f55E53',
-  'DAOCommittee': '0x6b12f4e068D6ed23111cDcb9dB56b659C9898B3D',
+const deployed = {
+  'TON'              : '0x122594eFc1653C86B97065d1B7C29d2Ca8db9081',
+  'WTON'             : '0xC3c44E2F55A093Eb67C6B2A0A936bF1B3DA8D17F',
+  'Layer2Registry'   : '0xbb20a7A837616dAB58E54dBfdc03F258aC27791a',
+  'DepositManager'   : '0x0430e7138F4981479F43F6e7d67081900028EEdD',
+  'CoinageFactory'   : '0x1C6bc7841303c3dc5c5D6bc0D6428a58B6F8190D',
+  'OldDAOVaultMock'  : '0x0a915BD4aD8b684f730012a12B52A629f842D5c4',
+  'SeigManager'      : '0x5bCbE9e523707200869FaeAac9C903786bD0fD57',
+  'PowerTON'         : '0x4C0946e3aEaDFD36ab7f09755d6b9CFDF081defb',
+  'DAOVault'         : '0x45cc5238047834C7CA7C3782E2EB4Af7544D2aAC',
+  'DAOAgendaManager' : '0x7Ce981B536d49Fe08bf876b2d699b240052DC058',
+  'CandidateFactory' : '0x78e1916595BFbb9D396f7bd3B5D4529cE9f55E53',
+  'DAOCommittee'     : '0x6b12f4e068D6ed23111cDcb9dB56b659C9898B3D',
   'DAOCommitteeProxy': '0x586caFca57613B864aDaC6b3F8A9d3390A128768',
-  'EtherToken': '0xFE9d9D39C34ce186E2b59089Ca1abB93F7dd8455',
+  'EtherToken'       : '0xFE9d9D39C34ce186E2b59089Ca1abB93F7dd8455',
 };
 
 function getContract (want, web3, address) {
