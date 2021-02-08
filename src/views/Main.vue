@@ -292,6 +292,8 @@ export default {
   }
 
   .event {
+    min-width: 480px;
+    max-width: 480px;
     flex: 1;
   }
 }
