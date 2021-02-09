@@ -382,10 +382,6 @@ const getABIFromSelector = function (selector, type='A') {
 
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
-
-    if (!abi) {
-      console.log('bug'); // eslint-disable-line
-    }
   } else {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
@@ -438,7 +434,6 @@ module.exports.parseAgendaBytecode = function (tx) {
     const abi = getABIFromSelector(selector);
 
     if (!abi) {
-      console.log('bug'); // eslint-disable-line
       onChainEffects.push({
         target: '',
         name: '',
