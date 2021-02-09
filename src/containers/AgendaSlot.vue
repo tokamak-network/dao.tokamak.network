@@ -74,7 +74,7 @@ export default {
       openAgendas: [],
       hideAgendas: [],
       hideButton: '',
-      hide: true,
+      hide: false,
       execute: [false, ''],
       status: [false, ''],
       vote: [false, ''],
@@ -95,9 +95,9 @@ export default {
       return this.openAgendas.length + this.hideAgendas.length;
     },
   },
-  beforeCreate () {
-    this.openAgendas = this.agendas;
-  },
+  // beforeCreate () {
+  //   this.openAgendas = this.agendas;
+  // },
   created () {
     this.agendaFilter();
     this.classify(this.openAgendas);
@@ -114,7 +114,6 @@ export default {
         this.hideButton = 'View more agenda (' + this.hideAgendas.length + ')';
       } else {
         this.openAgendas = agendas;
-        this.hideAgendas = [];
       }
     },
     hideSection () {
