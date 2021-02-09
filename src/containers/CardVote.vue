@@ -1,28 +1,20 @@
 <template>
   <div class="card-vote">
-    <card-container :title="'Your Vote'">
+    <card-container v-if="candidates!=null && clength > 0" :title="'Your Vote'">
       <template #body>
-        <div class="vote-percentage-container">
-          <!-- <div class="vote-percentage">{{ candidateContract }}</div> -->
-          <div class="vote-percentage">{{ voteRates }}% of Agenda is voted </div>
-          <vote-poll :pct="parseInt(voteRates)" :margin="16" />
-        </div>
-
-        <!-- TODO: zena implement -->
-        <!-- <div v-for="(candidate, _, index) in candidates"
-             v-else
+        <div v-for="(candidate, index) in agendaVotesByCandidates"
              :key="candidate.candidateContract"
         >
           <div v-if="index > 0" class="divide" />
           <div class="vote-container">
             <div class="vote-info-container">
-              <div class="vote-address">{{ candidateContract | hexSlicer }}</div>
-              <span class="vote-percent">{{ voteRates }}</span>
-              <span class="vote-explanation"> % of Agenda is voted</span>
+              <div class="vote-address"> {{ candidate.name | slice }} ... ({{ candidate.candidateContract | hexSlicer }})</div>
+              <span class="vote-percent"> {{ candidate.voteRates }} </span>
+              <span class="vote-explanation"> % of Agenda is voted  </span>
             </div>
-            <vote-poll :pct="parseInt(voteRates)" :margin="16" />
+            <vote-poll :pct="parseInt(candidate.voteRates)" :margin="16" />
           </div>
-        </div> -->
+        </div>
       </template>
     </card-container>
   </div>
@@ -31,6 +23,7 @@
 <script>
 import Card from '@/components/Card.vue';
 import VotePoll from '@/components/VotePoll.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -44,11 +37,19 @@ export default {
       required: true,
     },
     candidates: {
-      type: Object,
+      type: Array,
       default: null,
       required: true,
     },
   },
+  computed: {
+    ...mapState([
+      'account',
+      'web3',
+      'agendaVotesByCandidates',
+    ]),
+  },
+  /*
   computed: {
     voteRates () {
       if(this.candidates.countCanVoteAgendas > 0 && this.candidates.countAgendaVote > 0  ){
@@ -61,7 +62,7 @@ export default {
     candidateContract (){
       return this.candidates.candidateContract;
     },
-  },
+  },*/
 };
 </script>
 

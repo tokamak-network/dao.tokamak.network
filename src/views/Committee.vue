@@ -4,8 +4,8 @@
       <agenda-slot />
     </div>
     <div>
-      <card-vote v-for="(candidateAgendaInfo, index) in agendaVotesByCandidates" :key="'vote'+index" :candidates="candidateAgendaInfo" :clength="agendaVotesByCandidates.length" />
-      <card-stats v-for="(candidateAgendaInfo, index) in agendaVotesByCandidates" :key="'stat'+index" :candidates="candidateAgendaInfo" :clength="agendaVotesByCandidates.length" />
+      <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+      <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
       <card-stats-committee />
       <card-resource />
     </div>

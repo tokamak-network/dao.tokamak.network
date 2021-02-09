@@ -467,10 +467,11 @@ export default new Vuex.Store({
               activityReward = await committeeProxy.methods.getClaimableActivityReward(account).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
               agendaVotesByCandidates.forEach(candidate => {
-                if(candidate.candidate.toLowerCase() === account.toLowerCase()) candidate.claimableAmount=activityReward;
+                if(candidate.candidate.toLowerCase() === account.toLowerCase()) {
+                  candidate.claimableAmount=activityReward;
+                }
               });
             } );
-            //console.log('SET_VOTES_AGENDAS', agendaVotesByCandidates);
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates );
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
 
@@ -499,11 +500,13 @@ export default new Vuex.Store({
                   candidate:  candidate.candidate,
                   operator:  candidate.operator,
                   layer2:  candidate.layer2,
+                  name: candidate.name,
                   canVoteAgendas: [],
                   agendaVote:[],
                   countCanVoteAgendas:  0,
                   countAgendaVote:  0,
                   claimableAmount: 0,
+                  voteRates:0,
                 });
             });
           }
@@ -519,6 +522,9 @@ export default new Vuex.Store({
             });
             candidateContract.agendaVote = await getAgendaVotesByVoter(candidateContract.candidateContract);
             candidateContract.countAgendaVote = candidateContract.agendaVote.length ;
+            if(candidateContract.countAgendaVote > 0 && candidateContract.countCanVoteAgendas > 0)
+              candidateContract.voteRates = (( candidateContract.countAgendaVote / candidateContract.countCanVoteAgendas) * 100).toFixed(2);
+
           });
           commit('SET_VOTES_AGENDAS', myCandidateContracts );
         }

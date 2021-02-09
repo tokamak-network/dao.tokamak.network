@@ -30,7 +30,12 @@ export function date1 (timestamp) {
 }
 
 export function date2 (timestamp) {
-  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
+  //return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
+  //const _time = new Date(timestamp * 1000).toUTCString()
+  let _time =new Date(timestamp * 1000).toString();
+  //const _time = new Date(timestamp * 1000).toLocaleString() ;
+  if(_time && _time.indexOf('(')) _time = _time.substring(0, _time.indexOf('('));
+  return _time;
 }
 
 export function date3 (timestamp) {

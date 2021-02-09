@@ -46,7 +46,7 @@
     <div>
       <div class="title">Agenda</div>
       <div class="agenda-info">
-        {{ numAgenda }} Agendas - POSTED {{ agendas[0].tCreationDate | date2 }}
+        {{ numAgenda }} Agendas - POSTED {{ agendas[0]? agendas[0].tCreationDate:'' | date2 }}
       </div>
       <card-agenda-slot v-for="agenda in openAgendas" :key="agenda.agendaid" :agenda="agenda" />
       <button-comp v-if="hide === false" :name="hideButton" :type="'hide'" @on-clicked="hide=true" />

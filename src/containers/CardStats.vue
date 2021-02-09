@@ -1,35 +1,19 @@
 <template>
   <div class="card-stats">
-    <card-container :title="'Your Stats'">
+    <card-container v-if="candidates!=null && clength > 0" :title="'Your Stats'">
       <template #body>
-        <div>
-          <!-- <div class="stats">
-            <div class="candidate">{{ candidateContract }} </div>
-          </div> -->
-          <div class="stats">
-            <div class="title">Claimable TON</div>
-            <div class="content">{{ claimableAmount }} </div>
-          </div>
-          <div class="stats">
-            <div class="title"># of Agendas</div>
-            <div class="content">{{ totalAgendas }} Agendas</div>
-          </div>
-        </div>
-
-        <!-- TODO: zena implement -->
-        <!-- <div v-for="(candidate, _, index) in candidates"
-             v-else
+        <div v-for="(candidate, index) in candidates"
              :key="candidate.candidateContract"
         >
-          <div v-if="index !== 0" class="divide" />
+          <div v-if="index > 0" class="divide" />
           <div class="container">
-            <div class="address">{{ candidateContract | hexSlicer }}</div>
+            <div class="address">{{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }}) </div>
             <div class="stats-container">
               <div class="stats-label">
                 Claimable TON
               </div>
               <div class="stats-value">
-                {{ claimableAmount }}
+                {{ candidate.claimableAmount }}
               </div>
             </div>
             <div class="stats-container">
@@ -37,11 +21,11 @@
                 # of Voted
               </div>
               <div class="stats-value">
-                {{ totalAgendas }} Agendas
+                {{ candidate.countCanVoteAgendas }} Agendas
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </template>
     </card-container>
   </div>
@@ -62,7 +46,7 @@ export default {
       required: true,
     },
     candidates: {
-      type: Object,
+      type: Array,
       default: null,
       required: true,
     },
@@ -72,19 +56,6 @@ export default {
       'account',
       'web3',
     ]),
-    candidateContract (){
-      return this.candidates.candidateContract;
-    },
-    totalAgendas (){
-      return this.candidates.countCanVoteAgendas;
-    },
-    claimableAmount (){
-      let _amount = this.candidates.claimableAmount+'';
-      _amount = _amount.replaceAll('TON', '');
-      _amount =_amount.replaceAll(' ', '');
-      if(_amount ==='0.000000000000000000' || _amount ==='0.00' || _amount ==='0') return '0.00 TON';
-      else  return this.candidates.claimableAmount;
-    },
   },
 };
 </script>
