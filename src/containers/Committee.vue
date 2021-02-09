@@ -74,6 +74,7 @@ export default {
   computed: {
     ...mapState([
       'account',
+      'confirmBlock',
       'candidates',
       'members',
       'launched',
@@ -196,11 +197,12 @@ export default {
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
-              //
+              this.$store.commit('SET_PENDING_TX', '');
+              await this.$store.dispatch('launch');
+              await this.$store.dispatch('connectEthereum', this.web3);
             }
           })
           .on('receipt', () => {
-            this.$store.commit('SET_PENDING_TX', '');
           })
           .on('error', () => {
             this.$store.commit('SET_PENDING_TX', '');
@@ -222,11 +224,12 @@ export default {
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
-              //
+              this.$store.commit('SET_PENDING_TX', '');
+              await this.$store.dispatch('launch');
+              await this.$store.dispatch('connectEthereum', this.web3);
             }
           })
           .on('receipt', () => {
-            this.$store.commit('SET_PENDING_TX', '');
           })
           .on('error', () => {
             this.$store.commit('SET_PENDING_TX', '');
