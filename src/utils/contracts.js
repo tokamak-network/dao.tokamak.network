@@ -76,112 +76,365 @@ function getContract (want, web3, address) {
 module.exports.getContract = getContract;
 
 const depositManagerFunctionsOfTypeA = [
-  { 'name': 'setGlobalWithdrawalDelay', 'title':'Global withdrawal delay will be changed.', 'prettyName': '', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.' },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setGlobalWithdrawalDelay', 'title':'Global withdrawal delay will be changed.', 'prettyName': '', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.',
+  },
 ];
 const seigManagerFunctionsOfTypeA = [
-  { 'name': 'setPowerTONSeigRate', 'title':'Power TON Seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.' },
-  { 'name': 'setDaoSeigRate', 'title':'DAO seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.' },
-  { 'name': 'setPseigRate', 'title':'Propotional seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.' },
-  { 'name': 'setAdjustDelay', 'title':'Adjust delay will be changed', 'prettyName': '', 'explanation': 'It decides how much time should be wait until new commission rate is applied.' },
-  { 'name': 'setMinimumAmount', 'title':'Minimum amount to staking TON will be changed.', 'prettyName': '', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.' },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setPowerTONSeigRate', 'title':'Power TON Seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setDaoSeigRate', 'title':'DAO seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setPseigRate', 'title':'Propotional seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setAdjustDelay', 'title':'Adjust delay will be changed', 'prettyName': '', 'explanation': 'It decides how much time should be wait until new commission rate is applied.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setMinimumAmount', 'title':'Minimum amount to staking TON will be changed.', 'prettyName': '', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.',
+  },
 ];
 const daoCommitteeProxyFunctionsOfTypeA = [
-  { 'name': 'setActivityRewardPerSecond', 'title':'', 'prettyName': '', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.' },
-  { 'name': 'increaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It increases maximum number of Committee Members.' },
-  { 'name': 'decreaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It decreased maximum number of Committee Members.' },
-  { 'name': 'setQuorum', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum qurom for committee members to execute agenda.' },
-  { 'name': 'setCreateAgendaFees', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.' },
-  { 'name': 'setMinimumNoticePeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum notice period of agenda. Per seconds.' },
-  { 'name': 'setMinimumVotingPeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum vote period of agenda. Per seconds.' },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setActivityRewardPerSecond', 'title':'', 'prettyName': '', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.',
+  },
+  {
+    'params': {
+      'aboutParam0': '0',
+      'exampleParam0': '0',
+      'aboutParam1': '1',
+      'exampleParam1': '1',
+    },
+    'name': 'increaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It increases maximum number of Committee Members.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+    },
+    'name': 'decreaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It decreased maximum number of Committee Members.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setQuorum', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum qurom for committee members to execute agenda.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setCreateAgendaFees', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setMinimumNoticePeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum notice period of agenda. Per seconds.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+    },
+    'name': 'setMinimumVotingPeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum vote period of agenda. Per seconds.',
+  },
 ];
 const daoVaultFunctionsOfTypeA = [
-  { 'name': 'approveTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.' },
-  { 'name': 'approveWTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.' },
-  { 'name': 'approveERC20', 'title':'', 'prettyName': '', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.' },
-  { 'name': 'claimTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of TON.' },
-  { 'name': 'claimWTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of WTON.' },
-  { 'name': 'claimERC20', 'title':'', 'prettyName': '', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).' },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+    },
+    'name': 'approveTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+    },
+    'name': 'approveWTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+      'aboutParam2': '',
+      'exampleParam2': '',
+    },
+    'name': 'approveERC20', 'title':'', 'prettyName': '', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+    },
+    'name': 'claimTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of TON.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+    },
+    'name': 'claimWTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of WTON.',
+  },
+  {
+    'params': {
+      'aboutParam0': '',
+      'exampleParam0': '',
+      'aboutParam1': '',
+      'exampleParam1': '',
+      'aboutParam2': '',
+      'exampleParam2': '',
+    },
+    'name': 'claimERC20', 'title':'', 'prettyName': '', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).',
+  },
 ];
 
 const tonFunctionsOfTypeB = [
-  { 'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const wtonFunctionsOfTypeB = [
-  { 'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'burnFrom', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'burnFrom', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const depositManagerFunctionsOfTypeB = [
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const seigManagerFunctionsOfTypeB = [
-  { 'name': 'addPauser', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'pause', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'unpause', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setPowerTON', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setDao', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setCoinageFactory', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'addChallenger', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferCoinageOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceWTONMinter', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'addPauser', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'pause', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'unpause', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setPowerTON', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setDao', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setCoinageFactory', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'addChallenger', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferCoinageOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceWTONMinter', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const layer2RegistryFunctionsOfTypeB = [
-  { 'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const daoCommitteeProxyFunctionsOfTypeB = [
-  { 'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setProxyPause', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'upgradeTo', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setProxyPause', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'upgradeTo', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 const daoCommitteeFunctionsOfTypeB = [
-  { 'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setCandidatesSeigManager', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setCandidatesCommittee', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setDaoVault', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setLayer2Registry', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setAgendaManager', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setCandidateFactory', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setTon', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'registerOperatorByOwner', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'endAgendaVoting', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setAgendaStatus', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setCandidatesSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setCandidatesCommittee', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setDaoVault', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setLayer2Registry', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setAgendaManager', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setCandidateFactory', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setTon', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'registerOperatorByOwner', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'endAgendaVoting', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setAgendaStatus', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
-// const candidateFunctionsOfTypeB = [
-//   { 'name': 'approveTON', 'title':'', 'prettyName': '', 'explanation': '' },
-// ];
 const daoVaultFunctionsOfTypeB = [
-  { 'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setTON', 'title':'', 'prettyName': '', 'explanation': '' },
-  { 'name': 'setWTON', 'title':'', 'prettyName': '', 'explanation': '' },
+  {
+    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setTON', 'title':'', 'prettyName': '', 'explanation': '',
+  },
+  {
+    'name': 'setWTON', 'title':'', 'prettyName': '', 'explanation': '',
+  },
 ];
 
 const depositManagerABIOfTypeA = [];
@@ -196,7 +449,6 @@ const seigManagerABIOfTypeB = [];
 const layer2RegistryABIOfTypeB = [];
 const daoCommitteeProxyABIOfTypeB = [];
 const daoCommitteeABIOfTypeB = [];
-// const candidateABIOfTypeB = [];
 const daoVaultABIOfTypeB = [];
 
 (() => {
@@ -207,6 +459,7 @@ const daoVaultABIOfTypeB = [];
       f.explanation = func.explanation;
       f.prettyName = func.prettyName;
       f.title = func.title;
+      f.params = func.params;
 
       abis.push(f);
     });
@@ -224,7 +477,6 @@ const daoVaultABIOfTypeB = [];
   set(layer2RegistryFunctionsOfTypeB, layer2RegistryABIOfTypeB, layer2Registry.abi);
   set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxyABIOfTypeB, committeeProxy.abi);
   set(daoCommitteeFunctionsOfTypeB, daoCommitteeABIOfTypeB, committee.abi);
-  // set(candidateFunctionsOfTypeB, candidateABIOfTypeB, candidate.abi);
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
 })();
 
@@ -232,10 +484,10 @@ module.exports.getContractABI = function (want, type='A') {
   if (!want) return [];
 
   if (type === 'A') {
-    if (want === 'DepositManager')    return depositManagerABIOfTypeA;
-    else if (want === 'SeigManager')  return seigManagerABIOfTypeA;
+    if (want === 'DepositManager')         return depositManagerABIOfTypeA;
+    else if (want === 'SeigManager')       return seigManagerABIOfTypeA;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeA;
-    else if (want === 'DAOVault2')    return daoVaultABIOfTypeA;
+    else if (want === 'DAOVault2')         return daoVaultABIOfTypeA;
     else return [];
   } else {
     if (want === 'TON')                    return tonABIOfTypeB;
@@ -245,7 +497,6 @@ module.exports.getContractABI = function (want, type='A') {
     else if (want === 'Layer2Registry')    return layer2RegistryABIOfTypeB;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
     else if (want === 'DAOCommittee')      return daoCommitteeABIOfTypeB;
-    // else if (want === 'Candidate')         return candidateABIOfTypeB;
     else if (want === 'DAOVault2')         return daoVaultABIOfTypeB;
     else return [];
   }
@@ -461,8 +712,8 @@ module.exports.parseAgendaBytecode = function (tx) {
 
 module.exports.metamaskErrorMessage = function (errorString) {
   let errString='';
-  if(errorString!=null && errorString.length > 0 ){
-    const key='message';
+  if (errorString !== null && errorString.length > 0 ) {
+    const key = 'message';
     const positionKey = errorString.indexOf(key);
     const startMessage = errorString.indexOf('"', positionKey+key.length+2);
     const endMessage = errorString.indexOf('"', startMessage+3);
@@ -473,18 +724,18 @@ module.exports.metamaskErrorMessage = function (errorString) {
 
 module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
   let isVotableStatus = false;
-  try{
-    if(_web3==null){
+  try {
+    if (_web3 === null) {
       alert('Check Connect Wallet !');
-    }else{
-      const AgendaManager =  await getContract('DAOAgendaManager', _web3 );
-      if(AgendaManager!=null){
+    } else {
+      const AgendaManager = await getContract('DAOAgendaManager', _web3);
+      if (AgendaManager !== null){
         isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
-      }else{
+      } else {
         console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
       }
     }
-  }catch(err){
+  } catch (err) {
     console.log('Utils.isVotableStatus err', err) ; // eslint-disable-line
   }
   return isVotableStatus;

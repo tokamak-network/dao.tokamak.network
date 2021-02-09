@@ -11,7 +11,7 @@
       >
         <div class="param-container">
           <div class="label">{{ param.name }} ({{ param.type }})</div>
-          <img v-if="tooltip(param) !== ''"
+          <img v-if="tooltip(index) !== ''"
                class="tooltip-img"
                src="@/assets/tooltip.png" alt=""
                width="16" height="16"
@@ -22,7 +22,7 @@
                    width="4" height="6"
               >
               <div class="tooltip-content">
-                {{ tooltip(param) }}
+                {{ tooltip(index) }}
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { getContract, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
+import { getContractABI, getContract, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
 import { unmarshalString } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 import web3Utils from 'web3-utils';
@@ -121,11 +121,27 @@ export default {
     ...mapGetters([
       'createAgendaFee',
     ]),
+    aboutParam () {
+      return index => {
+        const depositManagerABI = getContractABI(this.contract, this.type);
+        const abi = depositManagerABI.find(abi => abi.name === this.functionName);
+        return abi.params[`aboutParam${index}`];
+      };
+    },
+    exampleParam () {
+      return index => {
+        const depositManagerABI = getContractABI(this.contract, this.type);
+        const abi = depositManagerABI.find(abi => abi.name === this.functionName);
+        return abi.params[`exampleParam${index}`];
+      };
+    },
   },
   methods: {
-    tooltip (param) {
-      param;
-      return '';
+    tooltip (index) {
+      if (this.type === 'B') {
+        return '';
+      }
+      return `about: ${this.aboutParam(index)}, example: ${this.exampleParam(index)}`;
     },
     close () {
       this.$emit('on-closed');
