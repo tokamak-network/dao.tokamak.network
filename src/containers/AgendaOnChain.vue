@@ -4,7 +4,19 @@
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
     <div>{{ explanation }} </div><br />
     <div>
-      <div v-for="(input, index) in inputs" :key="input.name" class="name">
+      <!-- for setSeigRates -->
+      <div v-if="onChainEffects.length === 3">
+        <div style="margin-bottom: 6px;">
+          <span>powerTONSeigRate_: </span><span>{{ onChainEffects[0].values[0] }}</span><br />
+        </div>
+        <div style="margin-bottom: 6px;">
+          <span>daoSeigRate_: </span><span>{{ onChainEffects[1].values[0] }}</span><br />
+        </div>
+        <div>
+          <span>pseigRate_: </span><span>{{ onChainEffects[2].values[0] }}</span><br />
+        </div>
+      </div>
+      <div v-for="(input, index) in inputs" v-else :key="input.name" class="name">
         <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
     </div>
@@ -36,6 +48,9 @@ export default {
       return onChainEffects[0].target;
     },
     explanation () {
+      if (this.onChainEffects.length === 3) {
+        return '**need explanation for setSeigRates agenda**';
+      }
       const abi = getContractABIFromAddress(this.target);
       if (!abi || abi.length === 0) return '';
 
@@ -52,6 +67,10 @@ export default {
       if (!onChainEffects || onChainEffects.length === 0) return {};
 
       return onChainEffects[0].values;
+    },
+    onChainEffects () {
+      const onChainEffects = this.agendaOnChainEffects(this.agendaId);
+      return onChainEffects;
     },
   },
   watch: {

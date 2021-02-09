@@ -150,6 +150,11 @@
         </div>
         <div v-if="index === 1" class="box-container">
           <div>
+            <div @click="showModal=true; currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
+              <box :function-name="'setSeigRates'"
+                   :type="'A'"
+              />
+            </div>
             <div v-for="func in seigManagerFunctionsOfTypeA" :key="func.name"
                  @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
@@ -372,6 +377,12 @@ export default {
       daoCommitteeFunctionsOfTypeB: [],
       // candidateFunctionsOfTypeB: [],
       daoVaultFunctionsOfTypeB: [],
+
+      setSeigRatesParams: [
+        { 'internalType': 'uint256', 'name': 'powerTONSeigRate_', 'type': 'uint256' },
+        { 'internalType': 'uint256', 'name': 'daoSeigRate_', 'type': 'uint256' },
+        { 'internalType': 'uint256', 'name': 'PseigRate_', 'type': 'uint256' },
+      ],
 
       type: 'A',
       hoverOn: '',

@@ -53,16 +53,13 @@ export default {
       type: String,
       default: '',
     },
-    error: {
-      type: Boolean,
-      default: false,
-    },
   },
   data () {
     return {
       unitWidth: 0,
       index: 0,
       realValue: '',
+      error: false,
     };
   },
   computed: {

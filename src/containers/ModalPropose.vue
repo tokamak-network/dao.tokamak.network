@@ -123,6 +123,12 @@ export default {
     ]),
     aboutParam () {
       return index => {
+        if (this.functionName === 'setSeigRates') {
+          if (index === 0) return '0';
+          if (index === 1) return '1';
+          if (index === 2) return '2';
+        }
+
         const depositManagerABI = getContractABI(this.contract, this.type);
         const abi = depositManagerABI.find(abi => abi.name === this.functionName);
         return abi.params[`aboutParam${index}`];
@@ -130,6 +136,12 @@ export default {
     },
     exampleParam () {
       return index => {
+        if (this.functionName === 'setSeigRates') {
+          if (index === 0) return '0';
+          if (index === 1) return '1';
+          if (index === 2) return '2';
+        }
+
         const depositManagerABI = getContractABI(this.contract, this.type);
         const abi = depositManagerABI.find(abi => abi.name === this.functionName);
         return abi.params[`exampleParam${index}`];
@@ -169,6 +181,10 @@ export default {
         return alert('The parameter value must be set.');
       }
 
+      if (this.functionName === 'setSeigRates') {
+        await this.proposeSetSeigRates();
+        return;
+      }
       const account = this.account.toLowerCase();
 
       const ton = getContract('TON', this.web3);
@@ -208,7 +224,6 @@ export default {
       const bytecode = selector.concat(data);
       const target = getContractAddress(this.contract);
 
-      // TODO: considering combination of functions.
       const param = encodeParameters(
         ['address[]', 'uint256', 'uint256', 'bytes[]'],
         [[target], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],
@@ -230,6 +245,90 @@ export default {
           this.$store.commit('SET_PENDING_TX', hash);
           this.close();
 
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
+          }
+        })
+        .on('receipt', async () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async proposeSetSeigRates () {
+      const account = this.account.toLowerCase();
+
+      const ton = getContract('TON', this.web3);
+      const agendaManager = getContract('DAOAgendaManager', this.web3);
+      const proxy = getContract('DAOCommitteeProxy', this.web3);
+
+      const [
+        noticePeriod,
+        votingPeriod,
+        fee,
+      ] = await Promise.all([
+        agendaManager.methods.minimumNoticePeriodSeconds().call(),
+        agendaManager.methods.minimumVotingPeriodSeconds().call(),
+        agendaManager.methods.createAgendaFees().call(),
+      ]);
+
+      const selector1 = getFunctionSelector(this.contract, 'setPowerTONSeigRate', this.type);
+      const selector2 = getFunctionSelector(this.contract, 'setDaoSeigRate', this.type);
+      const selector3 = getFunctionSelector(this.contract, 'setPseigRate', this.type);
+
+      const nParams = Object.keys(this.$refs).length;
+      const types = [];
+      const values = [];
+      for (let i = 0; i < nParams; i++) {
+        const type = this.params[i].type;
+        const value = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
+        console.log(i, type, value);
+        const encodedValue = encoded(type, value);
+        if (encodedValue === -1) {
+          console.log('bug'); // eslint-disable-line
+          return;
+        }
+
+        types.push(type);
+        values.push(encodedValue);
+      }
+      const params1 = encodeParameters([types[0]], [values[0]]);
+      const params2 = encodeParameters([types[1]], [values[1]]);
+      const params3 = encodeParameters([types[2]], [values[2]]);
+
+      const data1 = unmarshalString(params1);
+      const data2 = unmarshalString(params2);
+      const data3 = unmarshalString(params3);
+
+      const bytecode1 = selector1.concat(data1);
+      const bytecode2 = selector2.concat(data2);
+      const bytecode3 = selector3.concat(data3);
+      const target = getContractAddress(this.contract);
+
+      const param = encodeParameters(
+        ['address[]', 'uint256', 'uint256', 'bytes[]'],
+        [[target, target, target], noticePeriod.toString(), votingPeriod.toString(), [bytecode1, bytecode2, bytecode3]],
+      );
+
+      const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)
+        .estimateGas({
+          from: account,
+        });
+
+      await ton.methods.approveAndCall(proxy._address, fee, param)
+        .send({
+          from: account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', async (hash) => {
+          await createAgenda(account, hash, this.desc, this.type);
+
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
