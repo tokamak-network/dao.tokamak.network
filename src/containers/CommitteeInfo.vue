@@ -21,13 +21,13 @@
                     :width="'317'"
     /> -->
     <!-- <info-committee :title="'Reward'" :content="`${amount} TON`" /> -->
-    <info-committee :title="'Total Vote'" :content="`${wton(totalVotesForCandidate(address))} TON`" />
+    <info-committee :title="'Total Vote'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" />
     <div style="width: 100%; height: 18px;" />
 
-    <info-committee :title="'My Vote'" :content="`${wton(myVotes)} TON`" />
-    <info-committee :title="'Revotable'" :content="`${wton(canRevote(address, 0))} TON`" />
-    <info-committee :title="'Withdrawable'" :content="`${wton(canWithdraw(address, 0))} TON`" />
-    <info-committee :title="'Not Withdrawable'" :content="`${wton(cannotWithdraw)} TON`" />
+    <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" />
+    <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" />
+    <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" />
+    <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" />
     <!-- <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'New Commission Rate Changed At'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'Withdrawal Delay'" :content="'0.00 TON'" class="last" /> -->
@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { WTON } from '@/utils/helpers';
+import { WTON, withComma } from '@/utils/helpers';
 
 import InfoCommittee from '@/components/InfoCommittee.vue';
 
@@ -80,6 +80,9 @@ export default {
     wton (amount) {
       if (!amount) return WTON(0);
       return WTON(amount);
+    },
+    withComma (n) {
+      return withComma(n);
     },
   },
 };

@@ -8,7 +8,7 @@
     </div>
     <div class="body">
       <div v-if="currentSelector === 0" class="vote-container">
-        <div>Available Balance {{ tonBalance | TON }} TON</div>
+        <div>Available Balance {{ tonBalance | TON | withComma }} TON</div>
         <div>
           <text-input ref="tonvote"
                       class="vote-input"
@@ -36,7 +36,7 @@
                     :big="true"
                     :readonly="true"
                     :clickable="true"
-                    :value="canRevote(address, revoteIndex) ? wton(canRevote(address, revoteIndex)) : undefined"
+                    :value="canRevote(address, revoteIndex) ? withComma(wton(canRevote(address, revoteIndex))) : undefined"
                     :label="'Available Amount'"
                     @on-clicked="setRevoteAmount"
         />
@@ -47,7 +47,7 @@
         />
       </div>
       <div v-if="currentSelector === 2" class="unvote-container">
-        <div>Available Balance {{ myVotes | WTON }} TON</div>
+        <div>Available Balance {{ myVotes | WTON | withComma }} TON</div>
         <div>
           <text-input ref="tonunvote"
                       class="unvote-input"
@@ -68,14 +68,14 @@
         />
       </div>
       <div v-if="currentSelector === 3" class="unvote-container">
-        <div>Not Withdrawable Amount {{ cannotWithdraw ? wton(cannotWithdraw) : 0 }} TON</div>
+        <div>Not Withdrawable Amount {{ cannotWithdraw ? withComma(wton(cannotWithdraw)) : 0 }} TON</div>
         <text-input ref="tonwithdraw"
                     class="withdraw-input"
                     :unit="'TON'"
                     :hint="'0.00'"
                     :readonly="true"
                     :clickable="true"
-                    :value="canWithdraw(address, withdrawIndex) ? wton(canWithdraw(address, withdrawIndex)) : undefined"
+                    :value="canWithdraw(address, withdrawIndex) ? withComma(wton(canWithdraw(address, withdrawIndex))) : undefined"
                     :label="'Withdrawable Amount'"
                     @on-clicked="setWithdrawableAmount"
         />
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
+import { withComma, TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import web3Utils from 'web3-utils';
 
@@ -164,6 +164,9 @@ export default {
     this.address = this.$route.params.address;
   },
   methods: {
+    withComma (n) {
+      return withComma(n);
+    },
     tonMax () {
       if (this.tonBalance && this.tonBalance > 0) {
         this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);

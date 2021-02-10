@@ -1,7 +1,7 @@
 <template>
   <div class="candidate" :class="{ mine: myCandidate }">
     <div class="label"># of Votes </div>
-    <div class="amount">{{ wton(candidate.vote) }} TON</div>
+    <div class="amount">{{ wton(candidate.vote) | withComma }} TON</div>
     <div class="name">{{ candidate.name }}</div>
     <div class="detail" @click="detail()">View Detail</div>
   </div>

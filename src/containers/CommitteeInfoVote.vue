@@ -5,7 +5,7 @@
       <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
           <div>{{ voter.account }}</div>
-          <div>{{ voter.balance | WTON }} TON Voted</div>
+          <div>{{ voter.balance | WTON | withComma }} TON Voted</div>
         </div>
         <vote-poll class="vote-poll"
                    :pct="calcPct(voter.balance, sumOfVotes)"
@@ -22,7 +22,7 @@
       <div class="container-title">Voting Stats</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Vote</span>
-        <span class="voting-stat-content">{{ sumOfVotes | WTON }} TON</span>
+        <span class="voting-stat-content">{{ sumOfVotes | WTON | withComma }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Unique Voters</span>

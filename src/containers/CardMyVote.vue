@@ -14,7 +14,7 @@
           >
             <div>{{ (page*4) + index + 1 }}</div>
             <div>{{ data.name | slice }}... ({{ data.candidateContract | hexSlicer }})</div>
-            <div>{{ data.myVotes | WTON }} TON</div>
+            <div>{{ data.myVotes | WTON | withComma }} TON</div>
           </div>
         </div>
         <div class="button-container">

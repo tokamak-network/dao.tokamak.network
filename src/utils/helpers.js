@@ -124,3 +124,8 @@ export function pad (n, width, z) {
   n = n + '';
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
+
+export function withComma (n) {
+  n = String(n);
+  return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ','); // eslint-disable-line
+}

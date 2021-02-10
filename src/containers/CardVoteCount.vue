@@ -10,7 +10,7 @@
         <div class="divide" />
         <div class="content">
           <span>Voted</span>
-          <span>{{ myVotes | WTON }} TON</span>
+          <span>{{ myVotes | WTON | withComma }} TON</span>
         </div>
       </template>
     </card-container>

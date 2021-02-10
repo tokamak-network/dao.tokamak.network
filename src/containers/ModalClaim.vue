@@ -5,7 +5,7 @@
            @click="close"
       >
       <div v-if="agendaVotesByCandidates.length < 2" class="title">You can claim {{ activityReward }}</div>
-      <div v-else class="title">You can claim {{ candidate.claimableAmount }}</div>
+      <div v-else class="title">You can claim {{ candidate.claimableAmount | withComma }}</div>
 
       <div v-if="agendaVotesByCandidates.length < 2 && canClaimValue" class="question">Do you wish to continue?</div>
       <div v-else-if="agendaVotesByCandidates.length > 1 && canClaimAmount(candidate.claimableAmount)" class="question">Do you wish to continue?</div>
