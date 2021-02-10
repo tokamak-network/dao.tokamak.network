@@ -64,7 +64,7 @@ export async function getAgendas () {
       const data = element;
       //enum AgendaStatus { NONE, NOTICE, VOTING, WAITING_EXEC, EXECUTED, ENDED }
       //enum AgendaResult { PENDING, ACCEPT, REJECT, DISMISS }
-      if( element && data.status!=null && data.status === 2  && data.tExecTime < now ) {
+      if( element && data.status!=null && data.status === 2  && data.tVotingEndTime > 0 && data.tVotingEndTime < now ) {
         data.result = 5;
       }
       datas.push(data);
