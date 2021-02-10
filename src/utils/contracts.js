@@ -736,3 +736,18 @@ module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
   }
   return isVotableStatus;
 };
+
+module.exports.canExecute = async function (agendaId, _web3) {
+  let canExecute = false;
+  try {
+    const AgendaManager = await getContract('DAOAgendaManager', _web3);
+    if (AgendaManager !== null){
+      canExecute = await AgendaManager.methods.canExecuteAgenda(agendaId).call();
+    } else {
+      console.log('Utils.canExecuteAgenda AgendaManager is null') ; // eslint-disable-line
+    }
+  } catch (err) {
+    console.log('Utils.canExecuteAgenda err', err) ; // eslint-disable-line
+  }
+  return canExecute;
+};

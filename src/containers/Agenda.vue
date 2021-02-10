@@ -9,6 +9,13 @@
     </div>
     <div class="content">
       <div class="content-sub-container">
+        <div :class="{
+          'agenda-typeA': agendaType(agendaId) === 'A',
+          'agenda-typeB': agendaType(agendaId) === 'B',
+        }"
+        >
+          #{{ $route.params.id }}
+        </div>
         <div class="agenda-label">Type</div>
         <div :class="{
           'agenda-typeA': agendaType(agendaId) === 'A',
@@ -18,13 +25,7 @@
           {{ agendaType(agendaId) }}
         </div>
         <div class="content-sub-date">
-          Agenda
-          <span :class="{
-            'agenda-typeA': agendaType(agendaId) === 'A',
-            'agenda-typeB': agendaType(agendaId) === 'B',
-          }"
-          >
-            #{{ $route.params.id }} </span>is Posted {{ creationTime.tCreationDate | date3 }}
+          is Posted {{ creationTime.tCreationDate | date3 }}
         </div>
         <img v-if="agendaType(agendaId) === 'A'"
              src="@/assets/poll-time-active-icon.svg" alt=""
@@ -62,6 +63,14 @@
         >
           Comments ({{ voted }})
         </div>
+
+        <span class="space" />
+        <button v-if="account && checkStatus"
+                class="update-btn"
+                @click="endAgenda()"
+        >
+          End Agenda
+        </button>
       </div>
       <div class="divider" />
       <agenda-info v-if="currentSelector === 0" />
@@ -79,7 +88,8 @@ import AgendaInfo from '@/containers/AgendaInfo.vue';
 import AgendaOnChain from '@/containers/AgendaOnChain.vue';
 import AgendaDescription from '@/containers/AgendaDescription.vue';
 import { mapState, mapGetters } from 'vuex';
-import { getContractABIFromAddress } from '@/utils/contracts';
+import { getContractABIFromAddress, getContract } from '@/utils/contracts';
+// import moment from 'moment';
 
 export default {
   components: {
@@ -93,12 +103,12 @@ export default {
     return {
       agendaId: -1,
       currentSelector: 0,
-      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     };
   },
   computed: {
     ...mapState([
       'agendas',
+      'account',
     ]),
     ...mapGetters([
       'getAgendaByID',
@@ -106,6 +116,12 @@ export default {
       'agendaOnChainEffects',
       'agendaType',
     ]),
+    checkStatus () {
+      const agenda = this.getAgendaByID(this.agendaId);
+      const date = new Date();
+      if (agenda.status === 2 && agenda.tVotingEndTime * 1000 < date.getTime()) return true;
+      else return false;
+    },
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return '';
@@ -134,6 +150,26 @@ export default {
     },
   },
   methods: {
+    async endAgenda () {
+      const DAOCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
+      await DAOCommitteeProxy.methods.endAgendaVoting(this.agendaId).send({
+        from: this.account,
+      }).on('transactionHash', (hash) => {
+        this.$store.commit('SET_PENDING_TX', hash);
+      })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
     back () {
       this.$router.push({
         path: '/agenda',
@@ -222,6 +258,10 @@ export default {
 
   margin-top: 10px;
   margin-bottom: 25px;
+}
+
+.space {
+  flex: 1;
 }
 
 .content-sub-container {
@@ -374,5 +414,54 @@ export default {
 }
 .button .next {
   width: 165px;
+}
+.update-btn {
+  outline: none;
+
+  width: 126px;
+  height: 25px;
+
+  border-radius: 4px;
+  border: solid 1px #257eee;
+
+  background: #ffffff;
+
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: #2a72e5;
+
+  &:hover {
+    border-radius: 4px;
+    background-color: #257eee;
+
+    color: #ffffff;
+    cursor: pointer;
+  }
+}
+
+.update-btn-disabled {
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #86929d;
+
+  &:hover {
+    border: solid 1px #dfe4ee;
+    background-color: #ffffff;
+
+    color: #86929d;
+  }
 }
 </style>

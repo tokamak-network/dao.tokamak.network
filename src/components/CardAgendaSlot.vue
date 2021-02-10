@@ -74,7 +74,7 @@
           :width="'124px'"
           @on-clicked="click"
         />
-        <button-comp
+        <!-- <button-comp
           v-if="login!==false && canExecute"
           :name="buttonName"
           :type="buttonType"
@@ -82,7 +82,7 @@
           class="right"
           :width="'124px'"
           @on-clicked="click"
-        />
+        /> -->
       </div>
     </div>
   </div>
@@ -92,9 +92,8 @@
 import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
-import { isVotableStatusOfAgenda } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
-import { getContract, getContractABIFromAddress } from '@/utils/contracts';
+import { getContract, getContractABIFromAddress, isVotableStatusOfAgenda, canExecute } from '@/utils/contracts';
 import { hexSlicer, votingTime } from '@/utils/helpers';
 
 export default {
@@ -120,8 +119,9 @@ export default {
         'buttonStatus': 'disabled',
       },
       choice: '',
-      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       showModal: false,
+      votableStatus: true,
+      executable: false,
     };
   },
   computed: {
@@ -167,6 +167,9 @@ export default {
     },
     buttonName () {
       switch (this.agenda.status) {
+      case 2:
+        if (this.agenda.tVotingEndTime < this.now) return 'End Agenda';
+        else return 'Vote';
       case 3: return 'Execute';
       case 4: return 'Execute';
       case 5: return 'Execute';
@@ -182,41 +185,53 @@ export default {
       return 'vote';
     },
     buttonStatus () {
-      switch (this.agenda.status) {
-      case 1: return '';
-      case 2: return '';
-      case 3: return '';
-      }
-      return 'disabled';
+      if (this.votableStatus || this.executable) return '';
+      else return 'disabled';
+      // switch (this.agenda.status) {
+      // case 1:
+      //   if (this.votableStatus) return '';
+      //   else return 'disabled';
+      // case 2: return '';
+      // case 3:
+      //   if (this.executable) return '';
+      //   else return 'disabled';
+      // case 4: return 'disabled';
+      // case 5: return 'disabled';
+      // }
+      // return 'disabled';
     },
     canVote (){
-      if ( this.isMember && this.agenda && this.agenda.status === 1 && this.agenda.tNoticeEndTime < this.now)
+      if (this.isMember || this.isVoter)
         return true;
-      else if( this.isVoter )
-        return true;
+      // else if (this.isVoter)
+      //   return true;
       else
         return false;
     },
     isVoter (){
       let returnValue = false;
-      if( this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
+      if (this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
         && this.agenda.tVotingEndTime > this.now
-        && this.agenda.voters  && this.agenda.voters.length > 0 ){
+        && this.agenda.voters  && this.agenda.voters.length > 0 ) {
         this.agenda.voters.forEach(voter=>{
           if(voter!=null && (this.myCandidates.indexOf(voter.toLowerCase()) > -1 ) )
             returnValue= true;
         });
         return returnValue;
-      }else return returnValue;
-    },
-    canExecute (){
-      if ( this.agenda && this.agenda.result === 1 && this.agenda.tNoticeEndTime < this.now)
-        return true;
-      else
-        return false;
+      } else return returnValue;
     },
     votingTime () {
       return agenda => votingTime(agenda);
+    },
+  },
+  watch: {
+    'checkStatus': {
+      handler: async function () {
+        this.votableStatus = await isVotableStatusOfAgenda(this.agenda.agendaid, this.web3);
+        this.executable = await canExecute(this.agenda.agendaid, this.web3);
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {
@@ -236,7 +251,9 @@ export default {
         alert('Check Connect Wallet !');
         return;
       }
-      if (this.agenda.status === 2 || this.agenda.status === 1) {
+      if (this.agenda.status === 2 && this.agenda.tVotingEndTime < this.now) {
+        this.terminateAgenda();
+      } else if (this.agenda.status === 2 || this.agenda.status === 1) {
         const isVotableStatus = await isVotableStatusOfAgenda( this.agenda.agendaid, this.web3);
         if(!isVotableStatus) {
           alert('This Agenda is not in a state to vote.');
@@ -249,6 +266,26 @@ export default {
         this.execute();
       }
       this.$store.dispatch('setAgendas');
+    },
+    async terminateAgenda () {
+      const DAOCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
+      await DAOCommitteeProxy.methods.endAgendaVoting(this.agendaId).send({
+        from: this.account,
+      }).on('transactionHash', (hash) => {
+        this.$store.commit('SET_PENDING_TX', hash);
+      })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
     async execute () {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
