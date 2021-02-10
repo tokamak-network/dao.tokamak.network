@@ -117,6 +117,14 @@ export default {
         };
         const handleNetworkChanged = () => {
           this.$store.dispatch('disconnectEthereum');
+
+          const iconEle = this.$refs.icon;
+          if (iconEle) {
+            if (iconEle.childElementCount === 1) {
+              this.account = '';
+              iconEle.removeChild(iconEle.lastElementChild);
+            }
+          }
         };
         ethereum.on('accountsChanged', handleAccountsChanged);
         ethereum.on('networkChanged', handleNetworkChanged);
