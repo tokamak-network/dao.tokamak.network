@@ -74,7 +74,7 @@ export default {
       'agendas',
     ]),
     ...mapGetters([
-      'myCandidates',
+      'myCandidatesArrays',
       'isMember',
     ]),
     findAgenda (){
@@ -114,13 +114,13 @@ export default {
       //console.log('agenda', agenda, 'myCandidates', this.myCandidates, 'isMember', this.isMember, 'account', this.account) ;
       let candidateContract = null;
       let _myCandidates = null;
-      if(this.myCandidates) _myCandidates =this.myCandidates.split(',');
-      if(agenda.status===1 && this.isMember && _myCandidates){
-        candidateContract = _myCandidates.find(candidate=>candidate.toLowerCase()===this.isMember.candidate.toLowerCase());
-        if(candidateContract!=null  ) candidateContract = this.isMember.candidateContract.toLowerCase();
-      } else if (agenda.status===2 && _myCandidates && agenda.voters && agenda.voters.length > 0){
-        const findVoter  =  _myCandidates.find( candidate =>{
-          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.toLowerCase());
+      //if(this.myCandidates) _myCandidates =this.myCandidates.split(',');
+      if(agenda.status===1 && this.isMember && this.myCandidatesArrays && this.myCandidatesArrays.length > 0){
+        _myCandidates = this.myCandidatesArrays.find(candidate=>candidate.candidate.toLowerCase()===this.isMember.candidate.toLowerCase());
+        if(_myCandidates!=null  ) candidateContract = this.isMember.candidateContract.toLowerCase();
+      } else if (agenda.status===2 && this.myCandidatesArrays && this.myCandidatesArrays.length>0  && agenda.voters && agenda.voters.length > 0){
+        const findVoter  =  this.myCandidatesArrays.find( candidate =>{
+          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.candidate.toLowerCase());
           //console.log('agenda.voters', agenda.voters, 'voter', voter, 'candidate', candidate) ;
           return voter;
         } );

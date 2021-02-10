@@ -17,14 +17,14 @@
                      :type="'primary'"
                      class="left"
                      :width="'110px'"
-                     @on-clicked="claim()"
+                     @on-clicked="claimCandidate(candidate.candidateContract)"
         />
         <button-comp v-if="agendaVotesByCandidates.length > 1 && canClaimAmount(candidate.claimableAmount)"
                      :name="'OK'"
                      :type="'primary'"
                      class="left"
                      :width="'110px'"
-                     @on-clicked="claim()"
+                     @on-clicked="claimCandidate(candidate.candidateContract)"
         />
         <button-comp
           :name="'Close'"
@@ -98,32 +98,42 @@ export default {
         //console.log('err', err); // eslint-disable-line
       }
     },
-    async claimCandidate () {
+    async claimCandidate (_candiateContract) {
       let web3 = this.web3;
       if(web3  == null) web3 = new Web3(window.ethereum);
-      const daoCommitteeProxy = getContract('DAOCommitteeProxy', web3);
-      try{
-        await daoCommitteeProxy.methods.claimActivityReward().send({
+      const CandidateContract = getContract('Candidate', this.web3, _candiateContract );
+      const gasLimit = await CandidateContract.methods.claimActivityReward()
+        .estimateGas({
           from: this.account,
-        })
-          .on('transactionHash', async (hash) => {
-            this.$store.commit('SET_PENDING_TX', hash);
-            this.close();
+        });
+
+      if(CandidateContract!=null && CandidateContract){
+        try{
+          await CandidateContract.methods.claimActivityReward().send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
           })
-          .on('confirmation', async (confirmationNumber) => {
-            if (this.confirmBlock === confirmationNumber) {
+            .on('transactionHash', async (hash) => {
+              this.$store.commit('SET_PENDING_TX', hash);
+              this.close();
+            })
+            .on('confirmation', async (confirmationNumber) => {
+              if (this.confirmBlock === confirmationNumber) {
+                this.$store.commit('SET_PENDING_TX', '');
+                await this.$store.dispatch('launch');
+                await this.$store.dispatch('connectEthereum', this.web3);
+              }
+            })
+            .on('receipt', () => {
+            })
+            .on('error', () => {
               this.$store.commit('SET_PENDING_TX', '');
-              await this.$store.dispatch('launch');
-              await this.$store.dispatch('connectEthereum', this.web3);
-            }
-          })
-          .on('receipt', () => {
-          })
-          .on('error', () => {
-            this.$store.commit('SET_PENDING_TX', '');
-          });
-      }catch(err){
-        //console.log('err', err); // eslint-disable-line
+            });
+        }catch(err){
+          console.log('err', err); // eslint-disable-line
+        }
+      }else{
+        alert('Can\'t find conbtract. Check the network');
       }
     },
     canClaimAmount (amount){

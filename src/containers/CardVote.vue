@@ -49,20 +49,6 @@ export default {
       'agendaVotesByCandidates',
     ]),
   },
-  /*
-  computed: {
-    voteRates () {
-      if(this.candidates.countCanVoteAgendas > 0 && this.candidates.countAgendaVote > 0  ){
-        const voteRate = ( this.candidates.countAgendaVote / this.candidates.countCanVoteAgendas) * 100;
-        return voteRate.toFixed(2);
-      }else {
-        return 0;
-      }
-    },
-    candidateContract (){
-      return this.candidates.candidateContract;
-    },
-  },*/
 };
 </script>
 

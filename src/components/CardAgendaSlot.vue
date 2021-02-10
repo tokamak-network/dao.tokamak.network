@@ -199,7 +199,7 @@ export default {
     },
     isVoter (){
       let returnValue = false;
-      if( this.myCandidates && this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
+      if( this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
         && this.agenda.tVotingEndTime > this.now
         && this.agenda.voters  && this.agenda.voters.length > 0 ){
         this.agenda.voters.forEach(voter=>{

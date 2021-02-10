@@ -455,19 +455,18 @@ export default new Vuex.Store({
     },
     async setActivityReward ({ state, commit }) {
       const web3 = state.web3;
-      const candidates = this.getters.myCandidates;
+      const candidates = this.getters.myCandidatesArrays;
       try{
         if (web3!=null) {
           const committeeProxy = await getContract('DAOCommitteeProxy', web3);
           let activityReward;
-          const accounts = candidates.split(',');
-          if(candidates!=null && candidates.length > 0 && accounts!=null && accounts.length > 0 ){
+          if(candidates!=null && candidates.length > 0   ){
             const agendaVotesByCandidates = state.agendaVotesByCandidates;
-            accounts.forEach( async function (account){
-              activityReward = await committeeProxy.methods.getClaimableActivityReward(account).call();
+            candidates.forEach( async function (account){
+              activityReward = await committeeProxy.methods.getClaimableActivityReward(account.candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
               agendaVotesByCandidates.forEach(candidate => {
-                if(candidate.candidate.toLowerCase() === account.toLowerCase()) {
+                if(candidate.candidate.toLowerCase() === account.candidate.toLowerCase()) {
                   candidate.claimableAmount=activityReward;
                 }
               });
@@ -475,8 +474,8 @@ export default new Vuex.Store({
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates );
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
 
-            if(accounts[0]!=null  ) {
-              activityReward = await committeeProxy.methods.getClaimableActivityReward(accounts[0]).call();
+            if(candidates[0]!=null  ) {
+              activityReward = await committeeProxy.methods.getClaimableActivityReward(candidates[0].candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
               commit('SET_ACTIVITY_REWARD', activityReward);
             }
@@ -595,6 +594,18 @@ export default new Vuex.Store({
       }
       if(myCandidateContracts.length === 0 ) return '';
       else return myCandidateContracts.toString();
+    },
+    myCandidatesArrays: (state) => {
+      const account = state.account.toLowerCase();
+      if (!account) return [];
+      const myCandidateContracts =[];
+      for(let i=0; i< state.candidates.length; i++ ){
+        if( state.candidates[i].operator.toLowerCase()  === account  ){
+          myCandidateContracts.push(state.candidates[i]);
+        }
+      }
+      if(myCandidateContracts.length === 0 ) return [];
+      else return myCandidateContracts;
     },
     member: (state, getters) => (candidateContract) => {
       return state.members.find(member => {
