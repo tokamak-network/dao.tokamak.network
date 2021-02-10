@@ -2,26 +2,42 @@
   <div class="card-stats">
     <card-container v-if="candidates!=null && clength > 0" :title="'Your Stats'">
       <template #body>
-        <div v-for="(candidate, index) in candidates"
-             :key="candidate.candidateContract"
-        >
-          <div v-if="index > 0" class="divide" />
-          <div class="container">
-            <div class="address">{{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }}) </div>
-            <div class="stats-container">
-              <div class="stats-label">
-                Claimable TON
+        <div v-if="clength === 1 && candidates.length ===1">
+          <!-- <div class="stats">
+            <div class="candidate">{{ candidateContract }} </div>
+          </div> -->
+          <div class="stats">
+            <div class="title">Claimable TON</div>
+            <div class="content">{{ candidates[0].claimableAmount | tonFloor }} </div>
+          </div>
+          <div class="stats">
+            <div class="title"># of Agendas</div>
+            <div class="content">{{ candidates[0].countCanVoteAgendas }} Agendas</div>
+          </div>
+        </div>
+
+        <div v-if="clength > 1">
+          <div v-for="(candidate, index) in candidates"
+               :key="candidate.candidateContract"
+          >
+            <div v-if="index > 0" class="divide" />
+            <div class="container">
+              <div class="address">{{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }}) </div>
+              <div class="stats-container">
+                <div class="stats-label">
+                  Claimable TON
+                </div>
+                <div class="stats-value">
+                  {{ candidate.claimableAmount | tonFloor }}
+                </div>
               </div>
-              <div class="stats-value">
-                {{ candidate.claimableAmount | tonFloor }}
-              </div>
-            </div>
-            <div class="stats-container">
-              <div class="stats-label">
-                # of Voted
-              </div>
-              <div class="stats-value">
-                {{ candidate.countCanVoteAgendas }} Agendas
+              <div class="stats-container">
+                <div class="stats-label">
+                  # of Agendas
+                </div>
+                <div class="stats-value">
+                  {{ candidate.countCanVoteAgendas }} Agendas
+                </div>
               </div>
             </div>
           </div>

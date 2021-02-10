@@ -2,17 +2,23 @@
   <div class="card-vote">
     <card-container v-if="candidates!=null && clength > 0" :title="'Your Vote'">
       <template #body>
-        <div v-for="(candidate, index) in agendaVotesByCandidates"
-             :key="candidate.candidateContract"
-        >
-          <div v-if="index > 0" class="divide" />
-          <div class="vote-container">
-            <div class="vote-info-container">
-              <div class="vote-address"> {{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }})</div>
-              <span class="vote-percent"> {{ candidate.voteRates }} </span>
-              <span class="vote-explanation"> % of Agenda is voted  </span>
+        <div v-if="clength === 1 && candidates.length === 1" class="vote-percentage-container">
+          <div class="vote-percentage">{{ candidates[0].voteRates }}% of Agenda is voted </div>
+          <vote-poll :pct="parseInt( candidates[0].voteRates )" :margin="16" />
+        </div>
+        <div v-if="clength > 1">
+          <div v-for="(candidate, index) in agendaVotesByCandidates"
+               :key="candidate.candidateContract"
+          >
+            <div v-if="index > 0" class="divide" />
+            <div class="vote-container">
+              <div class="vote-info-container">
+                <div class="vote-address"> {{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }})</div>
+                <span class="vote-percent"> {{ candidate.voteRates }} </span>
+                <span class="vote-explanation"> % of Agenda is voted  </span>
+              </div>
+              <vote-poll :pct="parseInt( candidate.voteRates )" :margin="16" />
             </div>
-            <vote-poll :pct="parseInt(candidate.voteRates)" :margin="16" />
           </div>
         </div>
       </template>

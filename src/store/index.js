@@ -391,9 +391,9 @@ export default new Vuex.Store({
       */
 
       let activityReward ;
-      if (account !== '') {
+      if ( account !== '' ) {
         activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
-        activityReward = _TON(activityReward, 'wei').toString();
+        activityReward = _TON( activityReward, 'wei' ).toString();
       } else {
         activityReward = '0 TON';
       }
@@ -403,7 +403,7 @@ export default new Vuex.Store({
       const promAgendaContents = [];
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        promAgendaTx.push(web3.eth.getTransaction(txHash));
+        promAgendaTx.push( web3.eth.getTransaction(txHash));
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
@@ -461,7 +461,7 @@ export default new Vuex.Store({
         if (web3!=null) {
           const committeeProxy = await getContract('DAOCommitteeProxy', web3);
           let activityReward;
-          if(candidates!=null && candidates.length > 0   ){
+          if( candidates!=null && candidates.length > 0   ){
             const agendaVotesByCandidates = state.agendaVotesByCandidates;
             candidates.forEach( async function (account){
               activityReward = await committeeProxy.methods.getClaimableActivityReward(account.candidate).call();
@@ -475,7 +475,7 @@ export default new Vuex.Store({
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates );
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
 
-            if(candidates[0]!=null  ) {
+            if( candidates[0]!=null  ) {
               activityReward = await committeeProxy.methods.getClaimableActivityReward(candidates[0].candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
               commit('SET_ACTIVITY_REWARD', activityReward);
@@ -492,7 +492,7 @@ export default new Vuex.Store({
       const myCandidateContracts =[];
       try{
         if ( agendas!=null && account!=null && account.length > 0 && agendas.length > 0 ) {
-          if(state.candidates!=null && state.candidates.length > 0 ){
+          if( state.candidates!=null && state.candidates.length > 0 ){
             state.candidates.forEach(candidate=>{
               if( candidate.operator.toLowerCase()  === account.toLowerCase()  )
                 myCandidateContracts.push({
@@ -512,8 +512,8 @@ export default new Vuex.Store({
           }
           myCandidateContracts.forEach( async function (candidateContract){
             //console.log('setVoteAgendas myCandidateContracts in account', account, 'candidateContract', candidateContract);
-            agendas.forEach(agenda => {
-              agenda.voters.forEach(voter=>{
+            agendas.forEach( agenda => {
+              agenda.voters.forEach( voter =>{
                 if(voter!=null && voter.toLowerCase() === candidateContract.candidate.toLowerCase()) {
                   candidateContract.canVoteAgendas.push(agenda.agendaid);
                   candidateContract.countCanVoteAgendas ++;
@@ -522,7 +522,7 @@ export default new Vuex.Store({
             });
             candidateContract.agendaVote = await getAgendaVotesByVoter(candidateContract.candidateContract);
             candidateContract.countAgendaVote = candidateContract.agendaVote.length ;
-            if(candidateContract.countAgendaVote > 0 && candidateContract.countCanVoteAgendas > 0)
+            if( candidateContract.countAgendaVote > 0 && candidateContract.countCanVoteAgendas > 0)
               candidateContract.voteRates = (( candidateContract.countAgendaVote / candidateContract.countCanVoteAgendas) * 100).toFixed(2);
 
           });
@@ -600,7 +600,7 @@ export default new Vuex.Store({
       const account = state.account.toLowerCase();
       if (!account) return [];
       const myCandidateContracts =[];
-      for(let i=0; i< state.candidates.length; i++ ){
+      for( let i=0; i< state.candidates.length; i++ ){
         if( state.candidates[i].operator.toLowerCase()  === account  ){
           myCandidateContracts.push(state.candidates[i]);
         }
