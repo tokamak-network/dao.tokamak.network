@@ -69,6 +69,11 @@ export default {
       };
     },
   },
+  watch: {
+    value (newValue) {
+      this.realValue = newValue;
+    },
+  },
   mounted () {
     this.realValue = this.value;
     if (this.unit !== '') {

@@ -265,6 +265,9 @@ export default {
           if (this.confirmBlock === confirmationNumber) {
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
+
+            this.revoteIndex = 0;
+            this.withdrawIndex = 0;
           }
         })
         .on('receipt', () => {
@@ -300,6 +303,7 @@ export default {
             await this.update();
 
             this.revoteIndex = 0;
+            this.withdrawIndex = 0;
           }
         })
         .on('receipt', () => {
@@ -334,6 +338,7 @@ export default {
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
 
+            this.revoteIndex = 0;
             this.withdrawIndex = 0;
           }
         })
