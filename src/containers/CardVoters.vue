@@ -2,7 +2,10 @@
   <div class="card-voters">
     <card-container :title="'Voters'">
       <template #body>
-        <div class="table">
+        <div v-if="voters.length === 0" class="no-voters">
+          Not Decided Yet
+        </div>
+        <div v-else class="table">
           <table>
             <tbody>
               <tr v-for="(data, index) in voters" :key="index">
@@ -69,6 +72,21 @@ table {
 }
 table td, table th {
   overflow-wrap: anywhere;
+}
+.no-voters {
+  height: 100px;
+  overflow-y: auto;
+  background: #ffffff;
+  font-family: Roboto;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
+  text-align: center;
+  line-height: 100px;
 }
 
 .table {

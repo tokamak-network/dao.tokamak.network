@@ -305,7 +305,7 @@ export default new Vuex.Store({
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
 
       const agendas = state.agendas;
-      const members = state.members;
+      // const members = state.members;
 
       agendas.forEach(async function (agenda) {
         if (agenda.voters.length !== 0) {
@@ -317,17 +317,6 @@ export default new Vuex.Store({
               result: result,
             };
             votersOfAgenda.push(data);
-          }
-        } else {
-          for (const member of members) {
-            if (typeof(member) === 'object') {
-              const data = {
-                id: agenda.agendaid,
-                voter: member.candidate,
-                result: { 0: false, 1: '0' },
-              };
-              votersOfAgenda.push(data);
-            }
           }
         }
       });
