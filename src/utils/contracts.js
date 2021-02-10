@@ -19,7 +19,7 @@ const depositManager = require('../contracts/DepositManager.json');
 const ton = require('../contracts/TON.json');
 const wton = require('../contracts/WTON.json');
 const seigManager = require('../contracts/SeigManager.json');
-const daoVault = require('../contracts/DAOVault2.json');
+const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
 
@@ -487,7 +487,7 @@ module.exports.getContractABI = function (want, type='A') {
     if (want === 'DepositManager')         return depositManagerABIOfTypeA;
     else if (want === 'SeigManager')       return seigManagerABIOfTypeA;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeA;
-    else if (want === 'DAOVault2')         return daoVaultABIOfTypeA;
+    else if (want === 'DAOVault')         return daoVaultABIOfTypeA;
     else return [];
   } else {
     if (want === 'TON')                    return tonABIOfTypeB;
@@ -497,7 +497,7 @@ module.exports.getContractABI = function (want, type='A') {
     else if (want === 'Layer2Registry')    return layer2RegistryABIOfTypeB;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
     else if (want === 'DAOCommittee')      return daoCommitteeABIOfTypeB;
-    else if (want === 'DAOVault2')         return daoVaultABIOfTypeB;
+    else if (want === 'DAOVault')         return daoVaultABIOfTypeB;
     else return [];
   }
 };
@@ -510,7 +510,7 @@ module.exports.getContractABIFromAddress = function (address, type='A') {
     if (address === deployed.DepositManager.toLowerCase())    return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase())  return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
-    else if (address === deployed.DAOVault2.toLowerCase())    return daoVaultABIOfTypeA;
+    else if (address === deployed.DAOVault.toLowerCase())    return daoVaultABIOfTypeA;
     else return [];
   } else {
     if (address === deployed.TON.toLowerCase())                    return tonABIOfTypeB;
@@ -520,7 +520,7 @@ module.exports.getContractABIFromAddress = function (address, type='A') {
     else if (address === deployed.Layer2Registry.toLowerCase())    return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase())      return daoCommitteeABIOfTypeB;
-    else if (address === deployed.DAOVault2.toLowerCase())         return daoVaultABIOfTypeB;
+    else if (address === deployed.DAOVault.toLowerCase())         return daoVaultABIOfTypeB;
     else return [];
   }
 };
@@ -540,7 +540,7 @@ module.exports.getFunctionSelector  = function (contract, want, type) {
     if (contract === 'DepositManager')    return (depositManagerABIOfTypeA.find(f => f.name === want)).selector;
     else if (contract === 'SeigManager')  return (seigManagerABIOfTypeA.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeA.find(f => f.name === want)).selector;
-    else if (contract === 'DAOVault2')    {
+    else if (contract === 'DAOVault')    {
       return (daoVaultABIOfTypeA.find(f => f.name === want)).selector;
     }
     else {
@@ -554,7 +554,7 @@ module.exports.getFunctionSelector  = function (contract, want, type) {
     else if (contract === 'Layer2Registry')    return (layer2RegistryABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommittee')      return (daoCommitteeABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'DAOVault2')         return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOVault')         return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
     else return '';
   } else {
     return '';

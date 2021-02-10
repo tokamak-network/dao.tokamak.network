@@ -16,9 +16,9 @@ export function tonFloor (input) {
       if(idx < pointPosition+3) return e;
       else return '';
     } );
-    return rounds.join('');
+    return rounds.join('') + ' TON';
   }
-  else return '0.0';
+  else return '0.0 TON';
 }
 
 export function hexSlicer (address = '') {
