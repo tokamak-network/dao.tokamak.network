@@ -13,7 +13,7 @@
                 Claimable TON
               </div>
               <div class="stats-value">
-                {{ candidate.claimableAmount }}
+                {{ candidate.claimableAmount | tonFloor }}
               </div>
             </div>
             <div class="stats-container">

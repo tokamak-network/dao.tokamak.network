@@ -8,6 +8,18 @@ export function slice (str) {
   str = String(str);
   return str.slice(0, 6);
 }
+export function tonFloor (input) {
+  if( input != null && input.length > 0  ){
+    const pointPosition = input.indexOf('.');
+    let rounds = input.split('');
+    rounds = rounds.map((e, idx) => {
+      if(idx < pointPosition+3) return e;
+      else return '';
+    } );
+    return rounds.join('');
+  }
+  else return '0.0';
+}
 
 export function hexSlicer (address = '') {
   if (address.length < 11) {
@@ -30,12 +42,13 @@ export function date1 (timestamp) {
 }
 
 export function date2 (timestamp) {
-  //return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
-  //const _time = new Date(timestamp * 1000).toUTCString()
+  return moment.utc(timestamp * 1000).local().format('MMM D, YYYY, HH:mm');
+  /*
+  const _timeUtc = new Date(timestamp * 1000).toUTCString()
   let _time =new Date(timestamp * 1000).toString();
   //const _time = new Date(timestamp * 1000).toLocaleString() ;
-  if(_time && _time.indexOf('(')) _time = _time.substring(0, _time.indexOf('('));
-  return _time;
+  //if(_time && _time.indexOf('(')) _time = _time.substring(0, _time.indexOf('('));
+  return _time; */
 }
 
 export function date3 (timestamp) {

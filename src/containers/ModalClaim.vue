@@ -52,13 +52,13 @@ export default {
     ...mapState([
       'activityReward',
       'confirmBlock',
-      'web',
+      'web3',
       'account',
       'agendaVotesByCandidates',
     ]),
-    canClaimValue (){
+    canClaimValue () {
       let amount = this.activityReward+'';
-      if(amount === null || amount.length === 0 || amount === 0 || amount === '0' ) return false;
+      if( amount === null || amount.length === 0 || amount === 0 || amount === '0' ) return false;
       amount = amount.replaceAll('TON', '');
       amount =amount.replaceAll(' ', '');
       if( amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00' ){
@@ -98,26 +98,12 @@ export default {
         //console.log('err', err); // eslint-disable-line
       }
     },
-    async claimCandidate (_candiateContract) {
-      /*if(this.web3==null) {
-        alert('Check Connect Wallet!');
-        return;
-      }*/
-      const candidate = require('../contracts/Candidate.json');
-      let web3 = this.web3;
-      if(web3  == null) web3 = new Web3(ethereum);
-      //const CandidateContract = getContract('Candidate', this.web3, _candiateContract );
-      const CandidateContract = new web3.eth.Contract(candidate.abi, _candiateContract);
-      /*const gasLimit = await CandidateContract.methods.claimActivityReward()
-        .estimateGas({
-          from: this.account,
-        });
-        */
-      if(CandidateContract!=null && CandidateContract){
+    async claimCandidate ( _candiateContract ) {
+      const CandidateContract = getContract( 'Candidate', this.web3, _candiateContract );
+      if( CandidateContract!=null && CandidateContract ){
         try{
           await CandidateContract.methods.claimActivityReward().send({
             from: this.account,
-            //gasLimit: Math.floor(gasLimit * 1.2),
           })
             .on('transactionHash', async (hash) => {
               this.$store.commit('SET_PENDING_TX', hash);
@@ -142,7 +128,7 @@ export default {
         alert('Can\'t find conbtract. Check the network');
       }
     },
-    canClaimAmount (amount){
+    canClaimAmount ( amount ){
       if(amount==null || amount.length === 0 || amount === 0 || amount === '0' ) return false;
       else {
         amount = amount+'';

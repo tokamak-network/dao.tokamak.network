@@ -8,7 +8,7 @@
           <div v-if="index > 0" class="divide" />
           <div class="vote-container">
             <div class="vote-info-container">
-              <div class="vote-address"> {{ candidate.name | slice }} ... ({{ candidate.candidateContract | hexSlicer }})</div>
+              <div class="vote-address"> {{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }})</div>
               <span class="vote-percent"> {{ candidate.voteRates }} </span>
               <span class="vote-explanation"> % of Agenda is voted  </span>
             </div>
