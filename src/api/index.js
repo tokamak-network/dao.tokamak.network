@@ -57,6 +57,7 @@ export async function getAgendas () {
       chainId,
     },
   });
+  /*
   const now = parseInt(Date.now()/1000);
   const datas = [];
   if( res.data.datas != null && res.data.datas.length > 0 ){
@@ -65,14 +66,14 @@ export async function getAgendas () {
       //enum AgendaStatus { NONE, NOTICE, VOTING, WAITING_EXEC, EXECUTED, ENDED }
       //enum AgendaResult { PENDING, ACCEPT, REJECT, DISMISS }
       if( element && data.status!=null && data.status === 2  && data.tVotingEndTime > 0 && data.tVotingEndTime < now ) {
-        data.result = 5;
+        data.status = 5;
       }
       datas.push(data);
     });
   }
-  //console.log(datas) ;
-  //return res.data.datas;
   return datas;
+  */
+  return res.data.datas;
 }
 
 export async function getVotersByCandidate (layer2) {
