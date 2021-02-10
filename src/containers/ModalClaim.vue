@@ -99,19 +99,25 @@ export default {
       }
     },
     async claimCandidate (_candiateContract) {
+      /*if(this.web3==null) {
+        alert('Check Connect Wallet!');
+        return;
+      }*/
+      const candidate = require('../contracts/Candidate.json');
       let web3 = this.web3;
-      if(web3  == null) web3 = new Web3(window.ethereum);
-      const CandidateContract = getContract('Candidate', this.web3, _candiateContract );
-      const gasLimit = await CandidateContract.methods.claimActivityReward()
+      if(web3  == null) web3 = new Web3(ethereum);
+      //const CandidateContract = getContract('Candidate', this.web3, _candiateContract );
+      const CandidateContract = new web3.eth.Contract(candidate.abi, _candiateContract);
+      /*const gasLimit = await CandidateContract.methods.claimActivityReward()
         .estimateGas({
           from: this.account,
         });
-
+        */
       if(CandidateContract!=null && CandidateContract){
         try{
           await CandidateContract.methods.claimActivityReward().send({
             from: this.account,
-            gasLimit: Math.floor(gasLimit * 1.2),
+            //gasLimit: Math.floor(gasLimit * 1.2),
           })
             .on('transactionHash', async (hash) => {
               this.$store.commit('SET_PENDING_TX', hash);

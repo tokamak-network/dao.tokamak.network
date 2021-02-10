@@ -132,29 +132,30 @@ export default new Vuex.Store({
   actions: {
     async connectEthereum ({ commit, dispatch }, web3) {
       commit('SET_WEB3', web3);
+      if(web3){
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length === 0) {
+          commit('SET_ACCOUNT', '');
+        } else {
+          const account = accounts[0];
+          commit('SET_ACCOUNT', account);
+        }
 
-      const accounts = await web3.eth.getAccounts();
-      if (accounts.length === 0) {
-        commit('SET_ACCOUNT', '');
-      } else {
-        const account = accounts[0];
-        commit('SET_ACCOUNT', account);
+        const chainId = await web3.eth.getChainId();
+        commit('SET_CHAIN_ID', chainId);
+
+        const blockNumber = await web3.eth.getBlockNumber();
+        commit('SET_BLOCK_NUMBER', blockNumber);
+
+        await dispatch('setBalance');
+        await dispatch('setAgendas');
+        await dispatch('setVotedCandidatesFromAccount');
+        await dispatch('setRequests');
+        await dispatch('setContractState');
+
+        await dispatch('setVoteAgendas');
+        //await dispatch('setActivityReward');
       }
-
-      const chainId = await web3.eth.getChainId();
-      commit('SET_CHAIN_ID', chainId);
-
-      const blockNumber = await web3.eth.getBlockNumber();
-      commit('SET_BLOCK_NUMBER', blockNumber);
-
-      await dispatch('setBalance');
-      await dispatch('setAgendas');
-      await dispatch('setVotedCandidatesFromAccount');
-      await dispatch('setRequests');
-      await dispatch('setContractState');
-
-      await dispatch('setVoteAgendas');
-      //await dispatch('setActivityReward');
     },
     disconnectEthereum ({ commit }) {
       commit('SET_WEB3', null);
