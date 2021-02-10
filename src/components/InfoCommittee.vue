@@ -94,13 +94,14 @@ export default {
 
 <style scoped>
 .committee {
-  display: flex;
-  flex-direction: column;
+  max-height: 20px;
 }
 .committee .container {
   width: 100%;
   display: flex;
-  flex-direction: row;
+
+  align-items: center;
+  justify-content: center;
 }
 .committee .title {
   font-family: Roboto;

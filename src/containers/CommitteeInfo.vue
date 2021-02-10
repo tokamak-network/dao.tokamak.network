@@ -4,10 +4,20 @@
                     :tooltip="`Website of the operator who runs the staking`"
                     :width="'300'"
     /> -->
-    <info-committee :title="'Name'" :content="candidate(address) ? candidate(address).name :'-'" :type="'name'" />
-    <info-committee :title="'Description'" :content="candidate(address).description ? candidate(address).description : '-'" :type="'description'" />
-    <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" />
-    <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" />
+    <div class="container">
+      <info-committee :title="'Name'" :content="candidate(address) && !isEditName ? candidate(address).name : ''" :type="'name'" style="flex: 1;" />
+      <input v-if="isEditName" class="edit-input" type="text" :placeholder="candidate(address).name">
+      <div v-if="candidateContractFromEOA" class="edit-btn" @click="isEditName=true;">Edit</div>
+      <div v-if="isEditName" class="cancel-btn" @click="isEditName=false;">Cancle</div>
+    </div>
+    <div class="container" style="margin-top: 12px;">
+      <info-committee :title="'Description'" :content="candidate(address).description && !isEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
+      <input v-if="isEditDescription" class="edit-input" type="text" :placeholder="candidate(address).description">
+      <div v-if="candidateContractFromEOA" class="edit-btn" @click="isEditDescription=true;">Edit</div>
+      <div v-if="isEditDescription" class="cancel-btn" @click="isEditDescription=false;">Cancle</div>
+    </div>
+    <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;" />
+    <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
     <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
     <!-- <info-committee :title="'Commit Count'" :content="'66'" /> -->
     <!-- <info-committee :title="'Recent Commit'" :content="'4시간 전'" /> -->
@@ -21,13 +31,13 @@
                     :width="'317'"
     /> -->
     <!-- <info-committee :title="'Reward'" :content="`${amount} TON`" /> -->
-    <info-committee :title="'Total Vote'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" />
+    <info-committee :title="'Total Vote'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" style="margin-top: 12px;" />
     <div style="width: 100%; height: 18px;" />
 
-    <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" />
-    <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" />
-    <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" />
-    <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" />
+    <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" style="margin-top: 12px;" />
     <!-- <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'New Commission Rate Changed At'" :content="'0.00 TON'" /> -->
     <!-- <info-committee :title="'Withdrawal Delay'" :content="'0.00 TON'" class="last" /> -->
@@ -47,6 +57,8 @@ export default {
   data () {
     return {
       address: '',
+      isEditName: false,
+      isEditDescription: false,
     };
   },
   computed: {
@@ -60,6 +72,8 @@ export default {
       'canRevote',
       'canWithdraw',
       'notWithdrawableRequests',
+
+      'candidateContractFromEOA',
     ]),
     cannotWithdraw () {
       const requests = this.notWithdrawableRequests(this.address);
@@ -88,8 +102,74 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .last {
   margin-bottom: -15px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-input {
+  width: 330px;
+  height: 32px;
+  border-radius: 4px;
+  border: solid 1px #dfe4ee;
+  background-color: #ffffff;
+
+  outline: none;
+
+  text-align: right;
+  padding-right: 15px;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #3e495c;
+}
+
+.edit-btn {
+  height: 18px;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #2a72e5;
+
+  margin-left: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.cancel-btn {
+  height: 18px;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #818992;
+
+  margin-left: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>
