@@ -8,18 +8,9 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
+             href="https://discord.gg/SZw2WSR"
           >
-            Tokamak Forum (TBD)
-          </a>
-        </div>
-        <div class="resource">
-          <img src="@/assets/resources-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <a class="link"
-             target="_blank" rel="noopener noreferrer"
-          >
-            Governance FAQs (TBD)
+            Tokamak DAO Discussion
           </a>
         </div>
         <div class="resource">
@@ -31,6 +22,16 @@
              href="https://tokamak.network"
           >
             Tokamak Network Homepage
+          </a>
+        </div>
+        <div class="resource">
+          <img src="@/assets/resources-icon.svg" alt=""
+               width="14" height="14"
+          >
+          <a class="link"
+             target="_blank" rel="noopener noreferrer"
+          >
+            Governance FAQs (TBD)
           </a>
         </div>
       </template>
