@@ -12,12 +12,12 @@
       <template #body>
         <div class="vote-for-agenda" style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
-            {{ title }} - {{ deployDate(agenda) }}
+            {{ title }} - {{ agenda.tCreationDate | date1 }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
-                       :type="'secondary'"
+                       :type="'voteV2'"
+                       :status="voteStatus"
                        :width="'100%'"
-                       style="height: 43px; font-size: 14px; color: #ffffff;"
                        @on-clicked="openModel()"
           />
         </div>
@@ -45,7 +45,7 @@ export default {
     return {
       showModal: false,
       id: Number(this.$route.params.id),
-      monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      votableStatus: true,
     };
   },
   computed: {
@@ -57,6 +57,10 @@ export default {
       'getAgendaByID',
       'agendaOnChainEffects',
     ]),
+    voteStatus () {
+      if (this.votableStatus) return '';
+      else return 'disabled';
+    },
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
       if (!onChainEffects || onChainEffects.length === 0) return '';
@@ -71,15 +75,14 @@ export default {
     agenda () {
       return this.getAgendaByID(this.$route.params.id);
     },
-    deployDate () {
-      return (agenda) => {
-        const date = new Date(agenda.tCreationDate * 1000);
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-
-        return this.monthNames[parseInt(month)] + ' ' + day + ', ' + year;
-      };
+  },
+  watch: {
+    'checkStatus': {
+      handler: async function () {
+        this.votableStatus = await isVotableStatusOfAgenda(this.$route.params.id, this.web3);
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {
@@ -93,7 +96,7 @@ export default {
         alert('Check Connect Wallet!');
         return;
       }
-      const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
+      const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
       if(isVotableStatus) this.showModal=true;
       else alert('This Agenda is not in a state to vote.');
     },

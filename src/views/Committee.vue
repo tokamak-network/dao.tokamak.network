@@ -60,7 +60,7 @@ export default {
 
   display: flex;
   flex-direction: column;
-  margin-top: 72px;
+  margin-top: 100px;
   margin-left: 30px;
 }
 </style>

@@ -59,6 +59,7 @@ export default {
           'vote',
           'primary-typeB',
           'hide',
+          'voteV2',
         ].indexOf(value) !== -1;
       },
     },

@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 .card {
-  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .card-title {

@@ -725,15 +725,11 @@ module.exports.metamaskErrorMessage = function (errorString) {
 module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
   let isVotableStatus = false;
   try {
-    if (_web3 === null) {
-      alert('Check Connect Wallet !');
+    const AgendaManager = await getContract('DAOAgendaManager', _web3);
+    if (AgendaManager !== null){
+      isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
     } else {
-      const AgendaManager = await getContract('DAOAgendaManager', _web3);
-      if (AgendaManager !== null){
-        isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
-      } else {
-        console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
-      }
+      console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
     }
   } catch (err) {
     console.log('Utils.isVotableStatus err', err) ; // eslint-disable-line
