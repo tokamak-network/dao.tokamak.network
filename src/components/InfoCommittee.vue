@@ -31,7 +31,7 @@
         </span>
       </div>
       <div v-if="type === 'time' && typeof(content) === 'number'" class="content">
-        <span :class="{ 'description': type === 'time' }">
+        <span :class="{ 'description2': type === 'time' }">
           {{ content | date2 }}
         </span>
       </div>

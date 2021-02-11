@@ -1,13 +1,13 @@
 <template>
   <div class="agenda-info">
     <info-committee :title="'Agenda Creator'" :content="getAgendaByID(agendaId).creator" :type="'address'" />
-    <info-committee :title="'Agenda Creation Time'" :content="getAgendaByID(agendaId).tCreationDate" :type="'time'" />
-    <info-committee :title="'Notice End Time'" :content="getAgendaByID(agendaId).tNoticeEndTime" :type="'time'" />
-    <info-committee :title="'Voting Start Time'" :content="checkVotingTime('tVotingStartTime')" :type="'time'" />
-    <info-committee :title="'Voting End Time'" :content="checkVotingTime('tVotingEndTime')" :type="'time'" />
-    <info-committee :title="'Agenda Status'" :content="checkStatusCode" :type="'description'" />
-    <info-committee :title="'Agenda Result'" :content="checkResultCode" :type="'description'" />
-    <info-committee :title="'Executed Time'" :content="checkVotingTime('tExecTime')" :type="'time'" />
+    <info-committee :title="'Agenda Creation Time'" :content="getAgendaByID(agendaId).tCreationDate" :type="'time'" style="margin-top: 12px;" />
+    <info-committee :title="'Notice End Time'" :content="getAgendaByID(agendaId).tNoticeEndTime" :type="'time'" style="margin-top: 12px;" />
+    <info-committee :title="'Voting Start Time'" :content="checkVotingTime('tVotingStartTime')" :type="'time'" style="margin-top: 12px;" />
+    <info-committee :title="'Voting End Time'" :content="checkVotingTime('tVotingEndTime')" :type="'time'" style="margin-top: 12px;" />
+    <info-committee :title="'Agenda Status'" :content="checkStatusCode" :type="'description'" style="margin-top: 12px;" />
+    <info-committee :title="'Agenda Result'" :content="checkResultCode" :type="'description'" style="margin-top: 12px;" />
+    <info-committee :title="'Executed Time'" :content="checkVotingTime('tExecTime')" :type="'time'" style="margin-top: 12px;" />
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
       'agendaContents',
     ]),
     checkStatusCode () {
+      console.log(typeof(this.statusCode[this.getAgendaByID(this.agendaId).status]));
       return this.statusCode[this.getAgendaByID(this.agendaId).status];
     },
     checkResultCode () {
