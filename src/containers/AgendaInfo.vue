@@ -38,7 +38,6 @@ export default {
       'agendaContents',
     ]),
     checkStatusCode () {
-      console.log(typeof(this.statusCode[this.getAgendaByID(this.agendaId).status]));
       return this.statusCode[this.getAgendaByID(this.agendaId).status];
     },
     checkResultCode () {
