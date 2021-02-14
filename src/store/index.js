@@ -307,7 +307,7 @@ export default new Vuex.Store({
             }
             isMember = false;
           });
-          console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
+          //console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
           commit('SET_MEMBERS', members);
           commit('SET_NONMEMBERS', nonmembers);
         }
@@ -666,6 +666,16 @@ export default new Vuex.Store({
       if (!candidateContract) return false;
 
       const member = getters.member(candidateContract);
+      return member;
+    },
+    isMemberInMyCandidatesArrays: (_, getters) => {
+      const candidateContracts = getters.myCandidatesArrays;
+      console.log('isMemberInMyCandidatesArrays ', candidateContracts);
+      if (!candidateContracts) return null;
+      let member=null;
+      candidateContracts.forEach(candidate=>{
+        member = getters.member(candidate.candidateContract);
+      });
       return member;
     },
     requests: (state) => (address) => {
