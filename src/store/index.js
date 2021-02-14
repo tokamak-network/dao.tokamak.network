@@ -670,7 +670,6 @@ export default new Vuex.Store({
     },
     isMemberInMyCandidatesArrays: (_, getters) => {
       const candidateContracts = getters.myCandidatesArrays;
-      console.log('isMemberInMyCandidatesArrays ', candidateContracts);
       if (!candidateContracts) return null;
       let member=null;
       candidateContracts.forEach(candidate=>{
