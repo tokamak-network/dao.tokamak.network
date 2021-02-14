@@ -11,7 +11,7 @@
       <div v-if="isEditName" class="cancel-btn" @click="isEditName=false;">Cancle</div>
     </div>
     <div class="container" style="margin-top: 12px;">
-      <info-committee :title="'Description'" :content="candidate(address).description && !isEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
+      <info-committee v-if="address!=null && address.length > 0 && candidate(address)" :title="'Description'" :content="candidate(address).description && !isEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
       <input v-if="isEditDescription" class="edit-input" type="text" :placeholder="candidate(address).description">
       <div v-if="candidateContractFromEOA" class="edit-btn" @click="isEditDescription=true;">Edit</div>
       <div v-if="isEditDescription" class="cancel-btn" @click="isEditDescription=false;">Cancle</div>
@@ -67,12 +67,10 @@ export default {
     ]),
     ...mapGetters([
       'candidate',
-
       'totalVotesForCandidate',
       'canRevote',
       'canWithdraw',
       'notWithdrawableRequests',
-
       'candidateContractFromEOA',
     ]),
     cannotWithdraw () {

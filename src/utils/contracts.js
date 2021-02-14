@@ -10,7 +10,7 @@ function unmarshalString (str) {
   if (str.slice(0, 2) === '0x') return str.slice(2);
   return str;
 }
-
+const autoRefactorCoinage = require('../contracts/AutoRefactorCoinage.json');
 const agendaManager = require('../contracts/DAOAgendaManager.json');
 const candidate = require('../contracts/Candidate.json');
 const committeeProxy = require('../contracts/DAOCommitteeProxy.json');
@@ -39,7 +39,8 @@ const deployed = {
   'DAOCommittee'     : '0x6b12f4e068D6ed23111cDcb9dB56b659C9898B3D',
   'DAOCommitteeProxy': '0x586caFca57613B864aDaC6b3F8A9d3390A128768',
   'EtherToken'       : '0xFE9d9D39C34ce186E2b59089Ca1abB93F7dd8455',
-};*/
+};
+*/
 const deployed = {
   'TON': '0xD2F2b955C64B2aBefBee95157441B26E93d73F98',
   'WTON': '0xb3e121740a8b53edcd2AcebBE04C08E0337e9E2C',
@@ -62,6 +63,7 @@ function getContract (want, web3, address) {
   if (!web3) {
     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
   }
+  const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
   const Layer2 = new web3.eth.Contract(layer2.abi, address);
   const DAOAgendaManager = new web3.eth.Contract(agendaManager.abi, deployed.DAOAgendaManager);
@@ -71,6 +73,7 @@ function getContract (want, web3, address) {
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
+  const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
 
   const contracts = {
     Candidate,
@@ -82,6 +85,8 @@ function getContract (want, web3, address) {
     TON,
     WTON,
     SeigManager,
+    Coinage,
+    Layer2Registry,
   };
 
   if (want) {
