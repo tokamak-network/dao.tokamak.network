@@ -23,6 +23,7 @@ const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
 
+/*
 const deployed = {
   'TON'              : '0x122594eFc1653C86B97065d1B7C29d2Ca8db9081',
   'WTON'             : '0xC3c44E2F55A093Eb67C6B2A0A936bF1B3DA8D17F',
@@ -38,7 +39,24 @@ const deployed = {
   'DAOCommittee'     : '0x6b12f4e068D6ed23111cDcb9dB56b659C9898B3D',
   'DAOCommitteeProxy': '0x586caFca57613B864aDaC6b3F8A9d3390A128768',
   'EtherToken'       : '0xFE9d9D39C34ce186E2b59089Ca1abB93F7dd8455',
+};*/
+const deployed = {
+  'TON': '0xD2F2b955C64B2aBefBee95157441B26E93d73F98',
+  'WTON': '0xb3e121740a8b53edcd2AcebBE04C08E0337e9E2C',
+  'Layer2Registry': '0x5A39F68e53cCBe0092F4D7f1098905F7C55e30a5',
+  'DepositManager': '0xA8CF64F159C337DA3e465a3910C61F0f536bAb48',
+  'CoinageFactory': '0xcc61736cb4D75BcBfA7188d913012f49B225c77A',
+  'OldDAOVaultMock': '0xE51B320e6FeD07e6f3A4846444810CBAE717e71d',
+  'SeigManager': '0x481291f9Dbb81e05d4C1b9f707eF5d2e94108476',
+  'PowerTON': '0x4A36a630E027e55eC9b29eFe5dBecd2b42eBC35c',
+  'DAOVault': '0x37ACb37Ad64297363cc6D1a51217c9c0dA34d7ed',
+  'DAOAgendaManager': '0x8CfaB05718b607D45E3DF0f9B6F25dF81C7e5Ecb',
+  'CandidateFactory': '0x0A19fe7860Df2bb6711Ea6Cbd76507ceab005952',
+  'DAOCommittee': '0xE14FE4AaA9752E2587D74Aa51A92cd22E5fEb14c',
+  'DAOCommitteeProxy': '0x692A8C6b8c8Fdb6Af9c30119470874AD3fa3C5b1',
+  'EtherToken': '0x7e38f98DbdCb825Fe0BD7ae14DB7e70869a12927',
 };
+
 
 function getContract (want, web3, address) {
   if (!web3) {
