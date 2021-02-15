@@ -142,6 +142,18 @@ export async function updateAgendaContents (from, txHash, contents, sig) {
   return res.data;
 }
 
+export async function updateCandidate (layer2, operator, sig, name, description) {
+  const res = await instance.put('/layer2s/operators', {
+    layer2,
+    operator,
+    sig,
+    name,
+    description,
+    website: '',
+  });
+  return res.data;
+}
+
 export async function getRandomKey (from) {
   const res = await instance.post('/randomkey', {
     account: from,

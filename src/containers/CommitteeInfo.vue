@@ -5,16 +5,16 @@
                     :width="'300'"
     /> -->
     <div class="container">
-      <info-committee :title="'Name'" :content="candidate(address) && !isEditName ? candidate(address).name : ''" :type="'name'" style="flex: 1;" />
-      <input v-if="isEditName" class="edit-input" type="text" :placeholder="candidate(address).name">
-      <div v-if="candidateContractFromEOA" class="edit-btn" @click="isEditName=true;">Edit</div>
-      <div v-if="isEditName" class="cancel-btn" @click="isEditName=false;">Cancle</div>
+      <info-committee :title="'Name'" :content="candidate(address) && !canEditName ? candidate(address).name : ''" :type="'name'" style="flex: 1;" />
+      <input v-if="canEditName" ref="name" class="edit-input" type="text" :placeholder="candidate(address).name">
+      <div v-if="candidateContractFromEOA" class="edit-btn" @click="editName();">Edit</div>
+      <div v-if="canEditName" class="cancel-btn" @click="canEditName=false;">Cancle</div>
     </div>
     <div class="container" style="margin-top: 12px;">
-      <info-committee v-if="address!=null && address.length > 0 && candidate(address)" :title="'Description'" :content="candidate(address).description && !isEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
-      <input v-if="isEditDescription" class="edit-input" type="text" :placeholder="candidate(address).description">
-      <div v-if="candidateContractFromEOA" class="edit-btn" @click="isEditDescription=true;">Edit</div>
-      <div v-if="isEditDescription" class="cancel-btn" @click="isEditDescription=false;">Cancle</div>
+      <info-committee :title="'Description'" :content="candidate(address) && !canEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
+      <input v-if="canEditDescription" ref="description" class="edit-input" type="text" :placeholder="candidate(address).description">
+      <div v-if="candidateContractFromEOA" class="edit-btn" @click="editDescription();">Edit</div>
+      <div v-if="canEditDescription" class="cancel-btn" @click="canEditDescription=false;">Cancle</div>
     </div>
     <info-committee :title="'Candidate Address'" :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;" />
     <info-committee :title="'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
@@ -45,8 +45,11 @@
 </template>
 
 <script>
+import { getContract } from '@/utils/contracts';
 import { mapGetters, mapState } from 'vuex';
 import { WTON, withComma } from '@/utils/helpers';
+import { updateCandidate, getRandomKey } from '@/api';
+import BigNumber from 'bignumber.js';
 
 import InfoCommittee from '@/components/InfoCommittee.vue';
 
@@ -57,13 +60,16 @@ export default {
   data () {
     return {
       address: '',
-      isEditName: false,
-      isEditDescription: false,
+      canEditName: false,
+      canEditDescription: false,
     };
   },
   computed: {
     ...mapState([
       'myVotes',
+      'account',
+      'web3',
+      'confirmBlock',
     ]),
     ...mapGetters([
       'candidate',
@@ -95,6 +101,80 @@ export default {
     },
     withComma (n) {
       return withComma(n);
+    },
+    async editName () {
+      if (!this.canEditName) {
+        this.canEditName = true;
+        return;
+      }
+
+      const name = this.$refs.name.value;
+      if (!name) {
+        return alert('please input your new name!');
+      }
+
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
+      const gasLimit = await candidateContract.methods.setMemo(name)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await candidateContract.methods.setMemo(name)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.canEditName = false;
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
+          }
+        })
+        .on('receipt', async () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async editDescription () {
+      if (!this.canEditDescription) {
+        this.canEditDescription = true;
+        return;
+      }
+
+      const description = this.$refs.description.value;
+      if (!description) {
+        return alert('please input your new description!');
+      }
+
+      const candidate = this.candidate(this.address);
+      const sig = this.generateSig(candidate);
+      await updateCandidate(candidate.layer2.toLowerCase(), candidate.operator.toLowerCase(), sig, candidate.name, description);
+      this.canEditDescription = false;
+
+      await this.$store.dispatch('launch');
+      await this.$store.dispatch('connectEthereum', this.web3);
+    },
+    async generateSig (candidate) {
+      const operator = candidate.operator.toLowerCase();
+      const layer2 = candidate.layer2.toLowerCase();
+
+      const random = await getRandomKey(operator);
+      if (random) {
+        const randomBN = new BigNumber(random).toFixed(0);
+        const soliditySha3 = await this.web3.utils.soliditySha3(
+          { type: 'string', value: operator },
+          { type: 'uint256', value: randomBN },
+          { type: 'string', value: layer2 },
+        );
+        const sig = await this.web3.eth.personal.sign(soliditySha3, operator, '');
+        return sig;
+      }
     },
   },
 };
