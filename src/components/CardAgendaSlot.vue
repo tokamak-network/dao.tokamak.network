@@ -66,7 +66,7 @@
       </div>
       <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
         <button-comp
-          v-if="login!==false && canVote"
+          v-if="login!==false"
           :name="buttonName"
           :type="buttonType"
           :status="buttonStatus"
@@ -138,7 +138,6 @@ export default {
       'agendaType',
       'isMember',
       'myCandidates',
-      'getVoteResult',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -228,10 +227,8 @@ export default {
       return agenda => votingTime(agenda);
     },
     voted () {
-      // console.log(this.getVoteResult(this.agenda.agendaid, this.account));
       const voters = this.votersOfAgenda.filter(voter => String(voter.id) === String(this.agenda.agendaid));
       return voters.filter(vote => vote.voter.toLowerCase() === this.account.toLowerCase());
-      // return this.getVoteResult(this.agenda.agendaid, this.account);
     },
   },
   watch: {
@@ -273,13 +270,16 @@ export default {
           alert('This Agenda is not in a state to vote.');
           return ;
         }
-        if (this.voted[0].result[1]) {
-          alert('You have already voted.');
-          return ;
+
+        if (this.voted.length > 0) {
+          if (this.voted[0].result[1]) {
+            alert('You have already voted.');
+            return ;
+          }
         }
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));
-        (!operator.includes(this.account.toLowerCase()) ? alert('not members!') : this.showModal=true);
+        (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal=true);
       } else if (this.agenda.status === 3) {
         this.execute();
       }

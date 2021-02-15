@@ -107,6 +107,7 @@ export default {
   },
   computed: {
     ...mapState([
+      'web3',
       'agendas',
       'account',
     ]),

@@ -52,6 +52,7 @@ export default {
     ...mapState([
       'account',
       'web3',
+      'members',
     ]),
     ...mapGetters([
       'getAgendaByID',
@@ -97,8 +98,11 @@ export default {
         return;
       }
       const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
-      if(isVotableStatus) this.showModal=true;
-      else alert('This Agenda is not in a state to vote.');
+      if(!isVotableStatus) alert('This Agenda is not in a state to vote.');
+
+      const operator = [];
+      this.members.forEach(async member => operator.push(member.operator));
+      (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal=true);
     },
   },
 };

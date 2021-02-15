@@ -21,7 +21,7 @@
         />
         <dropdown
           v-if="isCandidate"
-          :items="['All', 'Yes', 'No', 'Abstain']"
+          :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
           :hint="'Voted'"
           :button-type="'a'"
           :selector-type="'a'"
@@ -86,18 +86,22 @@ export default {
       executeCode: ['Executed', 'Not Executed'],
       statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
       resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
-      voteCode: ['Abstain', 'Yes', 'No'],
+      voteCode: ['Abstain', 'Yes', 'No', 'Not Voted'],
     };
   },
   computed: {
     ...mapState([
       'agendas',
       'account',
+      'votersOfAgenda',
     ]),
     ...mapGetters([
       'isCandidate',
       'agendaVotesByCandidates',
     ]),
+    votedAgenda () {
+      return this.votersOfAgenda.filter(votedAgenda => votedAgenda.voter.toLowerCase() === this.account.toLowerCase());
+    },
   },
   methods: {
     agendaFilter () {
@@ -114,13 +118,35 @@ export default {
       if (this.vote[0] === true) {
         const stateCode = this.voteCode.indexOf(this.vote[1]);
         if (filteredAgenda.length === 0) {
-          // this.agendas.filter(agenda => {
-          //   if (agenda.voters.includes(this.account)) {}
-          // });
+          if (stateCode !== 3) {
+            const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
+            result.forEach(result => {
+              filteredAgenda = this.agendas.filter(agenda => agenda.agendaid === result.id);
+            });
+          } else {
+            const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
+            result.forEach(result => {
+              filteredAgenda = this.agendas.filter(agenda => (agenda.agendaid === result.id));
+            });
+          }
         } else {
-          filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
+          if (stateCode !== 3) {
+            const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
+            result.forEach(result => {
+              // const votedAgenda = filteredAgenda.filter(agenda => ((agenda !== undefined) ? agenda.agendaid === result.id : ''));
+              filteredAgenda = filteredAgenda.filter(agenda => agenda.agendaid === result.id);
+              // console.log(filteredAgenda);
+              // filteredAgenda.push(votedAgenda[0]);
+            });
+            // console.log(filteredAgenda);
+          } else {
+            const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
+            result.forEach(result => {
+              filteredAgenda = filteredAgenda.filter(agenda => (agenda.agendaid === result.id));
+              // console.log(filteredAgenda);
+            });
+          }
         }
-        // filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (Number(agenda.voting) === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
       }
       if (this.result[0] === true) {
         const stateCode = this.resultCode.indexOf(this.result[1]);
