@@ -152,7 +152,7 @@ export default {
   methods: {
     async endAgenda () {
       const DAOCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
-      await DAOCommitteeProxy.methods.endAgendaVoting(this.agendaId).send({
+      await DAOCommitteeProxy.methods.endAgendaVoting(Number(this.agendaId)).send({
         from: this.account,
       }).on('transactionHash', (hash) => {
         this.$store.commit('SET_PENDING_TX', hash);
