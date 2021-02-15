@@ -305,7 +305,6 @@ export default new Vuex.Store({
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
 
       const agendas = state.agendas;
-      // const members = state.members;
 
       agendas.forEach(async function (agenda) {
         if (agenda.voters.length !== 0) {
@@ -328,56 +327,9 @@ export default new Vuex.Store({
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
-      //const committeeProxy = getContract('DAOCommitteeProxy', web3);
 
       const account = state.account;
       const agendas = await await getAgendas();
-      // const daoAgendaManager = getContract('DAOAgendaManager', web3);
-      // const a = await daoAgendaManager.methods.getVoteStatus(46, '0xe84Da28128a48Dd5585d1aBB1ba67276FdD70776').call();
-      // console.log(a);
-      /*
-      const [agendas, events] = await Promise.all([
-        await getAgendas(), await getAgendaVoteCasted()],
-      );
-
-      const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0)); // check
-      const myVote = [];
-      let activityReward, candidateContract;
-      if (account !== '') {
-        [
-          activityReward,
-          candidateContract,
-        ] = await Promise.all([
-          await daoCommittee.methods.getClaimableActivityReward(account).call(),
-          await committeeProxy.methods.candidateContract(account).call(),
-        ]);
-        activityReward = _TON(activityReward, 'wei').toString();
-        //voteCasted.forEach(vote => (vote.from === candidateContract.toLowerCase() ? myVote.push(vote.data) : '')); // check
-      } else {
-        activityReward = '0 TON';
-      }
-
-      commit('SET_ACTIVITY_REWARD', activityReward);
-      //commit('SET_AGENDA_VOTE_CASTED', voteCasted);
-
-      const voteRate = (myVote.length / agendas.length) * 100;
-
-      if (account !== '') {
-        agendas.forEach(agenda => {
-          myVote.map(function (vote) {
-            if (Number(vote.id) === agenda.agendaid) {
-              const index = agendas.indexOf(agenda);
-              const agendaWithVote = { ...agenda, ...vote };
-              agendas.splice(index, 1, agendaWithVote);
-            }
-          });
-        });
-      }
-
-      commit('SET_MY_VOTE', myVote);
-      commit('SET_VOTE_RATE', voteRate);
-      */
 
       let activityReward ;
       if ( account !== '' ) {

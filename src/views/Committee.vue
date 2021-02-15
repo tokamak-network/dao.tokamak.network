@@ -113,7 +113,14 @@ export default {
       }
       if (this.vote[0] === true) {
         const stateCode = this.voteCode.indexOf(this.vote[1]);
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (Number(agenda.voting) === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
+        if (filteredAgenda.length === 0) {
+          // this.agendas.filter(agenda => {
+          //   if (agenda.voters.includes(this.account)) {}
+          // });
+        } else {
+          filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
+        }
+        // filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (Number(agenda.voting) === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
       }
       if (this.result[0] === true) {
         const stateCode = this.resultCode.indexOf(this.result[1]);
