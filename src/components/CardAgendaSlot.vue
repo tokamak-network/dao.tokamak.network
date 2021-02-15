@@ -131,12 +131,14 @@ export default {
       'members',
       'confirmBlock',
       'etherscanAddress',
+      'votersOfAgenda',
     ]),
     ...mapGetters([
       'agendaOnChainEffects',
       'agendaType',
       'isMember',
       'myCandidates',
+      'getVoteResult',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -150,7 +152,7 @@ export default {
       return abi[0].title;
     },
     voteResultStyle () {
-      if (this.agenda.voting !== undefined) {
+      if (this.voted.length > 0 && this.voted[0].result[0]) {
         if (this.agendaType(this.agenda.agendaid) === 'A') {
           return { 'color': '#2a72e5' };
         } else {
@@ -225,6 +227,12 @@ export default {
     votingTime () {
       return agenda => votingTime(agenda);
     },
+    voted () {
+      // console.log(this.getVoteResult(this.agenda.agendaid, this.account));
+      const voters = this.votersOfAgenda.filter(voter => String(voter.id) === String(this.agenda.agendaid));
+      return voters.filter(vote => vote.voter.toLowerCase() === this.account.toLowerCase());
+      // return this.getVoteResult(this.agenda.agendaid, this.account);
+    },
   },
   watch: {
     'checkStatus': {
@@ -238,11 +246,15 @@ export default {
   },
   methods: {
     votedResult () {
-      if (this.agenda.voting !== undefined) {
-        switch (this.agenda.voting) {
-        case '0': return 'You have voted to Abstain';
-        case '1': return 'You have voted Yes';
-        case '2': return 'You have voted No';
+      if (this.voted.length > 0) {
+        if (this.voted[0].result[0] === false) {
+          return 'You have not voted';
+        } else {
+          switch (this.voted[0].result[1]) {
+          case '0': return 'You have voted to Abstain';
+          case '1': return 'You have voted Yes';
+          case '2': return 'You have voted No';
+          }
         }
       } else {
         return 'You have not voted';
@@ -256,10 +268,14 @@ export default {
       if (this.agenda.status === 2 && this.agenda.tVotingEndTime < this.now) {
         this.terminateAgenda();
       } else if (this.agenda.status === 2 || this.agenda.status === 1) {
-        const isVotableStatus = await isVotableStatusOfAgenda( this.agenda.agendaid, this.web3);
-        if(!isVotableStatus) {
+        const isVotableStatus = await isVotableStatusOfAgenda(this.agenda.agendaid, this.web3);
+        if (!isVotableStatus) {
           alert('This Agenda is not in a state to vote.');
-          return;
+          return ;
+        }
+        if (this.voted[0].result[1]) {
+          alert('You have already voted.');
+          return ;
         }
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));

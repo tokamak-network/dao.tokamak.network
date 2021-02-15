@@ -8,6 +8,7 @@ import {
   getAgendaContents,
   getVotersByCandidate,
   getAgendaVotesByVoter,
+  getAgendaVoteCasted,
 } from '@/api';
 import {
   getContract,
@@ -224,6 +225,7 @@ export default new Vuex.Store({
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersOfAgenda');
+      await dispatch('setVoteCasted');
       commit('LAUNCHED');
     },
 
@@ -419,6 +421,12 @@ export default new Vuex.Store({
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
+    async setVoteCasted ({ commit }) {
+      const [events] = await Promise.all([await getAgendaVoteCasted()]);
+      const voteCasted = [];
+      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0));
+      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+    },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();
       commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
@@ -534,6 +542,10 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    getVoteResult: (state) => (agendaId, account) => {
+      const voters = state.votersOfAgenda.filter(voter => String(voter.id) === String(agendaId));
+      return voters.filter(vote => vote.voter.toLowerCase() === account.toLowerCase());
+    },
     getVotersOfAgenda: (state) => (agendaId) => {
       const currentVoter = state.votersOfAgenda.filter(voter => String(voter.id) === String(agendaId));
       return currentVoter;
