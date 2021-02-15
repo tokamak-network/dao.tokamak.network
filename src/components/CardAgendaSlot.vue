@@ -64,7 +64,7 @@
           {{ votedResult() }}
         </div>
       </div>
-      <div v-if="agenda.executed === false" class="right-side">
+      <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
         <button-comp
           v-if="login!==false && canVote"
           :name="buttonName"
@@ -185,8 +185,10 @@ export default {
       return 'vote';
     },
     buttonStatus () {
-      if (this.votableStatus || this.executable) return '';
-      else return 'disabled';
+      if (this.votableStatus || this.executable || (this.agenda.status === 2 && (this.agenda.tVotingEndTime < this.now))) return '';
+      else {
+        return 'disabled';
+      }
       // switch (this.agenda.status) {
       // case 1:
       //   if (this.votableStatus) return '';
@@ -269,7 +271,7 @@ export default {
     },
     async terminateAgenda () {
       const DAOCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
-      await DAOCommitteeProxy.methods.endAgendaVoting(this.agendaId).send({
+      await DAOCommitteeProxy.methods.endAgendaVoting(this.agenda.agendaid).send({
         from: this.account,
       }).on('transactionHash', (hash) => {
         this.$store.commit('SET_PENDING_TX', hash);
