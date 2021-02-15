@@ -226,17 +226,17 @@ export default new Vuex.Store({
       await dispatch('setVotersOfAgenda');
       commit('LAUNCHED');
     },
+
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-
+      const candidates = [];
       const [
-        candidates,
+        candidatesPre,
         maxMember,
       ] = await Promise.all([
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-
       const addressMembers = [];
       for (let i = 0; i < maxMember; i++) {
         const memberAddress = await daoCommitteeProxy.methods.members(i).call();
@@ -250,21 +250,78 @@ export default new Vuex.Store({
 
         addressMembers.push(member);
       }
-
-      const getVotesProm = [];
-      const getSelfVotesProm = []; // NOTE: candidate self votes
-      candidates.forEach(candidate => {
+      //const getVotesProm = [];
+      //const getSelfVotesProm = []; // NOTE: candidate self votes
+      const seigManager = getContract('SeigManager', state.web3 );
+      const layer2Registry = getContract('Layer2Registry', state.web3 );
+      let i = 0;
+      await candidatesPre.forEach( async function (candidate) {
         // TODO: fix contract.
         // daoCommittee.methods.totalSupplyOnCandidate(candidate.candidate).call()
-        const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        //const candidateContract = getContract('Candidate', state.web3, candidate.candidateContract);
+        let coinageContract = null;
+        if(  candidate.layer2 != null ){
+          const isLayer2 = await layer2Registry.methods.layer2s(candidate.layer2).call();
+          if( isLayer2 ){
+            const coinage = await seigManager.methods.coinages( candidate.layer2 ).call();
+            coinageContract = getContract('Coinage', state.web3, coinage);
+            if( coinageContract ){
+              const votes = await coinageContract.methods.totalSupply().call();
+              //getVotesProm.push( coinageContract.methods.totalSupply().call() );
+              let self = candidate.operator;
+              if( self === null || self.length === 0 ){
+                const candidateContract = getContract('Layer2', state.web3, candidate.layer2);
+                self = await candidateContract.methods.operator().call();
+                candidate.operator = self;
+              }
+              const selfVote = await coinageContract.methods.balanceOf(self).call();
+              //getSelfVotesProm.push( coinageContract.methods.balanceOf(self).call() );
+              candidate.vote = votes;
+              candidate.selfVote = selfVote;
+              const info = await daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call();
+              candidate.info = info;
+              candidates.push(candidate);
+            }else{
+              //console.log('coinageContract is null ', candidate.layer2,  candidate.kind);
+            }
+          }
+        }
+        //console.log('candidate.layer2', i, candidate.kind,  candidate.layer2, candidate.operator);
+        i++;
+        if( i === candidatesPre.length){
+          commit('SET_CANDIDATES', candidates);
+          const members = new Array(maxMember);
+          const nonmembers = [];
+          let isMember = false;
+          candidates.forEach(candidate => {
+            addressMembers.forEach(member => {
+              if (member.address.includes(candidate.candidate.toLowerCase())) {
+                candidate.memberIndex = member.memberIndex;
+                members[member.memberIndex] = candidate;
+                isMember = true;
+                return;
+              }
+            });
+            if (!isMember) {
+              nonmembers.push(candidate);
+            }
+            isMember = false;
+          });
+          //console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
+          commit('SET_MEMBERS', members);
+          commit('SET_NONMEMBERS', nonmembers);
+        }
+        /*
         getVotesProm.push(candidateContract.methods.totalStaked().call());
-
+        candidateContract.methods.totalStaked().call();
+        console.log('launch start setMembersAndNonmembers 5-1 operator:', candidate.operator, 'candidate:', candidate.candidate ) ;
         const self = candidate.kind === 'layer2' ? candidate.operator : candidate.candidate;
-        getSelfVotesProm.push(candidateContract.methods.stakedOf(self).call());
+        if(self) getSelfVotesProm.push(candidateContract.methods.stakedOf(self).call());
+        */
       });
+      /*
       const votes = await Promise.all(getVotesProm);
       const selfVotes = await Promise.all(getSelfVotesProm);
-
       const getInfosProm = [];
       candidates.forEach(candidate => getInfosProm.push(daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
@@ -295,6 +352,7 @@ export default new Vuex.Store({
       });
       commit('SET_MEMBERS', members);
       commit('SET_NONMEMBERS', nonmembers);
+      */
     },
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
@@ -560,6 +618,15 @@ export default new Vuex.Store({
       if (!candidateContract) return false;
 
       const member = getters.member(candidateContract);
+      return member;
+    },
+    isMemberInMyCandidatesArrays: (_, getters) => {
+      const candidateContracts = getters.myCandidatesArrays;
+      if (!candidateContracts) return null;
+      let member=null;
+      candidateContracts.forEach(candidate=>{
+        member = getters.member(candidate.candidateContract);
+      });
       return member;
     },
     requests: (state) => (address) => {

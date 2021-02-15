@@ -75,7 +75,7 @@ export default {
     ]),
     ...mapGetters([
       'myCandidatesArrays',
-      'isMember',
+      'isMemberInMyCandidatesArrays',
     ]),
     findAgenda (){
       return this.agendas.find(agenda=> agenda.agendaid === this.id );
@@ -111,25 +111,26 @@ export default {
         return;
       }
       const agenda = this.findAgenda;
-      //console.log('agenda', agenda, 'myCandidates', this.myCandidates, 'isMember', this.isMember, 'account', this.account) ;
+      //console.log('agenda', agenda, 'myCandidatesArrays', this.myCandidatesArrays, 'isMemberInMyCandidatesArrays', this.isMemberInMyCandidatesArrays, 'account', this.account) ;
       let candidateContract = null;
       let _myCandidates = null;
       //if(this.myCandidates) _myCandidates =this.myCandidates.split(',');
-      if(agenda.status===1 && this.isMember && this.myCandidatesArrays && this.myCandidatesArrays.length > 0){
-        _myCandidates = this.myCandidatesArrays.find(candidate=>candidate.candidate.toLowerCase()===this.isMember.candidate.toLowerCase());
-        if(_myCandidates!=null  ) candidateContract = this.isMember.candidateContract.toLowerCase();
-      } else if (agenda.status===2 && this.myCandidatesArrays && this.myCandidatesArrays.length>0  && agenda.voters && agenda.voters.length > 0){
+      if( agenda.status===1 && this.isMemberInMyCandidatesArrays && this.myCandidatesArrays && this.myCandidatesArrays.length > 0 ){
+        _myCandidates = this.myCandidatesArrays.find(candidate=>candidate.candidate.toLowerCase()===this.isMemberInMyCandidatesArrays.candidate.toLowerCase());
+        //console.log('_myCandidates', agenda.status, _myCandidates);
+        if(_myCandidates!=null  ) candidateContract = this.isMemberInMyCandidatesArrays.candidateContract.toLowerCase();
+      } else if ( agenda.status===2 && this.myCandidatesArrays && this.myCandidatesArrays.length>0  && agenda.voters && agenda.voters.length > 0 ){
         const findVoter  =  this.myCandidatesArrays.find( candidate =>{
-          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.candidate.toLowerCase());
-          //console.log('agenda.voters', agenda.voters, 'voter', voter, 'candidate', candidate) ;
+          const voter = agenda.voters.find( voter=>voter.toLowerCase() === candidate.candidate.toLowerCase() );
+          //console.log('agenda.voters', agenda.status, agenda.voters, 'voter', voter, 'candidate', candidate) ;
           return voter;
         } );
         //console.log('findVoter', findVoter, 'candidates', this.candidates) ;
-        const findCandidate = this.candidates.find(candidate=> candidate.candidate.toLowerCase() === findVoter );
+        const findCandidate = this.candidates.find( candidate=> candidate.candidate.toLowerCase() === findVoter.candidate.toLowerCase() );
+        //console.log('findCandidate', findCandidate ) ;
         if(findCandidate) candidateContract = findCandidate.candidateContract.toLowerCase();
       }
       try{
-        //console.log('candidateContract', candidateContract) ;
         if(candidateContract){
           const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
           if(!isVotableStatus){
