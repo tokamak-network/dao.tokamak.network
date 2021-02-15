@@ -29,10 +29,10 @@ export default {
     wton () {
       return (amount) => !amount ? WTON(0) : WTON(amount);
     },
-    myCandidate (){
-      if( this.candidate!=null && this.myCandidateContracts.indexOf(this.candidate.candidateContract) > -1 ){
+    myCandidate () {
+      if (this.candidate != null && this.myCandidateContracts.indexOf(this.candidate.candidateContract) > -1) {
         return true;
-      }else return false;
+      } else return false;
     },
   },
   methods: {

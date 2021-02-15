@@ -77,8 +77,8 @@ export default {
       'myCandidatesArrays',
       'isMemberInMyCandidatesArrays',
     ]),
-    findAgenda (){
-      return this.agendas.find(agenda=> agenda.agendaid === this.id );
+    findAgenda () {
+      return this.agendas.find(agenda=> agenda.agendaid === this.id);
     },
   },
   methods: {
@@ -94,19 +94,19 @@ export default {
         this.choice = 0;
       }
     },
-    findCandidateContractByOperator (){
+    findCandidateContractByOperator () {
       let _candidateContract = null;
       //console.log('findCandidateContractByOperator', this.candidates );
-      if(this.candidates!=null && this.candidates.length > 0 ){
-        for(let i=0; i< this.candidates.length; i++){
-          if( this.candidates[i].operator.toLowerCase() === this.account.toLowerCase() ) _candidateContract = this.candidates[i].candidateContract;
+      if (this.candidates != null && this.candidates.length > 0) {
+        for (let i = 0; i < this.candidates.length; i++) {
+          if (this.candidates[i].operator.toLowerCase() === this.account.toLowerCase()) _candidateContract = this.candidates[i].candidateContract;
         }
       }
       return _candidateContract;
     },
 
     async vote () {
-      if(this.web3==null) {
+      if (this.web3 == null) {
         alert('Check Connect Wallet!');
         return;
       }
@@ -115,30 +115,30 @@ export default {
       let candidateContract = null;
       let _myCandidates = null;
       //if(this.myCandidates) _myCandidates =this.myCandidates.split(',');
-      if( agenda.status===1 && this.isMemberInMyCandidatesArrays && this.myCandidatesArrays && this.myCandidatesArrays.length > 0 ){
-        _myCandidates = this.myCandidatesArrays.find(candidate=>candidate.candidate.toLowerCase()===this.isMemberInMyCandidatesArrays.candidate.toLowerCase());
+      if (agenda.status === 1 && this.isMemberInMyCandidatesArrays && this.myCandidatesArrays && this.myCandidatesArrays.length > 0) {
+        _myCandidates = this.myCandidatesArrays.find(candidate=>candidate.candidate.toLowerCase() === this.isMemberInMyCandidatesArrays.candidate.toLowerCase());
         //console.log('_myCandidates', agenda.status, _myCandidates);
-        if(_myCandidates!=null  ) candidateContract = this.isMemberInMyCandidatesArrays.candidateContract.toLowerCase();
-      } else if ( agenda.status===2 && this.myCandidatesArrays && this.myCandidatesArrays.length>0  && agenda.voters && agenda.voters.length > 0 ){
-        const findVoter  =  this.myCandidatesArrays.find( candidate =>{
-          const voter = agenda.voters.find( voter=>voter.toLowerCase() === candidate.candidate.toLowerCase() );
+        if (_myCandidates != null) candidateContract = this.isMemberInMyCandidatesArrays.candidateContract.toLowerCase();
+      } else if (agenda.status === 2 && this.myCandidatesArrays && this.myCandidatesArrays.length > 0 && agenda.voters && agenda.voters.length > 0) {
+        const findVoter = this.myCandidatesArrays.find(candidate =>{
+          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.candidate.toLowerCase());
           //console.log('agenda.voters', agenda.status, agenda.voters, 'voter', voter, 'candidate', candidate) ;
           return voter;
-        } );
+        });
         //console.log('findVoter', findVoter, 'candidates', this.candidates) ;
-        const findCandidate = this.candidates.find( candidate=> candidate.candidate.toLowerCase() === findVoter.candidate.toLowerCase() );
+        const findCandidate = this.candidates.find(candidate=> candidate.candidate.toLowerCase() === findVoter.candidate.toLowerCase());
         //console.log('findCandidate', findCandidate ) ;
-        if(findCandidate) candidateContract = findCandidate.candidateContract.toLowerCase();
+        if (findCandidate) candidateContract = findCandidate.candidateContract.toLowerCase();
       }
-      try{
-        if(candidateContract){
-          const isVotableStatus = await isVotableStatusOfAgenda( this.id, this.web3);
-          if(!isVotableStatus){
+      try {
+        if (candidateContract) {
+          const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
+          if (!isVotableStatus) {
             alert('This Agenda is not in a state to vote.');
             this.close();
-          }else{
+          } else {
             const Candidate = await getContract('Candidate', this.web3, candidateContract);
-            if(Candidate!=null){
+            if (Candidate != null) {
               await Candidate.methods.castVote(
                 this.id,
                 this.choice,
@@ -166,10 +166,10 @@ export default {
                 });
             }
           }
-        }else{
+        } else {
           alert('Can\'t find Candidate.');
         }
-      }catch(err){
+      } catch (err) {
         console.log(err) ; // eslint-disable-line
       }
     },

@@ -131,7 +131,7 @@ export default {
     },
 
     totalVotes () {
-      if(this.members[this.memberIndex]) return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
+      if (this.members[this.memberIndex]) return this.totalVotesForCandidate(this.members[this.memberIndex].candidateContract);
       else return 0;
     },
     totalVotesForEOA () {
@@ -146,10 +146,10 @@ export default {
       //return totalVotesForEOA.cmp(totalVotes) > 1;
       return totalVotesForEOA.gt(totalVotes);
     },
-    myCandidate (){
-      if( this.members[this.memberIndex]!=null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1 ){
+    myCandidate () {
+      if (this.members[this.memberIndex] != null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1) {
         return true;
-      }else return false;
+      } else return false;
     },
   },
   methods: {
@@ -201,7 +201,7 @@ export default {
     },
     async retire () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-      try{
+      try {
         const gasLimit = await candidateContract.methods.retireMember()
           .estimateGas({
             from: this.account,
@@ -226,9 +226,9 @@ export default {
           .on('error', (error) =>{
             console.log('error', error) ;// eslint-disable-line
           });
-      }catch(err){
+      } catch (err) {
         const msg = metamaskErrorMessage(err.message);
-        if(msg!=null && msg.length > 0 ) alert(msg) ;
+        if (msg != null && msg.length > 0) alert(msg) ;
       }
     },
   },

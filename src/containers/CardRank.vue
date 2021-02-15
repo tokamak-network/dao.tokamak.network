@@ -56,7 +56,7 @@ export default {
     ]),
     ranks () {
       const first = this.page * 4;
-      return this.sortedCandidateRankByVotes ? this.sortedCandidateRankByVotes.slice(first, first+4) : [];
+      return this.sortedCandidateRankByVotes ? this.sortedCandidateRankByVotes.slice(first, first + 4) : [];
     },
   },
   methods: {

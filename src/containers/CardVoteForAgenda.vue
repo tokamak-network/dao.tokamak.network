@@ -92,17 +92,17 @@ export default {
         path: `/agenda/${index}/${address}`,
       });
     },
-    async openModel (){
-      if(this.web3==null) {
+    async openModel () {
+      if (this.web3 == null) {
         alert('Check Connect Wallet!');
         return;
       }
       const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
-      if(!isVotableStatus) alert('This Agenda is not in a state to vote.');
+      if (!isVotableStatus) alert('This Agenda is not in a state to vote.');
 
       const operator = [];
       this.members.forEach(async member => operator.push(member.operator));
-      (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal=true);
+      (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal = true);
     },
   },
 };

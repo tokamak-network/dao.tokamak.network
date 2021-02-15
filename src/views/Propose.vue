@@ -394,31 +394,31 @@ export default {
     },
   },
   created () {
-    this.depositManagerFunctionsOfTypeA    = getContractABI('DepositManager', 'A');
-    this.seigManagerFunctionsOfTypeA       = getContractABI('SeigManager', 'A');
+    this.depositManagerFunctionsOfTypeA = getContractABI('DepositManager', 'A');
+    this.seigManagerFunctionsOfTypeA = getContractABI('SeigManager', 'A');
     this.daoCommitteeProxyFunctionsOfTypeA = getContractABI('DAOCommitteeProxy', 'A');
-    this.daoVaultFunctionsOfTypeA          = getContractABI('DAOVault', 'A');
+    this.daoVaultFunctionsOfTypeA = getContractABI('DAOVault', 'A');
 
-    this.tonFunctionsOfTypeB               = getContractABI('TON', 'B');
-    this.wtonFunctionsOfTypeB              = getContractABI('WTON', 'B');
-    this.depositManagerFunctionsOfTypeB    = getContractABI('DepositManager', 'B');
-    this.seigManagerFunctionsOfTypeB       = getContractABI('SeigManager', 'B');
-    this.layer2RegistryFunctionsOfTypeB    = getContractABI('Layer2Registry', 'B');
+    this.tonFunctionsOfTypeB = getContractABI('TON', 'B');
+    this.wtonFunctionsOfTypeB = getContractABI('WTON', 'B');
+    this.depositManagerFunctionsOfTypeB = getContractABI('DepositManager', 'B');
+    this.seigManagerFunctionsOfTypeB = getContractABI('SeigManager', 'B');
+    this.layer2RegistryFunctionsOfTypeB = getContractABI('Layer2Registry', 'B');
     this.daoCommitteeProxyFunctionsOfTypeB = getContractABI('DAOCommitteeProxy', 'B');
-    this.daoCommitteeFunctionsOfTypeB      = getContractABI('DAOCommittee', 'B');
+    this.daoCommitteeFunctionsOfTypeB = getContractABI('DAOCommittee', 'B');
     // this.candidateFunctionsOfTypeB         = getContractABI('Candidate', 'B');
-    this.daoVaultFunctionsOfTypeB          = getContractABI('DAOVault', 'B');
+    this.daoVaultFunctionsOfTypeB = getContractABI('DAOVault', 'B');
   },
   methods: {
     numFunctions (index) {
-      if (index === 0)      return this.depositManagerFunctionsOfTypeA.length;
+      if (index === 0) return this.depositManagerFunctionsOfTypeA.length;
       else if (index === 1) return this.seigManagerFunctionsOfTypeA.length;
       else if (index === 2) return this.daoCommitteeProxyFunctionsOfTypeA.length;
       else if (index === 3) return this.daoVaultFunctionsOfTypeA.length;
-      else                  return 0;
+      else return 0;
     },
     numFunctionsOfTypeB (index) {
-      if (index === 0)      return this.tonFunctionsOfTypeB.length;
+      if (index === 0) return this.tonFunctionsOfTypeB.length;
       else if (index === 1) return this.wtonFunctionsOfTypeB.length;
       else if (index === 2) return this.depositManagerFunctionsOfTypeB.length;
       else if (index === 3) return this.seigManagerFunctionsOfTypeB.length;
@@ -426,16 +426,16 @@ export default {
       else if (index === 5) return this.daoCommitteeProxyFunctionsOfTypeB.length;
       else if (index === 6) return this.daoCommitteeFunctionsOfTypeB.length;
       else if (index === 7) return this.daoVaultFunctionsOfTypeB.length;
-      else                  return 0;
+      else return 0;
     },
     setCurrentContract (index) {
-      if (index === 0)      this.currentContract = 'DepositManager';
+      if (index === 0) this.currentContract = 'DepositManager';
       else if (index === 1) this.currentContract = 'SeigManager';
       else if (index === 2) this.currentContract = 'DAOCommitteeProxy';
       else if (index === 3) this.currentContract = 'DAOVault';
     },
     setCurrentContractOfTypeB (index) {
-      if (index === 0)      this.currentContract = 'TON';
+      if (index === 0) this.currentContract = 'TON';
       else if (index === 1) this.currentContract = 'WTON';
       else if (index === 2) this.currentContract = 'DepositManager';
       else if (index === 3) this.currentContract = 'SeigManager';

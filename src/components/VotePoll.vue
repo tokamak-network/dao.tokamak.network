@@ -36,7 +36,7 @@ export default {
   computed: {
     barStyle () {
       const style = {
-        'width': this.pct+'%',
+        'width': this.pct + '%',
       };
       return style;
     },
@@ -55,7 +55,7 @@ export default {
     },
     roundNumber () {
       return pct => {
-        if(isNaN (pct) === false && Number.isInteger(pct) === false) {
+        if (isNaN (pct) === false && Number.isInteger(pct) === false) {
           return pct.toFixed(2);
         } else {
           return pct;
@@ -63,7 +63,7 @@ export default {
       };
     },
     remain () {
-      if(this.pct===0) return true;
+      if (this.pct === 0) return true;
       else return false;
     },
   },

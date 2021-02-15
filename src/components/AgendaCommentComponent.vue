@@ -42,9 +42,9 @@ export default {
   },
   methods: {
     toResult () {
-      if (this.vote === '0')      return 'Abstain';
+      if (this.vote === '0') return 'Abstain';
       else if (this.vote === '1') return 'Yes';
-      else                        return 'No';
+      else return 'No';
     },
   },
 };

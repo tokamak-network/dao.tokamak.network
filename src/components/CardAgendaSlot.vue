@@ -110,7 +110,7 @@ export default {
   },
   data () {
     return {
-      now : parseInt(Date.now()/1000),
+      now : parseInt(Date.now() / 1000),
       endedShow: false,
       login: true,
       buttonClass: {
@@ -203,7 +203,7 @@ export default {
       // }
       // return 'disabled';
     },
-    canVote (){
+    canVote () {
       if (this.isMember || this.isVoter)
         return true;
       // else if (this.isVoter)
@@ -211,14 +211,14 @@ export default {
       else
         return false;
     },
-    isVoter (){
+    isVoter () {
       let returnValue = false;
       if (this.agenda && this.agenda.status === 2 && this.agenda.tVotingStartTime < this.now
         && this.agenda.tVotingEndTime > this.now
-        && this.agenda.voters  && this.agenda.voters.length > 0 ) {
+        && this.agenda.voters && this.agenda.voters.length > 0) {
         this.agenda.voters.forEach(voter=>{
-          if(voter!=null && (this.myCandidates.indexOf(voter.toLowerCase()) > -1 ) )
-            returnValue= true;
+          if (voter != null && (this.myCandidates.indexOf(voter.toLowerCase()) > -1))
+            returnValue = true;
         });
         return returnValue;
       } else return returnValue;
@@ -258,7 +258,7 @@ export default {
       }
     },
     async click () {
-      if ( !this.web3 ){
+      if (!this.web3) {
         alert('Check Connect Wallet !');
         return;
       }
@@ -279,7 +279,7 @@ export default {
         }
         const operator = [];
         this.members.forEach(async member => operator.push(member.operator));
-        (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal=true);
+        (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal = true);
       } else if (this.agenda.status === 3) {
         this.execute();
       }
