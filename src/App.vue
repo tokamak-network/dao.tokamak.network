@@ -3,7 +3,7 @@
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
     <router-view />
-    <mobile-footer-container v-if="$mq === 'mobile'" />
+    <mobile-footer-container v-if="$mq === 'mobile'" style="padding-top: 60px; padding-bottom: 60px;" />
     <footer-container v-else />
   </div>
 </template>
@@ -66,5 +66,12 @@ body { margin: 0 !important; }
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
+  width: 100%;
+  min-width: 400px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  overflow: scroll;
 }
 </style>
