@@ -57,13 +57,13 @@ export default {
       'agendaVotesByCandidates',
     ]),
     canClaimValue () {
-      let amount = this.activityReward+'';
-      if( amount === null || amount.length === 0 || amount === 0 || amount === '0' ) return false;
+      let amount = this.activityReward + '';
+      if (amount === null || amount.length === 0 || amount === 0 || amount === '0') return false;
       amount = amount.replaceAll('TON', '');
-      amount =amount.replaceAll(' ', '');
-      if( amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00' ){
+      amount = amount.replaceAll(' ', '');
+      if (amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00') {
         return true;
-      }else return false;
+      } else return false;
     },
   },
   methods: {
@@ -72,9 +72,9 @@ export default {
     },
     async claim () {
       let web3 = this.web3;
-      if(web3  == null) web3 = new Web3(window.ethereum);
+      if (web3 == null) web3 = new Web3(window.ethereum);
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', web3);
-      try{
+      try {
         await daoCommitteeProxy.methods.claimActivityReward().send({
           from: this.account,
         })
@@ -94,14 +94,14 @@ export default {
           .on('error', () => {
             this.$store.commit('SET_PENDING_TX', '');
           });
-      }catch(err){
+      } catch (err) {
         //console.log('err', err); // eslint-disable-line
       }
     },
-    async claimCandidate ( _candiateContract ) {
-      const CandidateContract = getContract( 'Candidate', this.web3, _candiateContract );
-      if( CandidateContract!=null && CandidateContract ){
-        try{
+    async claimCandidate (_candiateContract) {
+      const CandidateContract = getContract('Candidate', this.web3, _candiateContract);
+      if (CandidateContract != null && CandidateContract) {
+        try {
           await CandidateContract.methods.claimActivityReward().send({
             from: this.account,
           })
@@ -121,22 +121,22 @@ export default {
             .on('error', () => {
               this.$store.commit('SET_PENDING_TX', '');
             });
-        }catch(err){
+        } catch (err) {
           console.log('err', err); // eslint-disable-line
         }
-      }else{
+      } else {
         alert('Can\'t find conbtract. Check the network');
       }
     },
-    canClaimAmount ( amount ){
-      if(amount==null || amount.length === 0 || amount === 0 || amount === '0' ) return false;
+    canClaimAmount (amount) {
+      if (amount == null || amount.length === 0 || amount === 0 || amount === '0') return false;
       else {
-        amount = amount+'';
+        amount = amount + '';
         amount = amount.replaceAll('TON', '');
-        amount =amount.replaceAll(' ', '');
-        if( amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00' ){
+        amount = amount.replaceAll(' ', '');
+        if (amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00') {
           return true;
-        }else return false;
+        } else return false;
       }
     },
   },

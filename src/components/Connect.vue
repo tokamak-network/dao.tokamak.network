@@ -79,7 +79,7 @@ export default {
             this.setIcon();
           });
 
-          for(;;) {
+          for (;;) {
             await new Promise(r => setTimeout(r, 500));
             if (this.launched) break;
           }
@@ -104,7 +104,7 @@ export default {
               this.setIcon();
             });
 
-            for(;;) {
+            for (;;) {
               await new Promise(r => setTimeout(r, 500));
               if (this.launched) break;
             }

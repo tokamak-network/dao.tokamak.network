@@ -91,13 +91,13 @@ export default {
         path: `/agenda/${index}/${address}`,
       });
     },
-    async openModel (){
-      if(this.web3==null) {
+    async openModel () {
+      if (this.web3 == null) {
         alert('Check Connect Wallet!');
         return;
       }
       const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
-      if(isVotableStatus) this.showModal=true;
+      if (isVotableStatus) this.showModal = true;
       else alert('This Agenda is not in a state to vote.');
     },
   },

@@ -61,7 +61,7 @@ export default {
     explanation (event) {
       const eventName = event.eventName;
 
-      if      (eventName === 'AgendaCreated') return `Agenda #${event.data.id} Created`;
+      if (eventName === 'AgendaCreated') return `Agenda #${event.data.id} Created`;
       else if (eventName === 'AgendaExecuted') return `Agenda #${event.data.id} Executed`;
       else if (eventName === 'AgendaVoteCasted') return `Agenda #${event.data.id} is Voted ${this.agendaVoted(event.data.voting)}`;
       else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';

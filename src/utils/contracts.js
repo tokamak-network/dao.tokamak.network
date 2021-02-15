@@ -503,47 +503,47 @@ const daoVaultABIOfTypeB = [];
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
 })();
 
-module.exports.getContractABI = function (want, type='A') {
+module.exports.getContractABI = function (want, type = 'A') {
   if (!want) return [];
 
   if (type === 'A') {
-    if (want === 'DepositManager')         return depositManagerABIOfTypeA;
-    else if (want === 'SeigManager')       return seigManagerABIOfTypeA;
+    if (want === 'DepositManager') return depositManagerABIOfTypeA;
+    else if (want === 'SeigManager') return seigManagerABIOfTypeA;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeA;
-    else if (want === 'DAOVault')         return daoVaultABIOfTypeA;
+    else if (want === 'DAOVault') return daoVaultABIOfTypeA;
     else return [];
   } else {
-    if (want === 'TON')                    return tonABIOfTypeB;
-    else if (want === 'WTON')              return wtonABIOfTypeB;
-    else if (want === 'DepositManager')    return depositManagerABIOfTypeB;
-    else if (want === 'SeigManager')       return seigManagerABIOfTypeB;
-    else if (want === 'Layer2Registry')    return layer2RegistryABIOfTypeB;
+    if (want === 'TON') return tonABIOfTypeB;
+    else if (want === 'WTON') return wtonABIOfTypeB;
+    else if (want === 'DepositManager') return depositManagerABIOfTypeB;
+    else if (want === 'SeigManager') return seigManagerABIOfTypeB;
+    else if (want === 'Layer2Registry') return layer2RegistryABIOfTypeB;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
-    else if (want === 'DAOCommittee')      return daoCommitteeABIOfTypeB;
-    else if (want === 'DAOVault')         return daoVaultABIOfTypeB;
+    else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeB;
+    else if (want === 'DAOVault') return daoVaultABIOfTypeB;
     else return [];
   }
 };
 
-module.exports.getContractABIFromAddress = function (address, type='A') {
+module.exports.getContractABIFromAddress = function (address, type = 'A') {
   if (!address) return [];
   address = address.toLowerCase();
 
   if (type === 'A') {
-    if (address === deployed.DepositManager.toLowerCase())    return depositManagerABIOfTypeA;
-    else if (address === deployed.SeigManager.toLowerCase())  return seigManagerABIOfTypeA;
+    if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
-    else if (address === deployed.DAOVault.toLowerCase())    return daoVaultABIOfTypeA;
+    else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else return [];
   } else {
-    if (address === deployed.TON.toLowerCase())                    return tonABIOfTypeB;
-    else if (address === deployed.WTON.toLowerCase())              return wtonABIOfTypeB;
-    else if (address === deployed.DepositManager.toLowerCase())    return depositManagerABIOfTypeB;
-    else if (address === deployed.SeigManager.toLowerCase())       return seigManagerABIOfTypeB;
-    else if (address === deployed.Layer2Registry.toLowerCase())    return layer2RegistryABIOfTypeB;
+    if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
+    else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
+    else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
-    else if (address === deployed.DAOCommittee.toLowerCase())      return daoCommitteeABIOfTypeB;
-    else if (address === deployed.DAOVault.toLowerCase())         return daoVaultABIOfTypeB;
+    else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
+    else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
     else return [];
   }
 };
@@ -556,28 +556,28 @@ module.exports.getContractAddress = function (target) {
   return address ? address : '';
 };
 
-module.exports.getFunctionSelector  = function (contract, want, type) {
+module.exports.getFunctionSelector = function (contract, want, type) {
   if (!contract || !want) return '';
 
   if (type === 'A') {
-    if (contract === 'DepositManager')    return (depositManagerABIOfTypeA.find(f => f.name === want)).selector;
-    else if (contract === 'SeigManager')  return (seigManagerABIOfTypeA.find(f => f.name === want)).selector;
+    if (contract === 'DepositManager') return (depositManagerABIOfTypeA.find(f => f.name === want)).selector;
+    else if (contract === 'SeigManager') return (seigManagerABIOfTypeA.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeA.find(f => f.name === want)).selector;
-    else if (contract === 'DAOVault')    {
+    else if (contract === 'DAOVault') {
       return (daoVaultABIOfTypeA.find(f => f.name === want)).selector;
     }
     else {
       return '';
     }
   } else if (type === 'B') {
-    if (contract === 'TON')                    return (tonABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'WTON')              return (wtonABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'DepositManager')    return (depositManagerABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'SeigManager')       return (seigManagerABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'Layer2Registry')    return (layer2RegistryABIOfTypeB.find(f => f.name === want)).selector;
+    if (contract === 'TON') return (tonABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'WTON') return (wtonABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DepositManager') return (depositManagerABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'SeigManager') return (seigManagerABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'Layer2Registry') return (layer2RegistryABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'DAOCommittee')      return (daoCommitteeABIOfTypeB.find(f => f.name === want)).selector;
-    else if (contract === 'DAOVault')         return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'DAOVault') return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
     else return '';
   } else {
     return '';
@@ -641,7 +641,7 @@ const decodeParameters = function (typesArray, hexString) {
 };
 module.exports.decodeParameters = decodeParameters;
 
-const getABIFromSelector = function (selector, type='A') {
+const getABIFromSelector = function (selector, type = 'A') {
   let abi;
 
   if (type === 'A') {
@@ -734,13 +734,13 @@ module.exports.parseAgendaBytecode = function (tx) {
 };
 
 module.exports.metamaskErrorMessage = function (errorString) {
-  let errString='';
-  if (errorString !== null && errorString.length > 0 ) {
+  let errString = '';
+  if (errorString !== null && errorString.length > 0) {
     const key = 'message';
     const positionKey = errorString.indexOf(key);
-    const startMessage = errorString.indexOf('"', positionKey+key.length+2);
-    const endMessage = errorString.indexOf('"', startMessage+3);
-    errString = errorString.substring(startMessage+1, endMessage);
+    const startMessage = errorString.indexOf('"', positionKey + key.length + 2);
+    const endMessage = errorString.indexOf('"', startMessage + 3);
+    errString = errorString.substring(startMessage + 1, endMessage);
   }
   return errString;
 };
@@ -749,7 +749,7 @@ module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
   let isVotableStatus = false;
   try {
     const AgendaManager = await getContract('DAOAgendaManager', _web3);
-    if (AgendaManager !== null){
+    if (AgendaManager !== null) {
       isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
     } else {
       console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
@@ -764,7 +764,7 @@ module.exports.canExecute = async function (agendaId, _web3) {
   let canExecute = false;
   try {
     const AgendaManager = await getContract('DAOAgendaManager', _web3);
-    if (AgendaManager !== null){
+    if (AgendaManager !== null) {
       canExecute = await AgendaManager.methods.canExecuteAgenda(agendaId).call();
     } else {
       console.log('Utils.canExecuteAgenda AgendaManager is null') ; // eslint-disable-line

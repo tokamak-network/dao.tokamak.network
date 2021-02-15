@@ -58,8 +58,8 @@ export default {
       'votersWithBalance',
     ]),
     selectedVoters () {
-      const first = this.page*4;
-      return this.votersWithBalance ? this.votersWithBalance.slice(first, first+4) : [];
+      const first = this.page * 4;
+      return this.votersWithBalance ? this.votersWithBalance.slice(first, first + 4) : [];
     },
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;

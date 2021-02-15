@@ -180,7 +180,7 @@ export default {
       if (index === this.agendas.length ? index = this.agendas.length : this.$router.push({ path: `/agenda/${index}` }));
     },
     next () {
-      let index = Number(this.agendaId) -1 ;
+      let index = Number(this.agendaId) - 1 ;
       if (index === -1 ? index = 0 : this.$router.push({ path: `/agenda/${index}` }));
     },
   },

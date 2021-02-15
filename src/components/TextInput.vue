@@ -65,7 +65,7 @@ export default {
   computed: {
     inputPadding () {
       return {
-        'padding-right': this.unit !== '' ? (7+this.unitWidth+16)+'px' : 0,
+        'padding-right': this.unit !== '' ? (7 + this.unitWidth + 16) + 'px' : 0,
       };
     },
   },

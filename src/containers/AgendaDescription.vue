@@ -78,19 +78,19 @@ export default {
   methods: {
     async editButton () {
       this.desc = this.agendaContents(this.agendaId);
-      this.edit=true;
+      this.edit = true;
     },
     async update () {
       const txHash = this.getAgendaByID(this.agendaId).transactionHash;
       const sig = await this.generateSig(txHash, this.account.toLowerCase());
       await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig);
 
-      this.edit=false;
+      this.edit = false;
       await this.$store.dispatch('launch');
     },
     async generateSig (txHash, from) {
       const randomvalue = await getRandomKey(from);
-      if(randomvalue!=null){
+      if (randomvalue != null) {
         const randomBn = new BigNumber(randomvalue).toFixed(0);
         const soliditySha3 = await this.web3.utils.soliditySha3(
           { type: 'string', value: from },

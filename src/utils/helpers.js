@@ -9,13 +9,13 @@ export function slice (str) {
   return str.slice(0, 6);
 }
 export function tonFloor (input) {
-  if( input != null && input.length > 0  ){
+  if (input != null && input.length > 0) {
     const pointPosition = input.indexOf('.');
     let rounds = input.split('');
     rounds = rounds.map((e, idx) => {
-      if(idx < pointPosition+3) return e;
+      if (idx < pointPosition + 3) return e;
       else return '';
-    } );
+    });
     return rounds.join('') + ' TON';
   }
   else return '0.0 TON';
@@ -73,7 +73,7 @@ export function votingTime (agenda) {
   }
 }
 
-export function fromNow (timestamp, suffix=false) {
+export function fromNow (timestamp, suffix = false) {
   return moment.unix(timestamp).fromNow(suffix);
 }
 
