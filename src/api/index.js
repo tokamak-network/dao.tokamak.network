@@ -144,11 +144,12 @@ export async function updateAgendaContents (from, txHash, contents, sig) {
 
 export async function updateCandidate (layer2, operator, sig, name, description) {
   const res = await instance.put('/layer2s/operators', {
-    layer2,
-    operator,
-    sig,
-    name,
-    description,
+    chainId,
+    layer2: layer2,
+    operator: operator,
+    sig: sig,
+    name: name,
+    description: description,
     website: '',
   });
   return res.data;

@@ -153,7 +153,7 @@ export default {
       }
 
       const candidate = this.candidate(this.address);
-      const sig = this.generateSig(candidate);
+      const sig = await this.generateSig(candidate);
       await updateCandidate(candidate.layer2.toLowerCase(), candidate.operator.toLowerCase(), sig, candidate.name, description);
       this.canEditDescription = false;
 
