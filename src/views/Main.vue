@@ -338,6 +338,9 @@ export default {
 }
 
 .recent-committee-activities-mobile {
+  min-width: 100%;
+  max-width: 100%;
+
   .header {
     font-family: Roboto;
     font-size: 22px;
@@ -393,6 +396,10 @@ export default {
         color: #8fc7fd;
 
         flex: 1;
+
+        &:hover {
+          cursor: pointer;
+        }
       }
 
       .time {
