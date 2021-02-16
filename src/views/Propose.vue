@@ -5,7 +5,7 @@
        ]"
   >
     <modal v-if="showModal"
-           :width="786"
+           :width="'786px'"
            @on-closed="showModal=false; currentFunction = ''; currentFunctionParams = []"
     >
       <template #body>

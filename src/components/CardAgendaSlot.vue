@@ -1,7 +1,7 @@
 <template>
   <div class="card-agenda-slot">
     <modal v-if="showModal"
-           :width="786"
+           :width="'786px'"
            @on-closed="showModal=false"
     >
       <template #body>
