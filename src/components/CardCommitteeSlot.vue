@@ -141,6 +141,9 @@ export default {
       if (this.isMember) {
         return false;
       }
+      if (!this.occupied()) {
+        return true;
+      }
       const totalVotes = toBN(this.totalVotes);
       const totalVotesForEOA = toBN(this.totalVotesForEOA);
       //return totalVotesForEOA.cmp(totalVotes) > 1;
