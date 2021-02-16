@@ -1,7 +1,7 @@
 <template>
   <div class="connect">
     <button
-      v-if="!account"
+      v-if="!connectedAccount"
       :class="{ sub: isSub }"
       @click="connect"
     >
@@ -41,11 +41,12 @@ export default {
   },
   data () {
     return {
-      account: '',
+      connectedAccount: '',
     };
   },
   computed: {
     ...mapState([
+      'account',
       'launched',
       'web3',
       'pendingTx',
@@ -53,11 +54,19 @@ export default {
       'etherscanAddress',
     ]),
     shortAddress () {
-      return `${this.account.slice(0, 7)}...${this.account.slice(-4)}`;
+      return `${this.connectedAccount.slice(0, 7)}...${this.connectedAccount.slice(-4)}`;
     },
     iconNumber () {
-      return parseInt(this.account.slice(2, 10), 16);
+      return parseInt(this.connectedAccount.slice(2, 10), 16);
     },
+  },
+  created () {
+    if (this.account) {
+      this.connectedAccount = this.account;
+      this.$nextTick(() => {
+        this.setIcon();
+      });
+    }
   },
   methods: {
     async connect () {
@@ -73,7 +82,7 @@ export default {
           }
 
           const accounts = await web3.eth.getAccounts();
-          this.account = accounts[0];
+          this.connectedAccount = accounts[0];
 
           this.$nextTick(() => {
             this.setIcon();
@@ -98,7 +107,7 @@ export default {
             this.$store.dispatch('disconnectEthereum');
           } else {
             const accounts = await web3.eth.getAccounts();
-            this.account = accounts[0];
+            this.connectedAccount = accounts[0];
 
             this.$nextTick(() => {
               this.setIcon();
@@ -121,7 +130,7 @@ export default {
           const iconEle = this.$refs.icon;
           if (iconEle) {
             if (iconEle.childElementCount === 1) {
-              this.account = '';
+              this.connectedAccount = '';
               iconEle.removeChild(iconEle.lastElementChild);
             }
           }
