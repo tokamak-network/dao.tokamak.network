@@ -702,7 +702,7 @@ export default new Vuex.Store({
       return state.contractState.createAgendaFee ? state.contractState.createAgendaFee : 0;
     },
     claimableAmount: (state) => {
-      if (!state.contractState) return 0;
+      if (!state.contractState || !state.contractState.claimableAmount) return 0;
       return state.contractState.claimableAmount;
     },
     minimumAmount: (state) => {
