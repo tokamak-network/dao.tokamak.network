@@ -19,7 +19,7 @@
         </div>
       </div>
       <div v-if="typeof(content) === 'string'" class="content">
-        <span v-if="type === 'address'"
+        <span v-if="type === 'address' && $mq === 'mobile'"
               :class="{
                 'url': type === 'url',
                 'description': type === 'description',
