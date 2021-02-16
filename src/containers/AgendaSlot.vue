@@ -6,7 +6,7 @@
         {{ numAgenda }} Agendas - POSTED {{ agendas[0]? agendas[0].tCreationDate:'' | date2 }}
       </div>
       <card-agenda-slot v-for="agenda in agendas.slice(0, 5)" :key="agenda.agendaid" :agenda="agenda" />
-      <button-comp v-if="hide === false && agendas.length > 5" :name="hideButton" :type="'hide'" @on-clicked="hideSection ()" />
+      <button-comp v-if="hide === false && agendas.length > 5" :name="hideButton" :type="'hide'" @on-clicked="hide=true" />
       <div v-if="hide === true && agendas.length > 5">
         <card-agenda-slot v-for="agenda in agendas.slice(5, agendas.length)" :key="agenda.agendaid" :agenda="agenda" />
       </div>
@@ -39,7 +39,6 @@ export default {
   },
   computed: {
     ...mapState([
-      // 'agendas',
       'account',
     ]),
     ...mapGetters([
@@ -52,47 +51,6 @@ export default {
       return 'View more agenda (' + this.agendas.slice(5, this.agendas.length).length + ')';
     },
   },
-  // beforeCreate () {
-  //   this.openAgendas = this.agendas;
-  // },
-  // watch: {
-  //   'classify': {
-  //     handler: async function () {
-  //       if (this.agendas.length > 5) {
-  //         this.hideAgendas = this.agendas.slice(5, this.agendas.length);
-  //         this.openAgendas = this.agendas.slice(0, 5);
-  //         this.hide = false;
-  //       } else {
-  //         this.openAgendas = this.agendas;
-  //         this.hideAgendas = [];
-  //         this.hide = true;
-  //       }
-  //     },
-  //   },
-  // },
-  // created () {
-  //   // this.agendaFilter();
-  //   console.log(this.agendas);
-  //   this.classify(this.agendas);
-  // },
-  // beforeUpdated () {
-  //   console.log(this.agendas);
-  //   this.classify(this.agendas);
-  //   this.hide = false;
-  // },
-  // methods: {
-  //   classify (agendas) {
-  //     if (this.agendas.length > 5) {
-  //       this.hideAgendas = agendas.slice(5, agendas.length);
-  //     } else {
-  //       this.openAgendas = agendas;
-  //       this.hideAgendas = [];
-  //     }
-  //   },
-  //   hideSection () {
-  //     this.hide = this.hide ? false : true;
-  //   },
-  // },
 };
 </script>
 
