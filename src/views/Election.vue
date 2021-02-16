@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background: #fafbfc; flex: 1;">
     <div v-if="$mq === 'mobile'" style="margin-left: 20px; margin-right: 20px; margin-top: 35px;">
       <committee-slot />
       <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
