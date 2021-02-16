@@ -121,31 +121,32 @@ export default {
           if (stateCode !== 3) {
             const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
             result.forEach(result => {
-              filteredAgenda = this.agendas.filter(agenda => agenda.agendaid === result.id);
+              const matchedAgenda = this.agendas.filter(agenda => agenda.agendaid === result.id);
+              filteredAgenda.push(matchedAgenda[0]);
             });
           } else {
             const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
             result.forEach(result => {
-              filteredAgenda = this.agendas.filter(agenda => (agenda.agendaid === result.id));
+              const matchedAgenda = this.agendas.filter(agenda => (agenda.agendaid === result.id));
+              filteredAgenda.push(matchedAgenda[0]);
             });
           }
         } else {
+          const matchedAgendas = [];
           if (stateCode !== 3) {
             const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
             result.forEach(result => {
-              // const votedAgenda = filteredAgenda.filter(agenda => ((agenda !== undefined) ? agenda.agendaid === result.id : ''));
-              filteredAgenda = filteredAgenda.filter(agenda => agenda.agendaid === result.id);
-              // console.log(filteredAgenda);
-              // filteredAgenda.push(votedAgenda[0]);
+              const matchedAgenda = filteredAgenda.filter(agenda => agenda.agendaid === result.id);
+              if (matchedAgenda.length > 0) matchedAgendas.push(matchedAgenda[0]);
             });
-            // console.log(filteredAgenda);
           } else {
             const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
             result.forEach(result => {
-              filteredAgenda = filteredAgenda.filter(agenda => (agenda.agendaid === result.id));
-              // console.log(filteredAgenda);
+              const matchedAgenda = filteredAgenda.filter(agenda => (agenda.agendaid === result.id));
+              if (matchedAgenda.length > 0) matchedAgendas.push(matchedAgenda[0]);
             });
           }
+          filteredAgenda = matchedAgendas;
         }
       }
       if (this.result[0] === true) {
