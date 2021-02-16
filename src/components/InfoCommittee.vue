@@ -19,7 +19,19 @@
         </div>
       </div>
       <div v-if="typeof(content) === 'string'" class="content">
-        <span :class="{
+        <span v-if="type === 'address'"
+              :class="{
+                'url': type === 'url',
+                'description': type === 'description',
+                'address': type === 'address',
+                'description2': type === 'time',
+              }"
+              @click="redirect(content)"
+        >
+          {{ content | hexSlicer }}
+        </span>
+        <span v-else
+              :class="{
                 'url': type === 'url',
                 'description': type === 'description',
                 'address': type === 'address',
@@ -92,7 +104,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .committee {
   max-height: 20px;
 }
