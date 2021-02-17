@@ -1,7 +1,11 @@
 <template>
-  <div class="mobile-header">
+  <div class="mobile-header"
+       :style="[
+         !isSub() ? { background: '#0062c2' } : { background: '#fafbfc' },
+       ]"
+  >
     <modal v-if="showModalClaim"
-           :width="'100%'"
+           :width="'90%'"
            :mobile="true"
     >
       <template #body>
@@ -22,15 +26,28 @@
       </div>
     </div>
     <div class="logo">
-      <img src="@/assets/mobile-logo.png" alt=""
+      <img v-if="!isSub()"
+           src="@/assets/mobile-logo.png" alt=""
+           width="105" height="30"
+           @click="route('/');"
+      >
+      <img v-else
+           src="@/assets/mobile-logo-colored.svg" alt=""
            width="105" height="30"
            @click="route('/');"
       >
     </div>
     <div class="menu">
-      <connect-wallet />
-      <img class="menu-icon"
+      <connect-wallet :is-sub="isSub()" />
+      <img v-if="!isSub()"
+           class="menu-icon"
            src="@/assets/mobile-menu.png" alt=""
+           width="30" height="30"
+           @click="isOpen = true;"
+      >
+      <img v-else
+           class="menu-icon"
+           src="@/assets/mobile-menu-colored.svg" alt=""
            width="30" height="30"
            @click="isOpen = true;"
       >
@@ -72,6 +89,9 @@ export default {
       }
       this.$router.push({ path });
     },
+    isSub () {
+      return this.$route.path !== '/';
+    },
   },
 };
 </script>
@@ -82,7 +102,6 @@ export default {
   justify-content: space-between;
 
   height: 84px;
-  background: #0062c2;
   padding-left: 20px;
   padding-right: 10px;
 }
@@ -153,7 +172,7 @@ img {
     justify-content: center;
     align-items: center;
 
-    width: 200px;
+  width: 200px;
     height: 50px;
     margin: 0 7px 10px;
     padding: 12px 74px;
