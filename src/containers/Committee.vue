@@ -52,6 +52,58 @@
       </div>
     </div>
 
+    <div v-else-if="$mq === 'tablet'" class="card-committee-info-tablet">
+      <div class="button-container-tablet">
+        <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
+                     @on-clicked="$router.push({ path: '/election' })"
+        />
+        <div>
+          <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
+          <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
+        </div>
+      </div>
+      <div class="content-tablet">
+        <div v-if="member(address)" class="timeline">
+          <div class="date">
+            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+          </div>
+          <div>
+            <img src="@/assets/poll-time-active-icon.svg" alt=""
+                 width="14" height="14"
+            >
+            <span class="black">Member </span>
+            <span class="blue">{{ member(address).memberIndex }} </span>
+            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+          </div>
+        </div>
+        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="selector">
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
+               @click="currentSelector = 1"
+          >
+            Vote Breakdown
+          </div>
+          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+
+          <span class="space" />
+          <button v-if="account"
+                  class="update-btn"
+                  :class="{
+                    'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
+                  }"
+                  @click="updateReward()"
+          >
+            Update Reward
+          </button>
+        </div>
+        <div class="divider" />
+        <committee-info v-if="currentSelector === 0" />
+        <committee-info-vote v-else-if="currentSelector === 1" />
+        <committee-vote v-else-if="currentSelector === 2" />
+      </div>
+    </div>
+
     <div v-else class="card-committee-info">
       <div class="button-container">
         <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
@@ -310,6 +362,15 @@ export default {
 
   margin-top: 12px;
 }
+.content-tablet {
+  border-radius: 10px;
+  box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
+  background-color: #ffffff;
+
+  padding: 30px;
+
+  margin-top: 12px;
+}
 .date {
   font-family: Roboto;
   font-size: 10px;
@@ -410,6 +471,24 @@ export default {
   }
   .next {
     width: 165px;
+  }
+}
+
+.button-container-tablet {
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+  }
+  .back {
+    width: 191px;
+  }
+  .prev {
+    width: 165px;
+  }
+  .next {
+    width: 141px;
   }
 }
 

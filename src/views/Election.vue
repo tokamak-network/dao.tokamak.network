@@ -6,11 +6,15 @@
       <card-rank :title="'Rank'" style="margin-top: 30px;" />
       <card-resource style="margin-top: 30px;" />
     </div>
-    <div v-else-if="$mq === 'tablet'" style="margin: 35px 17px 0 17px;">
-      <committee-slot />
-      <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
-      <card-rank :title="'Rank'" style="margin-top: 30px;" />
-      <card-resource style="margin-top: 30px;" />
+    <div v-else-if="$mq === 'tablet'" class="election-tablet" style="margin: 35px 17px 0 17px;">
+      <div class="committee-container-tablet">
+        <committee-slot />
+      </div>
+      <div class="card-container-tablet">
+        <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
+        <card-rank :title="'Rank'" style="margin-top: 30px;" />
+        <card-resource style="margin-top: 30px;" />
+      </div>
     </div>
     <div v-else class="election">
       <div class="committee-container">
@@ -66,6 +70,28 @@ export default {
   flex-direction: column;
 }
 .card-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  width: 378px;
+}
+.election-tablet {
+  /* all the `views` have to has this attribue  */
+  background: #fafbfc;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  /* padding-top: 35px; */
+  padding-bottom: 30px;
+}
+.committee-container-tablet {
+  width: 582px;
+  display: flex;
+  flex-direction: column;
+}
+.card-container-tablet {
   display: flex;
   flex-direction: column;
   margin-left: 30px;

@@ -10,6 +10,16 @@
         <card-resource style="margin-top: 30px;" />
       </div>
     </div>
+    <div v-else-if="$mq === 'tablet'" class="committee-detail-tablet">
+      <div class="committee-container-tablet">
+        <committee />
+      </div>
+      <div class="card-container-tablet">
+        <card-vote-count v-if="account !== ''" />
+        <card-supporters />
+        <card-resource />
+      </div>
+    </div>
     <div v-else class="committee-detail">
       <div class="committee-container">
         <committee />
@@ -62,6 +72,31 @@ export default {
 }
 .committee-container {
   width: 786px;
+  display: flex;
+  flex-direction: column;
+}
+.committee-detail-tablet {
+  /* all the `views` have to has this attribue  */
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background: #fafbfc;
+
+  padding-top: 25px;
+  padding-bottom: 50px;
+}
+.committee-container-tablet {
+  width: 582px;
+  display: flex;
+  flex-direction: column;
+}
+.card-container-tablet {
+  width: 378px;
+  margin-left: 30px;
+
   display: flex;
   flex-direction: column;
 }
