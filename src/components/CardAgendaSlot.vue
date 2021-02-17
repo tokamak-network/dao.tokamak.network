@@ -110,7 +110,7 @@ export default {
   },
   data () {
     return {
-      now : parseInt(Date.now() / 1000),
+      now: parseInt(Date.now() / 1000),
       endedShow: false,
       login: true,
       buttonClass: {

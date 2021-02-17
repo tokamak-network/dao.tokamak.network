@@ -340,8 +340,8 @@ export default {
   },
   data () {
     return {
-      index : -1,
-      indexOfTypeB : -1,
+      index: -1,
+      indexOfTypeB: -1,
       showModal: false,
       isEntrance: true,
 

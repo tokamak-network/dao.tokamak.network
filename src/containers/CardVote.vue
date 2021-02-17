@@ -37,7 +37,7 @@ export default {
     'vote-poll': VotePoll,
   },
   props: {
-    clength:{
+    clength: {
       type: Number,
       default: 0,
       required: true,
