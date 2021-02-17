@@ -28,7 +28,7 @@
           </div>
         </div>
         <text-input :ref="`param${index}`"
-                    :hint="`${param.name} (${param.type})`"
+                    :hint="exampleParam(index)"
         />
       </div>
     </div>
@@ -150,10 +150,7 @@ export default {
   },
   methods: {
     tooltip (index) {
-      if (this.type === 'B') {
-        return '';
-      }
-      return `about: ${this.aboutParam(index)}, example: ${this.exampleParam(index)}`;
+      return `${this.aboutParam(index)} \n\nex) ${this.exampleParam(index)}`;
     },
     close () {
       this.$emit('on-closed');
@@ -391,6 +388,8 @@ export default {
     color: #818992;
 
     margin-bottom: 30px;
+
+    white-space: pre-wrap;
   }
 
   .argument-container {
@@ -506,7 +505,7 @@ export default {
     z-index: 999;
   }
   .tooltip-content {
-    max-width: 317px;
+    width: 400px;
     background: #353c48;
     border-radius: 3px;
 
@@ -523,6 +522,8 @@ export default {
 
     margin-top: -21px;
     margin-left: 4px;
+
+    white-space: pre-wrap;
   }
 
   .param-container {
