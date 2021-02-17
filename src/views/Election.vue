@@ -6,6 +6,12 @@
       <card-rank :title="'Rank'" style="margin-top: 30px;" />
       <card-resource style="margin-top: 30px;" />
     </div>
+    <div v-else-if="$mq === 'tablet'" style="margin: 35px 17px 0 17px;">
+      <committee-slot />
+      <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
+      <card-rank :title="'Rank'" style="margin-top: 30px;" />
+      <card-resource style="margin-top: 30px;" />
+    </div>
     <div v-else class="election">
       <div class="committee-container">
         <committee-slot />
