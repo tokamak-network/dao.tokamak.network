@@ -1368,7 +1368,8 @@ module.exports.parseAgendaBytecode = function (tx) {
       target,
       name,
       types,
-      values };
+      values,
+    };
     onChainEffects.push(onChainEffect);
   }
   return onChainEffects;
