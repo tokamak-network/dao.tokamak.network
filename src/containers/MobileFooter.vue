@@ -1,17 +1,49 @@
 <template>
-  <div class="mobile-footer">
+  <div class="mobile-footer"
+       :style="[
+         !isSub() ? { background: '#0062c2' } : { background: '#fafbfc' },
+       ]"
+  >
     <div>
-      <a href="" target="_blank" class="clause">Terms</a>
-      <a href="" target="_blank" class="clause">Privacy Policy</a>
-      <a href="" target="_blank" class="clause">Status</a>
+      <a href="" target="_blank" class="clause"
+         :style="[
+           !isSub() ? { color: '#a6c8e9' } : { color: '#86929d' },
+         ]"
+      >
+        Terms
+      </a>
+      <a href="" target="_blank" class="clause"
+         :style="[
+           !isSub() ? { color: '#a6c8e9' } : { color: '#86929d' },
+         ]"
+      >
+        Privacy Policy
+      </a>
+      <a href="" target="_blank" class="clause"
+         :style="[
+           !isSub() ? { color: '#a6c8e9' } : { color: '#86929d' },
+         ]"
+      >
+        Status
+      </a>
     </div>
-    <span class="company">© 2021 Onther</span>
+    <span class="company"
+          :style="[
+            !isSub() ? { color: '#ffffff' } : { color: '#3e495c' },
+          ]"
+    >
+      © 2021 Onther
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-
+  methods: {
+    isSub () {
+      return this.$route.path !== '/';
+    },
+  },
 };
 </script>
 
@@ -24,7 +56,6 @@ export default {
 
   width: 100%;
   height: 76px;
-  background: #0062c2;
 }
 
 .clause {
@@ -60,6 +91,6 @@ export default {
   text-align: left;
   color: #ffffff;
 
-  padding-top: 8px;
+  padding-top: 20px;
 }
 </style>

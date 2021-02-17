@@ -3,6 +3,7 @@
        :style="[
          isHovered && type === 'A' ? { 'border': 'solid 1px #2a72e5' } : {},
          isHovered && type === 'B' ? { 'border': 'solid 1px #f7981c' } : {},
+         $mq === 'mobile' ? { width: '100%', 'justify-content': ''} : { 'justify-content': 'center' },
        ]"
        @mouseover="isHovered=true" @mouseleave="isHovered=false"
   >
@@ -69,7 +70,6 @@ export default {
   position: relative;
 
   display: flex;
-  justify-content: center;
   align-items: center;
 
   word-break: break-all;
