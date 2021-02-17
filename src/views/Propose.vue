@@ -264,7 +264,293 @@
         </div>
       </div>
     </div>
-    <div v-if="$mq !== 'mobile'" style="display: flex; flex-direction: column; align-items: center;">
+
+    <div v-else-if="$mq === 'tablet'" style="display: flex; flex-direction: column; align-items: center; max-width=1024px;">
+      <div class="header">
+        Propose Agenda
+      </div>
+      <div class="type-container">
+        <div class="typeA"
+             :class="{'typeA-selected': type === 'A'}"
+             @click="type = 'A'; index = -1;"
+        >
+          Type A
+        </div>
+        <div class="typeB"
+             :class="{'typeB-selected': type === 'B'}"
+             @click="type = 'B'; indexOfTypeB = -1;"
+        >
+          Type B
+        </div>
+      </div>
+      <div class="type-explanation">
+        {{ type === 'A' ?
+          'You can create a sound Tokamak Network ecosystem. Please participate in various suggestions.' :
+          'Tokamak Network infrastructure may be affected. Careful suggestions are required.' }}
+      </div>
+      <!-- typeA -->
+      <div v-if="type === 'A'">
+        <div class="propose-container-tablet">
+          <div v-for="(contract, i) in contractsOfTypeA" :key="contract" class="propose-contract-tablet"
+               :style="[
+                 index !== -1 ? { 'height': 124+'px' } : { height: 260+'px' },
+                 index === i ? { background: '#2a72e5' } : {},
+               ]"
+               @click="index=i; setCurrentContract(index);"
+          >
+            <div class="function-count"
+                 :style="[index !== -1 ? { display: 'none' } : {}]"
+            >
+              {{ pad(numFunctions(i)) }}
+            </div>
+            <img v-if="i === 0" src="@/assets/icon-deposit-manager-typeA.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 1" src="@/assets/icon-seig-manager-typeA.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 2" src="@/assets/icon-dao-committee-typeA.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 3" src="@/assets/icon-dao-vault-typeA.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <div>
+              <div class="contract-name"
+                   :style="[index === i ? { color: '#ffffff' } : {}]"
+              >
+                {{ contract }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="index === 0" class="box-container-tablet">
+          <div>
+            <div v-for="func in depositManagerFunctionsOfTypeA" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="index === 1" class="box-container-tablet">
+          <div>
+            <div @click="showModal=true; currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
+              <box :function-name="'setSeigRates'"
+                   :type="'A'"
+              />
+            </div>
+            <div v-for="func in seigManagerFunctionsOfTypeA" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="index === 2" class="box-container-tablet">
+          <div>
+            <div v-for="func in daoCommitteeProxyFunctionsOfTypeA" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="index === 3" class="box-container-tablet">
+          <div>
+            <div v-for="func in daoVaultFunctionsOfTypeA" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- typeB -->
+      <div v-else style="max-width: 1024px;">
+        <div class="propose-container" style="display: flex; flex-wrap: wrap;">
+          <div v-for="(contract, i) in contractsOfTypeB" :key="contract" class="propose-contract-typeB-tablet"
+               :style="[
+                 indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 260+'px' },
+                 indexOfTypeB === i ? { background: '#f7981c' } : {},
+               ]"
+               style="margin-bottom: 30px; width:228px;"
+               @click="indexOfTypeB=i; setCurrentContractOfTypeB(indexOfTypeB);"
+          >
+            <div class="function-count"
+                 :style="[indexOfTypeB !== -1 ? { display: 'none' } : {}]"
+            >
+              {{ pad(numFunctionsOfTypeB(i)) }}
+            </div>
+            <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt=""
+                 :style="[
+                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                 ]"
+            >
+            <div>
+              <div class="contract-name"
+                   :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"
+              >
+                {{ contract }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 0" class="box-container-typeB">
+          <div>
+            <div v-for="func in tonFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 1" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in wtonFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 2" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in depositManagerFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 3" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in seigManagerFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 4" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in layer2RegistryFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 5" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in daoCommitteeProxyFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 6" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in daoCommitteeFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="indexOfTypeB === 7" class="box-container-typeB-tablet">
+          <div>
+            <div v-for="func in daoVaultFunctionsOfTypeB" :key="func.name"
+                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+            >
+              <box :function-name="func.name"
+                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
+                   :type="'B'"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else style="display: flex; flex-direction: column; align-items: center;">
       <div class="header">
         Propose Agenda
       </div>
@@ -968,6 +1254,168 @@ export default {
     }
   }
 
+  .propose-container-tablet {
+    display: flex;
+    justify-content: center;
+
+    .propose-contract-tablet {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      width: 230px;
+      border-radius: 15px;
+      box-shadow: 0 10px 15px 0 rgba(223, 228, 238, 0.25);
+      background-color: #ffffff;
+
+      position: relative;
+
+      transition: height 0.5s;
+
+      margin-left: 11px;
+      margin-right: 11px;
+
+      > img {
+        position: absolute;
+        right: 20px;
+        top: 35px;
+      }
+
+      .function-count {
+        position: absolute;
+        left: -8px; top: 30px;
+
+        font-family: Roboto;
+        font-size: 64px;
+        font-weight: 100;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.31;
+        letter-spacing: normal;
+        text-align: right;
+        color: #f4f6f9;
+      }
+      > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-left: 30px;
+        padding-right: 20px;
+        padding-bottom: 19px;
+      }
+    }
+
+    .propose-contract-typeB-tablet {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      width: 230px;
+      border-radius: 15px;
+      box-shadow: 0 10px 15px 0 rgba(223, 228, 238, 0.25);
+      background-color: #ffffff;
+
+      position: relative;
+
+      transition: height 0.5s;
+
+      margin-left: 11px;
+      margin-right: 11px;
+
+        &:hover {
+          background: #f7981c;
+          color: #ffffff;
+        }
+      }
+
+    .contract-name {
+      font-family: Roboto;
+      font-size: 24px;
+      font-weight: 300;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      white-space: pre-wrap;
+      margin-left: -10px;
+
+      margin-bottom: 12px;
+    }
+  }
+
+  .type-container {
+    display: flex;
+
+    .typeA {
+      width: 102px;
+      height: 30px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 5px;
+      background-color: #ffffff;
+
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.38;
+      letter-spacing: 0.46px;
+      text-align: center;
+      color: #818992;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+    }
+
+    .typeA-selected {
+      background-color: #2a72e5;
+      color: #ffffff;
+    }
+
+    .typeB {
+      width: 102px;
+      height: 30px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 5px;
+      background-color: #ffffff;
+
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.38;
+      letter-spacing: 0.46px;
+      text-align: center;
+      color: #818992;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+    }
+
+    .typeB-selected {
+      background-color: #f7981c;
+      color: #ffffff;
+    }
+
+  }
+
   .type-explanation {
     width: 364px;
 
@@ -1006,6 +1454,40 @@ export default {
 
     > div {
       width: 1194px;
+
+      display: flex;
+      flex-wrap: wrap;
+
+      margin-top: 10px;
+    }
+  }
+
+  .box-container-tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > div {
+      width: 1024px;
+
+      display: flex;
+      flex-wrap: wrap;
+
+      margin: 10px 0 10px 30px;
+
+      > div {
+        margin: 20px 0 0 4px;
+      }
+    }
+  }
+
+  .box-container-typeB-tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > div {
+      width: 1024px;
 
       display: flex;
       flex-wrap: wrap;
