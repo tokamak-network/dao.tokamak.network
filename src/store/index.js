@@ -503,17 +503,17 @@ export default new Vuex.Store({
             state.candidates.forEach(candidate=>{
               if (candidate.operator.toLowerCase() === account.toLowerCase())
                 myCandidateContracts.push({
-                  candidateContract:  candidate.candidateContract,
-                  candidate:  candidate.candidate,
-                  operator:  candidate.operator,
-                  layer2:  candidate.layer2,
+                  candidateContract: candidate.candidateContract,
+                  candidate: candidate.candidate,
+                  operator: candidate.operator,
+                  layer2: candidate.layer2,
                   name: candidate.name,
                   canVoteAgendas: [],
-                  agendaVote:[],
-                  countCanVoteAgendas:  0,
-                  countAgendaVote:  0,
+                  agendaVote: [],
+                  countCanVoteAgendas: 0,
+                  countAgendaVote: 0,
                   claimableAmount: 0,
-                  voteRates:0,
+                  voteRates: 0,
                 });
             });
           }

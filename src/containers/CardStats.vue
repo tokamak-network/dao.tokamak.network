@@ -56,7 +56,7 @@ export default {
     'card-container': Card,
   },
   props: {
-    clength:{
+    clength: {
       type: Number,
       default: 0,
       required: true,

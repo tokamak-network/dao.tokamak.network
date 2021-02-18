@@ -474,7 +474,9 @@ export default {
   }
 }
 
-.button-container-tablet {
+.button-container-mobile {
+  margin-top: 35px;
+
   display: flex;
   justify-content: space-between;
 

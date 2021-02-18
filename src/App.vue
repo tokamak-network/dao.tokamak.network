@@ -68,7 +68,7 @@ body { margin: 0 !important; }
   min-height: 100vh;
 
   width: 100%;
-  min-width: 400px;
+  min-width: 320px;
   position: absolute;
   right: 0;
   left: 0;

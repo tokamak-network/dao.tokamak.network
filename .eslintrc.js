@@ -52,5 +52,6 @@ module.exports = {
     'vue/max-attributes-per-line': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'security/detect-object-injection': 'off',
+    'key-spacing': ['error', { 'afterColon': true }],
   },
 };

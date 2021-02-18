@@ -1,10 +1,17 @@
 <template>
   <div class="card-agenda-info">
-    <div class="button">
+    <div v-if="$mq !== 'mobile'" class="button">
       <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" @on-clicked="back" />
       <div>
         <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
         <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
+      </div>
+    </div>
+    <div v-else class="button-mobile">
+      <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" @on-clicked="back" />
+      <div>
+        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
@@ -38,7 +45,41 @@
         <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
       <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
-      <div class="selector">
+      <div v-if="$mq !== 'mobile'" class="selector">
+        <div :class="{ 'selected': currentSelector === 0,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
+             @click="currentSelector = 0"
+        >
+          Info
+        </div>
+        <div :class="{ 'selected': currentSelector === 1,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 1 }"
+             @click="currentSelector = 1"
+        >
+          Description
+        </div>
+        <div :class="{ 'selected': currentSelector === 2,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 2 }"
+             @click="currentSelector = 2"
+        >
+          On-Chain Effects
+        </div>
+        <div :class="{ 'selected': currentSelector === 3,
+                       'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 3 }"
+             @click="currentSelector = 3"
+        >
+          Comments ({{ voted }})
+        </div>
+
+        <span class="space" />
+        <button v-if="account && checkStatus"
+                class="update-btn"
+                @click="endAgenda()"
+        >
+          End Agenda
+        </button>
+      </div>
+      <div v-else class="selector-mobile">
         <div :class="{ 'selected': currentSelector === 0,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
              @click="currentSelector = 0"
@@ -252,6 +293,37 @@ export default {
 .selector > div:nth-child(3) {
   margin-right: 35px;
 }
+.selector-mobile {
+  display: flex;
+}
+.selector-mobile .selected {
+  color: #2a72e5;
+  font-weight: 500;
+}
+.selector-mobile .selected-typeB {
+  color: #ff7800;
+}
+.selector-mobile > div {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #86929d;
+}
+.selector-mobile > div:hover {
+  cursor: pointer;
+}
+.selector-mobile > div:nth-child(2) {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.selector-mobile > div:nth-child(3) {
+  margin-right: 20px;
+}
+
 .divider {
   width: 100%;
   height: 1px;
@@ -415,6 +487,23 @@ export default {
 }
 .button .next {
   width: 134px;
+}
+
+.button-mobile {
+  display: flex;
+  justify-content: space-between;
+}
+.button-mobile > div {
+  display: flex;
+}
+.button-mobile .back {
+  width: 120px;
+}
+.button-mobile .prev {
+  width: 95px;
+}
+.button-mobile .next {
+  width: 95px;
 }
 .update-btn {
   outline: none;

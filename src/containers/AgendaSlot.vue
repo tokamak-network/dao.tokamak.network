@@ -2,11 +2,11 @@
   <div class="agenda-slot">
     <div>
       <div class="title">Agenda</div>
-      <div class="agenda-info">
+      <!-- <div class="agenda-info">
         {{ numAgenda }} Agendas - POSTED {{ agendas[0]? agendas[0].tCreationDate:'' | date2 }}
-      </div>
+      </div> -->
       <card-agenda-slot v-for="agenda in agendas.slice(0, 5)" :key="agenda.agendaid" :agenda="agenda" />
-      <button-comp v-if="hide === false && agendas.length > 5" :name="hideButton" :type="'hide'" @on-clicked="hide=true" />
+      <button-comp v-if="hide === false && agendas.length > 5" :name="hideButton" class="hide-btn" :type="'hide'" @on-clicked="hide = true" />
       <div v-if="hide === true && agendas.length > 5">
         <card-agenda-slot v-for="agenda in agendas.slice(5, agendas.length)" :key="agenda.agendaid" :agenda="agenda" />
       </div>
@@ -16,8 +16,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 import Button from '@/components/Button.vue';
+import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 
 export default {
   components: {
@@ -68,10 +68,8 @@ export default {
 }
 .agenda-info {
   margin-bottom: 12px;
-  height: 15px;
   font-family: Roboto;
   font-size: 11px;
-  width: 786px;
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
@@ -92,5 +90,13 @@ export default {
 .dropdown {
   width: 150px;
   margin-left: 15px;
+}
+
+.hide-btn {
+  height: 55px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
+  font-size: 14px;
+  color: #86929d;
 }
 </style>

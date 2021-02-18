@@ -126,6 +126,11 @@ export function pad (n, width, z) {
 }
 
 export function withComma (n) {
-  n = String(n);
-  return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ','); // eslint-disable-line
+  try {
+    n = parseFloat(n);
+  } catch (err) {
+    if (err) console.log('bug', 'parse float'); // eslint-disable-line
+  }
+
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2 });
 }

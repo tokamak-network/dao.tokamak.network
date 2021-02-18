@@ -113,4 +113,17 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.committee-container-mobile {
+  flex: 1;
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.card-container-mobile {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
 </style>

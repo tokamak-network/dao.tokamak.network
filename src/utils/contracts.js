@@ -101,362 +101,999 @@ module.exports.getContract = getContract;
 const depositManagerFunctionsOfTypeA = [
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 globalWithdrawalDelay_: Minimum withdrawal period (unit: block)',
+      'exampleParam0': '1000',
     },
-    'name': 'setGlobalWithdrawalDelay', 'title':'Global withdrawal delay will be changed.', 'prettyName': '', 'explanation': 'It decides the Global Withdrawal Period for stakers/delegators. No single Layer2\'s withdrawal delay can\'t be shorter then this.',
+    'name': 'setGlobalWithdrawalDelay',
+    'title': 'Global withdrawal delay will be changed.',
+    'prettyName': '',
+    'explanation':
+`Tokamak Network Layer 2 staking has a global withdrawal delay.
+
+Staking operators can set individual withdrawal delay, but there is a minimum withdrawal delay period set throughout the network. This minimum withdrawal delay period is the 'global withdrawal delay', and each operator's withdrawal delay cannot be lower than the global withdrawal delay.
+    
+This withdrawal delay is specified in blocks. New global withdrawal delay will be applied when an offer is passed with the number of blocks you want to propose via 'globalWithdrawalDelay_'`,
   },
 ];
 const seigManagerFunctionsOfTypeA = [
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0':
+`uint256 powerTONSeigRate_: PowerTON distribution ratio (decimal: 27)
+100000000000000000000000000: 10%`,
+      'exampleParam0': '100000000000000000000000000',
     },
-    'name': 'setPowerTONSeigRate', 'title':'Power TON Seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for PowerTON winning prize.',
+    'name': 'setPowerTONSeigRate',
+    'title': 'Power TON Seigniorage rate will be changed.',
+    'prettyName': '',
+    'explanation':
+`Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%). 
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0':
+`uint256 daoSeigRate_: DAO distribution ratio (decimal: 27)
+100000000000000000000000000: 10%`,
+      'exampleParam0': '100000000000000000000000000',
     },
-    'name': 'setDaoSeigRate', 'title':'DAO seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for DAO pot.',
+    'name': 'setDaoSeigRate',
+    'title': 'DAO seigniorage rate will be changed.',
+    'prettyName': '',
+    'explanation':
+`Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%). 
+This function allows you to determine the ratio of the newly issued TON accumulated for DAO.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0':
+`uint256 PseigRate_: Additional seigniorage distribution ratio
+100000000000000000000000000: 10%`,
+      'exampleParam0': '100000000000000000000000000',
     },
-    'name': 'setPseigRate', 'title':'Propotional seigniorage rate will be changed.', 'prettyName': '', 'explanation': 'It represents how much of newly minted TON per block is deducted for propotional staking rewards.',
+    'name': 'setPseigRate',
+    'title': 'Propotional seigniorage rate will be changed.',
+    'prettyName': '',
+    'explanation':
+`Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%). 
+This function allows you to determine the ratio of the newly issued TON accumulated for staking users.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 adjustDelay_: Commission rate application grace period (Unit: Block)',
+      'exampleParam0': '1000',
     },
-    'name': 'setAdjustDelay', 'title':'Adjust delay will be changed', 'prettyName': '', 'explanation': 'It decides how much time should be wait until new commission rate is applied.',
+    'name': 'setAdjustDelay',
+    'title': 'Adjust delay will be changed',
+    'prettyName': '',
+    'explanation':
+`TON operator can set the commission rate deducted from the delegator.
+However, certain period is required to apply the changed commission rate. The period is measured in blocks.
+
+This function allows you to set a grace period for commission rate change application.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 minimumAmount_: Operator\'s minimum deposit quantity 1000000000000000000000000000: 1 WTON',
+      'exampleParam0': '1000000000000000000000000000',
     },
-    'name': 'setMinimumAmount', 'title':'Minimum amount to staking TON will be changed.', 'prettyName': '', 'explanation': 'It sets minimum amount of staked TON for operator to maintain Layer2. It operator\'s staked TON is less than this one, operator\'s commit is alwayw reverted.',
+    'name': 'setMinimumAmount',
+    'title': 'Minimum amount to staking TON will be changed.',
+    'prettyName': '',
+    'explanation':
+`TON operators must deposit and stake a minimum amount to operate Layer 2 chain of TON.
+
+If you are staking less than the amount set in this function, you cannot commit.
+
+* Commit: The act of collecting blocks from Layer 2 and entering them into Layer 1. Seigniorage (compensation) is paid when you prove that you are operating faithfully by making a commit.`,
   },
 ];
 const daoCommitteeProxyFunctionsOfTypeA = [
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 _value: Member activity subsidy per second (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam0': '10000000',
     },
-    'name': 'setActivityRewardPerSecond', 'title':'', 'prettyName': '', 'explanation': 'This is activity reward for Layer2 operator which occupy the Committee member. Reward is given time basis(seconds). It decide activity reward per seconds.',
+    'name': 'setActivityRewardPerSecond',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`In Tokamak DAO, DAO pays a reward (activity subsidy) to encourage the sincere activities of committees that review major governance issues.
+
+This activity subsidy is paid per second, and through this function, the amount of TON distributed per second can be set.`,
   },
   {
     'params': {
-      'aboutParam0': '0',
-      'exampleParam0': '0',
-      'aboutParam1': '1',
-      'exampleParam1': '1',
+      'aboutParam0': 'uint256 _newMaxMember: Maximum number of members',
+      'exampleParam0': '5',
+      'aboutParam1': 'uint256 _quorum: Quorum',
+      'exampleParam1': '3',
     },
-    'name': 'increaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It increases maximum number of Committee Members.',
+    'name': 'increaseMaxMember',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to increase the number of active committee members in Tokamak DAO.
+
+The number of committee members to be increased goes into the first parameter (Param1), and the number of quorum goes into the second parameter (Param2).
+
+For example, if there are 3 committee members currently and a function 'increaseMaxMember(2, 4)' is passed, the committee member will be 5 and the quorum will be 4.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
+      'aboutParam0': 'uint256 _reducingMemberIndex: Member index to be removed',
+      'exampleParam0': '1',
+      'aboutParam1': 'uint256 _quorum: Quorum',
+      'exampleParam1': '3',
     },
-    'name': 'decreaseMaxMember', 'title':'', 'prettyName': '', 'explanation': 'It decreased maximum number of Committee Members.',
+    'name': 'decreaseMaxMember',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows to reduce the number of active committee members in Tokamak DAO.
+
+The number that goes into the first parameter (Param1) is the index of the committee member to be excluded, and the number that goes into the second parameter (Param2) is the quorum.
+
+Each committee member is assigned with an index. Through this function, you can specify the members to be excluded and the quorum to be changed accordingly.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 _quorum: Quorum',
+      'exampleParam0': '3',
     },
-    'name': 'setQuorum', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum qurom for committee members to execute agenda.',
+    'name': 'setQuorum',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function sets the minimum number of votes for a single item to pass.
+
+If you record less than the minimum number of votes set here, the agenda will not pass and the agenda will be rejected.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 _fees: Agenda creation fee (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam0': '100000000000000000000',
     },
-    'name': 'setCreateAgendaFees', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum cost to propose agenda. Unit is TON.',
+    'name': 'setCreateAgendaFees',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`In order for an agenda to be made, a certain amount of TON must be incinerated.
+ 
+This function sets the amount of TON to be burned to make an agenda.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 _minimumNoticePeriod: Agenda minimum disclosure period (unit: seconds)',
+      'exampleParam0': '10000',
     },
-    'name': 'setMinimumNoticePeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum notice period of agenda. Per seconds.',
+    'name': 'setMinimumNoticePeriodSeconds',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`The agenda will be published for a period of time before it is passed.
+
+This function allows you to set the minimum disclosure period, and the unit is in seconds.
+
+The actual disclosure period for each agenda can be set at the time of creation of the agenda, but it must be more than the minimum value set in this function.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
+      'aboutParam0': 'uint256 _minimumVotingPeriod: Agenda minimum voting period (unit: seconds)',
+      'exampleParam0': '10000',
     },
-    'name': 'setMinimumVotingPeriodSeconds', 'title':'', 'prettyName': '', 'explanation': 'It sets minimum vote period of agenda. Per seconds.',
+    'name': 'setMinimumVotingPeriodSeconds',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to set the minimum voting period, and the unit is in seconds.
+
+The actual voting period for each agenda can be set when creating an agenda, but it must be more than the minimum value set in this function.`,
   },
 ];
 const daoVaultFunctionsOfTypeA = [
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
+      'aboutParam0': 'address _to: Address to which authority is granted',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam1': '1000000000000000000',
     },
-    'name': 'approveTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of TON in DAO vault2.',
+    'name': 'approveTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
+Through this function, you can grant permission to transfer the TON stored in DAO Vault to a specific address in a specific amount.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
+      'aboutParam0': 'address _to: Address to which authority is granted',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+      'exampleParam1': '1000000000000000000000000000',
     },
-    'name': 'approveWTON', 'title':'', 'prettyName': '', 'explanation': 'It approves param1(address) to spend param2 amount of WTON in DAO vault2.',
+    'name': 'approveWTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing them.
+Through this function, you can grant permission to transfer WTON stored in DAO Vault to a specific address in a specific amount.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
-      'aboutParam2': '',
-      'exampleParam2': '',
+      'aboutParam0': 'address _token: Token contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address _to: Address to which permission is granted',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+      'aboutParam2': 'uint256 _amount: Amount',
+      'exampleParam2': '100000000000',
     },
-    'name': 'approveERC20', 'title':'', 'prettyName': '', 'explanation': 'It approves param2(address) to spend param3 amount of ERC20(param1) in DAO vault2.',
+    'name': 'approveERC20',
+    'title': '',
+    'prettyName': '',
+    'explanation': 'This function allows you to grant permission to transfer specific ERC20 tokens stored in DAO Vault to a specific address in a specific amount.',
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
+      'aboutParam0': 'address _to: Address to receive withdrawal',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam1': '1000000000000000000',
     },
-    'name': 'claimTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of TON.',
+    'name': 'claimTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
+Through this function, you can request to send the TON stored in the DAO Vault to a specific address in a specific amount.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
+      'aboutParam0': 'address _to: Address to receive withdrawal',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+      'exampleParam1': '1000000000000000000000000000',
     },
-    'name': 'claimWTON', 'title':'', 'prettyName': '', 'explanation': 'It allows param1 to claim param2 amount of WTON.',
+    'name': 'claimWTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Some of the TON seigniorage generated per block is accumulated into DAO. The DAO Vault is responsible for storing the seigniorage.
+Through this function, you can request to send the WTON stored in DAO Vault to a specific address in a specific amount.`,
   },
   {
     'params': {
-      'aboutParam0': '',
-      'exampleParam0': '',
-      'aboutParam1': '',
-      'exampleParam1': '',
-      'aboutParam2': '',
-      'exampleParam2': '',
+      'aboutParam0': 'address _token: Token contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address _to: Address to receive withdrawal',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+      'aboutParam2': 'uint256 _amount: Amount',
+      'exampleParam2': '100000000000',
     },
-    'name': 'claimERC20', 'title':'', 'prettyName': '', 'explanation': 'It allows param2 to claim param3 amount of ERC20(param1).',
+    'name': 'claimERC20',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to request that the ERC20 tokens stored in the DAO Vault be transferred to a specific address and a specific amount.',
   },
 ];
 
 const tonFunctionsOfTypeB = [
   {
-    'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address that will have the right to issue additional TON',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'addMinter',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Through this function, you can give permission to create TON to a specific address.
+Enter the address to be authorized in the first parameter (Param1).`,
+  },
+  // {
+  //   'params': {
+  //     'aboutParam0': '',
+  //     'exampleParam0': '',
+  //   },
+  //   'name': 'enableCallback',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  {
+    'params': {
+      'aboutParam0': 'address account: Address to receive TON',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 amount: TON issuance amount (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam1': '1000000000000000000',
+    },
+    'name': 'mint',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function exists because WTON needs the authority to issue TON.
+Through this function, you can add a specific amount of balance to a specific account.
+
+Enter 'address account' in the first parameter (Param1) and 'amount' in the second parameter (Param2).`,
   },
   {
-    'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: Address from which TON issuance authority is to be removed',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceMinter',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Minter reserves the authority to issue TON.
+Through this function, you can remove Minter's authority.`,
   },
+  // {
+  //   'name': 'renounceOwnership',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  // {
+  //   'name': 'renouncePauser',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
   {
-    'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address sender: The sender\'s address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address recipient: The recipient\'s address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+      'aboutParam2': 'uint256 amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
+      'exampleParam2': '1000000000000000000',
+    },
+    'name': 'transferFrom',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to send TON.
+Through this function, TON in the first parameter (Param1) can be transferred to the second parameter (Param2) as much as the amount in the third parameter (Param3).
+Enter the Sender account in Param1, the Recipient account in Param2, and the amount in Parma3.`,
   },
-  {
-    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
-  },
+  // {
+  //   'name': 'transferOwnership',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  // {
+  //   'name': 'setSeigManager',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
 ];
 const wtonFunctionsOfTypeB = [
   {
-    'name': 'addMinter', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address that will have the right to issue additional WTON',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'addMinter',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Through this function, you can give a specific account permission to create WTON.
+Enter the account to be granted permission into Parma1.`,
   },
   {
-    'name': 'enableCallback', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bool _callbackEnabled: true/false',
+      'exampleParam0': 'false',
+    },
+    'name': 'enableCallback',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`When Layer 2 commits, part of the seigniorage is distributed to DAO and PowerTON.
+In addition, when WTON is transferred (incineration, issuance, transmission, etc.), some of the seigniorage can be distributed to DAO and PowerTON depending on the value of Param1.
+
+If the value is True, part of the seigniorage will be distributed to DAO and PowerTON when the WTON is transferred (burn, issue, transmission, etc.), and if the value is False, the seigniorage will not be distributed.
+
+* Commit: The act of collecting blocks from Layer 2 and entering them into Layer 1. Seigniorage (compensation) is paid when you prove that you are operating faithfully by making a commit.`,
   },
   {
-    'name': 'mint', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address to receive WTON',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 amount: WTON issuance amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+      'exampleParam1': '1000000000000000000000000000',
+    },
+    'name': 'mint',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function exists because TON needs the authority to issue WTON.
+Through this function, you can add a specific amount of balance to a specific account.
+
+Enter 'address account' in the first parameter (Param1) and 'amount' in the second parameter (Param2).`,
+  },
+  // {
+  //   'name': 'renounceMinter',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  // {
+  //   'name': 'renounceOwnership',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  // {
+  //   'name': 'renouncePauser',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  {
+    'params': {
+      'aboutParam0': 'address _seigManager: The new SeigManager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSeigManager',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to update SeigManager WTON has. SeigManager is a contract that manages the seigniorage.
+Enter the seigniorage contract to be changed in the first parameter (Param1).`,
   },
   {
-    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address sender: The sender\'s address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address recipient: The recipient\'s address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+      'aboutParam2': 'uint256 amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+      'exampleParam2': '1000000000000000000000000000',
+    },
+    'name': 'transferFrom',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to transfer WTON.
+Through this function, WTON in Param1 can be transferred to Param2 as much as the amount in Param3.
+Enter the account of Sender in the first parameter (Param1), the account of Recipient in the second parameter (Param2), and the amount in the third parameter (Parma3).`,
   },
   {
-    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: Target contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address newOwner: New owner address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'transferOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to update DAO (contract update). Through this function, owner rights for WTON held by DAO can be transferred to param1. Enter the contract to be changed in the first parameter (Param1).',
   },
   {
-    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'transferFrom', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'burnFrom', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address to be burned',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'uint256 amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+      'exampleParam1': '1000000000000000000000000000',
+    },
+    'name': 'burnFrom',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to incinerate a certain amount of WTON held by a certain account.
+Enter the address acount in the first parameter (Param1) and the amount to be burned in the second parameter (Param2).`,
   },
 ];
 const depositManagerFunctionsOfTypeB = [
   {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address newOwner: Address to receive owner authority',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'transferOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'DAO has owner rights for Depositmanager (user deposit and withdrawal process management during staking). This function allows you to change the authority, and you can enter the address to which the authority will be transferred in the first parameter (Param1). It will be used when the DAO is updated.',
   },
   {
-    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address seigManager: New seig manager contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSeigManager',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Deposit Manager (user deposit and withdrawal process management during staking) holds a contract to manage seigniorage.
+This function allows you to change the contract, and you can enter the contract address to be changed in the first parameter (Parma1). It will be used when the seigniorage management contract is updated.`,
   },
   {
-    'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address layer2: Layer2 address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address recipient: The recipient\'s address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+      'aboutParam2': 'uint256 amount: Amount to slash',
+      'exampleParam2': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'slash',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to change the operator of Layer 2. Since the operator can be forcibly changed, it can be used in the event of malicious act.',
   },
 ];
 const seigManagerFunctionsOfTypeB = [
   {
-    'name': 'addPauser', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address to receive authority',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'addPauser',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to grant permission to stop issuing seigniorage. Enter the address account to be authorized in the first parameter (Param1).',
   },
   {
-    'name': 'renounceMinter', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: Address from which authority is to be removed',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceMinter',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+    'This function allows you to remove the Minter rights for the first parameter (Param1) held by the existing Seigmanger (seigniorage managing contract). It will be used when Seigmanger (the seigniorage managing contract) is updated.',
   },
   {
-    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: The target address for which you want to remove owner rights from SeigManger.',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+    'This function allows you to remove the Owner rights for the first parameter (Param1) held by the existing Seigmanger (seigniorage managing contract). It will be used when Seigmanger (the seigniorage managing contract) is updated.',
   },
   {
-    'name': 'renouncePauser', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: Target address for which you want to remove Pauser permission from SeigManger',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renouncePauser',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+    'This function removes the Pauser permission for the first parameter (Param1) held by the existing Seigmanger when Seigmanger (seigniorage managing contract) is updated.',
   },
   {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address target: The target address from which the owner authority to be transferred by SeigManger',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address newOwner: The address to which SeigManger\'s owner authority is transferred',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'transferOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to change the owner of the first parameter (Param1) held by Seigmanager (seigniorage managing contract) to the second parameter (Param2).
+It will be used when Seigmanager (seigniorage managing contract) is updated.`,
   },
   {
-    'name': 'pause', 'title':'', 'prettyName': '', 'explanation': '',
+    'name': 'pause',
+    'title': '',
+    'prettyName': '',
+    'explanation': 'This function allows you to stop issuing seigniorage.',
   },
   {
-    'name': 'unpause', 'title':'', 'prettyName': '', 'explanation': '',
+    'name': 'unpause',
+    'title': '',
+    'prettyName': '',
+    'explanation': 'This function allows you to resume issuance of seigniorage.',
   },
   {
-    'name': 'setPowerTON', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address powerton: New PowerTON address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setPowerTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to set the new PowerTON cotntract as the first parameter (Param1). This function will be used when PowerTON is updated.',
   },
   {
-    'name': 'setDao', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address daoAddress: New DAO Vault address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setDao',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to set the new DAO contract as the first parameter (Param1). This function will be used when DAO Vault is updated.',
   },
   {
-    'name': 'setCoinageFactory', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address daoAddress: New CoinageFactory address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setCoinageFactory',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'CoinageFactory is where the seigniorage management contracts are distributed for each layer 2. This function will be used when the seigniorage management method is upgraded.',
   },
   {
-    'name': 'addChallenger', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address account: Address to receive challenger authority for Seigmanager',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'addChallenger',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to grant the Challenger authority to a specific Address account. Enter the Address account to receive the authority into the first parameter (Param1).',
   },
   {
-    'name': 'transferCoinageOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address newSeigManager: New SeigManager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address[] coinages: The address of the Coinage to which the owner\'s authority is transferred',
+      'exampleParam1': '[0x0000000000000000000000000000000000000000, 0x0000000000000000000000000000000000000001]',
+    },
+    'name': 'transferCoinageOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when Seigmanager (seigniorage managing contract) is updated.',
   },
   {
-    'name': 'renounceWTONMinter', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address daoAddress: New CoinageFactory address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceWTONMinter',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Seigmanger (seigniorage managing contract) has a Minter function for WTON.
+Seigmanager's MInter function for WTON can be removed through this function. It will be used when Seigmanger is updated.`,
   },
   {
-    'name': 'slash', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address layer2: Layer 2 contract address to slash',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address challenger: New operator address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'slash',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to take action when an operator\'s cheating occurs. You can forcibly change the operator of the first parameter (Param1) layer 2 to the second parameter (Param2).',
   },
 ];
 const layer2RegistryFunctionsOfTypeB = [
   {
-    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address layer2: Layer 2 contract address to slash',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'DAO has owner rights for Layer2Registry (a registry for Layer 2 into Seigmanager). Sender\'s owner rights can be removed through this function. It will be used when the DAO is updated.',
   },
   {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address newOwner: Address to which owner authority for Layer2Registry is transferred',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'transferOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'DAO has ownership rights to Layer2Registry (a registry for Layer 2 into Seigmanager). This function allows you to pass the Sender\'s owner rights to the first parameter (Param1). It will be used when the DAO is updated.',
   },
 ];
 const daoCommitteeProxyFunctionsOfTypeB = [
   {
-    'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to add',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address to be authorized',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'grantRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to grant owner rights (owner rights are displayed as 0) for DAO. You can give the DAO owner rights to the second parameter (Param2).
+If you want to grant owner rights, enter 0 in the first parameter (Param1).`,
   },
   {
-    'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to remove',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address from which authority is removed',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to remove owner rights (owner rights are marked as 0) for the DAO.
+If you want to remove the owner's authority, you can enter authority (the owner's authority is displayed as 0) in the first parameter (Param1) and your own address in the second parameter (Param2).`,
   },
   {
-    'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to remove',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address from which authority is removed',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'revokeRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to remove someone else\'s authority. If you want to remove the owner authority, enter the authority (owner authority is displayed as 0) in param1 and the address of the target whose authority you want to remove in param2.',
   },
   {
-    'name': 'setProxyPause', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bool _pause: Whether to stop (True:1/ False:0)',
+      'exampleParam0': '1',
+    },
+    'name': 'setProxyPause',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`Owners have the right to stop DAO. This function allows the owner to decide whether to stop DAO.
+If the first Param1 value is true, DAO stops, and if it is false, it operates normally.`,
   },
   {
-    'name': 'upgradeTo', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address impl: New DAO contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'upgradeTo',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function sets the new address of the DAO contract to be upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).
+It will be used when the DAO is upgraded.`,
   },
 ];
 const daoCommitteeFunctionsOfTypeB = [
   {
-    'name': 'grantRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to add',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address to be authorized',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'grantRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to grant owner rights (owner rights are displayed as 0) for DAO. You can give the DAO owner rights to the second parameter (Param2).
+If you want to grant owner rights, enter 0 in the first parameter (Param1).`,
   },
   {
-    'name': 'renounceRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to remove',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address from which authority is removed',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'renounceRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+`This function allows you to remove owner rights (owner rights are marked as 0) for the DAO.
+If you want to remove the owner's authority, you can enter authority (the owner's authority is displayed as 0) in the first parameter (Param1) and your own address in the second parameter (Param2).`,
   },
   {
-    'name': 'revokeRole', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'bytes32 role: Authority to remove',
+      'exampleParam0': '0',
+      'aboutParam1': 'address account: Address from which authority is removed',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'revokeRole',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows you to remove someone else\'s authority. If you want to remove the owner authority, enter the authority (owner authority is displayed as 0) in param1 and the address of the target whose authority you want to remove in param2.',
   },
   {
-    'name': 'setSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _seigManager: New Seigmanager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setSeigManager',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when upgrading the Seigmanager contract (seigniorage managing contract) owned by DAO. Enter the Seigmanager contract address to be upgraded in the first parameter (Param1). It will be used when Seigmanager is upgraded.',
   },
   {
-    'name': 'setCandidatesSeigManager', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address[] _candidateContracts: Candidate contract address to change Seigmanager address',
+      'exampleParam0': '[0x0000000000000000000000000000000000000000, 0x0000000000000000000000000000000000000001]',
+      'aboutParam1': 'address _seigManager: New Seigmanager address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setCandidatesSeigManager',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when upgrading the Seigmanager contract (seigniorage managing contract) held by the candidate. Enter the candidate in the first parameter (Param1) and the Seigmanager contract address to be upgraded in the second parameter (Param2).',
   },
   {
-    'name': 'setCandidatesCommittee', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address[] _candidateContracts: Candidate contract address to change DAO contract address',
+      'exampleParam0': '[0x0000000000000000000000000000000000000000, 0x0000000000000000000000000000000000000001]',
+      'aboutParam1': 'address _committee: New DAO contract address',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setCandidatesCommittee',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when upgrading the Seigmanager contract (seigniorage managing contract) held by the candidate. Enter the candidate in the first parameter (Param1) and the DAO contract address to be upgraded in the second parameter (Param2).',
   },
   {
-    'name': 'setDaoVault', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _daoVault: New DAO Vault address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setDaoVault',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when the DAO Vault is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
   },
   {
-    'name': 'setLayer2Registry', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _layer2Registry: New Layer2Registry address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setLayer2Registry',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when Layer2Registry (registry for Layer 2 into Seigmanager) is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
   },
   {
-    'name': 'setAgendaManager', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _agendaManager: New AgendaManager address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setAgendaManager',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when the DAO AgendaManager is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
   },
   {
-    'name': 'setCandidateFactory', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _candidateFactory: New CandidateFactory address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setCandidateFactory',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when CandidateFactory is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
   },
   {
-    'name': 'setTon', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _ton: New TON address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setTon',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when TON is upgraded. Enter the DAO contract address to be upgraded in param1.',
+  },
+  // {
+  //   'params': {
+  //     'aboutParam0': 'address layer2: Layer 2 contract address to slash',
+  //     'exampleParam0': '0x0000000000000000000000000000000000000000',
+  //   },
+  //   'name': 'registerOperatorByOwner',
+  //   'title': '',
+  //   'prettyName': '',
+  //   'explanation': '',
+  // },
+  {
+    'params': {
+      'aboutParam0': 'uint256 _agendaID: The agenda number to finish',
+      'exampleParam0': '13',
+    },
+    'name': 'endAgendaVoting',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function finally closes an agenda if the agenda is rejected.',
   },
   {
-    'name': 'registerOperatorByOwner', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'endAgendaVoting', 'title':'', 'prettyName': '', 'explanation': '',
-  },
-  {
-    'name': 'setAgendaStatus', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'uint256 _agendaID: The agenda number to be changed',
+      'exampleParam0': '13',
+      'aboutParam1': 'uint256 _status: The progress of the agenda',
+      'exampleParam1': '5',
+      'aboutParam2': 'uint256 _result: Voting result of the agenda',
+      'exampleParam2': '3',
+    },
+    'name': 'setAgendaStatus',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function allows the DAO to change the outcome of the agenda regardless of the vote result.',
   },
 ];
 const daoVaultFunctionsOfTypeB = [
   {
-    'name': 'renounceOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'name': 'renounceOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'The DAO holds owner rights to Vault. This function allows you to remove DAO\'s owner rights to the vault.',
   },
   {
-    'name': 'transferOwnership', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address newOwner: Address to which the owner authority will be transferred',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'transferOwnership',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'The DAO holds owner rights to Vault. This function allows you to transfer owner rights for the vault held by the DAO. Enter the new owner in the first parameter (Param1).',
   },
   {
-    'name': 'setTON', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _ton: New TON address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when TON is upgraded. Enter the new TON address in the first parameter (Param1).',
   },
   {
-    'name': 'setWTON', 'title':'', 'prettyName': '', 'explanation': '',
+    'params': {
+      'aboutParam0': 'address _wton: New WTON address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'setWTON',
+    'title': '',
+    'prettyName': '',
+    'explanation':
+'This function is used when WTON is upgraded. Enter the new WTON address in the first parameter (Param1).',
   },
 ];
 
@@ -727,7 +1364,12 @@ module.exports.parseAgendaBytecode = function (tx) {
     const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
     const values = decodeParameters(types, bytecode);
 
-    const onChainEffect = { target, name, types, values };
+    const onChainEffect = {
+      target,
+      name,
+      types,
+      values,
+    };
     onChainEffects.push(onChainEffect);
   }
   return onChainEffects;

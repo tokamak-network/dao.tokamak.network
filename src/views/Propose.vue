@@ -549,8 +549,7 @@
         </div>
       </div>
     </div>
-
-    <div v-else style="display: flex; flex-direction: column; align-items: center;">
+    <div v-if="$mq !== 'mobile'" style="display: flex; flex-direction: column; align-items: center;">
       <div class="header">
         Propose Agenda
       </div>
@@ -805,8 +804,8 @@ export default {
   },
   data () {
     return {
-      index : -1,
-      indexOfTypeB : -1,
+      index: -1,
+      indexOfTypeB: -1,
       showModal: false,
       // isEntrance: true,
 
