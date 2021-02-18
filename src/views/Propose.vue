@@ -388,8 +388,8 @@
       </div>
       <!-- typeB -->
       <div v-else style="max-width: 1024px;">
-        <div class="propose-container" style="display: flex; flex-wrap: wrap;">
-          <div v-for="(contract, i) in contractsOfTypeB" :key="contract" class="propose-contract-typeB-tablet"
+        <div class="propose-container-tablet" style="display: flex; flex-wrap: wrap;">
+          <div v-for="(contract, i) in contractsOfTypeB" :key="contract" class="propose-contract-tablet"
                :style="[
                  indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 260+'px' },
                  indexOfTypeB === i ? { background: '#f7981c' } : {},
@@ -404,42 +404,42 @@
             </div>
             <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '80px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt=""
                  :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
+                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
                  ]"
             >
             <div>
@@ -1306,12 +1306,30 @@ export default {
       }
     }
 
-    .propose-contract-typeB-tablet {
+    .contract-name {
+      font-family: Roboto;
+      font-size: 22px;
+      font-weight: 300;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      white-space: pre-wrap;
+      margin-left: -10px;
+
+      margin-bottom: 12px;
+    }
+  }
+
+  .propose-contract-typeB-tablet {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
 
-      width: 230px;
+      width: 250px;
       border-radius: 15px;
       box-shadow: 0 10px 15px 0 rgba(223, 228, 238, 0.25);
       background-color: #ffffff;
@@ -1327,25 +1345,7 @@ export default {
           background: #f7981c;
           color: #ffffff;
         }
-      }
-
-    .contract-name {
-      font-family: Roboto;
-      font-size: 24px;
-      font-weight: 300;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.33;
-      letter-spacing: normal;
-      text-align: left;
-      color: #3e495c;
-
-      white-space: pre-wrap;
-      margin-left: -10px;
-
-      margin-bottom: 12px;
     }
-  }
 
   .type-container {
     display: flex;
