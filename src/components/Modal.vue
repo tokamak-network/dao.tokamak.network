@@ -25,7 +25,7 @@ export default {
       default: '100%',
       required: true,
     },
-    mobile : {
+    mobile: {
       type: Boolean,
       default: false,
     },
