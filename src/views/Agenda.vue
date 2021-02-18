@@ -116,7 +116,7 @@
     </div>
 
     <div v-else class="committee-mobile">
-      <div class="filter-label">Filters</div>
+      <div class="filter-label" style="margin-top: 35px;">Filters</div>
       <div class="filter-container">
         <dropdown
           :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
@@ -308,7 +308,7 @@ export default {
 }
 
 .committee > div:nth-child(1) {
-  width: 1280px;
+  width: 786px;
 }
 .committee > div:nth-child(2) {
   width: 378px;
