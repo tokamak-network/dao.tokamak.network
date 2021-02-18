@@ -409,7 +409,7 @@ export default {
 }
 
 .card-title {
-  height: 26px;
+  // height: 26px;
   margin: 0 0 5px;
   font-size: 20px;
   text-align: left;
@@ -444,7 +444,7 @@ export default {
 }
 .description {
   font-size: 14px;
-  height: 19px;
+  // height: 19px;
   text-align: left;
   color: #86929d;
 }

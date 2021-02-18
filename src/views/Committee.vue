@@ -1,6 +1,65 @@
 <template>
   <div class="committee">
-    <div>
+    <div v-if="$mq === 'tablet'" class="agenda-tablet">
+      <div class="dropdown-section">
+        <div>Filters</div>
+        <dropdown
+          :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
+          :hint="'Status'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectStatus"
+        />
+        <dropdown
+          :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
+          :hint="'Result'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectResult"
+        />
+        <dropdown
+          v-if="isCandidate"
+          :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
+          :hint="'Voted'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectVoted"
+        />
+        <dropdown
+          :items="['All', 'Executed', 'Not Executed']"
+          :hint="'Executed'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectExecuted"
+        />
+        <dropdown
+          v-if="account"
+          :items="['All', 'My']"
+          :hint="'My Proposal'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectProposal"
+        />
+      </div>
+      <div class="card-section">
+        <div class="agenda-section">
+          <agenda-slot :agendas="agendaFilter()" />
+        </div>
+        <div class="stat-section">
+          <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+          <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+          <card-stats-committee />
+          <card-resource />
+        </div>
+      </div>
+    </div>
+
+    <div v-else>
       <div class="dropdown-section">
         <div>Filters</div>
         <dropdown
@@ -47,12 +106,12 @@
         />
       </div>
       <agenda-slot :agendas="agendaFilter()" />
-    </div>
-    <div>
-      <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats-committee />
-      <card-resource />
+      <div>
+        <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+        <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+        <card-stats-committee />
+        <card-resource />
+      </div>
     </div>
   </div>
 </template>
@@ -203,7 +262,7 @@ export default {
 }
 
 .committee > div:nth-child(1) {
-  width: 786px;
+  width: 1280px;
 }
 .committee > div:nth-child(2) {
   width: 378px;
@@ -226,5 +285,27 @@ export default {
 .dropdown {
   width: 150px;
   margin-left: 15px;
+}
+
+.agenda-tablet {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+.card-section {
+  display: flex;
+  justify-content: center;
+}
+.agenda-tablet > .dropdown-section {
+  width: 990px;
+}
+.agenda-section {
+  width: 582px;
+}
+.stat-section {
+  width: 378px;
+  margin-left: 30px;
+  margin-top: 25px;
 }
 </style>

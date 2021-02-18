@@ -1,12 +1,24 @@
 <template>
-  <div class="agenda-detail">
-    <div class="agenda-container">
-      <agenda />
+  <div>
+    <div v-if="$mq=='tablet'" class="agenda-detail">
+      <div class="agenda-container-tablet">
+        <agenda />
+      </div>
+      <div class="card-container">
+        <card-vote-for-agenda />
+        <card-voters :voters="voted" />
+        <card-resource />
+      </div>
     </div>
-    <div class="card-container">
-      <card-vote-for-agenda />
-      <card-voters :voters="voted" />
-      <card-resource />
+    <div v-else class="agenda-detail">
+      <div class="agenda-container">
+        <agenda />
+      </div>
+      <div class="card-container">
+        <card-vote-for-agenda />
+        <card-voters :voters="voted" />
+        <card-resource />
+      </div>
     </div>
   </div>
 </template>
@@ -74,5 +86,10 @@ export default {
   flex-direction: column;
   margin-left: 30px;
   width: 378px;
+}
+.agenda-container-tablet {
+  width: 582px;
+  display: flex;
+  flex-direction: column;
 }
 </style>
