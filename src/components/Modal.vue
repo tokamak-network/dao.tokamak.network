@@ -4,7 +4,8 @@
       <!-- @mousedown="$emit('on-closed')" -->
       <div class="modal-wrapper">
         <div class="modal-container"
-             :style="{ width: width+'px'}"
+             :class="{ mobile: mobile }"
+             :style="{ width: width }"
              @mousedown.stop
         >
           <div class="modal-body">
@@ -20,9 +21,13 @@
 export default {
   props: {
     width: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '100%',
       required: true,
+    },
+    mobile: {
+      type: Boolean,
+      default: false,
     },
   },
 };
@@ -54,6 +59,9 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+}
+.mobile {
+  width: 100%;
 }
 
 .modal-enter {

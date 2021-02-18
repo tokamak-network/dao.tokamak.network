@@ -1,49 +1,107 @@
 <template>
-  <div class="card-committee-info">
-    <div class="button">
-      <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
-                   @on-clicked="$router.push({ path: '/election' })"
-      />
-      <div>
-        <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
-        <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
+  <div>
+    <div v-if="$mq === 'mobile'">
+      <div class="button-container-mobile">
+        <button-step :type="'prev'" :name="'BACK TO ALL'" class="back"
+                     @on-clicked="$router.push({ path: '/election' })"
+        />
+        <div>
+          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
+          <button-step :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
+        </div>
+      </div>
+      <div class="content">
+        <div v-if="member(address)" class="timeline">
+          <div class="date">
+            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+          </div>
+          <div>
+            <img src="@/assets/poll-time-active-icon.svg" alt=""
+                 width="14" height="14"
+            >
+            <span class="black">Member </span>
+            <span class="blue">{{ member(address).memberIndex }} </span>
+            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+          </div>
+        </div>
+        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="selector">
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 15px; margin-right: 15px;"
+               @click="currentSelector = 1"
+          >
+            Vote Breakdown
+          </div>
+          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+
+          <span class="space" />
+          <button v-if="account"
+                  class="update-btn"
+                  :class="{
+                    'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
+                  }"
+                  @click="updateReward()"
+          >
+            Update Reward
+          </button>
+        </div>
+        <div class="divider" />
+        <committee-info v-if="currentSelector === 0" />
+        <committee-info-vote v-else-if="currentSelector === 1" />
+        <committee-vote v-else-if="currentSelector === 2" />
       </div>
     </div>
-    <div class="content">
-      <div v-if="member(address)" class="timeline">
-        <div class="date">
-          Elected at {{ member(address).info.memberJoinedTime | date1 }}
-        </div>
-        <div>
-          <img src="@/assets/poll-time-active-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <span class="black">Member </span>
-          <span class="blue">{{ member(address).memberIndex }} </span>
-          <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
-        </div>
-      </div>
-      <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
-      <div class="selector">
-        <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
-        <div :class="{ 'selected': currentSelector === 1 }" @click="currentSelector = 1">Vote Breakdown</div>
-        <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
 
-        <span class="space" />
-        <button v-if="account"
-                class="update-btn"
-                :class="{
-                  'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
-                }"
-                @click="updateReward()"
-        >
-          Update Reward
-        </button>
+    <div v-else class="card-committee-info">
+      <div class="button-container">
+        <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
+                     @on-clicked="$router.push({ path: '/election' })"
+        />
+        <div>
+          <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
+          <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
+        </div>
       </div>
-      <div class="divider" />
-      <committee-info v-if="currentSelector === 0" />
-      <committee-info-vote v-else-if="currentSelector === 1" />
-      <committee-vote v-else-if="currentSelector === 2" />
+      <div class="content">
+        <div v-if="member(address)" class="timeline">
+          <div class="date">
+            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+          </div>
+          <div>
+            <img src="@/assets/poll-time-active-icon.svg" alt=""
+                 width="14" height="14"
+            >
+            <span class="black">Member </span>
+            <span class="blue">{{ member(address).memberIndex }} </span>
+            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+          </div>
+        </div>
+        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="selector">
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
+               @click="currentSelector = 1"
+          >
+            Vote Breakdown
+          </div>
+          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+
+          <span class="space" />
+          <button v-if="account"
+                  class="update-btn"
+                  :class="{
+                    'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
+                  }"
+                  @click="updateReward()"
+          >
+            Update Reward
+          </button>
+        </div>
+        <div class="divider" />
+        <committee-info v-if="currentSelector === 0" />
+        <committee-info-vote v-else-if="currentSelector === 1" />
+        <committee-vote v-else-if="currentSelector === 2" />
+      </div>
     </div>
   </div>
 </template>
@@ -296,10 +354,6 @@ export default {
 .selector > div:hover {
   cursor: pointer;
 }
-.selector > div:nth-child(2) {
-  margin-left: 35px;
-  margin-right: 35px;
-}
 
 .divider {
   width: 100%;
@@ -341,21 +395,42 @@ export default {
   color: #2a72e5;
 }
 
-.button {
+.button-container {
   display: flex;
   justify-content: space-between;
+
+  > div {
+    display: flex;
+  }
+  .back {
+    width: 195px;
+  }
+  .prev {
+    width: 165px;
+  }
+  .next {
+    width: 165px;
+  }
 }
-.button > div {
+
+.button-container-mobile {
+  margin-top: 35px;
+
   display: flex;
-}
-.button .back {
-  width: 195px;
-}
-.button .prev {
-  width: 165px;
-}
-.button .next {
-  width: 165px;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+  }
+  .back {
+    width: 120px;
+  }
+  .prev {
+    width: 95px;
+  }
+  .next {
+    width: 95px;
+  }
 }
 
 .space {
@@ -392,6 +467,7 @@ export default {
 }
 
 .update-btn-disabled {
+  margin-top: -10px;
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
 

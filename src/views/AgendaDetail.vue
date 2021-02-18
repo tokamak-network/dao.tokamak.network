@@ -1,12 +1,24 @@
 <template>
-  <div class="agenda-detail">
-    <div class="agenda-container">
-      <agenda />
+  <div style="background: #fafbfc; flex: 1;">
+    <div v-if="$mq !=='mobile'" class="agenda-detail">
+      <div class="agenda-container">
+        <agenda />
+      </div>
+      <div class="card-container">
+        <card-vote-for-agenda />
+        <card-voters :voters="voted" />
+        <card-resource />
+      </div>
     </div>
-    <div class="card-container">
-      <card-vote-for-agenda />
-      <card-voters :voters="voted" />
-      <card-resource />
+    <div v-else class="agenda-detail-mobile">
+      <div class="agenda-container">
+        <agenda />
+      </div>
+      <div class="card-container-mobile">
+        <card-vote-for-agenda style="margin-top: 30px;" />
+        <card-voters :voters="voted" style="margin-top: 30px;" />
+        <card-resource style="margin-top: 30px;" />
+      </div>
     </div>
   </div>
 </template>
@@ -50,7 +62,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .agenda-detail {
   /* all the `views` have to has this attribue  */
   flex: 1;
@@ -65,7 +77,7 @@ export default {
   padding-bottom: 50px;
 }
 .agenda-container {
-  width: 786px;
+  max-width: 786px;
   display: flex;
   flex-direction: column;
 }
@@ -74,5 +86,13 @@ export default {
   flex-direction: column;
   margin-left: 30px;
   width: 378px;
+}
+
+.agenda-detail-mobile {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  display: flex;
+  flex-direction: column;
 }
 </style>

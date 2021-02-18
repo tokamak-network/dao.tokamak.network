@@ -1,10 +1,13 @@
 <template>
   <div class="main"
-       :style="[events.length > 0 ? { 'margin-top': '-84px' } : {}]"
+       :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
   >
-    <div class="main-logo">
+    <div class="main-logo"
+         :class="{ 'main-logo-mobile': $mq === 'mobile' }"
+    >
       <div v-if="events.length > 0"
            class="main-btn"
+           :class="{ 'main-btn-mobile': $mq === 'mobile' }"
            @click="$router.push({ path: 'agenda' })"
       >
         <div class="count">{{ events.length }}</div>
@@ -14,7 +17,7 @@
         >
       </div>
     </div>
-    <div v-if="events.length > 0"
+    <div v-if="events.length > 0 && $mq !== 'mobile'"
          class="recent-committee-activities"
     >
       <div class="header">Recent Committee Activities</div>
@@ -30,6 +33,28 @@
         </div>
         <div>
           {{ event.blockTimestamp | fromNow }}
+        </div>
+      </div>
+    </div>
+
+    <div v-if="events.length > 0 && $mq === 'mobile'"
+         class="recent-committee-activities-mobile"
+    >
+      <div class="header">Recent Committee Activities</div>
+      <div v-for="event in events" :key="event.data.transactionHash" class="content">
+        <div class="content-container">
+          <div class="tx-label">
+            Tx
+          </div>
+          <div class="tx-hash" @click="newtab(event.transactionHash)">
+            {{ event.transactionHash | hexSlicer }}
+          </div>
+          <div class="time">
+            {{ event.blockTimestamp | fromNow }}
+          </div>
+        </div>
+        <div class="event">
+          {{ explanation(event) }}
         </div>
       </div>
     </div>
@@ -141,6 +166,17 @@ export default {
   position: relative;
 }
 
+.main-logo-mobile {
+  width: 350px;
+  height: 253px;
+
+  background: url('../assets/logo-main.png') no-repeat;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  position: relative;
+}
+
 .main-btn {
   display: flex;
   justify-content: center;
@@ -159,6 +195,9 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
+}
+.main-btn-mobile {
+  bottom: 0px;
 }
 .main-btn:hover {
   cursor: pointer;
@@ -296,5 +335,98 @@ export default {
     max-width: 480px;
     flex: 1;
   }
+}
+
+.recent-committee-activities-mobile {
+  min-width: 100%;
+  max-width: 100%;
+
+  .header {
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.82;
+    letter-spacing: 0.88px;
+    text-align: center;
+    color: #ffffff;
+
+    margin-top: 163px;
+    margin-bottom: 30px;
+  }
+
+  .content {
+    min-height: 90px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    border-top: dotted 1px #256dc7;
+
+    .content-container{
+      display: flex;
+
+      .tx-label {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: 0.6px;
+        text-align: left;
+        color: #ffffff;
+
+        margin-right: 25px;
+      }
+
+      .tx-hash {
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.29;
+        letter-spacing: 0.56px;
+        text-align: left;
+        color: #8fc7fd;
+
+        flex: 1;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .time {
+        font-family: Roboto;
+        font-size: 10px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: normal;
+        text-align: right;
+        color: #8fc7fd;
+      }
+
+    }
+    .event {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.56px;
+      text-align: left;
+      color: #ffffff;
+
+      margin-top: 19px;
+    }
+  }
+
 }
 </style>

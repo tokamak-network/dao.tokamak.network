@@ -1,8 +1,64 @@
 <template>
-  <div class="committee">
-    <div>
-      <div class="dropdown-section">
-        <div>Filters</div>
+  <div style="background: #fafbfc; flex: 1;">
+    <div v-if="$mq !== 'mobile'" class="committee">
+      <div>
+        <div class="dropdown-section">
+          <div>Filters</div>
+          <dropdown
+            :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
+            :hint="'Status'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectStatus"
+          />
+          <dropdown
+            :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
+            :hint="'Result'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectResult"
+          />
+          <dropdown
+            v-if="isCandidate"
+            :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
+            :hint="'Voted'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectVoted"
+          />
+          <dropdown
+            :items="['All', 'Executed', 'Not Executed']"
+            :hint="'Executed'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectExecuted"
+          />
+          <dropdown
+            v-if="account"
+            :items="['All', 'My']"
+            :hint="'My Proposal'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectProposal"
+          />
+        </div>
+        <agenda-slot :agendas="agendaFilter()" />
+      </div>
+      <div>
+        <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+        <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+        <card-stats-committee />
+        <card-resource />
+      </div>
+    </div>
+    <div v-else class="committee-mobile">
+      <div class="filter-label">Filters</div>
+      <div class="filter-container">
         <dropdown
           :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
           :hint="'Status'"
@@ -46,13 +102,7 @@
           @on-selected="selectProposal"
         />
       </div>
-      <agenda-slot :agendas="agendaFilter()" />
-    </div>
-    <div>
-      <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats-committee />
-      <card-resource />
+      <agenda-slot :agendas="agendaFilter()" style="margin-top: 35px;" />
     </div>
   </div>
 </template>
@@ -187,16 +237,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .committee {
   /* all the `views` have to has this attribue  */
-  flex: 1;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
-
-  background: #fafbfc;
 
   padding-top: 30px;
   padding-bottom: 50px;
@@ -226,5 +272,31 @@ export default {
 .dropdown {
   width: 150px;
   margin-left: 15px;
+}
+
+.committee-mobile {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  .filter-label {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.3;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+  }
+
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    .dropdown {
+      margin-top: 15px;
+    }
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="card-vote-for-agenda">
     <modal v-if="showModal"
-           :width="786"
+           :width="$mq === 'mobile' ? '90%': '786px'"
            @on-closed="showModal=false"
     >
       <template #body>

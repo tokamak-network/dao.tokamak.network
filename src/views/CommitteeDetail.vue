@@ -1,12 +1,24 @@
 <template>
-  <div class="committee-detail">
-    <div class="committee-container">
-      <committee />
+  <div style="background: #fafbfc; flex: 1;">
+    <div v-if="$mq === 'mobile'" style="margin-left: 20px; margin-right: 20px;">
+      <div class="committee-container-mobile">
+        <committee />
+      </div>
+      <div class="card-container-mobile">
+        <card-vote-count v-if="account !== ''" style="margin-top: 30px;" />
+        <card-supporters style="margin-top: 30px;" />
+        <card-resource style="margin-top: 30px;" />
+      </div>
     </div>
-    <div class="card-container">
-      <card-vote-count v-if="account !== ''" />
-      <card-supporters />
-      <card-resource />
+    <div v-else class="committee-detail">
+      <div class="committee-container">
+        <committee />
+      </div>
+      <div class="card-container">
+        <card-vote-count v-if="account !== ''" />
+        <card-supporters />
+        <card-resource />
+      </div>
     </div>
   </div>
 </template>
@@ -53,10 +65,17 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.card-container {
+.committee-container-mobile {
+  flex: 1;
+
+  width: 100%;
   display: flex;
   flex-direction: column;
-  margin-left: 30px;
-  width: 378px;
+}
+.card-container-mobile {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
 }
 </style>

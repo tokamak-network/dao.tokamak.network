@@ -1,9 +1,6 @@
 <template>
   <div class="committee-slot">
     <div class="title">Elected Candidates</div>
-    <!-- <div class="slot-info">
-      3 slot
-    </div> -->
     <card-committee-slot :member-index="0" />
     <card-committee-slot :member-index="1" />
     <card-committee-slot :member-index="2" />

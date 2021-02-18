@@ -1,12 +1,20 @@
 <template>
-  <div class="election">
-    <div class="committee-container">
+  <div style="background: #fafbfc; flex: 1;">
+    <div v-if="$mq === 'mobile'" style="margin-left: 20px; margin-right: 20px; margin-top: 35px;">
       <committee-slot />
+      <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
+      <card-rank :title="'Rank'" style="margin-top: 30px;" />
+      <card-resource style="margin-top: 30px;" />
     </div>
-    <div class="card-container">
-      <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
-      <card-rank :title="'Rank'" />
-      <card-resource />
+    <div v-else class="election">
+      <div class="committee-container">
+        <committee-slot />
+      </div>
+      <div class="card-container">
+        <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
+        <card-rank :title="'Rank'" />
+        <card-resource />
+      </div>
     </div>
   </div>
 </template>

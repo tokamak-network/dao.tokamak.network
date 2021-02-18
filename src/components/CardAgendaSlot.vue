@@ -1,7 +1,7 @@
 <template>
   <div class="card-agenda-slot">
     <modal v-if="showModal"
-           :width="786"
+           :width="$mq === 'mobile' ? '90%': '786px'"
            @on-closed="showModal=false"
     >
       <template #body>
@@ -18,38 +18,49 @@
         <span class="type-label">TYPE </span>
         <span v-if="agendaType(agenda.agendaid) === 'A'"
               class="typeA"
-        >{{ agendaType(agenda.agendaid) }}</span>
+        >
+          {{ agendaType(agenda.agendaid) }}
+        </span>
         <span v-else
               class="typeB"
-        >{{ agendaType(agenda.agendaid) }}</span>
+        >
+          {{ agendaType(agenda.agendaid) }}
+        </span>
       </div>
     </div>
     <div class="card-title">
       <div class="title">
-        <!-- TODO: delete, if title is determined -->
         {{ title ? title : 'there is no title.' }}
       </div>
     </div>
     <div class="description">
       {{ `This agenda was made by ${shortAddress(agenda.creator)} on` }} {{ agenda.tCreationDate | date1 }}
     </div>
+
     <div class="info-time">
-      <img v-if="votingTime(agenda) === 'POLL ENDED'"
-           src="@/assets/poll-time-inactive-icon.svg" alt=""
-           width="14" height="14"
-      >
-      <img v-else-if="agendaType(agenda.agendaid) === 'A'"
-           src="@/assets/poll-time-active-icon.svg" alt=""
-           width="14" height="14"
-      >
-      <img v-else
-           src="@/assets/poll-time-active-icon-typeB.svg" alt=""
-           width="14" height="14"
-      >
-      <span :style="[
-        votingTime(agenda) === 'POLL ENDED' ? { color: '#d8dee3' } : {},
-      ]"
-      >{{ votingTime(agenda) }}</span>
+      <div class="info-time" style="flex: 1;">
+        <img v-if="votingTime(agenda) === 'POLL ENDED'"
+             src="@/assets/poll-time-inactive-icon.svg" alt=""
+             width="14" height="14"
+        >
+        <img v-else-if="agendaType(agenda.agendaid) === 'A'"
+             src="@/assets/poll-time-active-icon.svg" alt=""
+             width="14" height="14"
+        >
+        <img v-else
+             src="@/assets/poll-time-active-icon-typeB.svg" alt=""
+             width="14" height="14"
+        >
+        <span class="voting-time-info" :style="[
+          votingTime(agenda) === 'POLL ENDED' ? { color: '#d8dee3' } : {},
+        ]"
+        >
+          {{ votingTime(agenda) }}
+        </span>
+      </div>
+      <div class="vote-status" :style="voteResultStyle">
+        {{ votedResult() }}
+      </div>
     </div>
     <div class="bottom">
       <div class="left-side">
@@ -60,9 +71,6 @@
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
         />
-        <div class="vote-status" :style="voteResultStyle">
-          {{ votedResult() }}
-        </div>
       </div>
       <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
         <button-comp
@@ -74,15 +82,6 @@
           :width="'124px'"
           @on-clicked="click"
         />
-        <!-- <button-comp
-          v-if="login!==false && canExecute"
-          :name="buttonName"
-          :type="buttonType"
-          :status="buttonStatus"
-          class="right"
-          :width="'124px'"
-          @on-clicked="click"
-        /> -->
       </div>
     </div>
   </div>
@@ -339,28 +338,32 @@ export default {
 
 <style lang="scss" scoped>
 .card-agenda-slot {
-  flex: 1;
-  padding: 25px 0 25px 30px;
+  padding: 25px 30px;
   margin-bottom: 20px;
+
+  flex: 1;
+
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
   background-color: #ffffff;
-}
-.card-agenda-slot > div {
-  font-family: Roboto;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
+
+  > div {
+    font-family: Roboto;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+  }
 }
 
 .title {
   flex: 1;
+
+  margin-top: 3px;
+  margin-bottom: 5px;
 }
 .type-container {
   display: flex;
-
-  margin-right: 30px;
 
   .type-label {
     font-family: Roboto;
@@ -405,12 +408,9 @@ export default {
 
 .sub-container {
   display: flex;
-  margin-bottom: 8px;
 }
 
 .card-title {
-  height: 26px;
-  margin: 0 0 5px;
   font-size: 20px;
   text-align: left;
   color: #3e495c;
@@ -421,8 +421,6 @@ export default {
 .info-slot {
   display: flex;
   flex: 1;
-
-  margin-right: 30px;
 }
 .info-slot > span {
   font-family: Roboto;
@@ -447,14 +445,13 @@ export default {
   height: 19px;
   text-align: left;
   color: #86929d;
+
+  margin-bottom: 25px;
 }
 
 .info-time {
   display: flex;
   align-items: center;
-
-  margin-top: 24px;
-  margin-bottom: 3px;
 }
 .info-time > span {
   font-family: Roboto;
@@ -464,8 +461,6 @@ export default {
   font-style: normal;
   letter-spacing: normal;
   color: #86929d;
-
-  margin-left: 7px;
 }
 
 .card-agenda-slot > .bottom {
@@ -482,19 +477,12 @@ export default {
   width: 110px;
   align-self: flex-end;
 }
-.card-agenda-slot > .bottom > .left-side > .vote-status {
-  color: #c9d1d8;
-  font-size: 12px;
-  margin: 0 0 8px 20px;
-  align-self: flex-end;
-}
 .vote-status .vote-selected {
   color: #2a72e5;
 }
 .card-agenda-slot > .bottom > .left-side > .claimable {
   font-size: 10px;
   color: #3e495c;
-  margin: 0 0 10px 15px;
   align-self: flex-end;
 }
 .card-agenda-slot > .bottom > .right-side {
@@ -503,16 +491,16 @@ export default {
 }
 .card-agenda-slot > .bottom > .right-side > .right {
   width: 110px;
-  margin-right: 30px;
   align-self: flex-end;
 }
-.card-agenda-slot > .bottom > .right-side > .dropdown-section > .your-vote{
-  margin: 3px 0px 10px 0px;
-  font-size: 10px;
-  color: #3e495c;
+
+.vote-status {
+  color: #c9d1d8;
+  font-size: 12px;
+  align-self: flex-end;
 }
-.right-side .dropdown {
-  width: 140px;
-  right: 10px;
+
+.voting-time-info {
+  margin-left: 6px;
 }
 </style>

@@ -1,51 +1,51 @@
 <template>
-  <div class="footer" :class="{ 'footer-sub': isSub }">
+  <div class="footer" :class="{ 'footer-sub': isSub() }">
     <div class="menu">
-      <span class="company" :class="{ 'company-sub': isSub }">© 2021 Onther</span>
-      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Terms</a>
-      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Privacy Policy</a>
-      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub }">Status</a>
+      <span class="company" :class="{ 'company-sub': isSub() }">© 2021 Onther</span>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Terms</a>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Privacy Policy</a>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Status</a>
     </div>
     <div class="sns-container">
       <div class="sns">
         <a href="https://t.me/tokamak_network" target="_blank">
-          <img v-if="isSub" src="@/assets/telegram.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/telegram.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/telegram-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://discord.gg/SZw2WSR" target="_blank">
-          <img v-if="isSub" src="@/assets/discord.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/discord.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/discord-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://github.com/Onther-Tech" target="_blank">
-          <img v-if="isSub" src="@/assets/github.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/github.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/github-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ" target="_blank">
-          <img v-if="isSub" src="@/assets/youtube.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/youtube.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/youtube-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://twitter.com/tokamak_network" target="_blank">
-          <img v-if="isSub" src="@/assets/twitter.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/twitter.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/twitter-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://www.linkedin.com/company/onther-tech/" target="_blank">
-          <img v-if="isSub" src="@/assets/linkedin.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/linkedin.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/linkedin-white.svg" alt="" width="20" height="20">
         </a>
       </div>
       <div class="sns">
         <a href="https://medium.com/onther-tech" target="_blank">
-          <img v-if="isSub" src="@/assets/medium.svg" alt="" width="20" height="20">
+          <img v-if="isSub()" src="@/assets/medium.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/medium-white.svg" alt="" width="20" height="20">
         </a>
       </div>
@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  computed: {
+  methods: {
     isSub () {
       return this.$route.path !== '/';
     },

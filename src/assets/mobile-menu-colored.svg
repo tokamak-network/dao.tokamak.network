@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+    <defs>
+        <style>
+            .cls-2{fill:none;stroke:#3e495c;stroke-linejoin:round;stroke-width:2px}
+        </style>
+    </defs>
+    <g id="Burger_icon" transform="translate(-81 -81)">
+        <path id="Base" fill="none" d="M0 0H30V30H0z" transform="translate(81 81)"/>
+        <g id="icon" transform="translate(1 1)">
+            <path id="선_2" d="M0 0L20 0" class="cls-2" transform="translate(85 95)"/>
+            <path id="선_3" d="M0 0L20 0" class="cls-2" transform="translate(85 88)"/>
+            <path id="선_4" d="M0 0L20 0" class="cls-2" transform="translate(85 103)"/>
+        </g>
+    </g>
+</svg>
