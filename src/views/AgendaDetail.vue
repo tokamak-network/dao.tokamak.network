@@ -11,7 +11,7 @@
       </div>
     </div>
     <div v-else class="agenda-detail-mobile">
-      <div class="agenda-container">
+      <div class="agenda-container-mobile">
         <agenda />
       </div>
       <div class="card-container-mobile">
@@ -77,7 +77,7 @@ export default {
   padding-bottom: 50px;
 }
 .agenda-container {
-  max-width: 786px;
+  width: 786px;
   display: flex;
   flex-direction: column;
 }
