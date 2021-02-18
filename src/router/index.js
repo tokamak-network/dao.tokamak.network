@@ -5,7 +5,7 @@ import Root from '@/views/Root.vue';
 import Main from '@/views/Main.vue';
 import PageNotFound from '@/views/PageNotFound.vue';
 import Election from '@/views/Election.vue';
-import Committee from '@/views/Committee.vue';
+import Agenda from '@/views/Agenda.vue';
 import CommitteeDetail from '@/views/CommitteeDetail.vue';
 import AgendaDetail from '@/views/AgendaDetail.vue';
 import Propose from '@/views/Propose.vue';
@@ -36,7 +36,7 @@ const routes = [
   {
     path: '/agenda',
     name: 'agenda',
-    component: Committee,
+    component: Agenda,
   },
   {
     path: '/agenda/:id',
