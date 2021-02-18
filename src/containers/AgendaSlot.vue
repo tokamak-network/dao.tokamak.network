@@ -77,9 +77,6 @@ export default {
   text-align: left;
   color: #86929d;
 }
-.agenda-slot {
-  max-width: 786px;
-}
 .dropdown-section {
   display: flex;
   margin-bottom: 45px;

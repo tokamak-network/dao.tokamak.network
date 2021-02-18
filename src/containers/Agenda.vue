@@ -480,13 +480,13 @@ export default {
   display: flex;
 }
 .button .back {
-  width: 195px;
+  width: 173px;
 }
 .button .prev {
-  width: 165px;
+  width: 157px;
 }
 .button .next {
-  width: 165px;
+  width: 134px;
 }
 
 .button-mobile {
@@ -508,7 +508,7 @@ export default {
 .update-btn {
   outline: none;
 
-  width: 126px;
+  width: 102px;
   height: 25px;
 
   border-radius: 4px;
