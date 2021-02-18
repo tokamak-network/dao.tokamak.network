@@ -4,10 +4,9 @@
       <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
            @click="close"
       >
-      <div v-if="agendaVotesByCandidates.length < 2" class="title">You can claim {{ activityReward }}</div>
-      <div v-else class="title">You can claim {{ candidate.claimableAmount | withComma }}</div>
-
-      <div v-if="agendaVotesByCandidates.length < 2 && canClaimValue" class="question">Do you wish to continue?</div>
+      <div v-if="agendaVotesByCandidates.length < 2" class="title">You can claim {{ activityReward | withComma }} TON</div>
+      <div v-else class="title">You can claim {{ candidate.claimableAmount | withComma }} TON</div>
+      <div v-if="agendaVotesByCandidates.length < 2 && canClaimValue" class="question">Do you want to continue?</div>
       <div v-else-if="agendaVotesByCandidates.length > 1 && canClaimAmount(candidate.claimableAmount)" class="question">Do you wish to continue?</div>
       <div v-else class="question">There is no activity fee to be paid.</div>
 
@@ -160,9 +159,16 @@ export default {
     }
   }
   > .title {
+    display: flex;
+    flex-wrap: wrap;
+
     font-size: 24px;
     color: #3e495c;
+
     margin-bottom: 15px;
+
+    white-space: wrap;
+    word-break: break-all;
   }
   > .question {
     font-size: 14px;
