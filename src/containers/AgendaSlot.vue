@@ -16,11 +16,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import Button from '@/components/Button.vue';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
 
 export default {
   components: {
     'card-agenda-slot': CardAgendaSlot,
+    'button-comp': Button,
   },
   props: {
     agendas: {
@@ -92,6 +94,7 @@ export default {
   width: 150px;
   margin-left: 15px;
 }
+
 .hide-btn {
   height: 55px;
   border-radius: 10px;
