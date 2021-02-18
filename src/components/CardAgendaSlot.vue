@@ -77,7 +77,7 @@
       </div>
       <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
         <button-comp
-          v-if="login!==false"
+          v-if="account !== ''"
           :name="buttonName"
           :type="buttonType"
           :status="buttonStatus"

@@ -21,6 +21,14 @@
             @on-selected="selectResult"
           />
           <dropdown
+            :items="['All', 'Executed', 'Not Executed']"
+            :hint="'Executed'"
+            :button-type="'a'"
+            :selector-type="'a'"
+            class="dropdown"
+            @on-selected="selectExecuted"
+          />
+          <dropdown
             v-if="isCandidate"
             :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
             :hint="'Voted'"
@@ -28,14 +36,6 @@
             :selector-type="'a'"
             class="dropdown"
             @on-selected="selectVoted"
-          />
-          <dropdown
-            :items="['All', 'Executed', 'Not Executed']"
-            :hint="'Executed'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectExecuted"
           />
           <dropdown
             v-if="account"
@@ -76,6 +76,14 @@
           @on-selected="selectResult"
         />
         <dropdown
+          :items="['All', 'Executed', 'Not Executed']"
+          :hint="'Executed'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectExecuted"
+        />
+        <dropdown
           v-if="isCandidate"
           :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
           :hint="'Voted'"
@@ -83,14 +91,6 @@
           :selector-type="'a'"
           class="dropdown"
           @on-selected="selectVoted"
-        />
-        <dropdown
-          :items="['All', 'Executed', 'Not Executed']"
-          :hint="'Executed'"
-          :button-type="'a'"
-          :selector-type="'a'"
-          class="dropdown"
-          @on-selected="selectExecuted"
         />
         <dropdown
           v-if="account"
@@ -135,6 +135,14 @@
           @on-selected="selectResult"
         />
         <dropdown
+          :items="['All', 'Executed', 'Not Executed']"
+          :hint="'Executed'"
+          :button-type="'a'"
+          :selector-type="'a'"
+          class="dropdown"
+          @on-selected="selectExecuted"
+        />
+        <dropdown
           v-if="isCandidate"
           :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
           :hint="'Voted'"
@@ -142,14 +150,6 @@
           :selector-type="'a'"
           class="dropdown"
           @on-selected="selectVoted"
-        />
-        <dropdown
-          :items="['All', 'Executed', 'Not Executed']"
-          :hint="'Executed'"
-          :button-type="'a'"
-          :selector-type="'a'"
-          class="dropdown"
-          @on-selected="selectExecuted"
         />
         <dropdown
           v-if="account"
