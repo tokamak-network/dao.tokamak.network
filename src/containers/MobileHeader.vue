@@ -9,7 +9,7 @@
            :mobile="true"
     >
       <template #body>
-        <modal-claim-modal @on-closed="showModalClaim=false" />
+        <modal-claim @on-closed="showModalClaim=false" />
       </template>
     </modal>
     <div v-if="$mq === 'mobile' && isOpen" class="menu-container">
@@ -59,12 +59,12 @@
 import { mapGetters, mapState } from 'vuex';
 import Connect from '@/components/Connect.vue';
 import Modal from '@/components/Modal.vue';
-import ModalClaimMobile from '@/containers/ModalClaimMobile.vue';
+import ModalClaim from '@/containers/ModalClaim.vue';
 
 export default {
   components: {
     'modal': Modal,
-    'modal-claim-modal': ModalClaimMobile,
+    'modal-claim': ModalClaim,
     'connect-wallet': Connect,
   },
   data () {

@@ -87,7 +87,7 @@ export default {
   padding-bottom: 50px;
 }
 .agenda-container {
-  max-width: 786px;
+  width: 786px;
   display: flex;
   flex-direction: column;
 }
