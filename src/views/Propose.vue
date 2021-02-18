@@ -549,7 +549,7 @@
         </div>
       </div>
     </div>
-    <div v-if="$mq !== 'mobile'" style="display: flex; flex-direction: column; align-items: center;">
+    <div v-else style="display: flex; flex-direction: column; align-items: center;">
       <div class="header">
         Propose Agenda
       </div>
