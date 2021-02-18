@@ -1,9 +1,10 @@
 <template>
   <div class="modal-vote">
-    <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
+    <img src="@/assets/modal-close.svg" alt=""
+         width="30" height="30"
          @click="close"
     >
-    <div class="function">Agenda#{{ id }} Confirm Vote</div>
+    <div class="function">Agenda #{{ id }} Confirm Vote</div>
     <!-- <div class="content">
       <span>
         <span class="blue">

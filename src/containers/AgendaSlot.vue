@@ -2,9 +2,9 @@
   <div class="agenda-slot">
     <div>
       <div class="title">Agenda</div>
-      <div class="agenda-info">
+      <!-- <div class="agenda-info">
         {{ numAgenda }} Agendas - POSTED {{ agendas[0]? agendas[0].tCreationDate:'' | date2 }}
-      </div>
+      </div> -->
       <card-agenda-slot v-for="agenda in agendas.slice(0, 5)" :key="agenda.agendaid" :agenda="agenda" />
       <button-comp v-if="hide === false && agendas.length > 5" :name="hideButton" class="hide-btn" :type="'hide'" @on-clicked="hide = true" />
       <div v-if="hide === true && agendas.length > 5">
@@ -17,12 +17,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import CardAgendaSlot from '@/components/CardAgendaSlot.vue';
-import Button from '@/components/Button.vue';
 
 export default {
   components: {
     'card-agenda-slot': CardAgendaSlot,
-    'button-comp': Button,
   },
   props: {
     agendas: {
@@ -68,10 +66,8 @@ export default {
 }
 .agenda-info {
   margin-bottom: 12px;
-  height: 15px;
   font-family: Roboto;
   font-size: 11px;
-  width: 786px;
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
@@ -80,7 +76,7 @@ export default {
   color: #86929d;
 }
 .agenda-slot {
-  width: 786px;
+  max-width: 786px;
 }
 .dropdown-section {
   display: flex;

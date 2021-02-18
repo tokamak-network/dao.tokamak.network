@@ -21,7 +21,11 @@
               <img src="@/assets/arrow-tooltip.png" alt=""
                    width="4" height="6"
               >
-              <div class="tooltip-content">
+              <div class="tooltip-content"
+                   :style="[
+                     $mq === 'mobile' ? { 'width': '200px' } : { 'width': '400px' },
+                   ]"
+              >
                 {{ tooltip(index) }}
               </div>
             </div>
