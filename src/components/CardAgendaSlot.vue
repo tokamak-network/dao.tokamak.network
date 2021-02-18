@@ -58,7 +58,7 @@
           {{ votingTime(agenda) }}
         </span>
       </div>
-      <div class="vote-status" :style="voteResultStyle">
+      <div v-if="$mq === 'mobile'" class="vote-status" :style="voteResultStyle">
         {{ votedResult() }}
       </div>
     </div>
@@ -71,6 +71,9 @@
           :width="'118px'"
           @on-clicked="detail(agenda.agendaid)"
         />
+        <div v-if="$mq !== 'mobile'" class="vote-status" :style="voteResultStyle" style="margin-left: 20px;">
+          {{ votedResult() }}
+        </div>
       </div>
       <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
         <button-comp
@@ -466,12 +469,13 @@ export default {
 .card-agenda-slot > .bottom {
   display: flex;
   justify-content: space-between;
+
+  margin-top: 25px;
 }
 .card-agenda-slot > .bottom > .left-side {
   display: flex;
-  align-self: flex-end;
-  justify-content: flex-start;
-  height: 55px;
+  justify-content: center;
+  align-items: center;
 }
 .card-agenda-slot > .bottom > .left-side > .left {
   width: 110px;
@@ -497,7 +501,6 @@ export default {
 .vote-status {
   color: #c9d1d8;
   font-size: 12px;
-  align-self: flex-end;
 }
 
 .voting-time-info {
