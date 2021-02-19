@@ -1,10 +1,10 @@
 <template>
   <div style="background: #fafbfc; flex: 1;">
-    <div v-if="$mq === 'tablet'" class="agenda-detail">
+    <div v-if="$mq === 'tablet'" class="agenda-detail-tablet">
       <div class="agenda-container-tablet">
         <agenda />
       </div>
-      <div class="card-container">
+      <div class="card-container-tablet">
         <card-vote-for-agenda />
         <card-voters :voters="voted" />
         <card-resource />
@@ -86,6 +86,19 @@ export default {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+.agenda-detail-tablet {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background: #fafbfc;
+
+  padding-top: 50px;
+  padding-bottom: 50px;
+
+  margin-left: 20px;
+  margin-right: 20px;
+}
 .agenda-container {
   width: 786px;
   display: flex;
@@ -97,8 +110,25 @@ export default {
   margin-left: 30px;
   width: 378px;
 }
+
 .agenda-container-tablet {
-  width: 582px;
+  display: flex;
+  flex-direction: column;
+
+  flex: 3.5;
+
+  width: 100%;
+  min-width: 382px;
+}
+.card-container-tablet {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+
+  flex: 2;
+
+  width: 100%;
+  min-width: 178px;
 }
 
 .agenda-detail-mobile {

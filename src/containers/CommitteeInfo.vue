@@ -16,10 +16,10 @@
       <div v-if="candidateContractFromEOA" class="edit-btn" @click="editDescription();">Edit</div>
       <div v-if="canEditDescription" class="cancel-btn" @click="canEditDescription=false;">Cancle</div>
     </div>
-    <info-committee :title="$mq === 'mobile' ? 'Candidate' : 'Candidate Address'"
+    <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Candidate' : 'Candidate Address'"
                     :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;"
     />
-    <info-committee :title="$mq === 'mobile' ? 'Contract' : 'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
+    <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Contract' : 'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
     <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
     <!-- <info-committee :title="'Commit Count'" :content="'66'" /> -->
     <!-- <info-committee :title="'Recent Commit'" :content="'4시간 전'" /> -->

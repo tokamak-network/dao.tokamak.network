@@ -1,16 +1,16 @@
 <template>
-  <div style="background: #fafbfc; flex: 1;">
+  <div style="background: #fafbfc; flex: 1; padding-top: 35px;">
     <div v-if="$mq === 'mobile'" style="margin-left: 20px; margin-right: 20px;">
       <div class="committee-container-mobile">
         <committee />
       </div>
-      <div class="card-container-mobile">
-        <card-vote-count v-if="account !== ''" style="margin-top: 30px;" />
-        <card-supporters style="margin-top: 30px;" />
-        <card-resource style="margin-top: 30px;" />
+      <div class="card-container-mobile" style="margin-top: 30px;">
+        <card-vote-count v-if="account !== ''" />
+        <card-supporters />
+        <card-resource />
       </div>
     </div>
-    <div v-else-if="$mq === 'tablet'" class="committee-detail-tablet">
+    <div v-else-if="$mq === 'tablet'" class="committee-detail-tablet" style="margin-left: 20px; margin-right: 20px;">
       <div class="committee-container-tablet">
         <committee />
       </div>
@@ -67,7 +67,6 @@ export default {
 
   background: #fafbfc;
 
-  padding-top: 50px;
   padding-bottom: 50px;
 }
 .committee-container {
@@ -85,20 +84,27 @@ export default {
 
   background: #fafbfc;
 
-  padding-top: 25px;
   padding-bottom: 50px;
 }
+
 .committee-container-tablet {
-  width: 582px;
   display: flex;
   flex-direction: column;
+
+  flex: 3.5;
+
+  width: 100%;
+  min-width: 382px;
 }
 .card-container-tablet {
-  width: 378px;
+  display: flex;
+  flex-direction: column;
   margin-left: 30px;
 
-  display: flex;
-  flex-direction: column;
+  flex: 2;
+
+  width: 100%;
+  min-width: 178px;
 }
 .committee-container-mobile {
   flex: 1;
@@ -120,10 +126,12 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.card-container-mobile {
-  width: 100%;
+.card-container {
+  width: 378px;
 
   display: flex;
   flex-direction: column;
+
+  margin-left: 20px;
 }
 </style>

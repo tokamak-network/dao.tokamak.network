@@ -1,10 +1,17 @@
 <template>
   <div class="card-agenda-info">
-    <div v-if="$mq !== 'mobile'" class="button">
+    <div v-if="$mq === 'desktop'" class="button">
       <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" @on-clicked="back" />
       <div>
         <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
         <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
+      </div>
+    </div>
+    <div v-else-if="$mq === 'tablet'" class="button-mobile">
+      <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 120px;" @on-clicked="back" />
+      <div>
+        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 120px;" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 120px;" @on-clicked="next" />
       </div>
     </div>
     <div v-else class="button-mobile">
