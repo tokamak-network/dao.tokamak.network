@@ -27,7 +27,7 @@
         <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
-          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 15px; margin-right: 15px;"
+          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
             Vote Breakdown
@@ -52,15 +52,14 @@
         <committee-vote v-else-if="currentSelector === 2" />
       </div>
     </div>
-
-    <div v-else-if="$mq === 'tablet'" class="card-committee-info-tablet">
-      <div class="button-container-tablet">
-        <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
+    <div v-else-if="$mq === 'tablet'" class="card-committee-info">
+      <div class="button-container">
+        <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 120px"
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
-          <button-step :type="'prev'" :name="'PREVIOUS CANDIDATE'" class="prev" @on-clicked="prev" />
-          <button-step :type="'next'" :name="'NEXT CANDIDATE'" class="next" @on-clicked="next" />
+          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 120px" @on-clicked="prev" />
+          <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 120px" @on-clicked="next" />
         </div>
       </div>
       <div class="content-tablet">
@@ -79,13 +78,18 @@
         </div>
         <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
         <div class="selector">
-          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
-          <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">
+            Detail
+          </div>
+          <div :class="{ 'selected': currentSelector === 1 }"
+               style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
             Vote Breakdown
           </div>
-          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">
+            Vote/Unvote
+          </div>
 
           <span class="space" />
           <button v-if="account"
@@ -476,8 +480,6 @@ export default {
 }
 
 .button-container-mobile {
-  margin-top: 35px;
-
   display: flex;
   justify-content: space-between;
 
@@ -496,8 +498,6 @@ export default {
 }
 
 .button-container-mobile {
-  margin-top: 35px;
-
   display: flex;
   justify-content: space-between;
 
