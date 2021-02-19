@@ -4,7 +4,7 @@
       <div class="container-title">Review</div>
       <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
-          <div v-if="$mq === 'mobile'">{{ voter.account | hexSlicer }}</div>
+          <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div>
           <div v-else>{{ voter.account }}</div>
           <div>{{ voter.balance | WTON | withComma }} TON Voted</div>
         </div>

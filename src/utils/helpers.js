@@ -8,6 +8,15 @@ export function slice (str) {
   str = String(str);
   return str.slice(0, 6);
 }
+
+export function nameSlice (str) {
+  str = String(str);
+  if (str.length > 10) {
+    return `${str.slice(0, 8)}...`;
+  }
+  return str;
+}
+
 export function tonFloor (input) {
   if (input != null && input.length > 0) {
     const pointPosition = input.indexOf('.');

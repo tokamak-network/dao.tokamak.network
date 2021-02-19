@@ -264,291 +264,6 @@
         </div>
       </div>
     </div>
-
-    <div v-else-if="$mq === 'tablet'" style="display: flex; flex-direction: column; align-items: center; max-width=1024px;">
-      <div class="header">
-        Propose Agenda
-      </div>
-      <div class="type-container">
-        <div class="typeA"
-             :class="{'typeA-selected': type === 'A'}"
-             @click="type = 'A'; index = -1;"
-        >
-          Type A
-        </div>
-        <div class="typeB"
-             :class="{'typeB-selected': type === 'B'}"
-             @click="type = 'B'; indexOfTypeB = -1;"
-        >
-          Type B
-        </div>
-      </div>
-      <div class="type-explanation">
-        {{ type === 'A' ?
-          'You can create a sound Tokamak Network ecosystem. Please participate in various suggestions.' :
-          'Tokamak Network infrastructure may be affected. Careful suggestions are required.' }}
-      </div>
-      <!-- typeA -->
-      <div v-if="type === 'A'">
-        <div class="propose-container-tablet">
-          <div v-for="(contract, i) in contractsOfTypeA" :key="contract" class="propose-contract-tablet"
-               :style="[
-                 index !== -1 ? { 'height': 124+'px' } : { height: 260+'px' },
-                 index === i ? { background: '#2a72e5' } : {},
-               ]"
-               @click="index=i; setCurrentContract(index);"
-          >
-            <div class="function-count"
-                 :style="[index !== -1 ? { display: 'none' } : {}]"
-            >
-              {{ pad(numFunctions(i)) }}
-            </div>
-            <img v-if="i === 0" src="@/assets/icon-deposit-manager-typeA.svg" alt=""
-                 :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 1" src="@/assets/icon-seig-manager-typeA.svg" alt=""
-                 :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 2" src="@/assets/icon-dao-committee-typeA.svg" alt=""
-                 :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 3" src="@/assets/icon-dao-vault-typeA.svg" alt=""
-                 :style="[
-                   index !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <div>
-              <div class="contract-name"
-                   :style="[index === i ? { color: '#ffffff' } : {}]"
-              >
-                {{ contract }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="index === 0" class="box-container-tablet">
-          <div>
-            <div v-for="func in depositManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'A'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="index === 1" class="box-container-tablet">
-          <div>
-            <div @click="showModal=true; currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
-              <box :function-name="'setSeigRates'"
-                   :type="'A'"
-              />
-            </div>
-            <div v-for="func in seigManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'A'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="index === 2" class="box-container-tablet">
-          <div>
-            <div v-for="func in daoCommitteeProxyFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'A'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="index === 3" class="box-container-tablet">
-          <div>
-            <div v-for="func in daoVaultFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'A'"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- typeB -->
-      <div v-else style="max-width: 1024px;">
-        <div class="propose-container-tablet" style="display: flex; flex-wrap: wrap;">
-          <div v-for="(contract, i) in contractsOfTypeB" :key="contract" class="propose-contract-tablet"
-               :style="[
-                 indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 260+'px' },
-                 indexOfTypeB === i ? { background: '#f7981c' } : {},
-               ]"
-               style="margin-bottom: 30px; width:228px;"
-               @click="indexOfTypeB=i; setCurrentContractOfTypeB(indexOfTypeB);"
-          >
-            <div class="function-count"
-                 :style="[indexOfTypeB !== -1 ? { display: 'none' } : {}]"
-            >
-              {{ pad(numFunctionsOfTypeB(i)) }}
-            </div>
-            <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '80px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt=""
-                 :style="[
-                   indexOfTypeB !== -1 ? { height: '30px', top: '75px' } : { height: 50+'px' },
-                 ]"
-            >
-            <div>
-              <div class="contract-name"
-                   :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"
-              >
-                {{ contract }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 0" class="box-container-typeB">
-          <div>
-            <div v-for="func in tonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 1" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in wtonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 2" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in depositManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 3" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in seigManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 4" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in layer2RegistryFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 5" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in daoCommitteeProxyFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 6" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in daoCommitteeFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="indexOfTypeB === 7" class="box-container-typeB-tablet">
-          <div>
-            <div v-for="func in daoVaultFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
-            >
-              <box :function-name="func.name"
-                   :status="currentFunction === func.name ? 'selected' : 'unselected'"
-                   :type="'B'"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div v-else style="display: flex; flex-direction: column; align-items: center;">
       <div class="header">
         Propose Agenda
@@ -575,7 +290,7 @@
       <!-- typeA -->
       <div v-if="type === 'A'">
         <div class="propose-container">
-          <div v-for="(contract, i) in contractsOfTypeA" :key="contract" class="propose-contract"
+          <div v-for="(contract, i) in contractsOfTypeA" :key="contract" class="propose-contract" style="margin-top: 30px;"
                :style="[
                  index !== -1 ? { 'height': 124+'px' } : { height: 320+'px' },
                  index === i ? { background: '#2a72e5' } : {},
@@ -613,7 +328,7 @@
           </div>
         </div>
         <div v-if="index === 1" class="box-container">
-          <div>
+          <div style="display: flex; flex-wrap: wrap; margin-left: 30px; margin-right: 30px;">
             <div @click="showModal=true; currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
               <box :function-name="'setSeigRates'"
                    :type="'A'"
@@ -662,7 +377,7 @@
                  indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 270+'px' },
                  indexOfTypeB === i ? { background: '#f7981c' } : {},
                ]"
-               style="margin-bottom: 30px;"
+               style="margin-top: 30px;"
                @click="indexOfTypeB=i; setCurrentContractOfTypeB(indexOfTypeB);"
           >
             <div class="function-count"
@@ -1118,6 +833,8 @@ export default {
 
   .propose-container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
     > div {
       display: flex;
@@ -1428,7 +1145,7 @@ export default {
     color: #86929d;
 
     margin-top: 15px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
 
   .box-container {
@@ -1437,12 +1154,16 @@ export default {
     align-items: center;
 
     > div {
-      width: 1194px;
-
       display: flex;
       flex-wrap: wrap;
 
-      margin-top: 40px;
+      margin-top: 10px;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-left: 30px;
+      margin-right: 30px;
     }
   }
 
@@ -1452,12 +1173,16 @@ export default {
     align-items: center;
 
     > div {
-      width: 1194px;
-
       display: flex;
       flex-wrap: wrap;
 
       margin-top: 10px;
+
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-left: 30px;
+      margin-right: 30px;
     }
   }
 

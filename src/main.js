@@ -13,7 +13,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false;
 Vue.use(VueMq, {
   breakpoints: {
-    mobile: 700,
+    mobile: 840,
     tablet: 1270,
     desktop: Infinity,
   },
