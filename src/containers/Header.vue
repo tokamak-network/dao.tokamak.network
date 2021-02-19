@@ -8,9 +8,21 @@
         <modal-claim @on-closed="showModal=false" />
       </template>
     </modal>
-    <div class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
+    <div v-if="$mq === 'desktop'" class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
       <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
       <img v-else src="@/assets/logo.png" alt="">
+    </div>
+    <div v-else class="logo-table" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
+      <img v-if="!isSub"
+           src="@/assets/mobile-logo.png" alt=""
+           width="105" height="30"
+           @click="route('/');"
+      >
+      <img v-else
+           src="@/assets/mobile-logo-colored.svg" alt=""
+           width="105" height="30"
+           @click="route('/');"
+      >
     </div>
     <div style="display: flex; flex: 1; justify-content: flex-end;">
       <div class="menu">
@@ -31,8 +43,8 @@
         </router-link>
         <connect-wallet :is-sub="isSub" />
       </div>
-      <div class="container">
-        <div v-if="account!=='' && isCandidate">
+      <div v-if="account!=='' && isCandidate" class="container">
+        <div>
           <button
             :class="{ 'claim': isSub }"
             @click="showModal=true"
@@ -73,6 +85,14 @@ export default {
       return this.$route.path !== '/';
     },
   },
+  methods: {
+    route (path) {
+      if (this.$route.path === path) {
+        return;
+      }
+      this.$router.push({ path });
+    },
+  },
 };
 </script>
 
@@ -93,6 +113,17 @@ export default {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+
+  z-index: 1;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.logo-table {
   display: flex;
   align-items: center;
 
@@ -184,5 +215,7 @@ button:hover {
   justify-content: center;
   align-items: center;
   margin-left: 15px;
+
+  z-index: 1;
 }
 </style>
