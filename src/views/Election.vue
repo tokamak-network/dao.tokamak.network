@@ -6,7 +6,7 @@
       <card-rank :title="'Rank'" style="margin-top: 30px;" />
       <card-resource style="margin-top: 30px;" />
     </div>
-    <div v-else-if="$mq === 'tablet'" style="display: flex; margin-left: 20px; margin-right: 20px; margin-top: 35px;">
+    <div v-else-if="$mq === 'tablet'" style="display: flex; justify-content: center; margin-left: 20px;  margin-right: 20px; margin-top: 35px;">
       <div class="committee-container-tablet">
         <committee-slot />
       </div>
