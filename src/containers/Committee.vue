@@ -36,6 +36,7 @@
 
           <span class="space" />
           <button v-if="account"
+                  style="width: 100px;"
                   class="update-btn"
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),

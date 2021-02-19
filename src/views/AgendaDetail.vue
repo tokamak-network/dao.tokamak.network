@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="$mq=='tablet'" class="agenda-detail">
+  <div style="background: #fafbfc; flex: 1;">
+    <div v-if="$mq === 'tablet'" class="agenda-detail">
       <div class="agenda-container-tablet">
         <agenda />
       </div>
@@ -10,8 +10,8 @@
         <card-resource />
       </div>
     </div>
-    <div v-else-if="$mq=='mobile'" class="agenda-detail-mobile">
-      <div class="agenda-container">
+    <div v-else-if="$mq === 'mobile'" class="agenda-detail-mobile">
+      <div class="agenda-container-mobile">
         <agenda />
       </div>
       <div class="card-container-mobile">
@@ -107,5 +107,11 @@ export default {
 
   display: flex;
   flex-direction: column;
+}
+
+.agenda-container-mobile {
+  margin-top: 35px;
+
+  width: 100%;
 }
 </style>
