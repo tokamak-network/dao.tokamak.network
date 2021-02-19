@@ -77,14 +77,22 @@ export default {
 }
 
 .committee-container-tablet {
-  width: 582px;
   display: flex;
   flex-direction: column;
+
+  flex: 3.5;
+
+  width: 100%;
+  min-width: 382px;
 }
 .card-container-tablet {
   display: flex;
   flex-direction: column;
   margin-left: 30px;
-  width: 378px;
+
+  flex: 2;
+
+  width: 100%;
+  min-width: 178px;
 }
 </style>

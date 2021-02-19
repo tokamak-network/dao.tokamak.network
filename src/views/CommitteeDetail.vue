@@ -86,17 +86,25 @@ export default {
 
   padding-bottom: 50px;
 }
+
 .committee-container-tablet {
-  width: 582px;
   display: flex;
   flex-direction: column;
+
+  flex: 3.5;
+
+  width: 100%;
+  min-width: 382px;
 }
 .card-container-tablet {
-  width: 378px;
-  margin-left: 30px;
-
   display: flex;
   flex-direction: column;
+  margin-left: 30px;
+
+  flex: 2;
+
+  width: 100%;
+  min-width: 178px;
 }
 .committee-container-mobile {
   flex: 1;
