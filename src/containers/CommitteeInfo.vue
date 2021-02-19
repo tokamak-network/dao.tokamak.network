@@ -115,13 +115,13 @@ export default {
         return alert('please input your new name!');
       }
 
-      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-      const gasLimit = await candidateContract.methods.setMemo(name)
+      const committeeContract = getContract('DAOCommitteeProxy', this.web3);
+      const gasLimit = await committeeContract.methods.setMemoOnCandidateContract(this.candidateContractFromEOA, name)
         .estimateGas({
           from: this.account,
         });
 
-      await candidateContract.methods.setMemo(name)
+      await committeeContract.methods.setMemoOnCandidateContract(this.candidateContractFromEOA, name)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
