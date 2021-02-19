@@ -48,9 +48,9 @@
               @on-selected="selectProposal"
             />
           </div>
-          <agenda-slot :agendas="agendaFilter()" style="margin-top: 100px;" />
+          <agenda-slot :agendas="agendaFilter()" />
         </div>
-        <div class="card-container" style="margin-top: 100px;">
+        <div class="card-container" style="margin-top: 120px;">
           <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats-committee />
@@ -60,8 +60,8 @@
     </div>
     <div v-else-if="$mq === 'tablet'" class="committee-tablet">
       <div class="dropdown-section">
-        <div style="margin-top: 15px;">Filters</div>
-        <div style="display: flex;">
+        <div style="margin-top: 15px; width: 60px;">Filters</div>
+        <div style="display: flex; flex-wrap: wrap;">
           <dropdown
             :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
             :hint="'Status'"
@@ -345,7 +345,6 @@ export default {
   display: flex;
   margin-bottom: 45px;
 
-  position: fixed;
   margin-top: 25px;
 }
 .dropdown-section > div:first-child {
@@ -442,8 +441,6 @@ export default {
 
     width: 100%;
     min-width: 382px;
-
-    margin-top: 100px;
   }
 
   .card-container-tablet {
@@ -455,8 +452,6 @@ export default {
 
     width: 100%;
     min-width: 178px;
-
-    margin-top: 100px;
   }
 }
 </style>
