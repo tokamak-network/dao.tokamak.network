@@ -23,41 +23,23 @@ const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
 const layer2 = require('../contracts/Layer2.json');
 
-/*
-const deployed = {
-  'TON'              : '0x122594eFc1653C86B97065d1B7C29d2Ca8db9081',
-  'WTON'             : '0xC3c44E2F55A093Eb67C6B2A0A936bF1B3DA8D17F',
-  'Layer2Registry'   : '0xbb20a7A837616dAB58E54dBfdc03F258aC27791a',
-  'DepositManager'   : '0x0430e7138F4981479F43F6e7d67081900028EEdD',
-  'CoinageFactory'   : '0x1C6bc7841303c3dc5c5D6bc0D6428a58B6F8190D',
-  'OldDAOVaultMock'  : '0x0a915BD4aD8b684f730012a12B52A629f842D5c4',
-  'SeigManager'      : '0x5bCbE9e523707200869FaeAac9C903786bD0fD57',
-  'PowerTON'         : '0x4C0946e3aEaDFD36ab7f09755d6b9CFDF081defb',
-  'DAOVault'         : '0x45cc5238047834C7CA7C3782E2EB4Af7544D2aAC',
-  'DAOAgendaManager' : '0x7Ce981B536d49Fe08bf876b2d699b240052DC058',
-  'CandidateFactory' : '0x78e1916595BFbb9D396f7bd3B5D4529cE9f55E53',
-  'DAOCommittee'     : '0x6b12f4e068D6ed23111cDcb9dB56b659C9898B3D',
-  'DAOCommitteeProxy': '0x586caFca57613B864aDaC6b3F8A9d3390A128768',
-  'EtherToken'       : '0xFE9d9D39C34ce186E2b59089Ca1abB93F7dd8455',
-};
-*/
-const deployed = {
-  'TON': '0xD2F2b955C64B2aBefBee95157441B26E93d73F98',
-  'WTON': '0xb3e121740a8b53edcd2AcebBE04C08E0337e9E2C',
-  'Layer2Registry': '0x5A39F68e53cCBe0092F4D7f1098905F7C55e30a5',
-  'DepositManager': '0xA8CF64F159C337DA3e465a3910C61F0f536bAb48',
-  'CoinageFactory': '0xcc61736cb4D75BcBfA7188d913012f49B225c77A',
-  'OldDAOVaultMock': '0xE51B320e6FeD07e6f3A4846444810CBAE717e71d',
-  'SeigManager': '0x481291f9Dbb81e05d4C1b9f707eF5d2e94108476',
-  'PowerTON': '0x4A36a630E027e55eC9b29eFe5dBecd2b42eBC35c',
-  'DAOVault': '0x37ACb37Ad64297363cc6D1a51217c9c0dA34d7ed',
-  'DAOAgendaManager': '0x8CfaB05718b607D45E3DF0f9B6F25dF81C7e5Ecb',
-  'CandidateFactory': '0x0A19fe7860Df2bb6711Ea6Cbd76507ceab005952',
-  'DAOCommittee': '0xE14FE4AaA9752E2587D74Aa51A92cd22E5fEb14c',
-  'DAOCommitteeProxy': '0x692A8C6b8c8Fdb6Af9c30119470874AD3fa3C5b1',
-  'EtherToken': '0x7e38f98DbdCb825Fe0BD7ae14DB7e70869a12927',
-};
 
+const deployed = {
+  'TON': '0x105567148d87b2c48998b41409977D522491c2d9',
+  'WTON': '0xe6B5e4c9C967756A4Ce38ECc5BfD7e9774c1E0d0',
+  'Layer2Registry': '0x9658C3faE4bDdB37D31FED105Ab90Cf6c3C9f637',
+  'DepositManager': '0x8923dF9F29379bda8520a9FeDFB551ADdbD1b58E',
+  'CoinageFactory': '0xF3c9D1323dd9FD409e5E6D6dEc5FdEb646307b62',
+  'OldDAOVaultMock': '0x47a28B0E42993b067831A36e25abB2ADb6bd01CC',
+  'SeigManager': '0xbED423F1B8bC23B98DfA12cAbcA0aCAF79530594',
+  'PowerTON': '0x40526F9762169f437fB651213B3A6605Eb3EAa63',
+  'DAOVault': '0x5b0F0B7238555f2F10aa21cfB4a62d3c9589B2eB',
+  'DAOAgendaManager': '0x4c310e5100B6dcA87d661CDdC98c08e81CAe4697',
+  'CandidateFactory': '0x2ff67b407F2bDcb3B51a8948d5ccADEE5FD0eb93',
+  'DAOCommittee': '0x39e7bEaD66d1A0828957927f60BF696e9925F077',
+  'DAOCommitteeProxy': '0xEcd5E344d0649FF76AdBC10f5e3C0c100479559D',
+  'EtherToken': '0xBf000FbeDc0eBF5E33f54CDaE954893f8c49f6da',
+};
 
 function getContract (want, web3, address) {
   if (!web3) {
@@ -111,7 +93,7 @@ const depositManagerFunctionsOfTypeA = [
 `Tokamak Network Layer 2 staking has a global withdrawal delay.
 
 Staking operators can set individual withdrawal delay, but there is a minimum withdrawal delay period set throughout the network. This minimum withdrawal delay period is the 'global withdrawal delay', and each operator's withdrawal delay cannot be lower than the global withdrawal delay.
-    
+
 This withdrawal delay is specified in blocks. New global withdrawal delay will be applied when an offer is passed with the number of blocks you want to propose via 'globalWithdrawalDelay_'`,
   },
 ];
@@ -129,7 +111,7 @@ const seigManagerFunctionsOfTypeA = [
     'explanation':
 `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%). 
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
 This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`,
   },
   {
@@ -145,7 +127,7 @@ This function allows you to determine the ratio of the newly issued TON accumula
     'explanation':
 `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%). 
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
 This function allows you to determine the ratio of the newly issued TON accumulated for DAO.`,
   },
   {
@@ -161,7 +143,7 @@ This function allows you to determine the ratio of the newly issued TON accumula
     'explanation':
 `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%). 
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
 This function allows you to determine the ratio of the newly issued TON accumulated for staking users.`,
   },
   {
@@ -265,7 +247,7 @@ If you record less than the minimum number of votes set here, the agenda will no
     'prettyName': '',
     'explanation':
 `In order for an agenda to be made, a certain amount of TON must be incinerated.
- 
+
 This function sets the amount of TON to be burned to make an agenda.`,
   },
   {
