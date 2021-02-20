@@ -75,7 +75,7 @@
           {{ votedResult() }}
         </div>
       </div>
-      <div v-if="agenda.executed === false && agenda.status !== 5" class="right-side">
+      <div v-if="agenda.status !== 5" class="right-side">
         <button-comp
           v-if="account !== ''"
           :name="buttonName"
@@ -172,9 +172,11 @@ export default {
       case 2:
         if (this.agenda.tVotingEndTime < this.now) return 'End Agenda';
         else return 'Vote';
-      case 3: return 'Execute';
-      case 4: return 'Execute';
-      case 5: return 'Execute';
+      case 3:
+        if (this.agenda.tExecutableLimitTimestamp < this.now) return 'Executable time has passed';
+        else return 'Execute';
+      case 4: return 'End Agenda';
+      case 5: return 'End Agenda';
       }
       return 'Vote';
     },
@@ -187,8 +189,18 @@ export default {
       return 'vote';
     },
     buttonStatus () {
-      if (this.votableStatus || this.executable || (this.agenda.status === 2 && (this.agenda.tVotingEndTime < this.now))) return '';
-      else {
+      console.log('this.votableStatus', this.votableStatus);
+      console.log('this.executable', this.executable);
+      console.log('this.agenda.status', this.agenda.status);
+      console.log('(this.agenda.tVotingEndTime > this.now)', (this.agenda.tVotingEndTime > this.now));
+      console.log('(this.agenda.tVotingEndTime < this.now)', (this.agenda.tVotingEndTime < this.now));
+
+      if ((this.votableStatus && this.agenda.status === 2 && (this.agenda.tVotingEndTime > this.now))
+        || (this.executable && this.agenda.status === 3 && (this.agenda.tVotingEndTime < this.now))) {
+        console.log('buttonStatus', '');
+        return '';
+      } else {
+        console.log('buttonStatus', 'disabled');
         return 'disabled';
       }
       // switch (this.agenda.status) {
