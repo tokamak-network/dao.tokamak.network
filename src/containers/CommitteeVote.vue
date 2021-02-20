@@ -91,7 +91,7 @@
 
 <script>
 import { withComma, TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
-import { getContract } from '@/utils/contracts';
+import { getContract, stakedOfCandidateContracts, minimumAmountOfOperator } from '@/utils/contracts';
 import web3Utils from 'web3-utils';
 
 import { mapState, mapGetters } from 'vuex';
@@ -202,33 +202,55 @@ export default {
       if ((new BN(amount)).cmp(new BN(this.tonBalance)) === 1) {
         return alert('Please check your TON amount!');
       }
-      const data = await this.dataForDeposit();
 
-      const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
-        .estimateGas({
-          from: this.account,
-        });
+      //candidator's operator must deposit more amount than the minimun stake amount.
+      // so at first time, he have to vote more amount than the minimun stake amount.
+      let checkMinimunAmountOfOperator = true;
+      const candidate = this.candidate(this.address);
 
-      await ton.methods.approveAndCall(wton._address, amount, data)
-        .send({
-          from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
-        })
-        .on('transactionHash', (hash) => {
-          this.$refs.tonvote.$refs.input.value = null;
-          this.$store.commit('SET_PENDING_TX', hash);
-        })
-        .on('confirmation', async (confirmationNumber) => {
-          if (this.confirmBlock === confirmationNumber) {
+      if (candidate && candidate.operator && candidate.operator.toLowerCase() === this.account.toLowerCase()) {
+        const minimumAmount = await minimumAmountOfOperator(this.web3);
+        const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+        const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
+        const canVoteMinimunAmount = (new BN(minimumAmount)).sub(new BN(alreadyStakedAmount));
+        if (canVoteMinimunAmount.gt(new BN(0))) {
+          checkMinimunAmountOfOperator = false;
+          alert('Candidator have to stake a minimun amount in his candidateContract. '
+            + '\n Already your staked amount : ' + WTON(alreadyStakedAmount) + ' TON'
+            + '\n Minimun staked amount  : ' + WTON(minimumAmount) + ' TON'
+            + '\n Can vote more than ' + WTON(canVoteMinimunAmount) + ' TON');
+        }
+      }
+
+      if (checkMinimunAmountOfOperator) {
+        const data = await this.dataForDeposit();
+        const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
+          .estimateGas({
+            from: this.account,
+          });
+
+        await ton.methods.approveAndCall(wton._address, amount, data)
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$refs.tonvote.$refs.input.value = null;
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('confirmation', async (confirmationNumber) => {
+            if (this.confirmBlock === confirmationNumber) {
+              this.$store.commit('SET_PENDING_TX', '');
+              await this.update();
+            }
+          })
+          .on('receipt', () => {
+          })
+          .on('error', () => {
             this.$store.commit('SET_PENDING_TX', '');
-            await this.update();
-          }
-        })
-        .on('receipt', () => {
-        })
-        .on('error', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        });
+          });
+      }
+
     },
     async unvote () {
       if (!this.account) return;

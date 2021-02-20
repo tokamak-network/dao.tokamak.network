@@ -1398,3 +1398,42 @@ module.exports.canExecute = async function (agendaId, _web3) {
   }
   return canExecute;
 };
+
+module.exports.stakedOfCandidateContracts = async function (_web3, _candidateContract, account) {
+  let amount = 0;
+  if (_candidateContract !== null && _candidateContract.length > 0 && account !== null && account.length > 0) {
+    const seigManager = await getContract('SeigManager', _web3);
+    if (seigManager !== null) {
+      const coinageAddress = await seigManager.methods.coinages(_candidateContract).call();
+      if (coinageAddress) {
+        const coinage = await getContract('Coinage', _web3, coinageAddress);
+        if (coinage) {
+          amount = await coinage.methods.balanceOf(account).call();
+        } else {
+          console.log('Utils.stakedOfCandidateContracts coinage is null') ; // eslint-disable-line
+        }
+      } else {
+        console.log('Utils.stakedOfCandidateContracts coinageAddress is null') ; // eslint-disable-line
+      }
+    } else {
+      console.log('Utils.stakedOfCandidateContracts is null') ; // eslint-disable-line
+    }
+
+  }
+  return amount;
+};
+
+module.exports.minimumAmountOfOperator = async function (_web3) {
+  let amount = 0;
+  try {
+    const seigManager = await getContract('SeigManager', _web3);
+    if (seigManager !== null) {
+      amount = await seigManager.methods.minimumAmount().call();
+    } else {
+      console.log('Utils.minimumAmountOfOperator is null') ; // eslint-disable-line
+    }
+  } catch (err) {
+    console.log('Utils.minimumAmountOfOperator err', err) ; // eslint-disable-line
+  }
+  return amount;
+};
