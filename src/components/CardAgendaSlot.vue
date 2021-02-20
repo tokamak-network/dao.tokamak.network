@@ -189,18 +189,17 @@ export default {
       return 'vote';
     },
     buttonStatus () {
+      /*
       console.log('this.votableStatus', this.votableStatus);
       console.log('this.executable', this.executable);
       console.log('this.agenda.status', this.agenda.status);
       console.log('(this.agenda.tVotingEndTime > this.now)', (this.agenda.tVotingEndTime > this.now));
       console.log('(this.agenda.tVotingEndTime < this.now)', (this.agenda.tVotingEndTime < this.now));
-
+      */
       if ((this.votableStatus && this.agenda.status === 2 && (this.agenda.tVotingEndTime > this.now))
         || (this.executable && this.agenda.status === 3 && (this.agenda.tVotingEndTime < this.now))) {
-        console.log('buttonStatus', '');
         return '';
       } else {
-        console.log('buttonStatus', 'disabled');
         return 'disabled';
       }
       // switch (this.agenda.status) {
