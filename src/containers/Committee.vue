@@ -254,16 +254,26 @@ export default {
       if (!this.canUpdateReward(this.address)) {
         return alert('no deposit for this candidate');
       }
+
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
         return;
       }
       if (candidate.kind === 'layer2') {
+
         if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
-          alert('only candidate owner can update reward');
+          alert('only candidate by Layer2 owner can update reward');
         }
+
         const layer2Contract = getContract('Layer2', this.web3, candidate.layer2);
+        /* check operator
+        console.log('layer2Contract', candidate, layer2Contract) ;
+        if (layer2Contract) {
+          const _operator = await layer2Contract.methods.operator().call();
+          console.log('_operator', _operator) ;
+        }
+        */
         const [
           costNRB,
           NRELength,
@@ -283,7 +293,7 @@ export default {
         const pos1 = makePos(currentForkNumber, epochNumber);
         const pos2 = makePos(startBlockNumber, endBlockNumber);
         const dummyBytes = '0xdb431b544b2f5468e3f771d7843d9c5df3b4edcf8bc1c599f18f0b4ea8709bc3';
-
+        //console.log('pos1', pos1, 'pos2', pos2, 'dummyBytes', dummyBytes, 'costNRB', costNRB) ;
         const gasLimit = await layer2Contract.methods.submitNRE(
           pos1,
           pos2,
@@ -294,34 +304,39 @@ export default {
           from: this.account,
           value: costNRB,
         });
-
-        await layer2Contract.methods.submitNRE(
-          pos1,
-          pos2,
-          dummyBytes, // epochStateRoot
-          dummyBytes, // epochTransactionsRoot
-          dummyBytes, // epochReceiptsRoot
-        )
-          .send({
-            from: this.account,
-            value: costNRB,
-            gasLimit: Math.floor(gasLimit * 1.2),
-          })
-          .on('transactionHash', (hash) => {
-            this.$store.commit('SET_PENDING_TX', hash);
-          })
-          .on('confirmation', async (confirmationNumber) => {
-            if (this.confirmBlock === confirmationNumber) {
+        console.log('gasLimit', gasLimit) ;
+        try {
+          await layer2Contract.methods.submitNRE(
+            pos1,
+            pos2,
+            dummyBytes, // epochStateRoot
+            dummyBytes, // epochTransactionsRoot
+            dummyBytes, // epochReceiptsRoot
+          )
+            .send({
+              from: this.account,
+              value: costNRB,
+              gasLimit: Math.floor(gasLimit * 1.2),
+            })
+            .on('transactionHash', (hash) => {
+              this.$store.commit('SET_PENDING_TX', hash);
+            })
+            .on('confirmation', async (confirmationNumber) => {
+              if (this.confirmBlock === confirmationNumber) {
+                this.$store.commit('SET_PENDING_TX', '');
+                await this.$store.dispatch('launch');
+                await this.$store.dispatch('connectEthereum', this.web3);
+              }
+            })
+            .on('receipt', () => {
+            })
+            .on('error', () => {
               this.$store.commit('SET_PENDING_TX', '');
-              await this.$store.dispatch('launch');
-              await this.$store.dispatch('connectEthereum', this.web3);
-            }
-          })
-          .on('receipt', () => {
-          })
-          .on('error', () => {
-            this.$store.commit('SET_PENDING_TX', '');
-          });
+            });
+        } catch (error) {
+          console.log('error', error) ;// eslint-disable-line
+        }
+
       } else {
         const candidateContract = getContract('Candidate', this.web3, candidate.candidateContract);
         const gasLimit = await candidateContract.methods.updateSeigniorage()
