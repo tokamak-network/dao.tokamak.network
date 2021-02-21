@@ -193,6 +193,7 @@ export default {
       const wton = getContract('WTON', this.web3);
 
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
+
       if (String(amount) === '0') {
         return alert('Please input amount!');
       }
@@ -205,6 +206,7 @@ export default {
 
       //candidator's operator must deposit more amount than the minimun stake amount.
       // so at first time, he have to vote more amount than the minimun stake amount.
+      const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
       let checkMinimunAmountOfOperator = true;
       const candidate = this.candidate(this.address);
 
@@ -213,7 +215,8 @@ export default {
         const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
         const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
         const canVoteMinimunAmount = (new BN(minimumAmount)).sub(new BN(alreadyStakedAmount));
-        if (canVoteMinimunAmount.gt(new BN(0))) {
+        const subAmount = (new BN(amountToRay)).sub(canVoteMinimunAmount);
+        if (subAmount.lt(new BN(0))) {
           checkMinimunAmountOfOperator = false;
           alert('Candidator have to stake a minimun amount in his candidateContract. '
             + '\n Already your staked amount : ' + WTON(alreadyStakedAmount) + ' TON'
