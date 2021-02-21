@@ -282,13 +282,17 @@ export default new Vuex.Store({
               candidate.selfVote = selfVote;
               const info = await daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call();
               candidate.info = info;
+              //console.log('candidates.push', i, candidate); // eslint-disable-line
+
               candidates.push(candidate);
             } else {
-              //console.log('coinageContract is null ', candidate.layer2,  candidate.kind);
+              //console.log('coinageContract is null ', i, candidate); // eslint-disable-line
             }
+          } else {
+            //console.log('isLayer2 is null ', i, candidate); // eslint-disable-line
           }
         }
-        //console.log('candidate.layer2', i, candidate.kind,  candidate.layer2, candidate.operator);
+        //console.log('candidate', i, candidate, candidates);  // eslint-disable-line
         i++;
         if (i === candidatesPre.length) {
           commit('SET_CANDIDATES', candidates);
