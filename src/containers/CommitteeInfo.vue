@@ -80,6 +80,7 @@ export default {
       'canWithdraw',
       'notWithdrawableRequests',
       'candidateContractFromEOA',
+      'myCandidatesArrays',
     ]),
     cannotWithdraw () {
       const requests = this.notWithdrawableRequests(this.address);
@@ -115,13 +116,22 @@ export default {
         return alert('please input your new name!');
       }
 
+      let candidateContractFromEOA = this.candidateContractFromEOA;
+      if (this.myCandidatesArrays !== null && this.myCandidatesArrays.length > 1) {
+        this.myCandidatesArrays.forEach(e=>{
+          if (e.candidateContract === this.candidate(this.address).candidateContract) {
+            candidateContractFromEOA = e.candidateContract;
+          }
+        });
+      }
+
       const committeeContract = getContract('DAOCommitteeProxy', this.web3);
-      const gasLimit = await committeeContract.methods.setMemoOnCandidateContract(this.candidateContractFromEOA, name)
+      const gasLimit = await committeeContract.methods.setMemoOnCandidateContract(candidateContractFromEOA, name)
         .estimateGas({
           from: this.account,
         });
 
-      await committeeContract.methods.setMemoOnCandidateContract(this.candidateContractFromEOA, name)
+      await committeeContract.methods.setMemoOnCandidateContract(candidateContractFromEOA, name)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
