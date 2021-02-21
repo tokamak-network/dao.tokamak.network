@@ -141,6 +141,7 @@ export default {
       'totalVotesForCandidate',
       'isMember',
       'myCandidateContracts',
+      'myCandidatesArrays',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -179,6 +180,21 @@ export default {
     },
     canChallenge () {
       if (this.isMember) {
+        // in case of user has multi candidates
+        /*
+        if (this.myCandidatesArrays != null && this.myCandidatesArrays.length > 1) {
+          let canChallengeCandidate = false;
+          this.myCandidatesArrays.forEach(e=>{
+            if (e.operator === this.account.toLowerCase())
+              if (!this.members[this.memberIndex]
+                || (this.members[this.memberIndex] && this.members[this.memberIndex].operator !== this.account.toLowerCase()))
+                canChallengeCandidate = true;
+          });
+          return canChallengeCandidate;
+        } else {
+          return false;
+        }
+        */
         return false;
       }
       if (!this.occupied()) {

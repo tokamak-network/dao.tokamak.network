@@ -4,6 +4,14 @@
       <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
            @click="close"
       >
+      <div v-if="agendaVotesByCandidates.length > 1" class="content">
+        <span>
+          {{ candidate.name | slice }}
+          <span class="blue">
+            {{ candidate.candidate | hexSlicer }}
+          </span>
+        </span>
+      </div>
       <div v-if="agendaVotesByCandidates.length < 2" class="title">You can claim {{ activityReward | withComma }} TON</div>
       <div v-else class="title">You can claim {{ candidate.claimableAmount | withComma }} TON</div>
       <div v-if="agendaVotesByCandidates.length < 2 && canClaimValue" class="question">Do you want to continue?</div>
@@ -181,6 +189,16 @@ export default {
     > .right {
       margin-left: 15px;
     }
+  }
+  > .content {
+    background: #f4f6f9;
+    font-size: 20px;
+    text-align: center;
+    color: #3e495c;
+    padding: 20px 0 20px 0
+  }
+  .content .blue {
+    color: #2a72e5;
   }
 }
 </style>
