@@ -719,7 +719,7 @@ export default new Vuex.Store({
 
       const minimumAmount = web3Utils.toBN(getters.minimumAmount);
       const selfVote = web3Utils.toBN(candidate.selfVote);
-      return selfVote.cmp(minimumAmount) >= 0;
+      return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);
