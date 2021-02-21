@@ -304,7 +304,7 @@ export default {
           from: this.account,
           value: costNRB,
         });
-        console.log('gasLimit', gasLimit) ;
+
         try {
           await layer2Contract.methods.submitNRE(
             pos1,
