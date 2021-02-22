@@ -354,6 +354,9 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
 
+  max-height: 90vh;
+  overflow-y: scroll;
+
   > img {
     position: absolute;
     right: 30px;

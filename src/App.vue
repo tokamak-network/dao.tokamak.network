@@ -74,4 +74,9 @@ body { margin: 0 !important; }
   left: 0;
   overflow: scroll;
 }
+
+.modal-open {
+  height: 100vh;
+  overflow-y: hidden;
+}
 </style>
