@@ -6,15 +6,15 @@
     /> -->
     <div class="container">
       <info-committee :title="'Name'" :content="candidate(address) && !canEditName ? candidate(address).name : ''" :type="'name'" style="flex: 1;" />
-      <input v-if="canEditName" ref="name" class="edit-input" type="text" :placeholder="candidate(address).name">
-      <div v-if="candidateContractFromEOA" class="edit-btn" @click="editName();">Edit</div>
-      <div v-if="canEditName" class="cancel-btn" @click="canEditName=false;">Cancle</div>
+      <input v-if="canEditName && candidate(address).operator.toLowerCase() === account.toLowerCase()" ref="name" class="edit-input" type="text" :placeholder="candidate(address).name">
+      <div v-if="candidateContractFromEOA && candidate(address).operator.toLowerCase() === account.toLowerCase()" class="edit-btn" @click="editName();">Edit</div>
+      <div v-if="canEditName && candidate(address).operator.toLowerCase() === account.toLowerCase()" class="cancel-btn" @click="canEditName=false;">Cancle</div>
     </div>
     <div class="container" style="margin-top: 12px;">
       <info-committee :title="'Description'" :content="candidate(address) && !canEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
-      <input v-if="canEditDescription" ref="description" class="edit-input" type="text" :placeholder="candidate(address).description">
-      <div v-if="candidateContractFromEOA" class="edit-btn" @click="editDescription();">Edit</div>
-      <div v-if="canEditDescription" class="cancel-btn" @click="canEditDescription=false;">Cancle</div>
+      <input v-if="canEditDescription && candidate(address).operator.toLowerCase() === account.toLowerCase()" ref="description" class="edit-input" type="text" :placeholder="candidate(address).description">
+      <div v-if="candidateContractFromEOA && candidate(address).operator.toLowerCase() === account.toLowerCase()" class="edit-btn" @click="editDescription();">Edit</div>
+      <div v-if="canEditDescription && candidate(address).operator.toLowerCase() === account.toLowerCase()" class="cancel-btn" @click="canEditDescription=false;">Cancle</div>
     </div>
     <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Candidate' : 'Candidate Address'"
                     :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;"
@@ -110,7 +110,10 @@ export default {
         this.canEditName = true;
         return;
       }
-
+      if (this.candidate(this.address).operator.toLowerCase() !== this.account.toLowerCase()) {
+        alert('You are not the operator of this candidate');
+        return;
+      }
       const name = this.$refs.name.value;
       if (!name) {
         return alert('please input your new name!');
@@ -124,7 +127,6 @@ export default {
           }
         });
       }
-
       const committeeContract = getContract('DAOCommitteeProxy', this.web3);
       const gasLimit = await committeeContract.methods.setMemoOnCandidateContract(candidateContractFromEOA, name)
         .estimateGas({

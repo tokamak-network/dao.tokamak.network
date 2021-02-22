@@ -313,7 +313,7 @@ export default new Vuex.Store({
             }
             isMember = false;
           });
-          //console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
+          console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
           commit('SET_MEMBERS', members);
           commit('SET_NONMEMBERS', nonmembers);
         }
