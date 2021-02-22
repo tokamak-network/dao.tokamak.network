@@ -7,7 +7,7 @@
     <info-committee :title="'Voting End Time'" :content="checkVotingTime('tVotingEndTime')" :type="'time'" style="margin-top: 12px;" />
     <info-committee :title="'Agenda Status'" :content="checkStatusCode" :type="'description'" style="margin-top: 12px;" />
     <info-committee :title="'Agenda Result'" :content="checkResultCode" :type="'description'" style="margin-top: 12px;" />
-    <info-committee :title="'Agenda ExecutableLimitTime'" :content="checkVotingTime('tExecutableLimitTimestamp')" :type="'time'" style="margin-top: 12px;" />
+    <info-committee :title="'Agenda Execution Time Limit'" :content="checkVotingTime('tExecutableLimitTimestamp')" :type="'time'" style="margin-top: 12px;" />
     <info-committee :title="'Executed Time'" :content="checkVotingTime('tExecTime')" :type="'time'" style="margin-top: 12px;" />
   </div>
 </template>

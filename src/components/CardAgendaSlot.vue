@@ -173,8 +173,7 @@ export default {
         if (this.agenda.tVotingEndTime < this.now) return 'End Agenda';
         else return 'Vote';
       case 3:
-        if (this.agenda.tExecutableLimitTimestamp < this.now) return 'Executable time has passed';
-        else return 'Execute';
+        return 'Execute';
       case 4: return 'End Agenda';
       case 5: return 'End Agenda';
       }
@@ -182,7 +181,8 @@ export default {
     },
     buttonType () {
       switch (this.agenda.status) {
-      case 3: return 'secondary';
+      case 3:
+        return 'secondary';
       case 4: return 'secondary';
       case 5: return 'secondary';
       }
@@ -199,6 +199,8 @@ export default {
       if ((this.votableStatus && this.agenda.status === 2 && (this.agenda.tVotingEndTime > this.now))
         || (this.executable && this.agenda.status === 3 && (this.agenda.tVotingEndTime < this.now))) {
         return '';
+      } else if (this.agenda.tExecutableLimitTimestamp < this.now) {
+        return 'disabled';
       } else {
         return 'disabled';
       }
