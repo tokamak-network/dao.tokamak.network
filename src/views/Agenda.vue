@@ -171,6 +171,10 @@
       <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
       <card-stats-committee />
       <card-resource />
+      <!-- TODO: check condition -->
+      <!-- <div class="vote-btn-container">
+        <div class="vote-btn">Vote</div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -452,6 +456,49 @@ export default {
 
     width: 100%;
     min-width: 178px;
+  }
+}
+
+.vote-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 73px;
+
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  background: #ffffff;
+
+  .vote-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 43px;
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    background: #257eee;
+
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 </style>
