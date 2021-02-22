@@ -2,7 +2,6 @@
   <div class="propose">
     <modal v-if="showModal"
            :width="$mq === 'mobile' ? '90%': '786px'"
-           @on-closed="showModal=false; currentFunction = ''; currentFunctionParams = []"
     >
       <template #body>
         <modal-propose :contract="currentContract"
@@ -10,7 +9,7 @@
                        :params="currentFunctionParams"
                        :explanation="currentFunctionExplanation"
                        :type="type"
-                       @on-closed="showModal=false; currentFunction = ''; currentFunctionParams = []"
+                       @on-closed="closeModal(); currentFunction = ''; currentFunctionParams = []"
         />
       </template>
     </modal>
@@ -121,7 +120,7 @@
           </div>
           <div v-if="index === 0 && i == 0" class="box-container-mobile">
             <div v-for="func in depositManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -131,7 +130,7 @@
           </div>
           <div v-if="index === 1 && i == 1" class="box-container-mobile">
             <div v-for="func in seigManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -141,7 +140,7 @@
           </div>
           <div v-if="index === 2 && i == 2" class="box-container-mobile">
             <div v-for="func in daoCommitteeProxyFunctionsOfTypeA" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -151,7 +150,7 @@
           </div>
           <div v-if="index === 3 && i == 3" class="box-container-mobile">
             <div v-for="func in daoVaultFunctionsOfTypeA" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -183,7 +182,7 @@
           </div>
           <div v-if="indexOfTypeB === 0 && i == 0" class="box-container-mobile">
             <div v-for="func in tonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -193,7 +192,7 @@
           </div>
           <div v-if="indexOfTypeB === 1 && i == 1" class="box-container-mobile">
             <div v-for="func in wtonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -203,7 +202,7 @@
           </div>
           <div v-if="indexOfTypeB === 2 && i == 2" class="box-container-mobile">
             <div v-for="func in depositManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -213,7 +212,7 @@
           </div>
           <div v-if="indexOfTypeB === 3 && i == 3" class="box-container-mobile">
             <div v-for="func in seigManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -223,7 +222,7 @@
           </div>
           <div v-if="indexOfTypeB === 4 && i == 4" class="box-container-mobile">
             <div v-for="func in layer2RegistryFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -233,7 +232,7 @@
           </div>
           <div v-if="indexOfTypeB === 5 && i == 5" class="box-container-mobile">
             <div v-for="func in daoCommitteeProxyFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -243,7 +242,7 @@
           </div>
           <div v-if="indexOfTypeB === 6 && i == 6" class="box-container-mobile">
             <div v-for="func in daoCommitteeFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -253,7 +252,7 @@
           </div>
           <div v-if="indexOfTypeB === 7 && i == 7" class="box-container-mobile">
             <div v-for="func in daoVaultFunctionsOfTypeB" :key="func.name"
-                 @click="showModal = true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -318,7 +317,7 @@
         <div v-if="index === 0" class="box-container">
           <div>
             <div v-for="func in depositManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -329,13 +328,13 @@
         </div>
         <div v-if="index === 1" class="box-container">
           <div style="display: flex; flex-wrap: wrap; margin-left: 30px; margin-right: 30px;">
-            <div @click="showModal=true; currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
+            <div @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams;">
               <box :function-name="'setSeigRates'"
                    :type="'A'"
               />
             </div>
             <div v-for="func in seigManagerFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -347,7 +346,7 @@
         <div v-if="index === 2" class="box-container">
           <div>
             <div v-for="func in daoCommitteeProxyFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -359,7 +358,7 @@
         <div v-if="index === 3" class="box-container">
           <div>
             <div v-for="func in daoVaultFunctionsOfTypeA" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -405,7 +404,7 @@
         <div v-if="indexOfTypeB === 0" class="box-container-typeB">
           <div>
             <div v-for="func in tonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -417,7 +416,7 @@
         <div v-if="indexOfTypeB === 1" class="box-container-typeB">
           <div>
             <div v-for="func in wtonFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -429,7 +428,7 @@
         <div v-if="indexOfTypeB === 2" class="box-container-typeB">
           <div>
             <div v-for="func in depositManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -441,7 +440,7 @@
         <div v-if="indexOfTypeB === 3" class="box-container-typeB">
           <div>
             <div v-for="func in seigManagerFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -453,7 +452,7 @@
         <div v-if="indexOfTypeB === 4" class="box-container-typeB">
           <div>
             <div v-for="func in layer2RegistryFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -465,7 +464,7 @@
         <div v-if="indexOfTypeB === 5" class="box-container-typeB">
           <div>
             <div v-for="func in daoCommitteeProxyFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -477,7 +476,7 @@
         <div v-if="indexOfTypeB === 6" class="box-container-typeB">
           <div>
             <div v-for="func in daoCommitteeFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -489,7 +488,7 @@
         <div v-if="indexOfTypeB === 7" class="box-container-typeB">
           <div>
             <div v-for="func in daoVaultFunctionsOfTypeB" :key="func.name"
-                 @click="showModal=true; currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
+                 @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
               <box :function-name="func.name"
                    :status="currentFunction === func.name ? 'selected' : 'unselected'"
@@ -589,6 +588,18 @@ export default {
     this.daoVaultFunctionsOfTypeB = getContractABI('DAOVault', 'B');
   },
   methods: {
+    openModal () {
+      this.showModal = true;
+
+      const element = document.getElementById('app');
+      element.classList.add('modal-open');
+    },
+    closeModal () {
+      this.showModal = false;
+
+      const element = document.getElementById('app');
+      element.classList.remove('modal-open');
+    },
     numFunctions (index) {
       if (index === 0) return this.depositManagerFunctionsOfTypeA.length;
       else if (index === 1) return this.seigManagerFunctionsOfTypeA.length;
@@ -1338,7 +1349,6 @@ export default {
         }
       }
     }
-
   }
 }
 </style>
