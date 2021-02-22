@@ -167,7 +167,7 @@ export default {
     ]),
     ...mapGetters([
       'getAgendaByID',
-      'getVotedListByID',
+      'comments',
       'agendaOnChainEffects',
       'agendaType',
     ]),
@@ -189,7 +189,7 @@ export default {
       return abi[0].title;
     },
     voted () {
-      return this.getVotedListByID(this.agendaId).length;
+      return this.comments(this.agendaId).length;
     },
     creationTime () {
       return this.getAgendaByID(this.agendaId);

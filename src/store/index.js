@@ -8,7 +8,7 @@ import {
   getAgendaContents,
   getVotersByCandidate,
   getAgendaVotesByVoter,
-  getAgendaVoteCasted,
+  getAgendaVotes,
 } from '@/api';
 import {
   getContract,
@@ -44,7 +44,7 @@ export default new Vuex.Store({
 
     agendas: [],
     votersOfAgenda: [],
-    voteCasted: [],
+    votingDetails: [],
     voteRate: 0,
     myVote: [],
     agendaVotesByCandidates: [],
@@ -85,8 +85,8 @@ export default new Vuex.Store({
     SET_VOTERS_OF_AGENDA (state, votersOfAgenda) {
       state.votersOfAgenda = votersOfAgenda;
     },
-    SET_AGENDA_VOTE_CASTED (state, voteCasted) {
-      state.voteCasted = voteCasted;
+    SET_AGENDA_VOTING_DETAILS (state, votingDetails) {
+      state.votingDetails = votingDetails;
     },
     SET_VOTE_RATE (state, voteRate) {
       state.voteRate = voteRate;
@@ -225,7 +225,7 @@ export default new Vuex.Store({
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
       await dispatch('setVotersOfAgenda');
-      await dispatch('setVoteCasted');
+      await dispatch('setVotingDetails');
       commit('LAUNCHED');
     },
 
@@ -425,11 +425,9 @@ export default new Vuex.Store({
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
-    async setVoteCasted ({ commit }) {
-      const [events] = await Promise.all([await getAgendaVoteCasted()]);
-      const voteCasted = [];
-      events.forEach(event => (event.eventName === 'AgendaVoteCasted' ? voteCasted.push(event) : 0));
-      commit('SET_AGENDA_VOTE_CASTED', voteCasted);
+    async setVotingDetails ({ commit }) {
+      const [votes] = await Promise.all([await getAgendaVotes()]);
+      commit('SET_AGENDA_VOTING_DETAILS', votes);
     },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();
@@ -561,11 +559,6 @@ export default new Vuex.Store({
     getAgendaByID: (state) => (agendaId) => {
       const agenda = state.agendas.find(agenda => String(agenda.agendaid) === String(agendaId));
       return agenda ? agenda : {};
-    },
-    getVotedListByID: (state) => (agendaId) => {
-      const voted = [];
-      state.voteCasted.forEach(async casted => casted.data.id === agendaId ? voted.push(casted.data) : '');
-      return voted;
     },
     candidate: (state) => (address) => {
       if (address) {
@@ -754,8 +747,8 @@ export default new Vuex.Store({
       return agenda.type ? agenda.type : 'A'; // TODO: 'A' -> ''
     },
     comments: (state) => (agendaId) => {
-      if (!state.voteCasted) return [];
-      return state.voteCasted.filter(v => v.data.id === agendaId);
+      if (!state.votingDetails) return [];
+      return state.votingDetails.filter(v => v.agendaid === Number(agendaId));
     },
     sortedCandidates: (state, getters) => {
       const candidates = [];

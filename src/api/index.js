@@ -39,13 +39,10 @@ export async function getMembers () {
   return res.data.datas;
 }
 
-export async function getAgendaVoteCasted () {
-  const res = await instance.get('/events', {
+export async function getAgendaVotes () {
+  const res = await instance.get('/agendavotes', {
     params: {
       chainId,
-      page: 1,
-      pagesize: 100,
-      eventNames: 'AgendaVoteCasted',
     },
   });
   return res.data.datas;

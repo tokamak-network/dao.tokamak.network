@@ -4,20 +4,13 @@
       <div class="comment-sec">
         Comments ({{ numComments }})
       </div>
-      <!-- <dropdown :items="['latest', 'No', 'Abstain']"
-                :hint="'Sort by latest'"
-                :button-type="'a'"
-                :selector-type="'a'"
-                style="width: 150px;"
-                class="dropdown"
-      /> -->
     </div>
     <div class="divider" />
     <agenda-comment v-for="comment in comments(agendaId)" :key="comment.transactionHash"
-                    :voted-at="comment.blockTimestamp"
-                    :vote="comment.data.voting"
-                    :voter="comment.data.from"
-                    :comment="comment.data.comment"
+                    :voted-at="comment.blockNumber"
+                    :vote="String(comment.vote)"
+                    :voter="comment.voter"
+                    :comment="comment.comment"
     />
   </div>
 </template>
@@ -25,12 +18,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import AgendaComment from '@/components/AgendaCommentComponent.vue';
-// import Dropdown from '@/components/Dropdown.vue';
+// import Web3 = require('web3');
 
 export default {
   components: {
     'agenda-comment': AgendaComment,
-    // 'dropdown': Dropdown,
   },
   data () {
     return {
@@ -39,7 +31,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'voteCasted',
+      'web3',
     ]),
     ...mapGetters([
       'comments',

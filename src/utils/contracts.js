@@ -1437,3 +1437,12 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
   }
   return amount;
 };
+
+// module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
+//   if (!web3) {
+//     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+//   }
+//   const block = await web3.eth.getBlock(blockNumber);
+//   this.timestamp = block.timestamp;
+//   return block.timestamp;
+// };

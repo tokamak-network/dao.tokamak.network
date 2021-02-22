@@ -61,7 +61,6 @@ export default {
       'votersOfAgenda',
     ]),
     ...mapGetters([
-      'getVotedListByID',
       'getAgendaByID',
       'getVotersOfAgenda ',
     ]),
