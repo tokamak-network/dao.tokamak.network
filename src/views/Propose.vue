@@ -104,7 +104,7 @@
       </div>
       <div v-if="type === 'A'" class="propose-contract-container-mobile">
         <div v-for="(contract, i) in contractsOfTypeA" :key="contract"
-             @click="index = i; setCurrentContract(index);"
+             @click="selectContract(i, 'A'); setCurrentContract(index);"
         >
           <div class="propose-contract"
                :style="[
@@ -162,7 +162,7 @@
       </div>
       <div v-if="type === 'B'" class="propose-contract-container-mobile">
         <div v-for="(contract, i) in contractsOfTypeB" :key="contract"
-             @click="indexOfTypeB = i; setCurrentContract(indexOfTypeB);"
+             @click="selectContract(i, 'B'); setCurrentContract(indexOfTypeB);"
         >
           <div class="propose-contract-typeB"
                :style="[
@@ -617,6 +617,11 @@ export default {
       else if (index === 6) return this.daoCommitteeFunctionsOfTypeB.length;
       else if (index === 7) return this.daoVaultFunctionsOfTypeB.length;
       else return 0;
+    },
+    selectContract (index, type) {
+      type === 'A' ?
+        this.index > -1 ? this.index = -1 : this.index = index :
+        this.indexOfTypeB > -1 ? this.indexOfTypeB = -1 : this.indexOfTypeB = index;
     },
     setCurrentContract (index) {
       if (index === 0) this.currentContract = 'DepositManager';
