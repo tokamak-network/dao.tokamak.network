@@ -13,7 +13,7 @@
                class="body"
           >
             <div>{{ (page*4) + index + 1 }}</div>
-            <div v-if="$mq === 'desktop'">{{ data.name | nameSlice }}... ({{ data.layer2 | hexSlicer }})</div>
+            <div v-if="$mq === 'desktop'">{{ data.name | nameSlice }} ({{ data.candidateContract | hexSlicer }})</div>
             <div v-else>{{ data.name | nameSlice }}</div>
             <div>{{ data.vote | WTON | withComma }} TON</div>
           </div>
