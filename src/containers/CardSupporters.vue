@@ -20,7 +20,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .supporters-table {
   padding-top: 8px;
   padding-bottom: 8px;

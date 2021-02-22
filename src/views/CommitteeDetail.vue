@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .committee-detail {
   /* all the `views` have to has this attribue  */
   flex: 1;

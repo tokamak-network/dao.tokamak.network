@@ -54,7 +54,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .title {
   font-family: Roboto;
   font-size: 24px;

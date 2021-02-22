@@ -23,7 +23,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card {
   margin-bottom: 30px;
 }

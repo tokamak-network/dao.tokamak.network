@@ -108,7 +108,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .vote-for-agenda {
   font-family: Roboto;
   font-size: 20px;
