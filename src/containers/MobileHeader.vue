@@ -164,6 +164,7 @@ img {
 
     &:hover {
       cursor: pointer;
+      color: #2a72e5;
     }
   }
 
