@@ -51,7 +51,21 @@
         >
         <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
-      <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+      <div v-if="$mq !== 'mobile'" class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+      <div v-else>
+        <div v-if="account && checkStatus">
+          <div class="title" style="margin-bottom: 0px;">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+          <button style="margin-top: 14px; margin-bottom: 30px;"
+                  class="update-btn"
+                  @click="endAgenda()"
+          >
+            End Agenda
+          </button>
+        </div>
+        <div v-else>
+          <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+        </div>
+      </div>
       <div v-if="$mq !== 'mobile'" class="selector">
         <div :class="{ 'selected': currentSelector === 0,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector == 0 }"
@@ -111,14 +125,6 @@
         >
           Comments ({{ voted }})
         </div>
-
-        <span class="space" />
-        <button v-if="account && checkStatus"
-                class="update-btn"
-                @click="endAgenda()"
-        >
-          End Agenda
-        </button>
       </div>
       <div class="divider" />
       <agenda-info v-if="currentSelector === 0" />
