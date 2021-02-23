@@ -523,7 +523,7 @@ export default {
       showModal: false,
       // isEntrance: true,
 
-      contractsOfTypeA: ['Deposit Manager\n Contract', 'Seig Manager\n Contract', 'DAO Committee\n Contract', 'DAO Vault2\n Contract'],
+      contractsOfTypeA: ['Deposit Manager\nContract', 'Seig Manager\nContract', 'DAO Committee\nContract', 'DAO Vault2\nContract'],
       contractsOfTypeB: [
         'TON\n Contract',
         'WTON\n Contract',
@@ -911,7 +911,7 @@ export default {
       text-align: left;
       color: #3e495c;
 
-      white-space: pre-wrap;
+      white-space: pre-line;
       margin-left: -10px;
 
       margin-bottom: 12px;
