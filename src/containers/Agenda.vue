@@ -51,10 +51,10 @@
         >
         <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
-      <div v-if="$mq !== 'mobile'" class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+      <div v-if="$mq !== 'mobile'" class="title">{{ title }}</div>
       <div v-else>
         <div v-if="account && checkStatus">
-          <div class="title" style="margin-bottom: 0px;">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+          <div class="title" style="margin-bottom: 0px;">{{ title }}</div>
           <button style="margin-top: 14px; margin-bottom: 30px;"
                   class="update-btn"
                   @click="endAgenda()"
@@ -63,7 +63,7 @@
           </button>
         </div>
         <div v-else>
-          <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+          <div class="title">{{ title }}</div>
         </div>
       </div>
       <div v-if="$mq !== 'mobile'" class="selector">

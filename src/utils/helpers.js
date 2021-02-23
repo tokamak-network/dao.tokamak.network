@@ -61,10 +61,12 @@ export function date2 (timestamp) {
 }
 
 export function date3 (timestamp) {
+  if (!timestamp) return '';
   return moment.utc(timestamp * 1000).local().format('YYYY / MM / DD / HH:mm');
 }
 
 export function votingTime (agenda) {
+  if (!agenda.tNoticeEndTime) return '';
   if (agenda.tNoticeEndTime * 1000 > new Date().getTime() || agenda.tVotingEndTime === 0) {
     return 'VOTING IS NOT STARTED';
   } else {

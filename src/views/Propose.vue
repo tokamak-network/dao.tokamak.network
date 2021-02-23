@@ -620,8 +620,8 @@ export default {
     },
     selectContract (index, type) {
       type === 'A' ?
-        this.index > -1 ? this.index = -1 : this.index = index :
-        this.indexOfTypeB > -1 ? this.indexOfTypeB = -1 : this.indexOfTypeB = index;
+        this.index === index ? this.index = -1 : this.index = index :
+        this.indexOfTypeB === index ? this.indexOfTypeB = -1 : this.indexOfTypeB = index;
     },
     setCurrentContract (index) {
       if (index === 0) this.currentContract = 'DepositManager';
