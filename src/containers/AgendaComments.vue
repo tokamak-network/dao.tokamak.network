@@ -37,7 +37,6 @@ export default {
       'comments',
     ]),
     numComments () {
-      console.log(this.comments(this.agendaId));
       return this.comments(this.agendaId) ? this.comments(this.agendaId).length : 0;
     },
   },
