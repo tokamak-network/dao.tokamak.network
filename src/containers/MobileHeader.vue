@@ -27,12 +27,12 @@
     </div>
     <div class="logo">
       <img v-if="!isSub()"
-           src="@/assets/mobile-logo.svg" alt=""
+           src="@/assets/mobile-logo.png" alt=""
            width="105" height="30"
            @click="route('/');"
       >
       <img v-else
-           src="@/assets/mobile-logo-sub.svg" alt=""
+           src="@/assets/mobile-logo-sub.png" alt=""
            width="105" height="30"
            @click="route('/');"
       >
