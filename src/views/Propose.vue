@@ -113,10 +113,18 @@
                ]"
           >
             <div>{{ contract }}</div>
-            <img v-if="i === 0" src="@/assets/icon-deposit-manager-typeA.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 1" src="@/assets/icon-seig-manager-typeA.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 2" src="@/assets/icon-dao-committee-typeA.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 3" src="@/assets/icon-dao-vault-typeA.svg" alt="" width="30" height="30">
+            <img v-if="i === 0"
+                 :src="getImg(i, 'DepositManager', 'A')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 1"
+                 :src="getImg(i, 'SeigManager', 'A')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 2"
+                 :src="getImg(i, 'DAOCommittee', 'A')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 3"
+                 :src="getImg(i, 'DAOVault', 'A')" alt="" width="30" height="30"
+            >
           </div>
           <div v-if="index === 0 && i == 0" class="box-container-mobile">
             <div v-for="func in depositManagerFunctionsOfTypeA" :key="func.name"
@@ -171,14 +179,30 @@
                ]"
           >
             <div>{{ contract }}</div>
-            <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt="" width="30" height="30">
-            <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt="" width="30" height="30">
+            <img v-if="i === 0"
+                 :src="getImg(i, 'TON', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 1"
+                 :src="getImg(i, 'WTON', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 2"
+                 :src="getImg(i, 'DepositManager', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 3"
+                 :src="getImg(i, 'SeigManager', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 4"
+                 :src="getImg(i, 'Layer2Registry', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 5"
+                 :src="getImg(i, 'DAOCommitteeProxy', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 6"
+                 :src="getImg(i, 'DAOCommittee', 'B')" alt="" width="30" height="30"
+            >
+            <img v-else-if="i === 7"
+                 :src="getImg(i, 'DAOVault', 'B')" alt="" width="30" height="30"
+            >
           </div>
           <div v-if="indexOfTypeB === 0 && i == 0" class="box-container-mobile">
             <div v-for="func in tonFunctionsOfTypeB" :key="func.name"
@@ -301,10 +325,18 @@
             >
               {{ pad(numFunctions(i)) }}
             </div>
-            <img v-if="i === 0" src="@/assets/icon-deposit-manager-typeA.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 1" src="@/assets/icon-seig-manager-typeA.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 2" src="@/assets/icon-dao-committee-typeA.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 3" src="@/assets/icon-dao-vault-typeA.svg" alt="" width="50" height="50">
+            <img v-if="i === 0"
+                 :src="getImg(i, 'DepositManager', 'A')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 1"
+                 :src="getImg(i, 'SeigManager', 'A')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 2"
+                 :src="getImg(i, 'DAOCommittee', 'A')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 3"
+                 :src="getImg(i, 'DAOVault', 'A')" alt="" width="50" height="50"
+            >
             <div>
               <div class="contract-name"
                    :style="[index === i ? { color: '#ffffff' } : {}]"
@@ -384,14 +416,30 @@
             >
               {{ pad(numFunctionsOfTypeB(i)) }}
             </div>
-            <img v-if="i === 0" src="@/assets/icon-ton-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 1" src="@/assets/icon-wton-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 2" src="@/assets/icon-deposit-manager-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 3" src="@/assets/icon-seig-manager-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 4" src="@/assets/icon-layer2-registry-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 5" src="@/assets/icon-dao-committee-proxy-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 6" src="@/assets/icon-dao-committee-typeB.svg" alt="" width="50" height="50">
-            <img v-else-if="i === 7" src="@/assets/icon-dao-vault-typeB.svg" alt="" width="50" height="50">
+            <img v-if="i === 0"
+                 :src="getImg(i, 'TON', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 1"
+                 :src="getImg(i, 'WTON', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 2"
+                 :src="getImg(i, 'DepositManager', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 3"
+                 :src="getImg(i, 'SeigManager', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 4"
+                 :src="getImg(i, 'Layer2Registry', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 5"
+                 :src="getImg(i, 'DAOCommitteeProxy', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 6"
+                 :src="getImg(i, 'DAOCommittee', 'B')" alt="" width="50" height="50"
+            >
+            <img v-else-if="i === 7"
+                 :src="getImg(i, 'DAOVault', 'B')" alt="" width="50" height="50"
+            >
             <div>
               <div class="contract-name"
                    :style="[indexOfTypeB === i ? { color: '#ffffff' } : {}]"
@@ -525,15 +573,15 @@ export default {
 
       contractsOfTypeA: ['Deposit Manager\nContract', 'Seig Manager\nContract', 'DAO Committee\nContract', 'DAO Vault2\nContract'],
       contractsOfTypeB: [
-        'TON\n Contract',
-        'WTON\n Contract',
-        'Deposit Manager\n Contract',
-        'Seig Manager\n Contract',
+        'TON\nContract',
+        'WTON\nContract',
+        'Deposit Manager\nContract',
+        'Seig Manager\nContract',
         'Layer2 Registry\n Contract',
-        'DAO Committee\n Proxy Contract',
-        'DAO Committee\n Contract',
+        'DAO Committee\nProxy Contract',
+        'DAO Committee\nContract',
         // 'Candidate\n Contract',
-        'DAO Vault2\n Contract',
+        'DAO Vault2\nContract',
       ],
 
       currentContract: '',
@@ -638,6 +686,67 @@ export default {
       else if (index === 5) this.currentContract = 'DAOCommitteeProxy';
       else if (index === 6) this.currentContract = 'DAOCommittee';
       else if (index === 7) this.currentContract = 'DAOVault';
+    },
+    getImg (index, contract, type) {
+      console.log(index, contract, type);
+      if (type === 'A') {
+        switch (contract) {
+        case 'DepositManager':
+          return this.index === index ?
+            require('../assets/contract-deposit-manager-active.svg') :
+            require('../assets/contract-deposit-manager-inactive.svg');
+        case 'SeigManager':
+          return this.index === index ?
+            require('../assets/contract-seig-manager-active.svg') :
+            require('../assets/contract-seig-manager-inactive.svg');
+        case 'DAOCommittee':
+          return this.index === index ?
+            require('../assets/contract-dao-committee-active.svg') :
+            require('../assets/contract-dao-committee-inactive.svg');
+        case 'DAOVault':
+          return this.index === index ?
+            require('../assets/contract-dao-vault-active.svg') :
+            require('../assets/contract-dao-vault-inactive.svg');
+        }
+      } else if (type === 'B') {
+        switch (contract) {
+        case 'TON':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-ton-active-typeB.svg') :
+            require('../assets/contract-ton-inactive-typeB.svg');
+        case 'WTON':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-wton-active-typeB.svg') :
+            require('../assets/contract-wton-inactive-typeB.svg');
+        case 'DepositManager':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-deposit-manager-active-typeB.svg') :
+            require('../assets/contract-deposit-manager-inactive-typeB.svg');
+        case 'SeigManager':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-seig-manager-active-typeB.svg') :
+            require('../assets/contract-seig-manager-inactive-typeB.svg');
+        case 'Layer2Registry':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-layer2-registry-active-typeB.svg') :
+            require('../assets/contract-layer2-registry-inactive-typeB.svg');
+        case 'DAOCommitteeProxy':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-dao-committee-proxy-active-typeB.svg') :
+            require('../assets/contract-dao-committee-proxy-inactive-typeB.svg');
+        case 'DAOCommittee':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-dao-committee-active-typeB.svg') :
+            require('../assets/contract-dao-committee-inactive-typeB.svg');
+        case 'DAOVault':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-dao-vault-active-typeB.svg') :
+            require('../assets/contract-dao-vault-inactive-typeB.svg');
+        }
+      } else {
+        console.log('bug', 'no contact img'); // eslint-disable-line
+        return '';
+      }
     },
   },
 };
