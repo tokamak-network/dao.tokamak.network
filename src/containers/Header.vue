@@ -19,7 +19,7 @@
            @click="route('/');"
       >
       <img v-else
-           src="@/assets/mobile-logo-colored.svg" alt=""
+           src="@/assets/mobile-logo-sub.png" alt=""
            width="105" height="30"
            @click="route('/');"
       >

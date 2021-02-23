@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .rank-container {
   display: flex;
   flex-direction: column;

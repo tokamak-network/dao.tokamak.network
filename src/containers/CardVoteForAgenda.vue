@@ -12,7 +12,7 @@
       <template #body>
         <div class="vote-for-agenda" style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
-            {{ title }} - {{ agenda.tCreationDate | date1 }}
+            {{ title }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
                        :type="'voteV2'"
@@ -108,7 +108,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .vote-for-agenda {
   font-family: Roboto;
   font-size: 20px;

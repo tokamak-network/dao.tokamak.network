@@ -8,14 +8,14 @@
       </div>
     </div>
     <div v-else-if="$mq === 'tablet'" class="button-mobile">
-      <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 120px;" @on-clicked="back" />
+      <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 140px;" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 120px;" @on-clicked="prev" />
-        <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 120px;" @on-clicked="next" />
+        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px;" @on-clicked="prev" />
+        <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 130px;" @on-clicked="next" />
       </div>
     </div>
     <div v-else class="button-mobile">
-      <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" @on-clicked="back" />
+      <button-step :type="'prev'" :name="'BACK'" class="back" @on-clicked="back" />
       <div>
         <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
         <button-step :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
@@ -51,10 +51,10 @@
         >
         <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
-      <div v-if="$mq !== 'mobile'" class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+      <div v-if="$mq !== 'mobile'" class="title">{{ title }}</div>
       <div v-else>
         <div v-if="account && checkStatus">
-          <div class="title" style="margin-bottom: 0px;">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+          <div class="title" style="margin-bottom: 0px;">{{ title }}</div>
           <button style="margin-top: 14px; margin-bottom: 30px;"
                   class="update-btn"
                   @click="endAgenda()"
@@ -63,7 +63,7 @@
           </button>
         </div>
         <div v-else>
-          <div class="title">{{ title }} - {{ creationTime.tCreationDate | date1 }}</div>
+          <div class="title">{{ title }}</div>
         </div>
       </div>
       <div v-if="$mq !== 'mobile'" class="selector">
@@ -510,13 +510,13 @@ export default {
   display: flex;
 }
 .button-mobile .back {
-  width: 120px;
+  width: 110px;
 }
 .button-mobile .prev {
-  width: 95px;
+  width: 110px;
 }
 .button-mobile .next {
-  width: 95px;
+  width: 110px;
 }
 .update-btn {
   outline: none;

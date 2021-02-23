@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .progress {
   background: #dfe4ee;
   position: relative;

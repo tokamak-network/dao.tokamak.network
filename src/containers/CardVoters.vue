@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 table {
   width: 100%;
   margin-top: 10px;

@@ -9,7 +9,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-not-found {
   /* All views must have this attribute.*/
   flex: 1;

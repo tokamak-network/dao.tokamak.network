@@ -4,7 +4,7 @@
       <div class="committee-container">
         <div class="agenda-container">
           <div class="dropdown-section">
-            <div style="margin-top: 15px;">Filters</div>
+            <div class="filter-header" style="margin-top: 15px;">Filters</div>
             <dropdown
               :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
               :hint="'Status'"
@@ -60,7 +60,7 @@
     </div>
     <div v-else-if="$mq === 'tablet'" class="committee-tablet">
       <div class="dropdown-section">
-        <div style="margin-top: 15px; width: 60px;">Filters</div>
+        <div class="filter-header" style="margin-top: 15px; width: 60px;">Filters</div>
         <div style="display: flex; flex-wrap: wrap;">
           <dropdown
             :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
@@ -120,7 +120,7 @@
     </div>
     <div v-else class="committee-mobile">
       <div class="dropdown-section-mobile">
-        <div style="margin-top: 15px;">Filters</div>
+        <div class="filter-header" style="margin-top: 15px;">Filters</div>
         <div style="display: flex; flex-wrap: wrap;">
           <dropdown
             :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
@@ -500,5 +500,16 @@ export default {
       cursor: pointer;
     }
   }
+}
+
+.filter-header {
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
 }
 </style>

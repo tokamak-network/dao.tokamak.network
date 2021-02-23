@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .mobile-footer {
   display: flex;
   flex-direction: column;

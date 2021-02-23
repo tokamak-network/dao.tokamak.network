@@ -48,7 +48,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-vote-count .label {
   height: 96px;
 

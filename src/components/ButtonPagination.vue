@@ -90,7 +90,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .button-pagination {
   display: flex;
 }

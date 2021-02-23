@@ -53,7 +53,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .divider {
   width: 100%;
   height: 1px;

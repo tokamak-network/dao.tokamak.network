@@ -34,7 +34,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .button-step {
   width: 100%;
 }
