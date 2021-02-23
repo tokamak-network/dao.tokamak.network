@@ -1,8 +1,8 @@
 <template>
   <div class="agenda-comment">
-    <!-- <div class="date">
-      {{ getBlockTimeStamp(votedAt, web3) }}
-    </div> -->
+    <div class="date">
+      {{ votedAt | date2 }}
+    </div>
     <div class="vote-status">
       <span>
         <span class="blue">
@@ -22,8 +22,6 @@
 
 <script>
 import { mapState } from 'vuex';
-// import Web3 from 'web3';
-// import { getBlockTimeStamp } from '@/utils/contracts';
 
 export default {
   props: {
@@ -54,31 +52,12 @@ export default {
       'web3',
     ]),
   },
-  // watch: {
-  //   'timestamp': {
-  //     handler: async function () {
-  //       this.timestamp = await getBlockTimeStamp(this.votedAt, this.web3);
-  //     },
-  //   },
-  // },
   methods: {
     toResult () {
       if (this.vote === '0') return 'Abstain';
       else if (this.vote === '1') return 'Yes';
       else return 'No';
     },
-    // async getBlockTimestamp (blockNumber) {
-    //   let web3;
-    //   if (!this.web3) {
-    //     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
-    //   } else {
-    //     web3 = this.web3;
-    //   }
-    //   const block = await web3.eth.getBlock(blockNumber);
-    //   console.log(block.timestamp);
-    //   this.timestamp = block.timestamp;
-    //   return block.timestamp;
-    // },
   },
 };
 </script>

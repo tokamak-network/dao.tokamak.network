@@ -1,5 +1,6 @@
 import moment from 'moment';
 import web3Utils from 'web3-utils';
+// import Web3 from 'web3';
 import { createCurrency } from '@makerdao/currency';
 const _TON = createCurrency('TON');
 const _WTON = createCurrency('WTON');

@@ -425,9 +425,29 @@ export default new Vuex.Store({
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
-    async setVotingDetails ({ commit }) {
-      const [votes] = await Promise.all([await getAgendaVotes()]);
-      commit('SET_AGENDA_VOTING_DETAILS', votes);
+    async setVotingDetails ({ state, commit }) {
+      const votes = await getAgendaVotes();
+      const votingDetails = [];
+
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+
+      votes.forEach(async function (vote) {
+        const block = await web3.eth.getBlock(vote.blockNumber);
+        votingDetails.push({
+          agendaid: vote.agendaid,
+          timestamp: block.timestamp,
+          chainId: vote.chainId,
+          comment: vote.comment,
+          hasVoted: vote.hasVoted,
+          transactionHash: vote.transactionHash,
+          vote: vote.vote,
+          voter: vote.voter,
+        });
+      });
+      commit('SET_AGENDA_VOTING_DETAILS', votingDetails);
     },
     async setCandidateRankByVotes ({ commit }) {
       const candidateRankByVotes = await getCandidateRankByVotes();

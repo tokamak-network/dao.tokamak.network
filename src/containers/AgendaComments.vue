@@ -7,7 +7,7 @@
     </div>
     <div class="divider" />
     <agenda-comment v-for="comment in comments(agendaId)" :key="comment.transactionHash"
-                    :voted-at="comment.blockNumber"
+                    :voted-at="comment.timestamp"
                     :vote="String(comment.vote)"
                     :voter="comment.voter"
                     :comment="comment.comment"
@@ -37,6 +37,7 @@ export default {
       'comments',
     ]),
     numComments () {
+      console.log(this.comments(this.agendaId));
       return this.comments(this.agendaId) ? this.comments(this.agendaId).length : 0;
     },
   },
