@@ -2,7 +2,7 @@
   <div>
     <div v-if="$mq === 'mobile'">
       <div class="button-container-mobile">
-        <button-step :type="'prev'" :name="'BACK TO ALL'" class="back"
+        <button-step :type="'prev'" :name="'BACK'" class="back"
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
@@ -56,12 +56,12 @@
     </div>
     <div v-else-if="$mq === 'tablet'" class="card-committee-info">
       <div class="button-container">
-        <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 120px"
+        <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 140px"
                      @on-clicked="$router.push({ path: '/election' })"
         />
         <div>
-          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 120px" @on-clicked="prev" />
-          <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 120px" @on-clicked="next" />
+          <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px" @on-clicked="prev" />
+          <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 130px" @on-clicked="next" />
         </div>
       </div>
       <div class="content-tablet">
@@ -522,13 +522,13 @@ export default {
     display: flex;
   }
   .back {
-    width: 120px;
+    width: 110px;
   }
   .prev {
-    width: 95px;
+    width: 110px;
   }
   .next {
-    width: 95px;
+    width: 110px;
   }
 }
 
