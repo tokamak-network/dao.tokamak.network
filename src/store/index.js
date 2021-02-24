@@ -45,7 +45,6 @@ export default new Vuex.Store({
     agendas: [],
     votersOfAgenda: [],
     votingDetails: [],
-    voteRate: 0,
     myVote: [],
     agendaVotesByCandidates: [],
     activityReward: [],
@@ -87,9 +86,6 @@ export default new Vuex.Store({
     },
     SET_AGENDA_VOTING_DETAILS (state, votingDetails) {
       state.votingDetails = votingDetails;
-    },
-    SET_VOTE_RATE (state, voteRate) {
-      state.voteRate = voteRate;
     },
     SET_VOTES_AGENDAS (state, agendaVotesByCandidates) {
       state.agendaVotesByCandidates = agendaVotesByCandidates;
