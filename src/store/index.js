@@ -27,6 +27,8 @@ export default new Vuex.Store({
   state: {
     launched: false,
     etherscanAddress: 'https://rinkeby.etherscan.io',
+    pendingTx: '',
+    confirmBlock: 1,
 
     web3: null,
     account: '',
@@ -39,10 +41,11 @@ export default new Vuex.Store({
     candidates: [],
     members: [],
     nonmembers: [],
-    voters: [],
-    myVotes: 0,
 
     agendas: [],
+
+    voters: [],
+    myVotes: 0,
     votersOfAgenda: [],
     votingDetails: [],
     myVote: [],
@@ -52,9 +55,6 @@ export default new Vuex.Store({
 
     requestsByCandidate: [],
     candidateVoteRank: [],
-
-    pendingTx: '',
-    confirmBlock: 1,
   },
   mutations: {
     SET_WEB3 (state, web3) {
@@ -217,10 +217,10 @@ export default new Vuex.Store({
       commit('SET_CONTRACT_STATE', contractState);
     },
     async launch ({ commit, dispatch }) {
-      await dispatch('setAgendas');
-      await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
       await dispatch('setCandidateVoteRank');
+
+      await dispatch('setAgendas');
       await dispatch('setVotersOfAgenda');
       await dispatch('setVotingDetails');
       commit('LAUNCHED');
@@ -411,14 +411,12 @@ export default new Vuex.Store({
       const getInfosProm = [];
       candidates.forEach(candidate => getInfosProm.push(daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call()));
       const infos = await Promise.all(getInfosProm);
-
       for (let i = 0; i < candidates.length; i++) {
         candidates[i].selfVote = selfVotes[i]; // eslint-disable-line
         candidates[i].vote = votes[i]; // eslint-disable-line
         candidates[i].info = infos[i]; // eslint-disable-line
       }
       commit('SET_CANDIDATES', candidates);
-
       const members = new Array(maxMember);
       const nonmembers = [];
       let isMember = false;
@@ -531,12 +529,15 @@ export default new Vuex.Store({
     },
     async setCandidateVoteRank ({ commit }) {
       const candidateVoteRank = await getCandidateVoteRank();
-      commit('SET_CANDIDATE_RANK_BY_VOTES', candidateVoteRank);
+      commit('SET_CANDIDATE_VOTE_RANK', candidateVoteRank);
     },
-    async setVoters ({ commit }, _candidate) {
-      if (_candidate != null) {
-        let address = _candidate.candidateContract;
-        if (_candidate.kind === 'layer2') address = _candidate.layer2;
+    async setVoters ({ commit }, candidate) {
+      if (candidate != null) {
+        let address = candidate.candidateContract;
+        if (candidate.kind === 'layer2') {
+          address = candidate.layer2;
+        }
+
         const voters = await getVotersByCandidate(address.toLowerCase());
         commit('SET_VOTERS', voters);
       }
