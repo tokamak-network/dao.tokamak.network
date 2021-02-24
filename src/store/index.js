@@ -225,7 +225,90 @@ export default new Vuex.Store({
       await dispatch('setVotingDetails');
       commit('LAUNCHED');
     },
+    async setMembersAndNonmembersToBeUpdated ({ state, commit }) {
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const [
+        candidates,
+        maxMember,
+      ] = await Promise.all([
+        await getCandidates(),
+        await daoCommitteeProxy.methods.maxMember().call(),
+      ]);
 
+      const memberAddresses = [];
+      for (let i = 0; i < maxMember; i++) {
+        const memberAddress = await daoCommitteeProxy.methods.members(i).call();
+        const member = {
+          address: memberAddress.toLowerCase(),
+          memberIndex: i,
+        };
+        memberAddresses.push(member);
+      }
+
+      let web3 = state.web3;
+      if (!web3) {
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+      }
+      const seigManager = getContract('SeigManager', web3);
+      const layer2Registry = getContract('Layer2Registry', web3);
+
+      const candidatesFiltered = [];
+      let i = 0; // https://medium.com/@trustyoo86/async-await%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%B9%84%EB%8F%99%EA%B8%B0-loop-%EB%B3%91%EB%A0%AC%EB%A1%9C-%EC%88%9C%EC%B0%A8-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0-315f31b72ccc
+      candidates.forEach(async candidate => {
+        i++;
+        const [
+          isRegistered, coinage,
+        ] = await Promise.all([layer2Registry.methods.layer2s(candidate.layer2).call(), seigManager.methods.coinages(candidate.layer2).call()]);
+        if (!isRegistered || !coinage) {
+          console.log('bug', 'not registered candidate');
+          return;
+        }
+
+        const coinageContract = getContract('Coinage', web3, coinage);
+        const [
+          selfVote, totalVote, info,
+        ] = await Promise.all([
+          coinageContract.methods.balanceOf(candidate.operator).call(),
+          coinageContract.methods.totalSupply().call(),
+          daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
+        ]);
+
+        candidate.vote = totalVote; // TODO: totalVote
+        candidate.selfVote = selfVote;
+        candidate.info = info;
+
+        candidatesFiltered.push(candidate);
+
+        if (i === candidates.length) {
+          divideMemberAndNonmember(); // TODO: bug fix.
+        }
+      });
+
+      const divideMemberAndNonmember = () => {
+        const members = new Array(maxMember);
+        const nonmembers = [];
+        let isMember = false;
+
+        candidatesFiltered.forEach(candidate => {
+          memberAddresses.forEach(member => {
+            if (member.address.includes(candidate.candidate.toLowerCase())) {
+              candidate.memberIndex = member.memberIndex;
+              members[member.memberIndex] = candidate;
+              isMember = true;
+              return;
+            }
+          });
+
+          if (!isMember) {
+            nonmembers.push(candidate);
+          }
+          isMember = false;
+        });
+        commit('SET_CANDIDATES', candidatesFiltered);
+        commit('SET_MEMBERS', members);
+        commit('SET_NONMEMBERS', nonmembers);
+      };
+    },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
       const candidates = [];
