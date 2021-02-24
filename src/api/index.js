@@ -8,7 +8,6 @@ function createInstance () {
 const instance = createInstance();
 const chainId = 4;
 
-// TODO: check param
 export async function getRecentEvents () {
   const res = await instance.get('/events', {
     params: {
@@ -85,7 +84,7 @@ export async function getVotersByCandidate (layer2) {
   return res.data.datas;
 }
 
-export async function getCandidateRankByVotes () {
+export async function getCandidateVoteRank () {
   const res = await instance.get('/layer2coinages/dao_latest', {
     params: {
       chainId,

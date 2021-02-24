@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="button-container">
-          <button-pagination class="button-pagination" :datas="sortedCandidateRankByVotes" @on-selected="set" />
+          <button-pagination class="button-pagination" :datas="sortedCandidateVoteRank" @on-selected="set" />
         </div>
       </template>
     </card-container>
@@ -50,14 +50,14 @@ export default {
   },
   computed: {
     ...mapState([
-      'candidateRankByVotes',
+      'candidateVoteRank',
     ]),
     ...mapGetters([
-      'sortedCandidateRankByVotes',
+      'sortedCandidateVoteRank',
     ]),
     ranks () {
       const first = this.page * 4;
-      return this.sortedCandidateRankByVotes ? this.sortedCandidateRankByVotes.slice(first, first + 4) : [];
+      return this.sortedCandidateVoteRank ? this.sortedCandidateVoteRank.slice(first, first + 4) : [];
     },
   },
   methods: {

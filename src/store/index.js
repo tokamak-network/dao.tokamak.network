@@ -4,7 +4,7 @@ import web3Utils from 'web3-utils';
 import {
   getCandidates,
   getAgendas,
-  getCandidateRankByVotes,
+  getCandidateVoteRank,
   getAgendaContents,
   getVotersByCandidate,
   getAgendaVotesByVoter,
@@ -52,7 +52,7 @@ export default new Vuex.Store({
     votedCandidatesFromAccount: [],
 
     requestsByCandidate: [],
-    candidateRankByVotes: [],
+    candidateVoteRank: [],
 
     pendingTx: '',
     confirmBlock: 1,
@@ -119,8 +119,8 @@ export default new Vuex.Store({
     SET_REQUESTS_BY_CANDIDATE (state, requestsByCandidate) {
       state.requestsByCandidate = requestsByCandidate;
     },
-    SET_CANDIDATE_RANK_BY_VOTES (state, candidateRankByVotes) {
-      state.candidateRankByVotes = candidateRankByVotes;
+    SET_CANDIDATE_VOTE_RANK (state, candidateVoteRank) {
+      state.candidateVoteRank = candidateVoteRank;
     },
 
     SET_PENDING_TX (state, pendingTx) {
@@ -224,6 +224,7 @@ export default new Vuex.Store({
       await dispatch('setAgendas');
       await dispatch('setCandidateRankByVotes');
       await dispatch('setMembersAndNonmembers');
+      await dispatch('setCandidateVoteRank');
       await dispatch('setVotersOfAgenda');
       await dispatch('setVotingDetails');
       commit('LAUNCHED');
@@ -449,9 +450,9 @@ export default new Vuex.Store({
       });
       commit('SET_AGENDA_VOTING_DETAILS', votingDetails);
     },
-    async setCandidateRankByVotes ({ commit }) {
-      const candidateRankByVotes = await getCandidateRankByVotes();
-      commit('SET_CANDIDATE_RANK_BY_VOTES', candidateRankByVotes);
+    async setCandidateVoteRank ({ commit }) {
+      const candidateVoteRank = await getCandidateVoteRank();
+      commit('SET_CANDIDATE_RANK_BY_VOTES', candidateVoteRank);
     },
     async setVoters ({ commit }, _candidate) {
       if (_candidate != null) {
@@ -779,7 +780,7 @@ export default new Vuex.Store({
       const nonmembers = getters.sortedNonmembersByVotes;
       return candidates.concat(nonmembers);
     },
-    sortedCandidateRankByVotes: (state) => {
+    sortedCandidateVoteRank: (state) => {
       if (!state.candidates || state.candidates.length === 0) return [];
 
       return state.candidates.sort(function (a, b) {
