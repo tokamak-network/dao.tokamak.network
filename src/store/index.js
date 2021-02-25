@@ -158,6 +158,7 @@ export default new Vuex.Store({
       commit('SET_WEB3', null);
       commit('SET_ACCOUNT', '');
       commit('SET_CHAIN_ID', '');
+      commit('SET_PENDING_TX', '');
     },
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
