@@ -30,7 +30,7 @@
     </div>
     <div class="card-title">
       <div class="title">
-        {{ title ? title : 'there is no title.' }}
+        {{ agendaTitle(agenda.agendaid) }}
       </div>
     </div>
     <div class="description">
@@ -137,6 +137,7 @@ export default {
     ...mapGetters([
       'agendaOnChainEffects',
       'agendaType',
+      'agendaTitle',
       'isMember',
       'myCandidates',
     ]),

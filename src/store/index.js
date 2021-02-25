@@ -13,6 +13,7 @@ import {
 import {
   getContract,
   parseAgendaBytecode,
+  getContractABIFromAddress,
 } from '@/utils/contracts';
 import { createCurrency } from '@makerdao/currency';
 
@@ -823,6 +824,21 @@ export default new Vuex.Store({
       }
 
       return agenda.onChainEffects ? agenda.onChainEffects : [];
+    },
+    agendaTitle: (_, getters) => (agendaId) => {
+      const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (!onChainEffects || onChainEffects.length === 0) {
+        console.log('bug', 'no on-chain effects'); // eslint-disable-line
+        return '';
+      }
+      const abi = getContractABIFromAddress(onChainEffects[0].target);
+      if (!abi || abi.length === 0) {
+        console.log('bug', 'no abi'); // eslint-disable-line
+        return '';
+      }
+
+      const abiFound = abi.find(a => a.name === onChainEffects[0].name);
+      return abiFound.title;
     },
     agendaCreator: (_, getters) => (agendaId) => {
       const agenda = getters.getAgendaByID(agendaId);

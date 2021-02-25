@@ -51,7 +51,7 @@
         >
         <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
       </div>
-      <div v-if="$mq !== 'mobile'" class="title">{{ title }}</div>
+      <div v-if="$mq !== 'mobile'" class="title">{{ agendaTitle(agendaId) }}</div>
       <div v-else>
         <div v-if="account && checkStatus">
           <div class="title" style="margin-bottom: 0px;">{{ title }}</div>
@@ -170,6 +170,7 @@ export default {
       'comments',
       'agendaOnChainEffects',
       'agendaType',
+      'agendaTitle',
     ]),
     checkStatus () {
       const agenda = this.getAgendaByID(this.agendaId);
