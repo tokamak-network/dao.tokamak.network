@@ -51,7 +51,7 @@
           <agenda-slot :agendas="agendaFilter()" />
         </div>
         <div class="card-container" style="margin-top: 120px;">
-          <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+          <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats-committee />
           <card-resource />
@@ -111,7 +111,7 @@
           <agenda-slot :agendas="agendaFilter()" />
         </div>
         <div class="card-container-tablet">
-          <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+          <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats-committee />
           <card-resource />
@@ -167,7 +167,7 @@
         </div>
       </div>
       <agenda-slot :agendas="agendaFilter()" />
-      <card-vote :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
+      <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
       <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
       <card-stats-committee />
       <card-resource />
