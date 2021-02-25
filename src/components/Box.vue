@@ -64,8 +64,7 @@ export default {
   box-shadow: 0 0 10px 0 rgba(223, 228, 238, 0.35);
   background-color: #ffffff;
 
-  margin-right: 25px;
-  margin-bottom: 8px;
+  margin-bottom: -10px; // grid-gap: 20px
 
   position: relative;
 

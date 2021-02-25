@@ -133,9 +133,9 @@ export default {
           if (index === 2) return '2';
         }
 
-        const depositManagerABI = getContractABI(this.contract, this.type);
-        const abi = depositManagerABI.find(abi => abi.name === this.functionName);
-        return abi.params[`aboutParam${index}`];
+        const abi = getContractABI(this.contract, this.type);
+        const abiFound = abi.find(abi => abi.name === this.functionName);
+        return abiFound.params[`aboutParam${index}`];
       };
     },
     exampleParam () {
@@ -146,9 +146,9 @@ export default {
           if (index === 2) return '2';
         }
 
-        const depositManagerABI = getContractABI(this.contract, this.type);
-        const abi = depositManagerABI.find(abi => abi.name === this.functionName);
-        return abi.params[`exampleParam${index}`];
+        const abi = getContractABI(this.contract, this.type);
+        const abiFound = abi.find(abi => abi.name === this.functionName);
+        return abiFound.params[`exampleParam${index}`];
       };
     },
   },

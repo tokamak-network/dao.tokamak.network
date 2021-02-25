@@ -180,7 +180,7 @@ const daoCommitteeProxyFunctionsOfTypeA = [
   {
     'params': {
       'aboutParam0': 'uint256 _value: Member activity subsidy per second (decimal: 18) 1000000000000000000: 1 TON',
-      'exampleParam0': '10000000',
+      'exampleParam0': '1000000000000000000',
     },
     'name': 'setActivityRewardPerSecond',
     'title': 'DAO Committee- Committee\'s subsidies for DAO activities will be determined.',
