@@ -5,7 +5,7 @@
         <agenda />
       </div>
       <div class="card-container-tablet">
-        <card-vote-for-agenda />
+        <card-vote-for-agenda v-if="isCandidate" />
         <card-voters :voters="voted" />
         <card-resource />
       </div>
@@ -15,7 +15,7 @@
         <agenda />
       </div>
       <div class="card-container-mobile">
-        <card-vote-for-agenda style="margin-top: 30px;" />
+        <card-vote-for-agenda v-if="isCandidate" style="margin-top: 30px;" />
         <card-voters :voters="voted" style="margin-top: 30px;" />
         <card-resource style="margin-top: 30px;" />
       </div>
@@ -25,7 +25,7 @@
         <agenda />
       </div>
       <div class="card-container">
-        <card-vote-for-agenda />
+        <card-vote-for-agenda v-if="isCandidate" />
         <card-voters :voters="voted" />
         <card-resource />
       </div>
@@ -61,8 +61,7 @@ export default {
       'votersOfAgenda',
     ]),
     ...mapGetters([
-      'getAgendaByID',
-      'getVotersOfAgenda ',
+      'isCandidate',
     ]),
     voted () {
       return this.votersOfAgenda.filter(voter => String(voter.id) === String(this.$route.params.id));
