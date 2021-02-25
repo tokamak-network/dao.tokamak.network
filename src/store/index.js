@@ -261,7 +261,7 @@ export default new Vuex.Store({
           isRegistered, coinage,
         ] = await Promise.all([layer2Registry.methods.layer2s(candidate.layer2).call(), seigManager.methods.coinages(candidate.layer2).call()]);
         if (!isRegistered || !coinage) {
-          console.log('bug', 'not registered candidate');
+          console.log('bug', 'not registered candidate'); // eslint-disable-line
           return;
         }
 

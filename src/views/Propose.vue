@@ -688,7 +688,6 @@ export default {
       else if (index === 7) this.currentContract = 'DAOVault';
     },
     getImg (index, contract, type) {
-      console.log(index, contract, type);
       if (type === 'A') {
         switch (contract) {
         case 'DepositManager':
