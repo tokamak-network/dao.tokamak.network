@@ -95,7 +95,7 @@ import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 import { mapState, mapGetters } from 'vuex';
-import { getContract, getContractABIFromAddress, isVotableStatusOfAgenda, canExecute } from '@/utils/contracts';
+import { getContract, isVotableStatusOfAgenda, canExecute } from '@/utils/contracts';
 import { hexSlicer, votingTime } from '@/utils/helpers';
 
 export default {
@@ -146,11 +146,6 @@ export default {
       if (!onChainEffects || onChainEffects.length === 0) return '';
 
       return onChainEffects[0].target;
-    },
-    title () {
-      const abi = getContractABIFromAddress(this.target);
-      if (!abi || abi.length === 0) return '';
-      return abi[0].title;
     },
     voteResultStyle () {
       if (this.voted.length > 0 && this.voted[0].result[0]) {

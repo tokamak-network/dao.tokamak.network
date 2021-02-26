@@ -2,7 +2,7 @@
   <div class="agenda-on-chain">
     <span>For the spell at address </span>
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
-    <div>{{ explanation }} </div><br />
+    <div>{{ agendaExplanation(agendaId) }} </div><br />
     <div>
       <!-- for setSeigRates -->
       <div v-if="onChainEffects.length === 3">
@@ -16,7 +16,7 @@
           <span>pseigRate_: </span><span>{{ onChainEffects[2].values[0] }}</span><br />
         </div>
       </div>
-      <div v-for="(input, index) in inputs" v-else :key="input.name" class="name">
+      <div v-for="(input, index) in agendaInputs(agendaId)" v-else :key="input.name" class="name">
         <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
     </div>
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { getContractABIFromAddress } from '@/utils/contracts';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -40,27 +39,14 @@ export default {
     ...mapGetters([
       'agendaOnChainEffects',
       'agendaCreator',
+      'agendaExplanation',
+      'agendaInputs',
     ]),
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return '';
 
       return onChainEffects[0].target;
-    },
-    explanation () {
-      if (this.onChainEffects.length === 3) {
-        return '**need explanation for setSeigRates agenda**';
-      }
-      const abi = getContractABIFromAddress(this.target);
-      if (!abi || abi.length === 0) return '';
-
-      return abi[0].explanation;
-    },
-    inputs () {
-      const abi = getContractABIFromAddress(this.target);
-      if (!abi || abi.length === 0) return [];
-
-      return abi[0].inputs;
     },
     values () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
