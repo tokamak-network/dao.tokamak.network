@@ -230,7 +230,7 @@ export default {
         'Deposit Manager\nContract',
         'Seig Manager\nContract',
         'DAO Committee\nProxy Contract',
-        'DAO Vault2\nContract',
+        'DAO Vault\nContract',
       ],
       contractsOfTypeB: [
         'TON\nContract',
@@ -241,7 +241,7 @@ export default {
         'DAO Committee\nProxy Contract',
         'DAO Committee\nContract',
         // 'Candidate\n Contract',
-        'DAO Vault2\nContract',
+        'DAO Vault\nContract',
       ],
 
       currentContract: '',
@@ -411,7 +411,7 @@ export default {
           return this.index === index ?
             require('../assets/contract-dao-committee-active.svg') :
             require('../assets/contract-dao-committee-inactive.svg');
-        case 'DAO Vault2\nContract':
+        case 'DAO Vault\nContract':
           return this.index === index ?
             require('../assets/contract-dao-vault-active.svg') :
             require('../assets/contract-dao-vault-inactive.svg');
@@ -446,7 +446,7 @@ export default {
           return this.indexOfTypeB === index ?
             require('../assets/contract-dao-committee-active-typeB.svg') :
             require('../assets/contract-dao-committee-inactive-typeB.svg');
-        case 'DAO Vault2\nContract':
+        case 'DAO Vault\nContract':
           return this.indexOfTypeB === index ?
             require('../assets/contract-dao-vault-active-typeB.svg') :
             require('../assets/contract-dao-vault-inactive-typeB.svg');
