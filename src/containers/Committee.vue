@@ -212,11 +212,13 @@ export default {
         this.address = this.$route.params.address;
         for (;;) {
           await new Promise(r => setTimeout(r, 500));
-          if (this.launched) break;
+          if (this.candidates.length > 0) break; // TODO: fix setMembersAndNonmembers logic, and use launched.
         }
-        const foundcandidate = this.candidates.find(element => element.candidateContract === this.address);
-        await this.$store.dispatch('setVoters', foundcandidate);
-        if (this.account) await this.$store.dispatch('setMyVotes', this.address);
+        const candidateFound = this.candidates.find(element => element.candidateContract === this.address);
+        await this.$store.dispatch('setVoters', candidateFound);
+        if (this.account) {
+          await this.$store.dispatch('setMyVotes', this.address);
+        }
       },
       deep: true,
       immediate: true,
