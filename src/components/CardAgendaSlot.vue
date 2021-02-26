@@ -317,7 +317,10 @@ export default {
     },
     async execute () {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
-      const gasLimit = await daoCommitteeProxy.methods.executeAgenda(this.agenda.agendaid).send({ from: this.account });
+      const gasLimit = await daoCommitteeProxy.methods.executeAgenda(this.agenda.agendaid)
+        .estimateGas({
+          from: this.account,
+        });
 
       await daoCommitteeProxy.methods.executeAgenda(this.agenda.agendaid)
         .send({
