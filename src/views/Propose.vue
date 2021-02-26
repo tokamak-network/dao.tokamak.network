@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="wrapper">
-        <div class="function-container"
+        <div class="function-container function-container-desktop"
              :style="setFunctionGridTemplateColumns"
         >
           <div v-for="func in getFunctions()" :key="func.name"
@@ -710,6 +710,10 @@ export default {
     grid-gap: 30px;
 
     margin-top: 40px;
+
+    &-desktop {
+      margin-bottom: 40px;
+    }
   }
 }
 
