@@ -2,8 +2,7 @@
   <div class="committee-slot">
     <div class="title">Elected Candidates</div>
     <card-committee-slot :member-index="0" />
-    <card-committee-slot :member-index="1" />
-    <card-committee-slot :member-index="2" />
+    <card-committee-slot v-for="i in parseInt(maxMember)-1" :key="i" :member-index="i" />
     <div class="title"
          style="margin-top: 30px; margin-bottom: 20px;"
     >
@@ -26,6 +25,7 @@ export default {
   computed: {
     ...mapGetters([
       'sortedNonmembersByVotes',
+      'maxMember',
     ]),
   },
 };

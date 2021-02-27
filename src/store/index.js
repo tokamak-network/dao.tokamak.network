@@ -40,6 +40,7 @@ export default new Vuex.Store({
     contractState: {},
 
     candidates: [],
+    maxMember: 3,
     members: [],
     nonmembers: [],
 
@@ -72,6 +73,9 @@ export default new Vuex.Store({
     },
     SET_CANDIDATES (state, candidates) {
       state.candidates = candidates;
+    },
+    SET_MAX_MEMBER (state, maxMember) {
+      state.maxMember = maxMember;
     },
     SET_MEMBERS (state, members) {
       state.members = members;
@@ -145,6 +149,7 @@ export default new Vuex.Store({
         const blockNumber = await web3.eth.getBlockNumber();
         commit('SET_BLOCK_NUMBER', blockNumber);
 
+        await dispatch('setMaxMember');
         await dispatch('setBalance');
         await dispatch('setAgendas');
         await dispatch('setVotedCandidatesFromAccount');
@@ -236,7 +241,6 @@ export default new Vuex.Store({
         await getCandidates(),
         await daoCommitteeProxy.methods.maxMember().call(),
       ]);
-
       const memberAddresses = [];
       for (let i = 0; i < maxMember; i++) {
         const memberAddress = await daoCommitteeProxy.methods.members(i).call();
@@ -310,6 +314,12 @@ export default new Vuex.Store({
         commit('SET_MEMBERS', members);
         commit('SET_NONMEMBERS', nonmembers);
       };
+    },
+    async setMaxMember ({ state, commit }) {
+      const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const maxMember = await daoCommitteeProxy.methods.maxMember().call();
+      commit('SET_MAX_MEMBER', maxMember);
+
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
@@ -716,8 +726,12 @@ export default new Vuex.Store({
           myCandidateContracts.push(state.candidates[i]);
         }
       }
+
       if (myCandidateContracts.length === 0) return [];
       else return myCandidateContracts;
+    },
+    maxMember: (state) => {
+      return state.maxMember;
     },
     member: (state, getters) => (candidateContract) => {
       return state.members.find(member => {
@@ -732,14 +746,15 @@ export default new Vuex.Store({
       const member = getters.member(candidateContract);
       return member;
     },
-    isMemberInMyCandidatesArrays: (_, getters) => {
+    isMembersInMyCandidatesArrays: (_, getters) => {
       const candidateContracts = getters.myCandidatesArrays;
       if (!candidateContracts) return null;
-      let member = null;
+      let members = null;
       candidateContracts.forEach(candidate=>{
-        member = getters.member(candidate.candidateContract);
+        if (members === null) members = [];
+        if (getters.member(candidate.candidateContract)) members.push(getters.member(candidate.candidateContract)) ;
       });
-      return member;
+      return members;
     },
     requests: (state) => (address) => {
       const index = state.requestsByCandidate.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());

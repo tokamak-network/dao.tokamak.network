@@ -125,6 +125,7 @@ export default {
   data () {
     return {
       login: true,
+      challengeContract: null,
     };
   },
   computed: {
@@ -142,6 +143,7 @@ export default {
       'isMember',
       'myCandidateContracts',
       'myCandidatesArrays',
+      'isMembersInMyCandidatesArrays',
     ]),
     deployedDate () {
       return (timestamp) => {
@@ -178,24 +180,36 @@ export default {
     totalVotesForEOA () {
       return this.totalVotesForCandidate(this.candidateContractFromEOA);
     },
+
+    myCandidate () {
+      if (this.members[this.memberIndex] != null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1) {
+        return true;
+      } else return false;
+    },
     canChallenge () {
-      if (this.isMember) {
+      if (this.isMember && this.members[this.memberIndex]) {
         // in case of user has multi candidates
-        /*
+        const canChallenges = [];
         if (this.myCandidatesArrays != null && this.myCandidatesArrays.length > 1) {
-          let canChallengeCandidate = false;
+
           this.myCandidatesArrays.forEach(e=>{
-            if (e.operator === this.account.toLowerCase())
-              if (!this.members[this.memberIndex]
-                || (this.members[this.memberIndex] && this.members[this.memberIndex].operator !== this.account.toLowerCase()))
-                canChallengeCandidate = true;
+            const existMember = this.isMembersInMyCandidatesArrays.find(
+              member=> member.candidateContract.toLowerCase() === e.candidateContract.toLowerCase());
+            if (existMember === null || existMember === undefined || existMember.length === 0) canChallenges.push(e);
           });
-          return canChallengeCandidate;
+          if (canChallenges != null && canChallenges.length > 0) {
+            for (let i = 0 ; i < canChallenges.length; i++) {
+              const totalVotes = toBN(this.totalVotes);
+              const totalVotesForEOA = toBN(this.totalVotesForCandidate(canChallenges[i].candidateContract));
+
+              if (totalVotesForEOA.gt(totalVotes)) return true;
+            }
+            return false;
+          } else return false;
+
         } else {
           return false;
         }
-        */
-        return false;
       }
       if (!this.occupied()) {
         return true;
@@ -204,11 +218,6 @@ export default {
       const totalVotesForEOA = toBN(this.totalVotesForEOA);
       //return totalVotesForEOA.cmp(totalVotes) > 1;
       return totalVotesForEOA.gt(totalVotes);
-    },
-    myCandidate () {
-      if (this.members[this.memberIndex] != null && this.myCandidateContracts.indexOf(this.members[this.memberIndex].candidateContract) > -1) {
-        return true;
-      } else return false;
     },
   },
   methods: {
@@ -228,35 +237,64 @@ export default {
         });
       }
     },
+    getChallengeCandidateContract () {
+      if (this.myCandidatesArrays != null && this.myCandidatesArrays.length === 1) {
+        return this.candidateContractFromEOA;
+      } else if (this.myCandidatesArrays != null && this.myCandidatesArrays.length > 1) {
+        const canChallenges = [];
+        if (this.myCandidatesArrays != null && this.myCandidatesArrays.length > 1) {
+          this.myCandidatesArrays.forEach(e=>{
+            const existMember = this.isMembersInMyCandidatesArrays.find(
+              member=> member.candidateContract.toLowerCase() === e.candidateContract.toLowerCase());
+            if (existMember === null || existMember === undefined || existMember.length === 0) canChallenges.push(e);
+          });
+
+          if (canChallenges != null && canChallenges.length > 0) {
+            const totalVotes = toBN(this.totalVotes);
+            for (let i = 0 ; i < canChallenges.length; i++) {
+              const totalVotesForEOA = toBN(this.totalVotesForCandidate(canChallenges[i].candidateContract));
+              if (totalVotesForEOA.gt(totalVotes)) return canChallenges[i].candidateContract;
+            }
+          } else return null;
+        } else return null;
+      }
+    },
+
     async challenge () {
-      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-      const memberIndex = this.memberIndex;
+      const challengeContract = this.getChallengeCandidateContract();
+      if (challengeContract != null) {
+        const candidateContract = getContract('Candidate', this.web3, challengeContract);
+        const memberIndex = this.memberIndex;
 
-      const gasLimit = await candidateContract.methods.changeMember(memberIndex)
-        .estimateGas({
-          from: this.account,
-        });
+        const gasLimit = await candidateContract.methods.changeMember(memberIndex)
+          .estimateGas({
+            from: this.account,
+          });
 
-      await candidateContract.methods.changeMember(memberIndex)
-        .send({
-          from: this.account,
-          gasLimit: Math.floor(gasLimit * 1.2),
-        })
-        .on('transactionHash', (hash) => {
-          this.$store.commit('SET_PENDING_TX', hash);
-        })
-        .on('confirmation', async (confirmationNumber) => {
-          if (this.confirmBlock === confirmationNumber) {
+        await candidateContract.methods.changeMember(memberIndex)
+          .send({
+            from: this.account,
+            gasLimit: Math.floor(gasLimit * 1.2),
+          })
+          .on('transactionHash', (hash) => {
+            this.$store.commit('SET_PENDING_TX', hash);
+          })
+          .on('confirmation', async (confirmationNumber) => {
+            if (this.confirmBlock === confirmationNumber) {
+              this.$store.commit('SET_PENDING_TX', '');
+              await this.$store.dispatch('launch');
+              await this.$store.dispatch('connectEthereum', this.web3);
+            }
+          })
+          .on('receipt', async () => {
+          })
+          .on('error', () => {
             this.$store.commit('SET_PENDING_TX', '');
-            await this.$store.dispatch('launch');
-            await this.$store.dispatch('connectEthereum', this.web3);
-          }
-        })
-        .on('receipt', async () => {
-        })
-        .on('error', () => {
-          this.$store.commit('SET_PENDING_TX', '');
-        });
+          });
+      } else {
+        alert('You have no challengable Contract.');
+      }
+
     },
     async retire () {
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
@@ -290,6 +328,7 @@ export default {
         if (msg != null && msg.length > 0) alert(msg) ;
       }
     },
+
   },
 };
 </script>
