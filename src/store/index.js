@@ -506,11 +506,11 @@ export default new Vuex.Store({
       const agendaContents = await Promise.all(promAgendaContents);
 
       for (let i = 0; i < agendas.length; i++) {
-        agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i]);
-
         agendas[i].contents = agendaContents[i].contents;
         agendas[i].creator = agendaContents[i].creator;
         agendas[i].type = agendaContents[i].type;
+
+        agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
       }
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
@@ -846,7 +846,7 @@ export default new Vuex.Store({
         console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
-      const abi = getContractABIFromAddress(onChainEffects[0].target);
+      const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';

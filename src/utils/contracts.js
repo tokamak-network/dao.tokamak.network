@@ -1144,7 +1144,7 @@ module.exports.getContractABI = function (want, type = 'A') {
   }
 };
 
-module.exports.getContractABIFromAddress = function (address, type = 'A') {
+module.exports.getContractABIFromAddress = function (address, type) {
   if (!address) return [];
   address = address.toLowerCase();
 
@@ -1154,7 +1154,7 @@ module.exports.getContractABIFromAddress = function (address, type = 'A') {
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else return [];
-  } else {
+  } else if (type === 'B') {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
     else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
     else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
@@ -1164,6 +1164,8 @@ module.exports.getContractABIFromAddress = function (address, type = 'A') {
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
     else return [];
+  } else {
+    console.log('bug', 'no type'); // eslint-disable-line
   }
 };
 
@@ -1260,7 +1262,7 @@ const decodeParameters = function (typesArray, hexString) {
 };
 module.exports.decodeParameters = decodeParameters;
 
-const getABIFromSelector = function (selector, type = 'A') {
+const getABIFromSelector = function (selector, type) {
   let abi;
 
   if (type === 'A') {
@@ -1275,7 +1277,7 @@ const getABIFromSelector = function (selector, type = 'A') {
 
     abi = daoVaultABIOfTypeA.find(abi => abi.selector === selector);
     if (abi) return abi;
-  } else {
+  } else if (type === 'B') {
     abi = tonABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
@@ -1303,11 +1305,13 @@ const getABIFromSelector = function (selector, type = 'A') {
     if (!abi) {
       console.log('bug'); // eslint-disable-line
     }
+  } else {
+    console.log('bug', 'no type'); // eslint-disable-line
   }
 };
 module.exports.getABIFromSelector = getABIFromSelector;
 
-module.exports.parseAgendaBytecode = function (tx) {
+module.exports.parseAgendaBytecode = function (tx, type) {
   const params1 = marshalString(unmarshalString(tx.input).substring(8));
   const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
 
@@ -1324,7 +1328,7 @@ module.exports.parseAgendaBytecode = function (tx) {
   const onChainEffects = [];
   for (let i = 0; i < targets.length; i++) {
     const selector = commands[i].slice(0, 10);
-    const abi = getABIFromSelector(selector);
+    const abi = getABIFromSelector(selector, type);
 
     if (!abi) {
       onChainEffects.push({
@@ -1333,7 +1337,7 @@ module.exports.parseAgendaBytecode = function (tx) {
         types: [],
         bytecode: '',
       });
-
+      console.log('bug', 'no abi'); // eslint-disable-line
       continue;
     }
 

@@ -94,7 +94,15 @@ export async function getCandidateVoteRank () {
 }
 
 export async function createAgenda (from, txHash, contents, type) {
-  await instance.post('/agendacontents', { account: from, tx: txHash, contents, type });
+  if (!contents) {
+    contents = '-';
+  }
+  await instance.post('/agendacontents', {
+    account: from,
+    tx: txHash,
+    contents: contents,
+    type: type,
+  });
 }
 
 export async function getAgendaContents (agendaId) {
