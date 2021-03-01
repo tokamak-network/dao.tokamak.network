@@ -77,10 +77,11 @@ export function votingTime (agenda) {
     if (gap < 0) {
       return 'POLL ENDED';
     } else {
-      const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((gap - days * 86400000) / 3600000);
+      return 'VOTING IS STARTED';
+      // const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+      // const hours = Math.floor((gap - days * 86400000) / 3600000);
 
-      return days + 'D ' + hours + 'H REMAINING';
+      // return days + 'D ' + hours + 'H REMAINING';
     }
   }
 }
