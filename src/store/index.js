@@ -520,7 +520,7 @@ export default new Vuex.Store({
           try {
             agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
           } catch (err) {
-            console.log('onChainEffects error', i, agendas); // eslint-disable-line
+            // console.log('onChainEffects error', i, agendas); // eslint-disable-line
           }
         }
       }

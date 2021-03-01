@@ -103,10 +103,8 @@ export default {
       if (agenda.voters != null && agenda.voters.length > 0) {
         const findVoters = this.myCandidatesArrays.filter(candidate =>{
           const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.candidate.toLowerCase());
-
           if (voter && voter.length > 0) return candidate;
         });
-
         if (findVoters != null) this.voters = findVoters;
       }
     }
@@ -114,7 +112,6 @@ export default {
       this.hintVoter = this.voters[0].name;
       this.choiceCandidate = this.voters[0] ;
     }
-
     return;
   },
   methods: {
