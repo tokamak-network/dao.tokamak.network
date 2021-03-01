@@ -129,7 +129,7 @@
       <div class="divider" />
       <agenda-info v-if="currentSelector === 0" />
       <agenda-description v-else-if="currentSelector === 1" />
-      <agenda-info-vote v-else-if="currentSelector === 2" />
+      <agenda-on-chain v-else-if="currentSelector === 2" />
       <agenda-vote v-else-if="currentSelector === 3" />
     </div>
   </div>
@@ -149,7 +149,7 @@ export default {
   components: {
     'button-step': ButtonStep,
     'agenda-info': AgendaInfo,
-    'agenda-info-vote': AgendaOnChain,
+    'agenda-on-chain': AgendaOnChain,
     'agenda-vote': AgendaComments,
     'agenda-description': AgendaDescription,
   },

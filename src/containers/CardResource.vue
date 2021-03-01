@@ -51,6 +51,7 @@ export default {
 
 <style lang="scss" scoped>
 .card-resource {
+  width: 100%;
 }
 
 .resource {

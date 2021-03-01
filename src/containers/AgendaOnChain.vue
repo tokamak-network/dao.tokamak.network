@@ -2,7 +2,7 @@
   <div class="agenda-on-chain">
     <span>For the spell at address </span>
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
-    <div>{{ agendaExplanation(agendaId) }} </div><br />
+    <div>{{ agendaExplanation(agendaId, type) }} </div><br />
     <div>
       <!-- for setSeigRates -->
       <div v-if="onChainEffects.length === 3">
@@ -16,7 +16,7 @@
           <span>pseigRate_: </span><span>{{ onChainEffects[2].values[0] }}</span><br />
         </div>
       </div>
-      <div v-for="(input, index) in agendaInputs(agendaId)" v-else :key="input.name" class="name">
+      <div v-for="(input, index) in agendaInputs(agendaId, type)" v-else :key="input.name" class="name">
         <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
     </div>
@@ -37,11 +37,19 @@ export default {
       'etherscanAddress',
     ]),
     ...mapGetters([
+      'getAgendaByID',
       'agendaOnChainEffects',
       'agendaCreator',
       'agendaExplanation',
       'agendaInputs',
     ]),
+    type () {
+      const agenda = this.getAgendaByID(this.agendaId);
+      if (!agenda) {
+        return '';
+      }
+      return agenda.type;
+    },
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return '';

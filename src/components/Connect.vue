@@ -42,6 +42,7 @@ export default {
   data () {
     return {
       connectedAccount: '',
+      newBlockHeaderSubscription: null,
     };
   },
   computed: {
@@ -98,6 +99,14 @@ export default {
             const candidateContractAddress = this.$route.params.address;
             await this.$store.dispatch('setMyVotes', candidateContractAddress);
           }
+
+          this.newBlockHeaderSubscription = web3.eth.subscribe('newBlockHeaders', (error, result) => {
+            if (error) {
+              console.log('bug', 'failed to get new block'); // eslint-disable-line
+            }
+            this.$store.commit('SET_BLOCK_TIME', result.timestamp);
+          });
+
         } catch (e) {
           // User deny to connect MetaMask wallet.
         }

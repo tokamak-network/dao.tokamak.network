@@ -1,52 +1,67 @@
 <template>
-  <div style="background: #fafbfc; flex: 1;">
-    <div v-if="$mq === 'mobile'" style="margin-left: 20px; margin-right: 20px; margin-top: 35px;">
-      <committee-slot />
-      <card-my-vote v-if="account !== ''" :title="'Your Vote'" style="margin-top: 30px;" />
-      <card-rank :title="'Rank'" style="margin-top: 30px;" />
-      <card-resource style="margin-top: 30px;" />
-    </div>
-    <div v-else-if="$mq === 'tablet'" style="display: flex; justify-content: center; margin-left: 20px;  margin-right: 20px; margin-top: 35px;">
-      <div class="committee-container-tablet">
-        <committee-slot />
-      </div>
-      <div class="card-container-tablet">
-        <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
-        <card-rank :title="'Rank'" />
-        <card-resource />
-      </div>
-    </div>
-    <div v-else class="election">
-      <div class="committee-container">
-        <committee-slot />
-      </div>
-      <div class="card-container">
-        <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
-        <card-rank :title="'Rank'" />
-        <card-resource />
+  <div class="election">
+    <div v-if="launched" class="container">
+      <div class="wrapper"
+           :style="[
+             $mq === 'desktop' || $mq === 'tablet' ? { 'flex-direction': 'row' } : { 'flex-direction': 'column' },
+           ]"
+      >
+        <div class="election-container">
+          <div class="header header-member">Elected Candidates</div>
+          <card-member v-for="memberIndex in membersArray" :key="memberIndex"
+                       :member-index="memberIndex"
+          />
+          <div class="header header-nonmember">Candidates</div>
+          <card-nonmember v-for="nonmember in sortedNonmembersByVotes" :key="nonmember.candidateContract"
+                          :candidate="nonmember"
+          />
+        </div>
+        <div class="card-container"
+             :style="[
+               $mq === 'desktop' || $mq === 'tablet' ?
+                 {
+                   'width': '378px',
+                   'margin-left': '15px',
+                 } :
+                 {
+                   'width': '100%',
+                 },
+             ]"
+        >
+          <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
+          <card-rank :title="'Rank'" />
+          <card-resource />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
+import CardMember from '@/containers/CardMember.vue';
+import CardNonmember from '@/containers/CardNonmember.vue';
 import CardMyVote from '@/containers/CardMyVote.vue';
 import CardResource from '@/containers/CardResource.vue';
 import CardRank from '@/containers/CardRank.vue';
-import CommitteeSlot from '@/containers/CommitteeSlot';
 
 export default {
   components: {
+    'card-member': CardMember,
+    'card-nonmember': CardNonmember,
     'card-my-vote': CardMyVote,
     'card-rank': CardRank,
     'card-resource': CardResource,
-    'committee-slot': CommitteeSlot,
   },
   computed: {
     ...mapState([
       'account',
+      'launched',
+    ]),
+    ...mapGetters([
+      'membersArray',
+      'sortedNonmembersByVotes',
     ]),
   },
 };
@@ -54,45 +69,53 @@ export default {
 
 <style lang="scss" scoped>
 .election {
-  /* all the `views` have to has this attribue  */
   background: #fafbfc;
   flex: 1;
+
   display: flex;
-  flex-direction: row;
   justify-content: center;
-
-  padding-top: 35px;
-  padding-bottom: 50px;
-}
-.committee-container {
-  width: 786px;
-  display: flex;
-  flex-direction: column;
-}
-.card-container {
-  display: flex;
-  flex-direction: column;
-  margin-left: 30px;
-  width: 378px;
 }
 
-.committee-container-tablet {
+.container {
   display: flex;
-  flex-direction: column;
 
-  flex: 3.5;
+  width: 1194px;
 
-  width: 100%;
-  min-width: 382px;
-}
-.card-container-tablet {
-  display: flex;
-  flex-direction: column;
-  margin-left: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
 
-  flex: 2;
+  .wrapper {
+    min-width: 100%;
 
-  width: 100%;
-  min-width: 178px;
+    display: flex;
+  }
+
+  .election-container {
+    flex: 1;
+
+    margin-top: 45px;
+    margin-right: 15px;
+
+    .header {
+      font-family: Roboto;
+      font-size: 24px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+
+      margin-bottom: 20px;
+
+      &-nonmember {
+        margin-top: 35px;
+      }
+    }
+  }
+
+  .card-container {
+    margin-top: 45px;
+  }
 }
 </style>

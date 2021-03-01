@@ -29,16 +29,16 @@ export default {
 }
 
 .card-title {
-  font-family: Roboto;
   font-size: 24px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
+  line-height: 1.33;
   letter-spacing: normal;
   text-align: left;
   color: #3e495c;
 
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .card-body {

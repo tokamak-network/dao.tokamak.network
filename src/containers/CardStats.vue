@@ -78,6 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .card-stats {
+  width: 100%;
 }
 
 .stats {

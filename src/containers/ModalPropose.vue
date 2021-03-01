@@ -212,6 +212,7 @@ export default {
         const encodedValue = encoded(type, value);
         if (encodedValue === -1) {
           console.log('bug'); // eslint-disable-line
+          alert('Please check the input value.');
           return;
         }
 
@@ -241,7 +242,7 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
-          await createAgenda(account, hash, this.desc, this.type);
+          await createAgenda(account, hash, this.type, this.desc);
 
           this.$store.commit('SET_PENDING_TX', hash);
           this.close();
@@ -326,7 +327,7 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
-          await createAgenda(account, hash, this.desc, this.type);
+          await createAgenda(account, hash, this.type, this.desc);
 
           this.$store.commit('SET_PENDING_TX', hash);
           this.close();

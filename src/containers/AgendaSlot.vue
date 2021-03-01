@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: DELETE this file -->
   <div class="agenda-slot">
     <div>
       <div class="title">Agenda</div>

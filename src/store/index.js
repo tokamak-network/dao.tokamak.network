@@ -36,12 +36,13 @@ export default new Vuex.Store({
     account: '',
     chainId: '',
     blockNumber: 0,
+    blockTime: 0,
 
     tonBalance: 0,
     contractState: {},
 
     candidates: [],
-    maxMember: 3,
+    maxMember: 0,
     members: [],
     nonmembers: [],
 
@@ -72,6 +73,9 @@ export default new Vuex.Store({
     },
     SET_BLOCK_NUMBER (state, blockNumber) {
       state.blockNumber = blockNumber;
+    },
+    SET_BLOCK_TIME (state, blockTime) {
+      state.blockTime = blockTime;
     },
     SET_CANDIDATES (state, candidates) {
       state.candidates = candidates;
@@ -140,21 +144,24 @@ export default new Vuex.Store({
     async connectEthereum ({ commit, dispatch }, web3) {
       commit('SET_WEB3', web3);
       if (web3) {
-        const accounts = await web3.eth.getAccounts();
+        const [accounts, chainId, blockNumber]
+          = await Promise.all([
+            web3.eth.getAccounts(),
+            web3.eth.getChainId(),
+            web3.eth.getBlockNumber(),
+          ]);
         if (accounts.length === 0) {
           commit('SET_ACCOUNT', '');
         } else {
           const account = accounts[0];
           commit('SET_ACCOUNT', account);
         }
-
-        const chainId = await web3.eth.getChainId();
         commit('SET_CHAIN_ID', chainId);
-
-        const blockNumber = await web3.eth.getBlockNumber();
         commit('SET_BLOCK_NUMBER', blockNumber);
 
-        await dispatch('setMaxMember');
+        const block = await web3.eth.getBlock(blockNumber);
+        commit('SET_BLOCK_TIME', block.timestamp);
+
         await dispatch('setBalance');
         await dispatch('setAgendas');
         await dispatch('setVotedCandidatesFromAccount');
@@ -237,15 +244,17 @@ export default new Vuex.Store({
       await dispatch('setVotingDetails');
       commit('LAUNCHED');
     },
-    async setMembersAndNonmembersToBeUpdated ({ state, commit }) {
+    async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
       const [
-        candidates,
+        c,
         maxMember,
       ] = await Promise.all([
-        await getCandidates(),
-        await daoCommitteeProxy.methods.maxMember().call(),
+        getCandidates(),
+        daoCommitteeProxy.methods.maxMember().call(),
       ]);
+      commit('SET_MAX_MEMBER', maxMember);
+
       const memberAddresses = [];
       for (let i = 0; i < maxMember; i++) {
         const memberAddress = await daoCommitteeProxy.methods.members(i).call();
@@ -258,75 +267,68 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const seigManager = getContract('SeigManager', web3);
       const layer2Registry = getContract('Layer2Registry', web3);
 
-      const candidatesFiltered = [];
-      let i = 0; // https://medium.com/@trustyoo86/async-await%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%B9%84%EB%8F%99%EA%B8%B0-loop-%EB%B3%91%EB%A0%AC%EB%A1%9C-%EC%88%9C%EC%B0%A8-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0-315f31b72ccc
-      candidates.forEach(async candidate => {
-        i++;
-        const [
-          isRegistered, coinage,
-        ] = await Promise.all([layer2Registry.methods.layer2s(candidate.layer2).call(), seigManager.methods.coinages(candidate.layer2).call()]);
-        if (!isRegistered || !coinage) {
-          console.log('bug', 'not registered candidate'); // eslint-disable-line
-          return;
-        }
-
-        const coinageContract = getContract('Coinage', web3, coinage);
-        const [
-          selfVote, totalVote, info,
-        ] = await Promise.all([
-          coinageContract.methods.balanceOf(candidate.operator).call(),
-          coinageContract.methods.totalSupply().call(),
-          daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
-        ]);
-
-        candidate.vote = totalVote; // TODO: totalVote
-        candidate.selfVote = selfVote;
-        candidate.info = info;
-
-        candidatesFiltered.push(candidate);
-
-        if (i === candidates.length) {
-          divideMemberAndNonmember(); // TODO: bug fix.
-        }
-      });
-
-      const divideMemberAndNonmember = () => {
-        const members = new Array(maxMember);
-        const nonmembers = [];
-        let isMember = false;
-
-        candidatesFiltered.forEach(candidate => {
-          memberAddresses.forEach(member => {
-            if (member.address.includes(candidate.candidate.toLowerCase())) {
-              candidate.memberIndex = member.memberIndex;
-              members[member.memberIndex] = candidate;
-              isMember = true;
-              return;
-            }
-          });
-
-          if (!isMember) {
-            nonmembers.push(candidate);
+      const candidates = await Promise.all(
+        c.map(async candidate => {
+          const [
+            isRegistered, coinage,
+          ] = await Promise.all([
+            layer2Registry.methods.layer2s(candidate.layer2).call(),
+            seigManager.methods.coinages(candidate.layer2).call(),
+          ]);
+          if (!isRegistered || !coinage) {
+            console.log('bug', 'not registered candidate'); // eslint-disable-line
+            return false;
           }
-          isMember = false;
-        });
-        commit('SET_CANDIDATES', candidatesFiltered);
-        commit('SET_MEMBERS', members);
-        commit('SET_NONMEMBERS', nonmembers);
-      };
-    },
-    async setMaxMember ({ state, commit }) {
-      const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-      const maxMember = await daoCommitteeProxy.methods.maxMember().call();
-      commit('SET_MAX_MEMBER', maxMember);
 
+          const coinageContract = getContract('Coinage', web3, coinage);
+          const [
+            selfVote, totalVote, info,
+          ] = await Promise.all([
+            coinageContract.methods.balanceOf(candidate.operator).call(),
+            coinageContract.methods.totalSupply().call(),
+            daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
+          ]);
+
+          candidate.vote = totalVote; // TODO: totalVote
+          candidate.selfVote = selfVote;
+          candidate.info = info;
+          return candidate;
+        }),
+      );
+      const candidatesFiltered = candidates.filter(candidate => candidate);
+      commit('SET_CANDIDATES', candidatesFiltered);
+
+      const members = [];
+      for (let i = 0; i < maxMember; i++) {
+        members.push(false);
+      }
+      const nonmembers = [];
+      let isMember = false;
+
+      candidatesFiltered.forEach(candidate => {
+        memberAddresses.forEach(member => {
+          if (member.address.includes(candidate.candidate.toLowerCase())) {
+            candidate.memberIndex = member.memberIndex;
+            members[member.memberIndex] = candidate;
+            isMember = true;
+            return;
+          }
+        });
+
+        if (!isMember) {
+          nonmembers.push(candidate);
+        }
+        isMember = false;
+      });
+      commit('SET_MEMBERS', members);
+      commit('SET_NONMEMBERS', nonmembers);
     },
-    async setMembersAndNonmembers ({ state, commit }) {
+    async setMembersAndNonmembersDeprecated ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
       const candidates = [];
       const [
@@ -411,6 +413,7 @@ export default new Vuex.Store({
             isMember = false;
           });
           console.log('***candidates -->', candidates, members, nonmembers); // eslint-disable-line
+          commit('SET_MAX_MEMBER', maxMember);
           commit('SET_MEMBERS', members);
           commit('SET_NONMEMBERS', nonmembers);
         }
@@ -458,7 +461,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -483,7 +486,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -526,7 +529,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/f6429583907549eca57832ec1a60b44f'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {
@@ -702,6 +705,17 @@ export default new Vuex.Store({
       else if (operator) return operator.candidateContract;
       else return '';
     },
+    candidateFromEOA: (state) => {
+      const account = state.account.toLowerCase();
+      if (!account) return '';
+
+      const candidate = state.candidates.find(candidate => candidate.candidate.toLowerCase() === account);
+      const operator = state.candidates.find(candidate => candidate.operator.toLowerCase() === account);
+
+      if (candidate) return candidate.candidate;
+      else if (operator) return operator.candidate;
+      else return '';
+    },
     myCandidateContracts: (state) => {
       const account = state.account.toLowerCase();
       if (!account) return '';
@@ -738,9 +752,6 @@ export default new Vuex.Store({
 
       if (myCandidateContracts.length === 0) return [];
       else return myCandidateContracts;
-    },
-    maxMember: (state) => {
-      return state.maxMember;
     },
     member: (state, getters) => (candidateContract) => {
       return state.members.find(member => {
@@ -864,13 +875,13 @@ export default new Vuex.Store({
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
       return abiFound.title;
     },
-    agendaExplanation: (_, getters) => (agendaId) => {
+    agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
       if (!onChainEffects || onChainEffects.length === 0) {
         console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
-      const abi = getContractABIFromAddress(onChainEffects[0].target);
+      const abi = getContractABIFromAddress(onChainEffects[0].target, type);
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';
@@ -879,13 +890,13 @@ export default new Vuex.Store({
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
       return abiFound.explanation;
     },
-    agendaInputs: (_, getters) => (agendaId) => {
+    agendaInputs: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
       if (!onChainEffects || onChainEffects.length === 0) {
         console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
-      const abi = getContractABIFromAddress(onChainEffects[0].target);
+      const abi = getContractABIFromAddress(onChainEffects[0].target, type);
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';
@@ -921,6 +932,19 @@ export default new Vuex.Store({
     comments: (state) => (agendaId) => {
       if (!state.votingDetails) return [];
       return state.votingDetails.filter(v => v.agendaid === Number(agendaId));
+    },
+    hasVoted: (state, getters) => (agendaId) => {
+      if (!state.votingDetails) {
+        return true;
+      }
+      const found = state.votingDetails.find(votingDetail =>
+        votingDetail.agendaid === agendaId && votingDetail.voter === getters.candidateContractFromEOA);
+      if (!found) {
+        return true;
+      }
+      console.log(agendaId, found.hasVoted);
+
+      return found.hasVoted;
     },
     sortedCandidates: (state, getters) => {
       const candidates = [];
@@ -985,8 +1009,23 @@ export default new Vuex.Store({
       const reducer = (amount, voter) => amount + voter.balance;
       return state.voters.reduce(reducer, initialAmount);
     },
-    agendaVotesByCandidates (state) {
-      return state.agendaVotesByCandidates;
+    agendaIdsCanVote: (state) => {
+      if (!state.agendasCanVote) {
+        return [];
+      }
+      console.log('1', state.agendasCanVote);
+      console.log('2', state.agendasCanVote.map(agenda => agenda.agendaid));
+      return state.agendasCanVote.map(agenda => agenda.agendaid);
+    },
+    membersArray: (state) => {
+      const maxMember = parseInt(state.maxMember);
+      return Array.from(Array(maxMember).keys());
+    },
+    voteResult: (state, getters) => {
+      if (!getters.candidateFromEOA) {
+        return [];
+      }
+      return state.votersOfAgenda.filter(result => result.voter.toLowerCase() === getters.candidateFromEOA.toLowerCase());
     },
   },
 });

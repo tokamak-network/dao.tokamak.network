@@ -1,515 +1,288 @@
 <template>
-  <div style="background: #fafbfc; flex: 1;">
-    <div v-if="$mq === 'desktop'" class="committee">
-      <div class="committee-container">
+  <div class="agenda">
+    <!-- NOTE: need least 1 agenda -->
+    <div v-if="launched" class="container">
+      <div class="filter-container">
+        <div class="header">Filters</div>
+        <div class="filters">
+          <dropdown class="filter"
+                    :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
+                    :hint="'Status'"
+                    :button-type="'a'"
+                    :selector-type="'a'"
+                    @on-selected="filter($event, 'status')"
+          />
+          <dropdown class="filter"
+                    :items="['All', 'Pending', 'Accept', 'Reject', 'Dismiss']"
+                    :hint="'Result'"
+                    :button-type="'a'"
+                    :selector-type="'a'"
+                    @on-selected="filter($event, 'result')"
+          />
+          <dropdown class="filter"
+                    :items="['All', 'Executed', 'Not Executed']"
+                    :hint="'Executed'"
+                    :button-type="'a'"
+                    :selector-type="'a'"
+                    @on-selected="filter($event, 'executed')"
+          />
+          <!-- <dropdown class="filter"
+                    :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
+                    :hint="'Voted'"
+                    :button-type="'a'"
+                    :selector-type="'a'"
+                    @on-selected="filter($event, 'voted')"
+          />
+          <dropdown class="filter"
+                    :items="['All', 'Mine']"
+                    :hint="'Proposal'"
+                    :button-type="'a'"
+                    :selector-type="'a'"
+                    @on-selected="filter($event, 'proposal')"
+          /> -->
+        </div>
+      </div>
+      <div class="wrapper"
+           :style="[
+             $mq === 'desktop' || $mq === 'tablet' ? { 'flex-direction': 'row' } : { 'flex-direction': 'column' },
+           ]"
+      >
         <div class="agenda-container">
-          <div class="dropdown-section">
-            <div class="filter-header" style="margin-top: 15px;">Filters</div>
-            <dropdown
-              :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
-              :hint="'Status'"
-              :button-type="'a'"
-              :selector-type="'a'"
-              class="dropdown"
-              @on-selected="selectStatus"
-            />
-            <dropdown
-              :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
-              :hint="'Result'"
-              :button-type="'a'"
-              :selector-type="'a'"
-              class="dropdown"
-              @on-selected="selectResult"
-            />
-            <dropdown
-              :items="['All', 'Executed', 'Not Executed']"
-              :hint="'Executed'"
-              :button-type="'a'"
-              :selector-type="'a'"
-              class="dropdown"
-              @on-selected="selectExecuted"
-            />
-            <dropdown
-              v-if="isCandidate"
-              :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
-              :hint="'Voted'"
-              :button-type="'a'"
-              :selector-type="'a'"
-              class="dropdown"
-              @on-selected="selectVoted"
-            />
-            <dropdown
-              v-if="account"
-              :items="['All', 'My']"
-              :hint="'My Proposal'"
-              :button-type="'a'"
-              :selector-type="'a'"
-              class="dropdown"
-              @on-selected="selectProposal"
+          <div class="header">Agenda</div>
+          <!-- TODO: use filteredAgendas -->
+          <card-agenda v-for="agenda in agendasFiltered.slice(0, 5)" :key="agenda.agendaid"
+                       :agenda="agenda"
+          />
+          <hide-button v-if="!showAllAgendas && agendasFiltered.length > 5"
+                       class="hide-btn"
+                       :name="'View more agendas'"
+                       :type="'hide'"
+                       @on-clicked="showAllAgendas = true;"
+          />
+          <div v-if="showAllAgendas">
+            <card-agenda v-for="agenda in agendasFiltered.slice(5, agendasFiltered.length)"
+                         :key="agenda.agendaid"
+                         :agenda="agenda"
             />
           </div>
-          <agenda-slot :agendas="agendaFilter()" />
         </div>
-        <div class="card-container" style="margin-top: 120px;">
+        <div class="card-container"
+             :style="[
+               $mq === 'desktop' || $mq === 'tablet' ?
+                 {
+                   'width': '378px',
+                   'margin-left': '15px',
+                 } :
+                 {
+                   'width': '100%',
+                 },
+             ]"
+        >
           <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
           <card-stats-committee />
           <card-resource />
         </div>
       </div>
-    </div>
-    <div v-else-if="$mq === 'tablet'" class="committee-tablet">
-      <div class="dropdown-section">
-        <div class="filter-header" style="margin-top: 15px; width: 60px;">Filters</div>
-        <div style="display: flex; flex-wrap: wrap;">
-          <dropdown
-            :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
-            :hint="'Status'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectStatus"
-          />
-          <dropdown
-            :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
-            :hint="'Result'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectResult"
-          />
-          <dropdown
-            :items="['All', 'Executed', 'Not Executed']"
-            :hint="'Executed'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectExecuted"
-          />
-          <dropdown
-            v-if="isCandidate"
-            :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
-            :hint="'Voted'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectVoted"
-          />
-          <dropdown
-            v-if="account"
-            :items="['All', 'My']"
-            :hint="'My Proposal'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectProposal"
-          />
-        </div>
-      </div>
-      <div class="committee-container-tablet">
-        <div class="agenda-container-tablet">
-          <agenda-slot :agendas="agendaFilter()" />
-        </div>
-        <div class="card-container-tablet">
-          <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-          <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-          <card-stats-committee />
-          <card-resource />
-        </div>
-      </div>
-    </div>
-    <div v-else class="committee-mobile">
-      <div class="dropdown-section-mobile">
-        <div class="filter-header" style="margin-top: 15px;">Filters</div>
-        <div style="display: flex; flex-wrap: wrap;">
-          <dropdown
-            :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
-            :hint="'Status'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectStatus"
-          />
-          <dropdown
-            :items="['All', 'Pending', 'Accepted', 'Reject', 'Dismiss']"
-            :hint="'Result'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectResult"
-          />
-          <dropdown
-            :items="['All', 'Executed', 'Not Executed']"
-            :hint="'Executed'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectExecuted"
-          />
-          <dropdown
-            v-if="isCandidate"
-            :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
-            :hint="'Voted'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectVoted"
-          />
-          <dropdown
-            v-if="account"
-            :items="['All', 'My']"
-            :hint="'My Proposal'"
-            :button-type="'a'"
-            :selector-type="'a'"
-            class="dropdown"
-            @on-selected="selectProposal"
-          />
-        </div>
-      </div>
-      <agenda-slot :agendas="agendaFilter()" />
-      <card-vote v-if="isCandidate" :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats :candidates="agendaVotesByCandidates" :clength="agendaVotesByCandidates.length" />
-      <card-stats-committee />
-      <card-resource />
-      <!-- TODO: check condition -->
-      <!-- <div class="vote-btn-container">
-        <div class="vote-btn">Vote</div>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
+import { agendaStatus, agendaResult } from '@/utils/helpers';
 import { mapGetters, mapState } from 'vuex';
-import AgendaSlot from '@/containers/AgendaSlot.vue';
+
+import Dropdown from '@/components/Dropdown.vue';
+import Button from '@/components/Button.vue';
+import CardAgendaSlot from '@/containers/CardAgenda.vue';
 import CardResource from '@/containers/CardResource.vue';
 import CardStats from '@/containers/CardStats.vue';
 import CardVote from '@/containers/CardVote.vue';
 import CardStatsCommittee from '@/containers/CardStatsCommittee.vue';
-import Dropdown from '@/components/Dropdown.vue';
 
 export default {
   components: {
+    'dropdown': Dropdown,
+    'hide-button': Button,
+    'card-agenda': CardAgendaSlot,
     'card-stats': CardStats,
     'card-vote': CardVote,
     'card-resource': CardResource,
     'card-stats-committee': CardStatsCommittee,
-    'agenda-slot': AgendaSlot,
-    'dropdown': Dropdown,
   },
   data () {
     return {
-      // agenda: this.agendas,
-      execute: [false, ''],
-      status: [false, ''],
-      vote: [false, ''],
-      result: [false, ''],
-      proposal: [false, ''],
-      executeCode: ['Executed', 'Not Executed'],
-      statusCode: ['', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended'],
-      resultCode: ['Pending', 'Accepted', 'Reject', 'Dismiss'],
-      voteCode: ['Abstain', 'Yes', 'No', 'Not Voted'],
+      showAllAgendas: false,
+
+      filterStatus: 'All',
+      filterResult: 'All',
+      filterExecuted: 'All',
+      filterVoted: 'All',
+      filterProposal: 'All',
     };
   },
   computed: {
     ...mapState([
+      'launched',
       'agendas',
-      'account',
-      'votersOfAgenda',
+      'agendaVotesByCandidates',
     ]),
     ...mapGetters([
       'isCandidate',
-      'agendaVotesByCandidates',
     ]),
-    votedAgenda () {
-      return this.votersOfAgenda.filter(votedAgenda => votedAgenda.voter.toLowerCase() === this.account.toLowerCase());
+    agendasFiltered () {
+      return this.agendas
+        .filter(agenda => {
+          if (this.filterStatus === 'All') {
+            return true;
+          } else {
+            return agendaStatus(agenda.status) === this.filterStatus.toUpperCase();
+          }
+        })
+        .filter(agenda => {
+          if (this.filterResult === 'All') {
+            return true;
+          } else {
+            return agendaResult(agenda.result) === this.filterResult.toUpperCase();
+          }
+        })
+        .filter(agenda => {
+          if (this.filterExecuted === 'All') {
+            return true;
+          } else {
+            if (this.filterExecuted === 'Executed') {
+              return agenda.executed;
+            } else if (this.filterExecuted === 'Not Executed') {
+              return !agenda.executed;
+            } else {
+              console.log('bug'); // eslint-disable-line
+              return true;
+            }
+          }
+        });
+      // .filter(agenda => {
+      //   if (this.filterVoted === 'All') {
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // })
+      // .filter(agenda => {
+      //   if (this.filterProposal === 'All') {
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // });
     },
   },
   methods: {
-    agendaFilter () {
-      let filteredAgenda = [];
-      if (this.execute[0] === true) {
-        let stateCode;
-        this.execute[1] === 'Executed' ? stateCode = true : stateCode = false;
-        filteredAgenda = this.agendas.filter(agenda => (agenda.executed === stateCode));
+    filter (value, type) {
+      switch (type) {
+      case 'status':
+        this.filterStatus = value;
+        break;
+      case 'result':
+        this.filterResult = value;
+        break;
+      case 'executed':
+        this.filterExecuted = value;
+        break;
+      case 'voted':
+        this.filterVoted = value;
+        break;
+      case 'proposal':
+        this.filterProposal = value;
+        break;
+      default:
+        break;
       }
-      if (this.status[0] === true) {
-        const stateCode = this.statusCode.indexOf(this.status[1]);
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.status === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.status === stateCode));
-      }
-      if (this.vote[0] === true) {
-        const stateCode = this.voteCode.indexOf(this.vote[1]);
-        if (filteredAgenda.length === 0) {
-          if (stateCode !== 3) {
-            const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
-            result.forEach(result => {
-              const matchedAgenda = this.agendas.filter(agenda => agenda.agendaid === result.id);
-              filteredAgenda.push(matchedAgenda[0]);
-            });
-          } else {
-            const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
-            result.forEach(result => {
-              const matchedAgenda = this.agendas.filter(agenda => (agenda.agendaid === result.id));
-              filteredAgenda.push(matchedAgenda[0]);
-            });
-          }
-        } else {
-          const matchedAgendas = [];
-          if (stateCode !== 3) {
-            const result = this.votedAgenda.filter(agenda => Number(agenda.result[1]) === stateCode && agenda.result[0] === true);
-            result.forEach(result => {
-              const matchedAgenda = filteredAgenda.filter(agenda => agenda.agendaid === result.id);
-              if (matchedAgenda.length > 0) matchedAgendas.push(matchedAgenda[0]);
-            });
-          } else {
-            const result = this.votedAgenda.filter(agenda => agenda.result[0] === false);
-            result.forEach(result => {
-              const matchedAgenda = filteredAgenda.filter(agenda => (agenda.agendaid === result.id));
-              if (matchedAgenda.length > 0) matchedAgendas.push(matchedAgenda[0]);
-            });
-          }
-          filteredAgenda = matchedAgendas;
-        }
-      }
-      if (this.result[0] === true) {
-        const stateCode = this.resultCode.indexOf(this.result[1]);
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.result === stateCode)) : filteredAgenda = filteredAgenda.filter(agenda => (agenda.result === stateCode));
-      }
-      if (this.proposal[0] === true) {
-        filteredAgenda.length === 0 ? filteredAgenda = this.agendas.filter(agenda => (agenda.creator === this.account.toLowerCase())) : filteredAgenda = filteredAgenda.filter(agenda => agenda.creator === this.account.toLowerCase());
-      }
-
-      if (this.execute[0] !== true && this.status[0] !== true && this.vote[0] !== true && this.result[0] !== true && this.proposal[0] !== true) {
-        filteredAgenda = this.agendas;
-      }
-
-      return filteredAgenda;
-    },
-    selectExecuted (item) {
-      item !== 'All' ? this.execute = [true, item] : this.execute = [false, ''] ;
-      this.agendaFilter();
-    },
-    selectStatus (item) {
-      item !== 'All' ? this.status = [true, item] : this.status = [false, ''] ;
-      this.agendaFilter();
-    },
-    selectResult (item) {
-      item !== 'All' ? this.result = [true, item] : this.result = [false, ''] ;
-      this.agendaFilter();
-    },
-    selectVoted (item) {
-      item !== 'All' ? this.vote = [true, item] : this.vote = [false, ''] ;
-      this.agendaFilter();
-    },
-    selectProposal (item) {
-      item !== 'All' ? this.proposal = [true, item] : this.proposal = [false, ''] ;
-      this.agendaFilter();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.committee {
-  display: flex;
-  flex-direction: column;
+.agenda {
+  background: #fafbfc;
+  flex: 1;
 
-  margin-left: 20px;
-  margin-right: 20px;
-
-
-  .committee-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .agenda-container {
-    display: flex;
-    flex-direction: column;
-
-    flex: 3.5;
-
-    width: 100%;
-    max-width: 786px;
-  }
-
-  .card-container {
-    display: flex;
-    flex-direction: column;
-    margin-left: 30px;
-
-    flex: 2;
-
-    width: 100%;
-    max-width: 378px;
-  }
-}
-
-.dropdown-section {
-  display: flex;
-  margin-bottom: 45px;
-
-  margin-top: 25px;
-}
-.dropdown-section > div:first-child {
-  align-self: center;
-  font-size: 20px;
-  color: #3e495c;
-  margin-right: 15px;
-}
-.dropdown-section-mobile {
-  display: flex;
-  margin-bottom: 33px;
-  flex-wrap: wrap;
-
-  margin-top: 35px;
-}
-.dropdown-section-mobile > div:first-child {
-  align-self: center;
-  font-size: 20px;
-  color: #3e495c;
-  margin-right: 15px;
-}
-.dropdown {
-  width: 150px;
-  margin-left: 15px;
-
-  margin-top: 10px;
-}
-
-.agenda-tablet {
-  display: flex;
-  flex-direction: column;
-  /* justify-content: center; */
-  align-items: center;
-}
-.card-section {
   display: flex;
   justify-content: center;
 }
-.agenda-tablet > .dropdown-section {
-  width: 990px;
-}
-.agenda-section {
-  width: 582px;
-}
-.stat-section {
-  width: 378px;
-  margin-left: 30px;
-  margin-top: 25px;
-}
 
-.committee-mobile {
-  padding-left: 20px;
-  padding-right: 20px;
+.container {
+  display: flex;
+  flex-direction: column;
 
-  .filter-label {
-    font-family: Roboto;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.3;
-    letter-spacing: normal;
-    text-align: left;
-    color: #3e495c;
-  }
+  width: 1194px;
+
+  margin-left: 20px;
+  margin-right: 20px;
 
   .filter-container {
     display: flex;
-    flex-wrap: wrap;
 
-    .dropdown {
-      margin-top: 15px;
+    margin-top: 20px;
+
+    .header {
+      font-family: Roboto;
+      font-size: 20px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.3;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      margin-right: 10px;
+      margin-top: 8px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .filter {
+      width: 120px;
+      margin-top: 8px;
+
+      margin-left: 15px;
     }
   }
-}
 
-.card-container {
-  width: 378px;
-}
-
-.committee-tablet {
-  margin-left: 20px;
-  margin-right: 20px;
-
-  .committee-container-tablet {
+  .wrapper {
     display: flex;
   }
 
-  .agenda-container-tablet {
-    display: flex;
-    flex-direction: column;
+  .agenda-container {
+    flex: 1;
+    margin-right: 15px;
 
-    flex: 3.5;
+    .header {
+      font-size: 24px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
 
-    width: 100%;
-    min-width: 382px;
-  }
+      margin-top: 45px;
+      margin-bottom: 16px;
+    }
+    .hide-btn {
+      height: 55px;
 
-  .card-container-tablet {
-    display: flex;
-    flex-direction: column;
-    margin-left: 30px;
-
-    flex: 2;
-
-    width: 100%;
-    min-width: 178px;
-  }
-}
-
-.vote-btn-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 73px;
-
-  position: fixed;
-  left: 0;
-  bottom: 0;
-
-  background: #ffffff;
-
-  .vote-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    height: 43px;
-
-    margin-left: 20px;
-    margin-right: 20px;
-
-    background: #257eee;
-
-    font-family: Roboto;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.36;
-    letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-
-    &:hover {
-      cursor: pointer;
+      margin-top: 10px;
     }
   }
-}
 
-.filter-header {
-  font-family: Roboto;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #3e495c;
+  .card-container {
+    margin-top: 45px;
+  }
 }
 </style>

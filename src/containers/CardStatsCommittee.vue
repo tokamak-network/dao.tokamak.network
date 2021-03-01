@@ -59,6 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 .card-stats-committee{
+  width: 100%;
 }
 
 .stats-committee {
