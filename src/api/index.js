@@ -93,7 +93,7 @@ export async function getCandidateVoteRank () {
   return res.data.datas;
 }
 
-export async function createAgenda (from, txHash, contents, type) {
+export async function createAgenda (from, txHash, type, contents) {
   if (!contents) {
     contents = '-';
   }
@@ -137,6 +137,9 @@ export async function getAgendaVotesByVoter (voter) {
 }
 
 export async function updateAgendaContents (from, txHash, contents, sig) {
+  if (!contents) {
+    contents = '-';
+  }
   const res = await instance.put('/agendacontents', {
     tx: txHash,
     contents: contents,
