@@ -942,8 +942,6 @@ export default new Vuex.Store({
       if (!found) {
         return true;
       }
-      console.log(agendaId, found.hasVoted);
-
       return found.hasVoted;
     },
     sortedCandidates: (state, getters) => {
@@ -1013,8 +1011,6 @@ export default new Vuex.Store({
       if (!state.agendasCanVote) {
         return [];
       }
-      console.log('1', state.agendasCanVote);
-      console.log('2', state.agendasCanVote.map(agenda => agenda.agendaid));
       return state.agendasCanVote.map(agenda => agenda.agendaid);
     },
     membersArray: (state) => {

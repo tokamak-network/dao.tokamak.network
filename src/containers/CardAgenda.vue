@@ -250,7 +250,7 @@ export default {
             this.$store.commit('SET_PENDING_TX', '');
           });
       } else {
-        console.log('bug', 'no action');
+        console.log('bug', 'no action'); // eslint-disable-line
       }
     },
   },
