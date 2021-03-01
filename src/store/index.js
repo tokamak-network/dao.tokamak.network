@@ -9,6 +9,7 @@ import {
   getVotersByCandidate,
   getAgendaVotesByVoter,
   getAgendaVotes,
+  getAgendasCanVote,
 } from '@/api';
 import {
   getContract,
@@ -45,6 +46,7 @@ export default new Vuex.Store({
     nonmembers: [],
 
     agendas: [],
+    agendasCanVote: [],
 
     voters: [],
     myVotes: 0,
@@ -85,6 +87,9 @@ export default new Vuex.Store({
     },
     SET_AGENDAS (state, agendas) {
       state.agendas = agendas;
+    },
+    SET_AGENDAS_CAN_VOTE (state, agendasCanVote) {
+      state.agendasCanVote = agendasCanVote;
     },
     SET_VOTERS_OF_AGENDA (state, votersOfAgenda) {
       state.votersOfAgenda = votersOfAgenda;
@@ -157,7 +162,7 @@ export default new Vuex.Store({
         await dispatch('setContractState');
 
         await dispatch('setVoteAgendas');
-        //await dispatch('setActivityReward');
+        await dispatch('setAgendasCanVote');
       }
     },
     disconnectEthereum ({ commit }) {
@@ -542,6 +547,10 @@ export default new Vuex.Store({
     async setCandidateVoteRank ({ commit }) {
       const candidateVoteRank = await getCandidateVoteRank();
       commit('SET_CANDIDATE_VOTE_RANK', candidateVoteRank);
+    },
+    async setAgendasCanVote ({ state, commit }) {
+      const agendasCanVote = await getAgendasCanVote(state.account);
+      commit('SET_AGENDAS_CAN_VOTE', agendasCanVote);
     },
     async setVoters ({ commit }, candidate) {
       if (candidate != null) {

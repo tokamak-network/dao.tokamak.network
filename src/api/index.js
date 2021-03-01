@@ -116,7 +116,7 @@ export async function getAgendaContents (agendaId) {
 }
 
 
-export async function getCanAgendasByVoter (voter) {
+export async function getAgendasCanVote (voter) {
   const res = await instance.get('/agendas/canVoteAgendas', {
     params: {
       chainId,
