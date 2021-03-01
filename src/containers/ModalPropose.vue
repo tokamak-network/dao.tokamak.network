@@ -227,8 +227,8 @@ export default {
       const target = getContractAddress(this.contract);
 
       const param = encodeParameters(
-        ['address[]', 'uint256', 'uint256', 'bytes[]'],
-        [[target], noticePeriod.toString(), votingPeriod.toString(), [bytecode]],
+        ['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'],
+        [[target], noticePeriod.toString(), votingPeriod.toString(), true, [bytecode]],
       );
 
       const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)
