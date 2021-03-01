@@ -512,13 +512,17 @@ export default new Vuex.Store({
       }
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
-
       for (let i = 0; i < agendas.length; i++) {
-        agendas[i].contents = agendaContents[i].contents;
-        agendas[i].creator = agendaContents[i].creator;
-        agendas[i].type = agendaContents[i].type;
-
-        agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
+        if (agendaContents[i] != null) {
+          agendas[i].contents = agendaContents[i].contents;
+          agendas[i].creator = agendaContents[i].creator;
+          agendas[i].type = agendaContents[i].type;
+          try {
+            agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
+          } catch (err) {
+            console.log('onChainEffects error', i, agendas); // eslint-disable-line
+          }
+        }
       }
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
