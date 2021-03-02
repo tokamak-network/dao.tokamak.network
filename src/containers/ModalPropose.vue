@@ -211,8 +211,9 @@ export default {
         const value = this.$refs[Object.keys(this.$refs)[i]][0].$refs.input.value;
         const encodedValue = encoded(type, value);
         if (encodedValue === -1) {
-          console.log('bug'); // eslint-disable-line
+          console.log('bug', 'failed to encode value'); // eslint-disable-line
           alert('Please check the input value.');
+          this.$refs[Object.keys(this.$refs)[i]][0].error = true;
           return;
         }
 
