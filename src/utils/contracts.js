@@ -1316,10 +1316,10 @@ module.exports.parseAgendaBytecode = function (tx, type) {
   const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
 
   const params2 = decodedParams1[2];
-  const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bytes[]'], params2);
+  const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
 
   const targets = decodedParams2[0];
-  const commands = decodedParams2[3];
+  const commands = decodedParams2[4];
 
   if (targets.length !== commands.length) {
     console.log('bug'); // eslint-disable-line
