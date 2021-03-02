@@ -101,7 +101,6 @@
                  :status="currentFunction === func.name ? 'selected' : 'unselected'"
                  :type="type"
             />
-            <!-- {{ func.inputs }} -->
           </div>
         </div>
       </div>
