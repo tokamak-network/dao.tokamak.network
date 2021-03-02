@@ -2,7 +2,7 @@
   <div class="text-input"
        :class="{
          'clickable': clickable,
-         'error': error && !realValue,
+         'error': error,
        }"
        @click="click()"
   >
@@ -72,6 +72,9 @@ export default {
   watch: {
     value (newValue) {
       this.realValue = newValue;
+    },
+    realValue () {
+      this.error = false;
     },
   },
   mounted () {
