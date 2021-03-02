@@ -1,6 +1,5 @@
 <template>
   <div class="agenda">
-    <!-- NOTE: need least 1 agenda -->
     <div v-if="launched" class="container">
       <div class="filter-container">
         <div class="header">Filters</div>
@@ -49,7 +48,6 @@
       >
         <div class="agenda-container">
           <div class="header">Agenda</div>
-          <!-- TODO: use filteredAgendas -->
           <card-agenda v-for="agenda in agendasFiltered.slice(0, 5)" :key="agenda.agendaid"
                        :agenda="agenda"
           />

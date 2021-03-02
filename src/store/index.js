@@ -524,6 +524,7 @@ export default new Vuex.Store({
           }
         }
       }
+      console.log('1');
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
