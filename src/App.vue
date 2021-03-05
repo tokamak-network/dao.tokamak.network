@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <alert />
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
     <router-view />
@@ -10,6 +11,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import Alert from '@/containers/Alert.vue';
 import Header from '@/containers/Header.vue';
 import Footer from '@/containers/Footer.vue';
 import MobileHeader from '@/containers/MobileHeader.vue';
@@ -18,6 +20,7 @@ import MobileFooter from '@/containers/MobileFooter.vue';
 export default {
   name: 'App',
   components: {
+    'alert': Alert,
     'header-container': Header,
     'footer-container': Footer,
     'mobile-header-container': MobileHeader,
