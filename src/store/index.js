@@ -29,7 +29,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     launched: false,
-    etherscanAddress: 'https://rinkeby.etherscan.io',
+    etherscanAddress: 'https://etherscan.io',
     pendingTx: '',
     confirmBlock: 1,
 
@@ -268,7 +268,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const seigManager = getContract('SeigManager', web3);
       const layer2Registry = getContract('Layer2Registry', web3);
@@ -462,7 +462,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -487,7 +487,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -530,7 +530,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {

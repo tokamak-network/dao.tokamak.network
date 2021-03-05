@@ -76,10 +76,9 @@ export default {
         try {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
-          // TODO: delete after internal test
           const chainId = await web3.eth.getChainId();
-          if (chainId !== 4) {
-            return alert('Please use rinkeby network for internal test');
+          if (chainId !== 1) {
+            return alert('The current network is not mainnet. Please change it to the mainnet.');
           }
 
           const accounts = await web3.eth.getAccounts();
@@ -135,7 +134,7 @@ export default {
             }
           }
         };
-        const handleNetworkChanged = () => {
+        const handleChainChanged = () => {
           this.$store.dispatch('disconnectEthereum');
 
           const iconEle = this.$refs.icon;
@@ -147,9 +146,9 @@ export default {
           }
         };
         ethereum.on('accountsChanged', handleAccountsChanged);
-        ethereum.on('networkChanged', handleNetworkChanged);
+        ethereum.on('chainChanged', handleChainChanged); // https://docs.metamask.io/guide/ethereum-provider.html#legacy-events
       } else {
-        // MetaMask need to be installed.
+        return alert('Please install metamsk wallet.');
       }
     },
     setIcon () {

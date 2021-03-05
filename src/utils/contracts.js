@@ -43,7 +43,7 @@ const deployed = {
 
 function getContract (want, web3, address) {
   if (!web3) {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+    web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
   }
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
@@ -1429,7 +1429,7 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
 
 // module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
 //   if (!web3) {
-//     web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+//     web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
 //   }
 //   const block = await web3.eth.getBlock(blockNumber);
 //   this.timestamp = block.timestamp;
