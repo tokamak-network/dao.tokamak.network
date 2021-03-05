@@ -83,6 +83,9 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <loading />
+    </div>
   </div>
 </template>
 
@@ -90,6 +93,7 @@
 import { agendaStatus, agendaResult } from '@/utils/helpers';
 import { mapGetters, mapState } from 'vuex';
 
+import Loading from '@/components/Loading.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 import CardAgendaSlot from '@/containers/CardAgenda.vue';
@@ -100,6 +104,7 @@ import CardStatsCommittee from '@/containers/CardStatsCommittee.vue';
 
 export default {
   components: {
+    'loading': Loading,
     'dropdown': Dropdown,
     'hide-button': Button,
     'card-agenda': CardAgendaSlot,
