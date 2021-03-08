@@ -342,19 +342,21 @@ export default {
         });
     },
     async withdraw () {
-      if (!this.account) return;
+      if (!this.account) {
+        return;
+      }
 
       const depositManager = getContract('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
 
-      const gasLimit = await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw, true)
+      const gasLimit = await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw(this.address, this.withdrawIndex), true)
         .estimateGas({
           from: this.account,
         });
 
-      await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw, true)
+      await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw(this.address, this.withdrawIndex), true)
         .send({
           from: this.account,
           gasLimit: Math.floor(gasLimit * 1.2),
