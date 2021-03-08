@@ -2,6 +2,20 @@
   <div class="main"
        :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
   >
+    <div id="wrap">
+      <button style="width: 100%" @click="()=>test()">
+        Test
+      </button>
+      <canvas
+        id="canvas"
+      ></canvas>
+      <p id="options">
+        <span class="color-check">
+          <input id="colored-check" type="checkbox" />
+          <label for="colored-check">Colored</label>
+        </span>
+      </p>
+    </div>
     <div class="main-logo"
          :class="{ 'main-logo-mobile': $mq === 'mobile' }"
     >
@@ -64,6 +78,10 @@
 <script>
 import { mapState } from 'vuex';
 import { getRecentEvents } from '@/api';
+import mainScript from '../test/mainScript';
+
+// import dao1 from '../test/dao1.png';
+// import dao2 from '../test/dao2.png';
 
 export default {
   data () {
@@ -79,7 +97,23 @@ export default {
   async created () {
     this.events = await getRecentEvents();
   },
+  mounted: {
+  },
   methods: {
+    test () {
+      const images = ['../assets/box-side.png', `<svg xmlns="http://www.w3.org/2000/svg" id="propose_decoration_icon" width="2" height="10" viewBox="0 0 2 10">
+    <defs>
+        <style>
+            .cls-2{fill:#cfd7db}
+        </style>
+    </defs>
+    <path id="Base" fill="none" d="M0 0H2V10H0z"/>
+    <circle id="Oval" cx="1" cy="1" r="1" class="cls-2"/>
+    <circle id="Oval-2" cx="1" cy="1" r="1" class="cls-2" transform="translate(0 4)"/>
+    <circle id="Oval-3" cx="1" cy="1" r="1" class="cls-2" transform="translate(0 8)"/>
+</svg>`];
+      mainScript(images);
+    },
     newtab (txhash) {
       window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
@@ -158,7 +192,7 @@ export default {
   width: 840px;
   height: 607px;
 
-  background: url('../assets/logo-main.png') no-repeat;
+  // background: url('../assets/logo-main.png') no-repeat;
   /* background-size: 840px; */
   background-size: contain;
   background-repeat: no-repeat;
@@ -170,7 +204,7 @@ export default {
   width: 350px;
   height: 253px;
 
-  background: url('../assets/logo-main.png') no-repeat;
+  // background: url('../assets/logo-main.png') no-repeat;
   background-size: contain;
   background-repeat: no-repeat;
 
@@ -427,6 +461,13 @@ export default {
       margin-top: 19px;
     }
   }
-
+}
+#wrap {
+  width: 100%;
+  height: 1000px;
+}
+#canvas {
+  width: 100%;
+  height: 1080px;
 }
 </style>
