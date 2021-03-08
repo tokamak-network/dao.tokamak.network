@@ -8,7 +8,7 @@
           </div> -->
           <div class="stats">
             <div class="title">Claimable TON</div>
-            <div class="content">{{ candidates[0].claimableAmount | tonFloor | withComma }} </div>
+            <div class="content">{{ candidates[0].claimableAmount | tonFloor | withComma }} TON</div>
           </div>
           <div class="stats">
             <div class="title"># of Agendas</div>
