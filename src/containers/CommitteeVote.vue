@@ -25,6 +25,7 @@
         <custom-button :type="'secondary'"
                        :name="account ? 'Vote' : 'Please connect wallet'"
                        :disabled="account ? false : true"
+                       :status="voteInProgress ? 'running' : ''"
                        @on-clicked="vote"
         />
       </div>
@@ -43,6 +44,7 @@
         <custom-button :type="'secondary'"
                        :name="account ? 'Revote' : 'Please connect wallet'"
                        :disabled="!account || !canRevote(address, revoteIndex) ? true : false"
+                       :status="revoteInProgress ? 'running' : ''"
                        @on-clicked="revote"
         />
       </div>
@@ -64,6 +66,7 @@
         <custom-button :type="'secondary'"
                        :name="account ? 'Unvote' : 'Please connect wallet'"
                        :disabled="account ? false : true"
+                       :status="unvoteInProgress ? 'running' : ''"
                        @on-clicked="unvote"
         />
       </div>
@@ -82,6 +85,7 @@
         <custom-button :type="'secondary'"
                        :name="account ? 'Withdraw' : 'Please connect wallet'"
                        :disabled="!account || !canWithdraw(address, revoteIndex) ? true : false"
+                       :status="withdrawInProgress ? 'running' : ''"
                        @on-clicked="withdraw"
         />
       </div>
@@ -111,6 +115,11 @@ export default {
 
       revoteIndex: 0,
       withdrawIndex: 0,
+
+      voteInProgress: false,
+      revoteInProgress: false,
+      unvoteInProgress: false,
+      withdrawInProgress: false,
     };
   },
   computed: {
@@ -240,10 +249,12 @@ export default {
           })
           .on('transactionHash', (hash) => {
             this.$refs.tonvote.$refs.input.value = null;
+            this.voteInProgress = true;
             this.$store.commit('SET_PENDING_TX', hash);
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
+              this.voteInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
               await this.update();
             }
@@ -288,10 +299,12 @@ export default {
         })
         .on('transactionHash', (hash) => {
           this.$refs.tonunvote.$refs.input.value = null;
+          this.unvoteInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.unvoteInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
 
@@ -324,10 +337,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', (hash) => {
+          this.revoteInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.revoteInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
 
@@ -362,10 +377,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', async (hash) => {
+          this.withdrawInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.withdrawInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
 

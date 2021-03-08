@@ -112,11 +112,13 @@ export default {
         gasLimit: Math.floor(gasLimit * 1.2),
       })
         .on('transactionHash', async (hash) => {
+          this.$emit('vote-casted');
           this.$store.commit('SET_PENDING_TX', hash);
           this.close();
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.$emit('vote-reflected');
             this.$store.commit('SET_PENDING_TX', '');
             await this.$store.dispatch('launch');
             await this.$store.dispatch('connectEthereum', this.web3);

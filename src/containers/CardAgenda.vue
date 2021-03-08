@@ -5,7 +5,11 @@
            @on-closed="showModal=false"
     >
       <template #body>
-        <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
+        <modal-vote :id="agenda.agendaid"
+                    @on-closed="showModal=false"
+                    @vote-casted="actInProgress=true;"
+                    @vote-reflected="actInProgress=false;"
+        />
       </template>
     </modal>
     <div class="header-container">
@@ -72,6 +76,7 @@ export default {
   data () {
     return {
       showModal: false,
+      actInProgress: false,
     };
   },
   computed: {
@@ -140,6 +145,10 @@ export default {
       return this.action;
     },
     actionStatus () {
+      if (this.actInProgress) {
+        return 'running';
+      }
+
       const agenda = this.agenda;
       if (!agenda) {
         return 'disabled';
@@ -197,10 +206,12 @@ export default {
             gasLimit: Math.floor(gasLimit * 1.2),
           })
           .on('transactionHash', (hash) => {
+            this.actInProgress = true;
             this.$store.commit('SET_PENDING_TX', hash);
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
+              this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
               await this.$store.dispatch('launch');
@@ -224,10 +235,12 @@ export default {
             gasLimit: Math.floor(gasLimit * 1.2),
           })
           .on('transactionHash', (hash) => {
+            this.actInProgress = true;
             this.$store.commit('SET_PENDING_TX', hash);
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
+              this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
               await this.$store.dispatch('launch');

@@ -37,12 +37,14 @@
                        :width="'110px'"
                        :type="'primary'"
                        :disabled="!canChallenge"
+                       :status="challengeInProgress ? 'running' : ''"
                        @on-clicked="challenge()"
       />
       <election-button v-if="canRetire"
                        :name="'Retire'"
                        :width="'110px'"
                        :type="'primary'"
+                       :status="retirementInProgress ? 'running' : ''"
                        @on-clicked="retire()"
       />
     </div>
@@ -72,6 +74,12 @@ export default {
       type: Number,
       default: 0,
     },
+  },
+  data () {
+    return {
+      challengeInProgress: false,
+      retirementInProgress: false,
+    };
   },
   computed: {
     ...mapState([
@@ -145,10 +153,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', (hash) => {
+          this.challengeInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.challengeInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
             await this.$store.dispatch('launch');
@@ -175,10 +185,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', (hash) => {
+          this.retirementInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.retirementInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
             await this.$store.dispatch('launch');
