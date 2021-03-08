@@ -46,7 +46,7 @@
           <div v-for="(contract, i) in contractsOfTypeA" :key="contract"
                class="contract-card contract-card-type-a"
                :style="[
-                 index !== -1 ? { 'height': 124+'px' } : { height: 320+'px' },
+                 index !== -1 ? { 'height': 124+'px', transition: 'height 0.5s' } : { height: 320+'px' },
                  index === i ? { background: '#2a72e5' } : {},
                ]"
                @click="index=i; setCurrentContract();"
@@ -71,7 +71,7 @@
           <div v-for="(contract, i) in contractsOfTypeB" :key="contract"
                class="contract-card contract-card-type-b"
                :style="[
-                 indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 320+'px' },
+                 indexOfTypeB !== -1 ? { 'height': 124+'px', transition: 'height 0.5s' } : { height: 320+'px' },
                  indexOfTypeB === i ? { background: '#f7981c' } : {},
                ]"
                @click="indexOfTypeB=i; setCurrentContract();"
@@ -636,8 +636,6 @@ export default {
       padding-top: 30px;
 
       width: 276px;
-      // height set dynamically
-      transition: height 0.5s;
 
       border-radius: 15px;
 
