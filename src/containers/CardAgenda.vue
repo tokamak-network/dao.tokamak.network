@@ -90,6 +90,7 @@ export default {
       'hasVoted',
       'candidateContractFromEOA',
       'voteResult',
+      'canVoteForAgenda',
     ]),
     voteResultStyle () {
       if (this.voteResultString === 'You have not voted') {
@@ -144,20 +145,7 @@ export default {
         return 'disabled';
       }
       if (this.action === 'VOTE') {
-        if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
-          // when vote is not started, only member can vote.
-          return this.isMember ? '' : 'disabled';
-        } else {
-          // check if member already have voted.
-          if (this.hasVoted(agenda.agendaid)) {
-            return 'disabled';
-          }
-
-          // check if member can vote.
-          const agendaId = agenda.agendaid;
-          const found = this.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
-          return found ? '' : 'disabled';
-        }
+        return this.canVoteForAgenda(agenda) ? '' : 'disabled';
       } else {
         return '';
       }

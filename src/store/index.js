@@ -16,6 +16,7 @@ import {
   parseAgendaBytecode,
   getContractABIFromAddress,
 } from '@/utils/contracts';
+import { agendaStatus } from '@/utils/helpers';
 import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
@@ -863,7 +864,6 @@ export default new Vuex.Store({
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
       if (!onChainEffects || onChainEffects.length === 0) {
-        console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
@@ -883,7 +883,6 @@ export default new Vuex.Store({
       }
       const abi = getContractABIFromAddress(onChainEffects[0].target, type);
       if (!abi || abi.length === 0) {
-        console.log('bug', 'no abi'); // eslint-disable-line
         return '';
       }
 
@@ -1022,6 +1021,21 @@ export default new Vuex.Store({
         return [];
       }
       return state.votersOfAgenda.filter(result => result.voter.toLowerCase() === getters.candidateFromEOA.toLowerCase());
+    },
+    canVoteForAgenda: (state, getters) => (agenda) => {
+      if (!agenda) {
+        return false;
+      }
+      if (agendaStatus(agenda.status) === 'NOTICE' && state.blockTime >= agenda.tNoticeEndTime) {
+        return getters.isMember;
+      } else {
+        if (getters.hasVoted(agenda.agendaid)) {
+          return false;
+        }
+        const agendaId = agenda.agendaid;
+        const found = getters.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
+        return found ? true : false;
+      }
     },
   },
 });

@@ -1373,21 +1373,6 @@ module.exports.metamaskErrorMessage = function (errorString) {
   return errString;
 };
 
-module.exports.isVotableStatusOfAgenda = async function (agendaId, _web3) {
-  let isVotableStatus = false;
-  try {
-    const AgendaManager = await getContract('DAOAgendaManager', _web3);
-    if (AgendaManager !== null) {
-      isVotableStatus = await AgendaManager.methods.isVotableStatus(agendaId).call();
-    } else {
-      console.log('Utils.isVotableStatus AgendaManager is null') ; // eslint-disable-line
-    }
-  } catch (err) {
-    console.log('Utils.isVotableStatus err', err) ; // eslint-disable-line
-  }
-  return isVotableStatus;
-};
-
 module.exports.canExecute = async function (agendaId, _web3) {
   let canExecute = false;
   try {
