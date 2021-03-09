@@ -324,6 +324,7 @@ export default {
     margin-right: 15px;
 
     .header {
+      font-family: Roboto;
       font-size: 24px;
       font-weight: normal;
       font-stretch: normal;
