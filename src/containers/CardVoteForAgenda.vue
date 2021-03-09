@@ -68,7 +68,7 @@ export default {
       if (!agenda) {
         return 'disabled';
       }
-      return this.canVoteForAgenda(agenda) ? '' : 'disabled';
+      return this.canVoteForAgenda(agenda.agendaid) ? '' : 'disabled';
     },
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);

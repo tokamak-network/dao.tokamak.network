@@ -932,17 +932,6 @@ export default new Vuex.Store({
       if (!state.votingDetails) return [];
       return state.votingDetails.filter(v => v.agendaid === Number(agendaId));
     },
-    hasVoted: (state, getters) => (agendaId) => {
-      if (!state.votingDetails) {
-        return true;
-      }
-      const found = state.votingDetails.find(votingDetail =>
-        votingDetail.agendaid === agendaId && votingDetail.voter === getters.candidateContractFromEOA);
-      if (!found) {
-        return true;
-      }
-      return found.hasVoted;
-    },
     sortedCandidates: (state, getters) => {
       const candidates = [];
       state.members.forEach(member => {
@@ -1022,18 +1011,31 @@ export default new Vuex.Store({
       }
       return state.votersOfAgenda.filter(result => result.voter.toLowerCase() === getters.candidateFromEOA.toLowerCase());
     },
-    canVoteForAgenda: (state, getters) => (agenda) => {
-      if (!agenda) {
+    haveAlreadyVotedForAgenda: (state, getters) => (agendaId) => {
+      if (!state.votingDetails) {
+        return true;
+      }
+      const found = state.votingDetails.find(votingDetail =>
+        votingDetail.agendaid === agendaId && votingDetail.voter.toLowerCase() === getters.candidateContractFromEOA.toLowerCase(),
+      );
+      return found ? true : false;
+    },
+    canVoteForAgenda: (state, getters) => (agendaId) => {
+      if (!agendaId || agendaId < 0) {
         return false;
       }
+
+      const agenda = getters.getAgendaByID(agendaId);
       if (agendaStatus(agenda.status) === 'NOTICE' && state.blockTime >= agenda.tNoticeEndTime) {
         return getters.isMember;
       } else {
-        if (getters.hasVoted(agenda.agendaid)) {
+        if (getters.haveAlreadyVotedForAgenda(agendaId)) {
           return false;
         }
-        const agendaId = agenda.agendaid;
-        const found = getters.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
+
+        const found = agenda.voters.find(voter =>
+          voter.toLowerCase() === getters.candidateFromEOA.toLowerCase(),
+        );
         return found ? true : false;
       }
     },
