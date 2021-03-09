@@ -115,6 +115,8 @@ export default {
           if (accounts.length === 0) {
             this.$store.dispatch('disconnectEthereum');
           } else {
+            this.$store.commit('SET_PENDING_TX', '');
+
             const accounts = await web3.eth.getAccounts();
             this.connectedAccount = accounts[0];
 
