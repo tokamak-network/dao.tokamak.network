@@ -7,8 +7,7 @@
       <template #body>
         <modal-vote :id="agenda.agendaid"
                     @on-closed="showModal=false"
-                    @vote-casted="actInProgress=true;"
-                    @vote-reflected="actInProgress=false;"
+                    @on-voted="onVoted"
         />
       </template>
     </modal>
@@ -87,12 +86,12 @@ export default {
       'confirmBlock',
       'web3',
       'votersOfAgenda',
+      'pendingTx',
     ]),
     ...mapGetters([
       'agendaTitle',
       'agendaIdsCanVote',
       'isMember',
-      'hasVoted',
       'candidateContractFromEOA',
       'voteResult',
       'canVoteForAgenda',
@@ -185,7 +184,17 @@ export default {
       }
     },
   },
+  watch: {
+    pendingTx (newValue) {
+      if (newValue === '') {
+        this.actInProgress = false;
+      }
+    },
+  },
   methods: {
+    onVoted () {
+      this.actInProgress = true;
+    },
     route (path) {
       this.$router.push({ path });
     },
