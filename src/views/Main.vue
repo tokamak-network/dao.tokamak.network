@@ -2,9 +2,12 @@
   <div class="main"
        :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
   >
-    <div class="main-logo"
+    <!-- <div class="main-logo"
+
          :class="{ 'main-logo-mobile': $mq === 'mobile' }"
-    >
+    > -->
+    <div class="main-top">
+      <img class-="main-interaction" src="@/assets/main-interaction.gif">
       <div v-if="events.length > 0"
            class="main-btn"
            :class="{ 'main-btn-mobile': $mq === 'mobile' }"
@@ -158,12 +161,19 @@ export default {
   width: 840px;
   height: 607px;
 
-  background: url('../assets/logo-main.png') no-repeat;
-  /* background-size: 840px; */
-  background-size: contain;
-  background-repeat: no-repeat;
+  // background: url('../assets/logo-main.png') no-repeat;
+  // /* background-size: 840px; */
+  // background-size: contain;
+  // background-repeat: no-repeat;
 
   position: relative;
+}
+
+.main-interaction {
+}
+
+.main-top {
+  display: flex;
 }
 
 .main-logo-mobile {
@@ -187,10 +197,8 @@ export default {
   border-radius: 25px;
   box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
   background-color: #f6f8f9;
-
   position: absolute;
-  bottom: 92px;
-
+  top: 488px;
   left: 0;
   right: 0;
   margin-left: auto;
