@@ -6,7 +6,7 @@ function createInstance () {
   });
 }
 const instance = createInstance();
-const chainId = 4;
+const chainId = 1;
 
 export async function getRecentEvents () {
   const res = await instance.get('/events', {
