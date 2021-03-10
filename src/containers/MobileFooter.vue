@@ -4,7 +4,7 @@
          !isSub() ? { background: '#0062c2' } : { background: '#fafbfc' },
        ]"
   >
-    <div>
+    <!-- <div>
       <a href="" target="_blank" class="clause"
          :style="[
            !isSub() ? { color: '#a6c8e9' } : { color: '#86929d' },
@@ -26,7 +26,7 @@
       >
         Status
       </a>
-    </div>
+    </div> -->
     <span class="company"
           :style="[
             !isSub() ? { color: '#ffffff' } : { color: '#3e495c' },
