@@ -2,10 +2,6 @@
   <div class="main"
        :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
   >
-    <!-- <div class="main-logo"
-
-         :class="{ 'main-logo-mobile': $mq === 'mobile' }"
-    > -->
     <div class="main-top">
       <div v-if="$mq === 'mobile'"
            class="main-logo-mobile"
@@ -179,11 +175,6 @@ export default {
 .main-logo {
   width: 840px;
   height: 607px;
-
-  // background: url('../assets/logo-main.png') no-repeat;
-  // /* background-size: 840px; */
-  // background-size: contain;
-  // background-repeat: no-repeat;
 
   position: relative;
 }
