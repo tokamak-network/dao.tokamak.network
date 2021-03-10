@@ -32,7 +32,7 @@
             !isSub() ? { color: '#ffffff' } : { color: '#3e495c' },
           ]"
     >
-      © 2021 Onther
+      © 2021 Onther PTE. LTD.
     </span>
   </div>
 </template>

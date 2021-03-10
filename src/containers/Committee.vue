@@ -19,7 +19,7 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
@@ -79,7 +79,7 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
@@ -138,7 +138,7 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>

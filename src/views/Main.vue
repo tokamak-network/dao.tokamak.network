@@ -8,14 +8,9 @@
       >
         <div v-if="events.length > 0"
              class="main-btn-mobile"
-             @click="$router.push({ path: 'agenda' })"
         >
           <div class="count">{{ events.length }}</div>
           <span class="label">Committee activities</span>
-          <img class="arrow"
-               src="@/assets/arrow-next-main.png" alt=""
-               width="4" height="8"
-          >
         </div>
       </div>
       <div v-else>
@@ -24,14 +19,9 @@
         >
         <div v-if="events.length > 0"
              class="main-btn"
-             @click="$router.push({ path: 'agenda' })"
         >
           <div class="count">{{ events.length }}</div>
           <span class="label">Committee activities</span>
-          <img class="arrow"
-               src="@/assets/arrow-next-main.png" alt=""
-               width="4" height="8"
-          >
         </div>
       </div>
     </div>
@@ -214,10 +204,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
 
-  &:hover {
-    cursor: pointer;
-  }
-
   .count {
     display: flex;
     justify-content: center;
@@ -237,7 +223,7 @@ export default {
     text-align: center;
     color: #ffffff;
 
-    margin-left: 9px;
+    margin-left: 16px;
     margin-right: 12px;
   }
 
@@ -276,10 +262,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
 
-  &:hover {
-    cursor: pointer;
-  }
-
   .count {
     display: flex;
     justify-content: center;
@@ -299,7 +281,7 @@ export default {
     text-align: center;
     color: #ffffff;
 
-    margin-left: 9px;
+    margin-left: 16px;
     margin-right: 12px;
   }
 

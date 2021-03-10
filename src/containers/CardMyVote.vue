@@ -13,8 +13,18 @@
                class="body"
           >
             <div>{{ (page*4) + index + 1 }}</div>
-            <div v-if="$mq === 'desktop'">{{ data.name | nameSlice }} ({{ data.candidateContract | hexSlicer }})</div>
-            <div v-else>{{ data.name | nameSlice }}</div>
+            <div v-if="$mq === 'desktop'"
+                 class="candidate"
+                 @click="route(`/election/${data.candidateContract}`);"
+            >
+              {{ data.name | nameSlice }} ({{ data.candidateContract | hexSlicer2 }})
+            </div>
+            <div v-else
+                 class="candidate"
+                 @click="route(`/election/${data.candidateContract}`);"
+            >
+              {{ data.name | nameSlice }}
+            </div>
             <div>{{ data.myVotes | WTON | withComma }} TON</div>
           </div>
         </div>
@@ -60,6 +70,9 @@ export default {
   methods: {
     set (page) {
       this.page = page;
+    },
+    route (path) {
+      this.$router.push({ path });
     },
   },
 };
@@ -141,5 +154,11 @@ export default {
 .button-pagination {
   margin-top: 10px;
   padding-bottom: 16px;
+}
+
+.candidate {
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>
