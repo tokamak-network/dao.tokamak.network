@@ -15,7 +15,7 @@
       />
       <text-small class="member-slot"
                   :type="'A'"
-                  :label="'Member'"
+                  :label="'Slot'"
                   :value="`#${memberIndex}`"
       />
     </div>
