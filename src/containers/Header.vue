@@ -1,7 +1,7 @@
 <template>
   <div class="header" :class="{ 'header-sub': isSub }">
     <modal v-if="showModal"
-           :width="'390px'"
+           :width="'490px'"
            @on-closed="showModal=false"
     >
       <template #body>
