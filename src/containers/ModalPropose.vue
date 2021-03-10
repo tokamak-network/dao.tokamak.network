@@ -128,9 +128,9 @@ export default {
     aboutParam () {
       return index => {
         if (this.functionName === 'setSeigRates') {
-          if (index === 0) return '0';
-          if (index === 1) return '1';
-          if (index === 2) return '2';
+          if (index === 0) return 'uint256 powerTONSeigRate_: PowerTON distribution ratio (decimal: 27) 100000000000000000000000000: 10%';
+          if (index === 1) return 'uint256 daoSeigRate_: DAO distribution ratio (decimal: 27) 200000000000000000000000000: 20%';
+          if (index === 2) return 'uint256 PseigRate_: Additional seigniorage distribution ratio 300000000000000000000000000: 30%';
         }
 
         const abi = getContractABI(this.contract, this.type);
@@ -141,9 +141,9 @@ export default {
     exampleParam () {
       return index => {
         if (this.functionName === 'setSeigRates') {
-          if (index === 0) return '0';
-          if (index === 1) return '1';
-          if (index === 2) return '2';
+          if (index === 0) return '100000000000000000000000000';
+          if (index === 1) return '200000000000000000000000000';
+          if (index === 2) return '300000000000000000000000000';
         }
 
         const abi = getContractABI(this.contract, this.type);
@@ -314,8 +314,8 @@ export default {
       const target = getContractAddress(this.contract);
 
       const param = encodeParameters(
-        ['address[]', 'uint256', 'uint256', 'bytes[]'],
-        [[target, target, target], noticePeriod.toString(), votingPeriod.toString(), [bytecode1, bytecode2, bytecode3]],
+        ['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'],
+        [[target, target, target], noticePeriod.toString(), votingPeriod.toString(), true, [bytecode1, bytecode2, bytecode3]],
       );
 
       const gasLimit = await ton.methods.approveAndCall(proxy._address, fee, param)

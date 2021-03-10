@@ -94,6 +94,12 @@
         <div class="function-container function-container-desktop"
              :style="setFunctionGridTemplateColumns"
         >
+          <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+            <box :function-name="'setSeigRates'"
+                 :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                 :type="'A'"
+            />
+          </div>
           <div v-for="func in getFunctions()" :key="func.name"
                @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
           >
@@ -152,6 +158,12 @@
                class="function-container"
                :style="setFunctionGridTemplateColumns"
           >
+            <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+              <box :function-name="'setSeigRates'"
+                   :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
             <div v-for="func in getFunctions()" :key="func.name"
                  @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >

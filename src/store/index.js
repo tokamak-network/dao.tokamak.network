@@ -863,6 +863,14 @@ export default new Vuex.Store({
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 3) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
+            onChainEffects[1].name === 'setDaoSeigRate' &&
+            onChainEffects[2].name === 'setPseigRate'
+        ) {
+          return 'SeigManager- All the seigniorage rates will be changed';
+        }
+      }
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
@@ -877,6 +885,17 @@ export default new Vuex.Store({
     },
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 3) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
+            onChainEffects[1].name === 'setDaoSeigRate' &&
+            onChainEffects[2].name === 'setPseigRate'
+        ) {
+          return `Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+          Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
+          This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
+        }
+      }
       if (!onChainEffects || onChainEffects.length === 0) {
         console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
