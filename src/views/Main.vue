@@ -7,17 +7,36 @@
          :class="{ 'main-logo-mobile': $mq === 'mobile' }"
     > -->
     <div class="main-top">
-      <img class-="main-interaction" src="@/assets/main-interaction.gif">
-      <div v-if="events.length > 0"
-           class="main-btn"
-           :class="{ 'main-btn-mobile': $mq === 'mobile' }"
-           @click="$router.push({ path: 'agenda' })"
+      <div v-if="$mq === 'mobile'"
+           class="main-logo-mobile"
       >
-        <div class="count">{{ events.length }}</div>
-        <span>Committee activities</span>
-        <img src="@/assets/arrow-next-main.png" alt=""
-             width="4" height="8"
+        <div v-if="events.length > 0"
+             class="main-btn-mobile"
+             @click="$router.push({ path: 'agenda' })"
         >
+          <div class="count">{{ events.length }}</div>
+          <span class="label">Committee activities</span>
+          <img class="arrow"
+               src="@/assets/arrow-next-main.png" alt=""
+               width="4" height="8"
+          >
+        </div>
+      </div>
+      <div v-else>
+        <img class-="main-interaction"
+             src="@/assets/main-interaction.gif"
+        >
+        <div v-if="events.length > 0"
+             class="main-btn"
+             @click="$router.push({ path: 'agenda' })"
+        >
+          <div class="count">{{ events.length }}</div>
+          <span class="label">Committee activities</span>
+          <img class="arrow"
+               src="@/assets/arrow-next-main.png" alt=""
+               width="4" height="8"
+          >
+        </div>
       </div>
     </div>
     <div v-if="events.length > 0 && $mq !== 'mobile'"
@@ -81,8 +100,6 @@ export default {
   },
   async created () {
     this.events = await getRecentEvents();
-  },
-  mounted: {
   },
   methods: {
     newtab (txhash) {
@@ -182,7 +199,7 @@ export default {
   width: 350px;
   height: 253px;
 
-  // background: url('../assets/logo-main.png') no-repeat;
+  background: url('../assets/logo-main.png') no-repeat;
   background-size: contain;
   background-repeat: no-repeat;
 
@@ -205,52 +222,112 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-}
-.main-btn-mobile {
-  bottom: 0px;
-}
-.main-btn:hover {
-  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2a72e5;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+
+    margin-left: 9px;
+    margin-right: 12px;
+  }
+
+  .label {
+    flex: 1;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #354052;
+  }
+
+  .arrow {
+    margin-right: 15px;
+  }
 }
 
-.count {
+.main-btn-mobile {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #2a72e5;
+  width: 200px;
+  height: 38px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
+  background-color: #f6f8f9;
+  position: absolute;
+  top: 300px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #ffffff;
+  &:hover {
+    cursor: pointer;
+  }
 
-  margin-left: 9px;
-  margin-right: 12px;
-}
+  .count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-.main-btn span {
-  flex: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2a72e5;
 
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #354052;
-}
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
 
-.main-btn img {
-  margin-right: 15px;
+    margin-left: 9px;
+    margin-right: 12px;
+  }
+
+  .label {
+    flex: 1;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #354052;
+  }
+
+  .arrow {
+    margin-right: 15px;
+  }
 }
 
 .recent-committee-activities {
