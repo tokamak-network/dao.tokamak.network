@@ -82,6 +82,8 @@ export default {
   async created () {
     this.events = await getRecentEvents();
   },
+  mounted: {
+  },
   methods: {
     newtab (txhash) {
       window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
@@ -180,7 +182,7 @@ export default {
   width: 350px;
   height: 253px;
 
-  background: url('../assets/logo-main.png') no-repeat;
+  // background: url('../assets/logo-main.png') no-repeat;
   background-size: contain;
   background-repeat: no-repeat;
 
@@ -435,6 +437,13 @@ export default {
       margin-top: 19px;
     }
   }
-
+}
+#wrap {
+  width: 100%;
+  height: 1000px;
+}
+#canvas {
+  width: 100%;
+  height: 1080px;
 }
 </style>
