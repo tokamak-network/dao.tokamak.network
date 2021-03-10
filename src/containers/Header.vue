@@ -47,7 +47,7 @@
         <router-link :to="'/agenda'"
                      class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('agenda') }"
         >
-          Agenda
+          Committee
         </router-link>
         <connect-wallet :is-sub="isSub" />
       </div>

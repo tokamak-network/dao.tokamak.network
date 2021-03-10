@@ -17,7 +17,7 @@
       <div class="menu-btn" @click="route('/'); isOpen = false;">Home</div>
       <div class="menu-btn" @click="route('/election'); isOpen = false;">Election</div>
       <div class="menu-btn" @click="route('/propose'); isOpen = false;">Propose</div>
-      <div class="menu-btn" @click="route('/agenda'); isOpen = false;">Agenda</div>
+      <div class="menu-btn" @click="route('/agenda'); isOpen = false;">Committee</div>
       <div v-if="account !== '' && isCandidate"
            class="claim-btn"
            @click="showModalClaim=true;"
