@@ -60,7 +60,7 @@
           />
           <hide-button v-if="!showAllAgendas && agendasFiltered.length > 5"
                        class="hide-btn"
-                       :name="'View more agendas'"
+                       :name="`View more agendas (${agendasFiltered.slice(5, agendasFiltered.length).length})`"
                        :type="'hide'"
                        @on-clicked="showAllAgendas = true;"
           />
