@@ -232,7 +232,7 @@ export default {
       if (newAccount !== oldAccount) {
         for (let i = 0; i < 5; i++) {
           if (this.$refs[`filter${i}`]) {
-            this.$refs[`filter${i}`].selectedItem = 'All';
+            this.$refs[`filter${i}`].selectedItem = this.$refs[`filter${i}`].hint;
           }
         }
         this.filterStatus = 'All';
