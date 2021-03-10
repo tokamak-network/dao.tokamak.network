@@ -30,6 +30,17 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
+             href="https://docs.tokamak.network/docs/en/guides/getting-started/how-to-set-candidate"
+          >
+            How to be a candidate
+          </a>
+        </div>
+        <div class="resource">
+          <img src="@/assets/resources-icon.svg" alt=""
+               width="14" height="14"
+          >
+          <a class="link"
+             target="_blank" rel="noopener noreferrer"
           >
             Governance FAQs (TBD)
           </a>
@@ -82,6 +93,10 @@ export default {
   padding-top: 16px;
 }
 .resource:nth-child(2) {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.resource:nth-child(3) {
   margin-top: 16px;
   margin-bottom: 16px;
 }
