@@ -9,20 +9,28 @@
       </template>
     </modal>
     <div v-if="$mq === 'desktop'" class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
-      <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
-      <img v-else src="@/assets/logo.png" alt="">
+      <div v-if="isSub" class="logo-container">
+        <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
+        <div class="beta beta-sub">Beta</div>
+      </div>
+      <div v-else class="logo-container">
+        <img src="@/assets/logo.png" alt="">
+        <div class="beta">Beta</div>
+      </div>
     </div>
-    <div v-else class="logo-table" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
-      <img v-if="!isSub"
-           src="@/assets/mobile-logo.png" alt=""
-           width="105" height="30"
-           @click="route('/');"
-      >
-      <img v-else
-           src="@/assets/mobile-logo-sub.png" alt=""
-           width="105" height="30"
-           @click="route('/');"
-      >
+    <div v-else class="logo-tablet" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
+      <div v-if="isSub" class="logo-container">
+        <img src="@/assets/mobile-logo-sub.png" alt=""
+             width="105" height="30"
+        >
+        <div class="beta beta-sub">Beta</div>
+      </div>
+      <div v-else class="logo-container">
+        <img src="@/assets/mobile-logo.png" alt=""
+             width="105" height="30"
+        >
+        <div class="beta">Beta</div>
+      </div>
     </div>
     <div style="display: flex; flex: 1; justify-content: flex-end;">
       <div class="menu">
@@ -112,6 +120,31 @@ export default {
   background: #fafbfc;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+
+  .beta {
+    margin-top: 4px;
+
+    font-family: Georgia;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: 1.14;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+
+    margin-left: 4px;
+
+    &-sub {
+      color: #2a72e5;
+    }
+  }
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -123,7 +156,7 @@ export default {
   }
 }
 
-.logo-table {
+.logo-tablet {
   display: flex;
   align-items: center;
 
