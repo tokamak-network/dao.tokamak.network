@@ -2,7 +2,10 @@
   <div class="card-nonmember" :class="{ mine: myCandidate }">
     <div class="label"># of Votes </div>
     <div class="amount">{{ wton(candidate.vote) | withComma }} TON</div>
-    <div class="name">{{ candidate.name }}</div>
+    <div class="name-container">
+      <div class="name">{{ candidate.name }}</div>
+      <div v-if="$mq !== 'mobile'" class="type">{{ `- ${candidate.kind}` }}</div>
+    </div>
     <div class="detail" @click="detail()">View Detail</div>
   </div>
 </template>
@@ -85,17 +88,41 @@ export default {
     text-align: left;
     color: #3e495c
   }
-  .name {
+  .name-container {
+    display: flex;
+    align-items: center;
+
     flex: 1;
 
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #3e495c;
+    word-break: break-all;
+
+    .name {
+      font-family: Roboto;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+    }
+
+    .type {
+      width: 120px;
+
+      font-family: Roboto;
+      font-size: 11px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.36;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      margin-top: 3px;
+      margin-left: 4px;
+    }
   }
   .detail {
     font-family: Roboto;

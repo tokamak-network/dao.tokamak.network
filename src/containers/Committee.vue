@@ -25,10 +25,16 @@
           </div>
         </div>
         <div v-if="!account">
-          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="title-container">
+            <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          </div>
         </div>
         <div v-else>
-          <div class="title" style="margin-bottom: 0px;">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="title-container" style="margin-bottom: 0px;">
+            <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          </div>
           <button style="margin-top: 14px; margin-bottom: 30px;"
                   class="update-btn"
                   :class="{
@@ -78,7 +84,10 @@
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
         </div>
-        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="title-container">
+          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+        </div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">
             Detail
@@ -110,7 +119,6 @@
         <committee-vote v-else-if="currentSelector === 2" />
       </div>
     </div>
-
     <div v-else class="card-committee-info">
       <div class="button-container">
         <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
@@ -135,7 +143,10 @@
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
         </div>
-        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="title-container">
+          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+        </div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
@@ -405,20 +416,6 @@ export default {
   text-align: left;
   color: #3e495c;
 }
-.title {
-  font-family: Roboto;
-  font-size: 20px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.3;
-  letter-spacing: normal;
-  text-align: left;
-  color: #3e495c;
-
-  margin-top: 8px;
-  margin-bottom: 30px;
-}
 .selector {
   display: flex;
 }
@@ -586,6 +583,44 @@ export default {
     background-color: #ffffff;
 
     color: #86929d;
+  }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+
+  margin-top: 8px;
+  margin-bottom: 30px;
+
+  word-break: break-all;
+
+  .title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.3;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+  }
+
+  .type {
+    width: 120px;
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+
+    margin-top: 3px;
+    margin-left: 4px;
   }
 }
 </style>
