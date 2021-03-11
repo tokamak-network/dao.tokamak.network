@@ -8,6 +8,17 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
+             href="https://docs.google.com/presentation/d/1d1YrughbLXeQafNmWrjjz2dl9IjREe_bNIckQIMFLo8/edit?usp=sharing"
+          >
+            Tokamak DAO User Guide
+          </a>
+        </div>
+        <div class="resource">
+          <img src="@/assets/resources-icon.svg" alt=""
+               width="14" height="14"
+          >
+          <a class="link"
+             target="_blank" rel="noopener noreferrer"
              href="https://discord.gg/SZw2WSR"
           >
             Tokamak DAO Discussion
