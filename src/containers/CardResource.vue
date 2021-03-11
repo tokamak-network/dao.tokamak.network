@@ -111,6 +111,10 @@ export default {
   margin-top: 16px;
   margin-bottom: 16px;
 }
+.resource:nth-child(4) {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
 .resource:last-child {
   padding-bottom: 16px;
 }
