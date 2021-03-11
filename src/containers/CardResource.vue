@@ -43,7 +43,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://docs.tokamak.network/docs/en/guides/getting-started/how-to-set-candidate"
           >
-            How to be a candidate
+            Candidate Registration
           </a>
         </div>
         <div class="resource">
