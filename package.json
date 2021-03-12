@@ -15,6 +15,7 @@
     "dompurify": "^2.2.6",
     "marked": ">=2.0.0",
     "moment": "^2.29.1",
+    "numeral": "^2.0.6",
     "tokamak-staking-lib": "0.0.12",
     "vue": "^2.6.11",
     "vue-mq": "^1.0.1",

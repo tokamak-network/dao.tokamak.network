@@ -25,6 +25,14 @@
                     :content="`${candidate(address) ? date2(candidate(address).lastCommitAt) : '-'}`"
                     style="margin-top: 12px;"
     />
+    <info-committee :title="'Winning Probability'" :content="powerTONWinningProbability" style="margin-top: 12px;" />
+    <div class="label-power-ton">
+      <span>(You can check the amount of power </span>
+      <a class="label-power-ton-link" target="_blank" rel="noopener noreferrer"
+         href="https://staking.tokamak.network"
+      >here</a>
+      <span>)</span>
+    </div>
     <div style="width: 100%; height: 18px;" />
     <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
@@ -59,6 +67,7 @@ export default {
       'account',
       'web3',
       'confirmBlock',
+      'winningProbability',
     ]),
     ...mapGetters([
       'candidate',
@@ -76,6 +85,9 @@ export default {
     },
     date2 () {
       return (timestamp) => date2(timestamp);
+    },
+    powerTONWinningProbability () {
+      return this.winningProbability === '' ? '0.00%' : this.winningProbability;
     },
   },
   watch: {
@@ -254,6 +266,28 @@ export default {
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.label-power-ton {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: 0.3px;
+  text-align: left;
+  color: #3e495c;
+
+  margin-top: -13px;
+
+  &-link {
+    text-decoration: none;
+    color: #2a72e5;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 </style>

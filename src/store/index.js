@@ -1,5 +1,6 @@
 import Web3 from 'web3';
-import web3Utils from 'web3-utils';
+import { toBN } from 'web3-utils';
+import numeral from 'numeral';
 
 import {
   getCandidates,
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     blockTime: 0,
 
     tonBalance: 0,
+    winningProbability: '',
     contractState: {},
 
     candidates: [],
@@ -114,6 +116,9 @@ export default new Vuex.Store({
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
+    SET_WINNING_PROBABILITY (state, winningProbability) {
+      state.winningProbability = winningProbability;
+    },
     SET_CONTRACT_STATE (state, contractState) {
       state.contractState = contractState;
     },
@@ -181,8 +186,22 @@ export default new Vuex.Store({
     },
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
-      const tonBalance = await ton.methods.balanceOf(state.account).call();
+      const powerTON = getContract('PowerTON', state.web3);
+
+      const [
+        tonBalance,
+        power,
+        totalDeposits,
+      ] = await Promise.all([
+        ton.methods.balanceOf(state.account).call(),
+        powerTON.methods.powerOf(state.account).call(),
+        powerTON.methods.totalDeposits().call(),
+      ]);
+
       commit('SET_TON_BALANCE', tonBalance);
+
+      const winningProbability = numeral(power / totalDeposits).format('0.00%');
+      commit('SET_WINNING_PROBABILITY', winningProbability);
     },
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
@@ -857,8 +876,8 @@ export default new Vuex.Store({
       const candidate = getters.candidate(address);
       if (!candidate || !getters.minimumAmount) return false;
 
-      const minimumAmount = web3Utils.toBN(getters.minimumAmount);
-      const selfVote = web3Utils.toBN(candidate.selfVote);
+      const minimumAmount = toBN(getters.minimumAmount);
+      const selfVote = toBN(candidate.selfVote);
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
@@ -973,10 +992,10 @@ export default new Vuex.Store({
 
       return state.candidates.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -988,10 +1007,10 @@ export default new Vuex.Store({
 
       return state.nonmembers.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -1003,10 +1022,10 @@ export default new Vuex.Store({
 
       return state.votedCandidatesFromAccount.sort(function (a, b) {
         a = a.myVotes.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.myVotes.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
