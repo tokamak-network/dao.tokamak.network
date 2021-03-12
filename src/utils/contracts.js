@@ -18,6 +18,7 @@ const committee = require('../contracts/DAOCommittee.json');
 const depositManager = require('../contracts/DepositManager.json');
 const ton = require('../contracts/TON.json');
 const wton = require('../contracts/WTON.json');
+const powerTON = require('../contracts/PowerTON.json');
 const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
@@ -52,6 +53,7 @@ function getContract (want, web3, address) {
   const DepositManager = new web3.eth.Contract(depositManager.abi, deployed.DepositManager);
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
+  const PowerTON = new web3.eth.Contract(powerTON.abi, deployed.PowerTON);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
 
@@ -64,6 +66,7 @@ function getContract (want, web3, address) {
     DepositManager,
     TON,
     WTON,
+    PowerTON,
     SeigManager,
     Coinage,
     Layer2Registry,
