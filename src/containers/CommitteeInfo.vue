@@ -25,7 +25,12 @@
                     :content="`${candidate(address) ? date2(candidate(address).lastCommitAt) : '-'}`"
                     style="margin-top: 12px;"
     />
-    <info-committee :title="'Winning Probability'" :content="powerTONWinningProbability" style="margin-top: 12px;" />
+    <div style="width: 100%; height: 18px;" />
+    <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'My Winning Probability'" :content="powerTONWinningProbability" style="margin-top: 12px;" />
     <div class="label-power-ton">
       <span>(You can check the amount of power </span>
       <a class="label-power-ton-link" target="_blank" rel="noopener noreferrer"
@@ -33,11 +38,6 @@
       >here</a>
       <span>)</span>
     </div>
-    <div style="width: 100%; height: 18px;" />
-    <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
-    <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
-    <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" style="margin-top: 12px;" />
-    <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" style="margin-top: 12px;" />
   </div>
 </template>
 
