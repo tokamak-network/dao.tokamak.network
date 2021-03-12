@@ -1,6 +1,6 @@
 <template>
   <div class="card-resource">
-    <card-container :title="'Resource'">
+    <card-container :title="'Resources'">
       <template #body>
         <div class="resource">
           <img src="@/assets/resources-icon.svg" alt=""
@@ -10,7 +10,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://docs.google.com/presentation/d/1d1YrughbLXeQafNmWrjjz2dl9IjREe_bNIckQIMFLo8/edit?usp=sharing"
           >
-            Tokamak DAO User Guide
+            DAO User Guide
           </a>
         </div>
         <div class="resource">
@@ -21,7 +21,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://discord.gg/SZw2WSR"
           >
-            Tokamak DAO Discussion
+            DAO Discussion (Discrod)
           </a>
         </div>
         <div class="resource">
@@ -32,7 +32,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://tokamak.network"
           >
-            Tokamak Network Homepage
+            Tokamak Network
           </a>
         </div>
         <div class="resource">
