@@ -247,6 +247,9 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const seigManager = getContract('SeigManager', web3);
+      const layer2Registry = getContract('Layer2Registry', web3);
+
       const [
         c,
         maxMember,
@@ -270,16 +273,17 @@ export default new Vuex.Store({
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
 
       const candidates = await Promise.all(
         c.map(async candidate => {
+          const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+
           const [
-            isRegistered, coinage,
+            isRegistered, coinage, lastCommitBlockNumber,
           ] = await Promise.all([
             layer2Registry.methods.layer2s(candidate.layer2).call(),
             seigManager.methods.coinages(candidate.layer2).call(),
+            seigManager.methods.lastCommitBlock(addr).call(),
           ]);
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
@@ -288,16 +292,20 @@ export default new Vuex.Store({
 
           const coinageContract = getContract('Coinage', web3, coinage);
           const [
-            selfVote, totalVote, info,
+            selfVote, totalVote, info, lastCommitBlock,
           ] = await Promise.all([
             coinageContract.methods.balanceOf(candidate.operator).call(),
             coinageContract.methods.totalSupply().call(),
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
+            web3.eth.getBlock(lastCommitBlockNumber),
           ]);
 
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
+          candidate.coinage = coinage;
+          candidate.lastCommitBlockNumber = lastCommitBlockNumber;
+          candidate.lastCommitAt = lastCommitBlock.timestamp;
           return candidate;
         }),
       );
