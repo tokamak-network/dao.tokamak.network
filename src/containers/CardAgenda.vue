@@ -167,9 +167,7 @@ export default {
       if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
         return this.isMember ? 'VOTE' : '';
       } else if (agendaStatus(agenda.status) === 'VOTING' && this.blockTime <= agenda.tVotingEndTime) {
-        const agendaId = agenda.agendaid;
-        const found = this.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
-        return found ? 'VOTE' : '';
+        return this.isMember ? 'VOTE' : '';
       } else if (agendaStatus(agenda.status) === 'WAITING_EXEC' &&
                  agendaResult(agenda.result) === 'ACCEPT' &&
                  this.blockTime >= agenda.tVotingEndTime &&
