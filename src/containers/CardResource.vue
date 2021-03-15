@@ -52,8 +52,9 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
+             href="https://www.notion.so/onther/FAQ-27a7fcfaed5047b895169930b5912cab"
           >
-            Governance FAQs (TBD)
+            Governance FAQs
           </a>
         </div>
       </template>
