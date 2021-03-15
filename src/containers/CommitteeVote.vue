@@ -8,13 +8,25 @@
     </div>
     <div class="body">
       <div v-if="currentSelector === 0" class="vote-container">
-        <div>Available Balance {{ tonBalance | TON | withComma }} TON</div>
+        <div v-if="voteUnit === 'TON'">Available Balance {{ tonBalance | TON | withComma }} TON</div>
+        <div v-else>Available Balance {{ wtonBalance | WTON | withComma }} WTON</div>
         <div>
-          <text-input ref="tonvote"
-                      class="vote-input"
-                      :unit="'TON'"
-                      :hint="'0.00'"
-          />
+          <div class="ton-vote-container">
+            <text-input :ref="voteUnit === 'TON' ? 'tonvote' : 'wtonvote'"
+                        class="vote-input"
+                        :hint="'0.00'"
+                        :for-voting="true"
+            />
+            <dropdown-unit class="dropdown"
+                           :items="['TON', 'WTON']"
+                           :hint="'TON'"
+                           :no-hint="true"
+                           :button-type="'a'"
+                           :selector-type="'a'"
+                           :width="'80px'"
+                           @on-selected="select($event)"
+            />
+          </div>
           <custom-button class="vote-max"
                          :name="'MAX'"
                          :type="'vote'"
@@ -96,16 +108,18 @@
 <script>
 import { withComma, TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
 import { getContract, stakedOfCandidateContracts, minimumAmountOfOperator } from '@/utils/contracts';
-import web3Utils from 'web3-utils';
+import { toBN } from 'web3-utils';
 
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
+import DropdownUnit from '@/components/DropdownUnit.vue';
 import TextInput from '@/components/TextInput.vue';
 
 export default {
   components: {
-    'text-input': TextInput,
     'custom-button': Button,
+    'dropdown-unit': DropdownUnit,
+    'text-input': TextInput,
   },
   data () {
     return {
@@ -120,6 +134,8 @@ export default {
       revoteInProgress: false,
       unvoteInProgress: false,
       withdrawInProgress: false,
+
+      voteUnit: 'TON',
     };
   },
   computed: {
@@ -128,6 +144,7 @@ export default {
       'account',
       'web3',
       'tonBalance',
+      'wtonBalance',
       'confirmBlock',
       'myVotes',
     ]),
@@ -178,8 +195,14 @@ export default {
       return withComma(n);
     },
     tonMax () {
-      if (this.tonBalance && this.tonBalance > 0) {
-        this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);
+      if (this.voteUnit === 'TON') {
+        if (this.tonBalance && this.tonBalance > 0) {
+          this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);
+        }
+      } else {
+        if (this.wtonBalance && this.wtonBalance > 0) {
+          this.$refs.wtonvote.$refs.input.value = WTON(this.wtonBalance);
+        }
       }
     },
     wtonMax () {
@@ -195,82 +218,155 @@ export default {
       const requests = this.withdrawableRequests(this.address);
       this.withdrawIndex + 1 === requests.length ? this.withdrawIndex = 0 : this.withdrawIndex++;
     },
+    async select (unit) {
+      if (this.voteUnit !== unit) {
+        if (this.$refs.tonvote) {
+          this.$refs.tonvote.$refs.input.value = null;
+        }
+        if (this.$refs.wtonvote) {
+          this.$refs.wtonvote.$refs.input.value = null;
+        }
+      }
+      this.voteUnit = unit;
+    },
     async vote () {
-      if (!this.account) return;
-      const BN = web3Utils.BN;
-
+      this.voteUnit === 'TON' ? await this.voteTON() : await this.voteWTON();
+    },
+    async voteTON () {
+      if (!this.account) {
+        return;
+      }
       const ton = getContract('TON', this.web3);
       const wton = getContract('WTON', this.web3);
 
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
-
       if (String(amount) === '0') {
         return alert('Please input amount!');
       }
       if (String(this.tonBalance) === '0') {
         return alert('Please check your TON amount!');
       }
-      if ((new BN(amount)).cmp(new BN(this.tonBalance)) === 1) {
+      if ((toBN(amount)).cmp(toBN(this.tonBalance)) === 1) {
         return alert('Please check your TON amount!');
       }
 
-      //candidator's operator must deposit more amount than the minimun stake amount.
-      // so at first time, he have to vote more amount than the minimun stake amount.
-      const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
-      let checkMinimunAmountOfOperator = true;
       const candidate = this.candidate(this.address);
+      if (!candidate) {
+        console.log('bug', 'no candidate'); // eslint-disable-line
+      }
 
-      if (candidate && candidate.operator && candidate.operator.toLowerCase() === this.account.toLowerCase()) {
+      if (candidate.operator.toLowerCase() === this.account.toLowerCase()) {
+        const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
         const minimumAmount = await minimumAmountOfOperator(this.web3);
         const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
         const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
-        const canVoteMinimunAmount = (new BN(minimumAmount)).sub(new BN(alreadyStakedAmount));
-        const subAmount = (new BN(amountToRay)).sub(canVoteMinimunAmount);
-        if (subAmount.lt(new BN(0))) {
-          checkMinimunAmountOfOperator = false;
-          alert('Candidator have to stake a minimun amount in his candidateContract. '
-            + '\n Already your staked amount : ' + WTON(alreadyStakedAmount) + ' TON'
-            + '\n Minimun staked amount  : ' + WTON(minimumAmount) + ' TON'
-            + '\n Can vote more than ' + WTON(canVoteMinimunAmount) + ' TON');
+        const canVoteMinimunAmount = (toBN(minimumAmount)).sub(toBN(alreadyStakedAmount));
+        const subAmount = (toBN(amountToRay)).sub(canVoteMinimunAmount);
+
+        if (subAmount.lt(toBN(0))) {
+          return alert('Candidator have to stake a minimun amount.');
         }
       }
 
-      if (checkMinimunAmountOfOperator) {
-        const data = await this.dataForDeposit();
-        const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
-          .estimateGas({
-            from: this.account,
-          });
+      const data = await this.dataForDeposit();
+      const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
+        .estimateGas({
+          from: this.account,
+        });
 
-        await ton.methods.approveAndCall(wton._address, amount, data)
-          .send({
-            from: this.account,
-            gasLimit: Math.floor(gasLimit * 1.2),
-          })
-          .on('transactionHash', (hash) => {
-            this.$refs.tonvote.$refs.input.value = null;
-            this.voteInProgress = true;
-            this.$store.commit('SET_PENDING_TX', hash);
-          })
-          .on('confirmation', async (confirmationNumber) => {
-            if (this.confirmBlock === confirmationNumber) {
-              this.voteInProgress = false;
-              this.$store.commit('SET_PENDING_TX', '');
-              await this.update();
-            }
-          })
-          .on('receipt', () => {
-          })
-          .on('error', () => {
+      await ton.methods.approveAndCall(wton._address, amount, data)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$refs.tonvote.$refs.input.value = null;
+          this.voteInProgress = true;
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.voteInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
-          });
+            await this.update();
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
+    },
+    async voteWTON () {
+      if (!this.account) {
+        return;
       }
 
+      const amount = toRay(this.$refs.wtonvote.$refs.input.value);
+      if (String(amount) === '0') {
+        return alert('Please input amount!');
+      }
+      if (String(this.wtonBalance) === '0') {
+        return alert('Please check your WTON amount!');
+      }
+      if ((toBN(amount)).cmp(toBN(this.wtonBalance)) === 1) {
+        return alert('Please check your WTON amount!');
+      }
+
+      const candidate = this.candidate(this.address);
+      if (!candidate) {
+        console.log('bug', 'no candidate'); // eslint-disable-line
+      }
+
+      if (candidate.operator.toLowerCase() === this.account.toLowerCase()) {
+        const minimumAmount = await minimumAmountOfOperator(this.web3);
+        const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+        const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
+        const canVoteMinimunAmount = toBN(minimumAmount).sub(toBN(alreadyStakedAmount));
+        const subAmount = toBN(amount).sub(canVoteMinimunAmount);
+
+        if (subAmount.lt(toBN(0))) {
+          return alert('Candidate have to stake a minimum amount');
+        }
+      }
+
+      const wton = getContract('WTON', this.web3);
+      const depositManager = getContract('DepositManager', this.web3);
+      const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+
+      const data = this.dataForDepositWTON(candidateContract);
+      const gasLimit = await wton.methods.approveAndCall(depositManager._address, amount, data)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await wton.methods.approveAndCall(depositManager._address, amount, data)
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
+        })
+        .on('transactionHash', (hash) => {
+          this.$refs.wtonvote.$refs.input.value = null;
+          this.voteInProgress = true;
+          this.$store.commit('SET_PENDING_TX', hash);
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.voteInProgress = false;
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.update();
+          }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
     async unvote () {
-      if (!this.account) return;
-      const BN = web3Utils.BN;
-
+      if (!this.account) {
+        return;
+      }
       const depositManager = getContract('DepositManager', this.web3);
       const candidate = this.candidate(this.address);
 
@@ -283,7 +379,7 @@ export default {
       if (String(this.myVotes) === '0') {
         return alert('Please check your TON amount!');
       }
-      if ((new BN(amount)).cmp(new BN(this.myVotes)) === 1) {
+      if ((toBN(amount)).cmp(toBN(this.myVotes)) === 1) {
         return alert('Please check your TON amount!!');
       }
 
@@ -396,7 +492,7 @@ export default {
           this.$store.commit('SET_PENDING_TX', '');
         });
     },
-    async dataForDeposit () {
+    dataForDeposit () {
       const depositManager = getContract('DepositManager', this.web3);
 
       const candidate = this.candidate(this.address);
@@ -404,6 +500,15 @@ export default {
 
       const data = marshalString(
         [depositManager._address, candidateContract]
+          .map(unmarshalString)
+          .map(str => padLeft(str, 64))
+          .join(''),
+      );
+      return data;
+    },
+    dataForDepositWTON (candidateContract) {
+      const data = marshalString(
+        [candidateContract]
           .map(unmarshalString)
           .map(str => padLeft(str, 64))
           .join(''),
@@ -506,5 +611,19 @@ export default {
 .revote-input, .withdraw-input {
   margin-top: 10px;
   margin-bottom: 21px;
+}
+
+.ton-vote-container {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  .dropdown {
+    position: absolute;
+    right: 1px;
+  }
 }
 </style>
