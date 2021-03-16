@@ -20,6 +20,7 @@
       </div>
       <div v-else>
         <img class-="main-interaction"
+             style="height: 600px"
              src="@/assets/main-interaction.gif"
         >
         <div v-if="events.length > 0"
@@ -177,9 +178,6 @@ export default {
   height: 607px;
 
   position: relative;
-}
-
-.main-interaction {
 }
 
 .main-top {
