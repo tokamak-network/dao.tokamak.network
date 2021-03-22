@@ -115,7 +115,7 @@ export default {
         .add(toBN(totalStakedAmount))
         .sub(toBN(tonBalanceOfWTON).mul(toBN(10e8)));
 
-      setNetwork('https://rpc.tokamak.network');
+      setNetwork('http://175.208.142.167:8545');
       const expectedSeig = calculateExpectedSeig(
         toBN(fromBlockNumber),
         toBN(toBlockNumber),

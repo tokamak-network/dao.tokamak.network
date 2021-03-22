@@ -42,7 +42,7 @@ const deployed = {
 
 function getContract (want, web3, address) {
   if (!web3) {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.tokamak.network'));
+    web3 = new Web3(new Web3.providers.HttpProvider('http://175.208.142.167:8545'));
   }
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
@@ -1430,7 +1430,7 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
 
 // module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
 //   if (!web3) {
-//     web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.tokamak.network'));
+//     web3 = new Web3(new Web3.providers.HttpProvider('http://175.208.142.167:8545'));
 //   }
 //   const block = await web3.eth.getBlock(blockNumber);
 //   this.timestamp = block.timestamp;
