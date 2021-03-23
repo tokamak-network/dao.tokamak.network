@@ -903,7 +903,7 @@ export default new Vuex.Store({
             onChainEffects[1].name === 'setDaoSeigRate' &&
             onChainEffects[2].name === 'setPseigRate'
         ) {
-          return 'SeigManager- All the seigniorage rates will be changed';
+          return '(SeigManager)All the seigniorage rates will be changed';
         }
       }
       if (!onChainEffects || onChainEffects.length === 0) {
