@@ -9,14 +9,36 @@ const instance = createInstance();
 const chainId = 1;
 
 export async function getRecentEvents () {
+  const events = [
+    'AgendaCreated',
+    'AgendaExecuted',
+    'AgendaVoteCasted',
+    'CandidateContractCreated',
+    'ChangedMember',
+    'ChangedSlotMaximum',
+    'ClaimedActivityReward',
+    'Layer2Registered',
+    'AgendaStatusChanged',
+    'AgendaResultChanged',
+    // 'ApplyMemberSuccess', // NOT USED.
+
+    'Deposited',
+    'WithdrawalRequested',
+    'WithdrawalProcessed',
+    'Comitted',
+    'RoundStart',
+  ];
+  const eventsString = events.join(',');
+
   const res = await instance.get('/events', {
     params: {
       chainId,
       page: 1,
-      pagesize: 20,
-      eventNames: 'AgendaCreated,AgendaExecuted,AgendaVoteCasted,ApplyMemberSuccess,CandidateContractCreated,ChangedMember,ChangedSlotMaximum,ClaimedActivityReward,OperatorRegistered,AgendaStatusChanged,AgendaResultChanged',
+      pagesize: 10,
+      eventNames: eventsString,
     },
   });
+
   return res.data.datas;
 }
 
