@@ -1093,5 +1093,19 @@ export default new Vuex.Store({
         return found ? true : false;
       }
     },
+    candidateName: (state) => (address) => {
+      if (!state.candidates) {
+        return '-';
+      }
+
+      const found = state.candidates.find(
+        candidate => candidate.candidate.toLowerCase() === address.toLowerCase() ||
+                     candidate.candidateContract.toLowerCase() === address.toLowerCase());
+      if (found) {
+        return found.name;
+      } else {
+        return '-';
+      }
+    },
   },
 });
