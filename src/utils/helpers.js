@@ -81,7 +81,7 @@ export function date3 (timestamp) {
 
 export function date4 (timestamp) {
   if (!timestamp) return '';
-  return moment.utc(timestamp * 1000).local().format('MM, DD');
+  return moment.utc(timestamp * 1000).local().format('MMM, DD');
 }
 
 export function votingTime (agenda) {
