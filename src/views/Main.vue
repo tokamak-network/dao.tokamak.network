@@ -107,7 +107,8 @@ export default {
       const eventName = event.eventName;
       if (eventName === 'Deposited' ||
           eventName === 'WithdrawalRequested' ||
-          eventName === 'WithdrawalProcessed') {
+          eventName === 'WithdrawalProcessed' ||
+          eventName === 'Comitted') {
         const found = candidates.find(candidate => candidate.candidate.toLowerCase() === event.data.layer2.toLowerCase() ||
                                                    candidate.candidateContract.toLowerCase() === event.data.layer2.toLowerCase());
         return found ? true : false;
