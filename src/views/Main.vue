@@ -138,7 +138,7 @@ export default {
 
       else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2)}`;
       else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2)}`;
-      else if (eventName === 'WithdrawalProcessed') return `${tonFloor(fromRay2(event.data.amount))} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2)}`;
+      else if (eventName === 'WithdrawalProcessed') return `${tonFloor(fromRay2(event.data.amount))} is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2)}`;
       else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2)}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
       else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
       else {
