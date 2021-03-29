@@ -1095,7 +1095,7 @@ export default new Vuex.Store({
     },
     candidateName: (state) => (address) => {
       if (!state.candidates) {
-        return '-';
+        return '';
       }
 
       const found = state.candidates.find(
@@ -1104,7 +1104,7 @@ export default new Vuex.Store({
       if (found) {
         return found.name;
       } else {
-        return '-';
+        return '';
       }
     },
   },

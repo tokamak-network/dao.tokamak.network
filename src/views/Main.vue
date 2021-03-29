@@ -79,10 +79,12 @@ export default {
   data () {
     return {
       events: [],
+      nameLoading: '-',
     };
   },
   computed: {
     ...mapState([
+      'candidates',
       'etherscanAddress',
     ]),
     ...mapGetters([
@@ -117,8 +119,25 @@ export default {
       }
     });
     this.events = filteredEvents;
+    this.loading();
   },
   methods: {
+    loading () {
+      let cnt = 1;
+      const nameLoading = '-';
+      const interval = setInterval(() => {
+        if (!this.candidates || this.candidates.length === 0) {
+          this.nameLoading = nameLoading.repeat(cnt);
+          cnt++;
+
+          if (cnt === 5) {
+            cnt = 1;
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000); // 1s
+    },
     newtab (txhash) {
       window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
@@ -131,15 +150,15 @@ export default {
       else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';
       else if (eventName === 'ChangedMember') return 'Committee Member Changed';
       else if (eventName === 'ChangedSlotMaximum') return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
-      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${this.candidateName(event.data.candidate)}`;
-      else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract)} Registered`;
+      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${this.candidateName(event.data.candidate) ? this.candidateName(event.data.candidate) : this.nameLoading}`;
+      else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract) ? this.candidateName(event.data.candidateContract) : this.nameLoading} Registered`;
       else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
       else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
 
-      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2)}`;
-      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2)}`;
-      else if (eventName === 'WithdrawalProcessed') return `${tonFloor(fromRay2(event.data.amount))} is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2)}`;
-      else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2)}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
+      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalProcessed') return `${tonFloor(fromRay2(event.data.amount))} is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
       else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
       else {
         return '-';
