@@ -1075,7 +1075,7 @@ export default new Vuex.Store({
       return found ? true : false;
     },
     canVoteForAgenda: (state, getters) => (agendaId) => {
-      if (!agendaId || agendaId < 0) {
+      if (agendaId < 0) {
         return false;
       }
 
