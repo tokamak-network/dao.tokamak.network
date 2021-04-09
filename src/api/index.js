@@ -158,7 +158,7 @@ export async function getAgendaVotesByVoter (voter) {
   return res.data.datas;
 }
 
-export async function updateAgendaContents (from, txHash, contents, sig) {
+export async function updateAgendaContents (from, txHash, contents, sig, type) {
   if (!contents) {
     contents = '-';
   }
@@ -167,6 +167,7 @@ export async function updateAgendaContents (from, txHash, contents, sig) {
     contents: contents,
     account: from,
     sig: sig,
+    type: type,
   });
   return res.data;
 }
