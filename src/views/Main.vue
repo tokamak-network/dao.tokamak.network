@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { fromRay2, tonFloor, hexSlicer, date4 } from '@/utils/helpers';
+import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
 import { getRecentEvents, getCandidates } from '@/api';
 import { mapState, mapGetters } from 'vuex';
 
@@ -90,8 +90,8 @@ export default {
     ...mapGetters([
       'candidateName',
     ]),
-    tonFloor () {
-      return amount => tonFloor(amount);
+    truncate () {
+      return amount => truncate(amount);
     },
     hexSlicer () {
       return address => hexSlicer(address);
@@ -154,10 +154,10 @@ export default {
       else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract) ? this.candidateName(event.data.candidateContract) : this.nameLoading} Registered`;
       else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
       else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
+      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
 
-      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${tonFloor(fromRay2(event.data.amount))} to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-      else if (eventName === 'WithdrawalProcessed') return `${tonFloor(fromRay2(event.data.amount))} is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalProcessed') return `${truncate(fromRay2(event.data.amount), 2)} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
       else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
       else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
       else {
