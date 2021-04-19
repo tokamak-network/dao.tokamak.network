@@ -903,7 +903,7 @@ export default new Vuex.Store({
             onChainEffects[1].name === 'setDaoSeigRate' &&
             onChainEffects[2].name === 'setPseigRate'
         ) {
-          return 'SeigManager- All the seigniorage rates will be changed';
+          return '(SeigManager)All the seigniorage rates will be changed';
         }
       }
       if (!onChainEffects || onChainEffects.length === 0) {
@@ -1075,7 +1075,7 @@ export default new Vuex.Store({
       return found ? true : false;
     },
     canVoteForAgenda: (state, getters) => (agendaId) => {
-      if (!agendaId || agendaId < 0) {
+      if (agendaId < 0) {
         return false;
       }
 
@@ -1091,6 +1091,20 @@ export default new Vuex.Store({
           voter.toLowerCase() === getters.candidateFromEOA.toLowerCase(),
         );
         return found ? true : false;
+      }
+    },
+    candidateName: (state) => (address) => {
+      if (!state.candidates) {
+        return '';
+      }
+
+      const found = state.candidates.find(
+        candidate => candidate.candidate.toLowerCase() === address.toLowerCase() ||
+                     candidate.candidateContract.toLowerCase() === address.toLowerCase());
+      if (found) {
+        return found.name;
+      } else {
+        return '';
       }
     },
   },

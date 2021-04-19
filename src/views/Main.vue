@@ -22,14 +22,14 @@
              class="main-btn"
         >
           <div class="count">{{ events.length }}</div>
-          <span class="label">Committee activities</span>
+          <span class="label">DAO activities</span>
         </div>
       </div>
     </div>
     <div v-if="events.length > 0 && $mq !== 'mobile'"
          class="recent-committee-activities"
     >
-      <div class="header">Recent Committee Activities</div>
+      <div class="header">Recent DAO Activities</div>
       <div v-for="event in events" :key="event.data.transactionHash" class="content">
         <div>
           Tx
@@ -71,24 +71,73 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { getRecentEvents } from '@/api';
+import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
+import { getRecentEvents, getCandidates } from '@/api';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   data () {
     return {
       events: [],
+      nameLoading: '-',
     };
   },
   computed: {
     ...mapState([
+      'candidates',
       'etherscanAddress',
     ]),
+    ...mapGetters([
+      'candidateName',
+    ]),
+    truncate () {
+      return amount => truncate(amount);
+    },
+    hexSlicer () {
+      return address => hexSlicer(address);
+    },
+    date4 () {
+      return timestamp => date4(timestamp);
+    },
   },
   async created () {
-    this.events = await getRecentEvents();
+    const [ candidates, events ] = await Promise.all([
+      getCandidates(), getRecentEvents(),
+    ]);
+
+    const filteredEvents = events.filter(event => {
+      const eventName = event.eventName;
+      if (eventName === 'Deposited' ||
+          eventName === 'WithdrawalRequested' ||
+          eventName === 'WithdrawalProcessed' ||
+          eventName === 'Comitted') {
+        const found = candidates.find(candidate => candidate.candidate.toLowerCase() === event.data.layer2.toLowerCase() ||
+                                                   candidate.candidateContract.toLowerCase() === event.data.layer2.toLowerCase());
+        return found ? true : false;
+      } else {
+        return true;
+      }
+    });
+    this.events = filteredEvents;
+    this.loading();
   },
   methods: {
+    loading () {
+      let cnt = 1;
+      const nameLoading = '-';
+      const interval = setInterval(() => {
+        if (!this.candidates || this.candidates.length === 0) {
+          this.nameLoading = nameLoading.repeat(cnt);
+          cnt++;
+
+          if (cnt === 5) {
+            cnt = 1;
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000); // 1s
+    },
     newtab (txhash) {
       window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
@@ -101,10 +150,16 @@ export default {
       else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';
       else if (eventName === 'ChangedMember') return 'Committee Member Changed';
       else if (eventName === 'ChangedSlotMaximum') return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
-      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${event.data.candidate}`;
-      else if (eventName === 'OperatorRegistered') return `Operator ${event.data.candidateContract} Registered`; // TODO: OperatorRegistered -> Layer2Registered
+      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${this.candidateName(event.data.candidate) ? this.candidateName(event.data.candidate) : this.nameLoading}`;
+      else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract) ? this.candidateName(event.data.candidateContract) : this.nameLoading} Registered`;
       else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
       else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
+      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+
+      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalProcessed') return `${truncate(fromRay2(event.data.amount), 2)} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
+      else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
       else {
         return '-';
         console.log('bug', 'events'); // eslint-disable-line
@@ -190,7 +245,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  width: 200px;
+  width: 160px;
   height: 38px;
   border-radius: 25px;
   box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
