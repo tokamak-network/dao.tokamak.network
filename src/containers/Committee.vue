@@ -265,7 +265,7 @@ export default {
       const candidate = this.candidate(address);
 
       if (candidate.kind === 'layer2') {
-        if (candidate.operator.toLowerCase() !== this.account) {
+        if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
           return alert('Only candidate by layer2 owner can update reward.');
         }
       }
