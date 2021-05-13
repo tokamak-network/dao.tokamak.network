@@ -32,10 +32,10 @@ export default {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
 
-        if (chainId !== this.chainId || chainId !== this.decentChainId) {
-          this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
-        } else {
+        if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
+        } else {
+          this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
         }
       } else {
         const aTag = function (href, link) {
