@@ -10,6 +10,7 @@ export default {
     return {
       alert: '',
       chainId: '0x1', // production: '0x1', develop: '0x4'
+      decentChainId: '0x01',
     };
   },
   computed: {
@@ -30,10 +31,8 @@ export default {
       if (typeof window.ethereum !== 'undefined') {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
-        alert(chainId);
-        alert(this.chainId);
 
-        if (chainId !== this.chainId) {
+        if (chainId !== this.chainId || chainId !== this.decentChainId) {
           this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
         } else {
           this.alert = '';
