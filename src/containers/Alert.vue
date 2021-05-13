@@ -31,6 +31,7 @@ export default {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
         alert(chainId);
+        alert(this.chainId);
 
         if (chainId !== this.chainId) {
           this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
