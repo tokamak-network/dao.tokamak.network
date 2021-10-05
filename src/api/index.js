@@ -2,7 +2,7 @@ import axios from 'axios';
 
 function createInstance () {
   return axios.create({
-    baseURL: 'https://daoapi.tokamak.network/v1',
+	  baseURL: 'https://staging.daoapi.tokamak.network/v1',
   });
 }
 const instance = createInstance();
