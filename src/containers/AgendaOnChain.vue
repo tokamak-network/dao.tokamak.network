@@ -16,6 +16,14 @@
           <span>pseigRate_: </span><span>{{ onChainEffects[2].values[0] }}</span><br />
         </div>
       </div>
+      <div v-else-if="onChainEffects.length === 2 && onChainEffects[0].name === 'setPowerTONSeigRate'">
+        <div style="margin-bottom: 6px;">
+          <span>powerTONSeigRate_: </span><span>{{ onChainEffects[0].values[0] }}</span><br />
+        </div>
+        <div style="margin-bottom: 6px;">
+          <span>powerton: </span><span>{{ onChainEffects[1].values[0] }}</span><br />
+        </div>
+      </div>
       <div v-for="(input, index) in agendaInputs(agendaId, type)" v-else :key="input.name" class="name">
         <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
