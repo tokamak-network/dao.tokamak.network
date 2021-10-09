@@ -701,7 +701,7 @@ It will be used when Seigmanager (seigniorage managing contract) is updated.`,
     'title': '(Seig Manager)PowerTON contract will be changed.',
     'prettyName': '',
     'explanation':
-'This function allows you to set the new PowerTON cotntract as the first parameter (Param1). This function will be used when PowerTON is updated.',
+'This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.',
   },
   {
     'params': {
@@ -1313,6 +1313,7 @@ const getABIFromSelector = function (selector, type) {
 module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx, type) {
+  // TODO: to fix case of using mixed type with 'A' and 'B'
   const params1 = marshalString(unmarshalString(tx.input).substring(8));
   const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
 
@@ -1329,7 +1330,10 @@ module.exports.parseAgendaBytecode = function (tx, type) {
   const onChainEffects = [];
   for (let i = 0; i < targets.length; i++) {
     const selector = commands[i].slice(0, 10);
-    const abi = getABIFromSelector(selector, type);
+    let abi = getABIFromSelector(selector, type);
+    if (!abi) {
+      abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+    }
 
     if (!abi) {
       onChainEffects.push({
