@@ -2,7 +2,7 @@
   <div class="agenda-on-chain">
     <span>For the spell at address </span>
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
-    <div>{{ agendaExplanation(agendaId, type) }} </div><br />
+    <div class="explanation">{{ agendaExplanation(agendaId, type) }} </div><br />
     <div>
       <!-- for setSeigRates -->
       <div v-if="onChainEffects.length === 3">
@@ -113,5 +113,8 @@ export default {
     margin-right: 8px;
   }
 
+  .explanation {
+    white-space: pre-wrap;
+  }
 }
 </style>

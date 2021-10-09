@@ -929,13 +929,13 @@ export default new Vuex.Store({
       if (onChainEffects.length === 2) {
         if (onChainEffects[0].name === 'setPowerTONSeigRate') {
           return `Execution 1:
-          This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
+This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
 
-          Execution 2:
-          Currently, TON seigniorage is issued each time a Ethereum block is created.
+Execution 2:
+Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-          Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
-          This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
         }
       }
       if (onChainEffects.length === 3) {
@@ -945,8 +945,8 @@ export default new Vuex.Store({
         ) {
           return `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-          Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
-          This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
         }
       }
       if (!onChainEffects || onChainEffects.length === 0) {
