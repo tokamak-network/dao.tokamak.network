@@ -28,7 +28,7 @@ module.exports = {
     'eqeqeq': ['error', 'smart'],
     'generator-star-spacing': ['error', 'before'],
     'indent': ['error', 2],
-    // 'linebreak-style': ['error', 'unix'],
+    'linebreak-style': 0,
     'no-dupe-args': 'error',
     'no-dupe-keys': 'error',
     'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],

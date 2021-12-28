@@ -1,5 +1,6 @@
 import Web3 from 'web3';
-import web3Utils from 'web3-utils';
+import { toBN } from 'web3-utils';
+import numeral from 'numeral';
 
 import {
   getCandidates,
@@ -40,6 +41,8 @@ export default new Vuex.Store({
     blockTime: 0,
 
     tonBalance: 0,
+    wtonBalance: 0,
+    winningProbability: '',
     contractState: {},
 
     candidates: [],
@@ -114,6 +117,12 @@ export default new Vuex.Store({
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
+    SET_WTON_BALANCE (state, wtonBalance) {
+      state.wtonBalance = wtonBalance;
+    },
+    SET_WINNING_PROBABILITY (state, winningProbability) {
+      state.winningProbability = winningProbability;
+    },
     SET_CONTRACT_STATE (state, contractState) {
       state.contractState = contractState;
     },
@@ -181,8 +190,26 @@ export default new Vuex.Store({
     },
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
-      const tonBalance = await ton.methods.balanceOf(state.account).call();
+      const wton = getContract('WTON', state.web3);
+      const powerTON = getContract('PowerTON', state.web3);
+
+      const [
+        tonBalance,
+        wtonBalance,
+        power,
+        totalDeposits,
+      ] = await Promise.all([
+        ton.methods.balanceOf(state.account).call(),
+        wton.methods.balanceOf(state.account).call(),
+        powerTON.methods.powerOf(state.account).call(),
+        powerTON.methods.totalDeposits().call(),
+      ]);
+
       commit('SET_TON_BALANCE', tonBalance);
+      commit('SET_WTON_BALANCE', wtonBalance);
+
+      const winningProbability = numeral(power / totalDeposits).format('0.00%');
+      commit('SET_WINNING_PROBABILITY', winningProbability);
     },
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
@@ -247,6 +274,9 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const seigManager = getContract('SeigManager', web3);
+      const layer2Registry = getContract('Layer2Registry', web3);
+
       const [
         c,
         maxMember,
@@ -270,16 +300,17 @@ export default new Vuex.Store({
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
 
       const candidates = await Promise.all(
         c.map(async candidate => {
+          const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+
           const [
-            isRegistered, coinage,
+            isRegistered, coinage, lastCommitBlockNumber,
           ] = await Promise.all([
             layer2Registry.methods.layer2s(candidate.layer2).call(),
             seigManager.methods.coinages(candidate.layer2).call(),
+            seigManager.methods.lastCommitBlock(addr).call(),
           ]);
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
@@ -288,16 +319,20 @@ export default new Vuex.Store({
 
           const coinageContract = getContract('Coinage', web3, coinage);
           const [
-            selfVote, totalVote, info,
+            selfVote, totalVote, info, lastCommitBlock,
           ] = await Promise.all([
             coinageContract.methods.balanceOf(candidate.operator).call(),
             coinageContract.methods.totalSupply().call(),
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
+            web3.eth.getBlock(lastCommitBlockNumber),
           ]);
 
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
+          candidate.coinage = coinage;
+          candidate.lastCommitBlockNumber = lastCommitBlockNumber;
+          candidate.lastCommitAt = lastCommitBlock.timestamp;
           return candidate;
         }),
       );
@@ -849,8 +884,8 @@ export default new Vuex.Store({
       const candidate = getters.candidate(address);
       if (!candidate || !getters.minimumAmount) return false;
 
-      const minimumAmount = web3Utils.toBN(getters.minimumAmount);
-      const selfVote = web3Utils.toBN(candidate.selfVote);
+      const minimumAmount = toBN(getters.minimumAmount);
+      const selfVote = toBN(candidate.selfVote);
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
@@ -868,7 +903,7 @@ export default new Vuex.Store({
             onChainEffects[1].name === 'setDaoSeigRate' &&
             onChainEffects[2].name === 'setPseigRate'
         ) {
-          return 'SeigManager- All the seigniorage rates will be changed';
+          return '(SeigManager)All the seigniorage rates will be changed';
         }
       }
       if (!onChainEffects || onChainEffects.length === 0) {
@@ -965,10 +1000,10 @@ export default new Vuex.Store({
 
       return state.candidates.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -980,10 +1015,10 @@ export default new Vuex.Store({
 
       return state.nonmembers.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -995,10 +1030,10 @@ export default new Vuex.Store({
 
       return state.votedCandidatesFromAccount.sort(function (a, b) {
         a = a.myVotes.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.myVotes.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -1056,6 +1091,20 @@ export default new Vuex.Store({
           voter.toLowerCase() === getters.candidateFromEOA.toLowerCase(),
         );
         return found ? true : false;
+      }
+    },
+    candidateName: (state) => (address) => {
+      if (!state.candidates) {
+        return '-';
+      }
+
+      const found = state.candidates.find(
+        candidate => candidate.candidate.toLowerCase() === address.toLowerCase() ||
+                     candidate.candidateContract.toLowerCase() === address.toLowerCase());
+      if (found) {
+        return found.name;
+      } else {
+        return '-';
       }
     },
   },

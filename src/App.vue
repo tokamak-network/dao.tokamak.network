@@ -75,7 +75,6 @@ body { margin: 0 !important; }
   position: absolute;
   right: 0;
   left: 0;
-  overflow: scroll;
 }
 
 .modal-open {

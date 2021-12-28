@@ -20,36 +20,31 @@
                     :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;"
     />
     <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Contract' : 'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
-    <!-- <info-committee :title="'Chain ID'" :content="'9898'" /> -->
-    <!-- <info-committee :title="'Commit Count'" :content="'66'" /> -->
-    <!-- <info-committee :title="'Recent Commit'" :content="'4시간 전'" /> -->
-    <!-- <info-committee :title="'Running Time'" :content="'3달'" /> -->
-    <!-- <info-committee :title="'Commission Rate'" :content="'2.5%'"
-                    :tooltip="`The commission rate of this operator. It has a value
-            between -100% and 100%. (1) + : The operator takes
-            the profit from the delegator. (2) - : It distributes the
-            operator’s profits to the delegator. (3) 0 : It doesn’t
-            divide the profit between the operator and the delegator.`"
-                    :width="'317'"
-    /> -->
-    <!-- <info-committee :title="'Reward'" :content="`${amount} TON`" /> -->
     <info-committee :title="'Total Vote'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Last Reward Update'"
+                    :content="`${candidate(address) ? date2(candidate(address).lastCommitAt) : '-'}`"
+                    style="margin-top: 12px;"
+    />
     <div style="width: 100%; height: 18px;" />
-
     <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Not Withdrawable'" :content="`${withComma(wton(cannotWithdraw))} TON`" style="margin-top: 12px;" />
-    <!-- <info-committee :title="'New Commission Rate'" :content="'0.00 TON'" /> -->
-    <!-- <info-committee :title="'New Commission Rate Changed At'" :content="'0.00 TON'" /> -->
-    <!-- <info-committee :title="'Withdrawal Delay'" :content="'0.00 TON'" class="last" /> -->
+    <info-committee :title="'My Winning Probability'" :content="powerTONWinningProbability" style="margin-top: 12px;" />
+    <div class="label-power-ton">
+      <span>(You can check the amount of power </span>
+      <a class="label-power-ton-link" target="_blank" rel="noopener noreferrer"
+         href="https://staking.tokamak.network"
+      >here</a>
+      <span>)</span>
+    </div>
   </div>
 </template>
 
 <script>
 import { getContract } from '@/utils/contracts';
 import { mapGetters, mapState } from 'vuex';
-import { WTON, withComma } from '@/utils/helpers';
+import { WTON, withComma, date2 } from '@/utils/helpers';
 import { updateCandidate, getRandomKey } from '@/api';
 import BigNumber from 'bignumber.js';
 
@@ -72,6 +67,7 @@ export default {
       'account',
       'web3',
       'confirmBlock',
+      'winningProbability',
     ]),
     ...mapGetters([
       'candidate',
@@ -86,6 +82,12 @@ export default {
       const requests = this.notWithdrawableRequests(this.address);
       const amount = requests.reduce((prev, cur) => prev + parseInt(cur.amount), 0);
       return amount;
+    },
+    date2 () {
+      return (timestamp) => date2(timestamp);
+    },
+    powerTONWinningProbability () {
+      return this.winningProbability === '' ? '0.00%' : this.winningProbability;
     },
   },
   watch: {
@@ -264,6 +266,28 @@ export default {
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.label-power-ton {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: 0.3px;
+  text-align: left;
+  color: #3e495c;
+
+  margin-top: -13px;
+
+  &-link {
+    text-decoration: none;
+    color: #2a72e5;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 </style>

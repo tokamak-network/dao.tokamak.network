@@ -23,7 +23,7 @@
           <dropdown ref="filter2"
                     class="filter"
                     :items="['All', 'Executed', 'Not Executed']"
-                    :hint="'Executed'"
+                    :hint="'Execution'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'executed')"

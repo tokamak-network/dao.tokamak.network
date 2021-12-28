@@ -1,6 +1,11 @@
 import moment from 'moment';
 import web3Utils from 'web3-utils';
-// import Web3 from 'web3';
+import { ethers } from 'ethers';
+const formatUnits = ethers.utils.formatUnits;
+const parseUnits = ethers.utils.parseUnits;
+const commify = ethers.utils.commify;
+const BigNumber = ethers.BigNumber;
+
 import { createCurrency } from '@makerdao/currency';
 const _TON = createCurrency('TON');
 const _WTON = createCurrency('WTON');
@@ -72,6 +77,11 @@ export function date2 (timestamp) {
 export function date3 (timestamp) {
   if (!timestamp) return '';
   return moment.utc(timestamp * 1000).local().format('YYYY / MM / DD / HH:mm');
+}
+
+export function date4 (timestamp) {
+  if (!timestamp) return '';
+  return moment.utc(timestamp * 1000).local().format('MM, DD');
 }
 
 export function votingTime (agenda) {
@@ -210,6 +220,25 @@ export function toWei (amount) {
 export function toRay (amount) {
   if (!amount) return 0;
   return _WTON(amount).toFixed('ray');
+}
+
+// version 2 uses `ethers` library.
+export function toWei2 (amount) {
+  return parseUnits(String(amount), '18');
+}
+
+export function toRay2 (amount) {
+  return parseUnits(String(amount), '27');
+}
+
+export function fromWei2 (amount) {
+  const amountBN = BigNumber.from(amount);
+  return commify(formatUnits(amountBN, 18));
+}
+
+export function fromRay2 (amount) {
+  const amountBN = BigNumber.from(amount);
+  return commify(formatUnits(amountBN, 27));
 }
 
 export function pad (n, width, z) {
