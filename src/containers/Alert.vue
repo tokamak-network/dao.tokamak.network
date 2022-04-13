@@ -9,7 +9,8 @@ export default {
   data () {
     return {
       alert: '',
-      chainId: '0x4', // production: '0x1', develop: '0x4'
+      chainId: '0x1', // production: '0x1', develop: '0x4'
+      decentChainId: '0x01',
     };
   },
   computed: {
@@ -31,10 +32,10 @@ export default {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
 
-        if (chainId !== this.chainId) {
-          this.alert = 'The current network is not rinkeby network. Please change it to the rinkeby network.';
-        } else {
+        if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
+        } else {
+          this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
         }
       } else {
         const aTag = function (href, link) {
