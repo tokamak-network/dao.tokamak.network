@@ -669,8 +669,6 @@ const seigManagerFunctionsOfTypeB = [
     'params': {
       'aboutParam0': 'address target: The target address from which the owner authority to be transferred by SeigManger',
       'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'address newOwner: The address to which SeigManger\'s owner authority is transferred',
-      'exampleParam1': '0x0000000000000000000000000000000000000000',
     },
     'name': 'transferOwnership',
     'title': 'SeigManager- First parameter\'s(Param1) owner rights of Seigmanager will be transferred.',
