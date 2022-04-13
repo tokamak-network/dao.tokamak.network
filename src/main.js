@@ -1,21 +1,23 @@
-import Vue from 'vue';
-import VueMq from 'vue-mq';
+import Vue from "vue";
+import VueMq from "vue-mq";
 
-import App from './App.vue';
-import store from './store';
-import router from './router';
+import App from "./App.vue";
+import store from "./store";
+import router from "./router";
 
-import VueGtag from 'vue-gtag';
+import VueGtag from "vue-gtag";
 Vue.use(VueGtag, {
   config: {
-    id: 'G-LFP6FR91CY',
+    id: "G-LFP6FR91CY",
   },
 });
 
-import * as filters from '@/utils/helpers';
-Object.keys(filters).forEach(key => {
+import * as filters from "@/utils/helpers";
+Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key]); // eslint-disable-line
 });
+
+//DAO AGENDA DEPLOY TEST
 
 Vue.config.productionTip = false;
 Vue.use(VueMq, {
@@ -29,5 +31,5 @@ Vue.use(VueMq, {
 new Vue({
   store,
   router,
-  render: h => h(App),
-}).$mount('#app');
+  render: (h) => h(App),
+}).$mount("#app");
