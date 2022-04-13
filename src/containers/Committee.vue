@@ -1,5 +1,12 @@
 <template>
   <div>
+    <modal v-if="showModal"
+           :width="'490px'"
+    >
+      <template #body>
+        <modal-update-reward @on-closed="showModal=false" />
+      </template>
+    </modal>
     <div v-if="$mq === 'mobile'">
       <div class="button-container-mobile">
         <button-step :type="'prev'" :name="'BACK'" class="back"
@@ -19,22 +26,28 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
         </div>
         <div v-if="!account">
-          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="title-container">
+            <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          </div>
         </div>
         <div v-else>
-          <div class="title" style="margin-bottom: 0px;">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="title-container" style="margin-bottom: 0px;">
+            <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          </div>
           <button style="margin-top: 14px; margin-bottom: 30px;"
                   class="update-btn"
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
                   }"
-                  @click="updateReward()"
+                  @click="openUpdateRewardModal()"
           >
             Update Reward
           </button>
@@ -73,12 +86,15 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
         </div>
-        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="title-container">
+          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+        </div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">
             Detail
@@ -99,7 +115,7 @@
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
                   }"
-                  @click="updateReward()"
+                  @click="openUpdateRewardModal()"
           >
             Update Reward
           </button>
@@ -110,7 +126,6 @@
         <committee-vote v-else-if="currentSelector === 2" />
       </div>
     </div>
-
     <div v-else class="card-committee-info">
       <div class="button-container">
         <button-step :type="'prev'" :name="'BACK TO ALL CANDIDATES'" class="back"
@@ -130,12 +145,15 @@
             <img src="@/assets/poll-time-active-icon.svg" alt=""
                  width="14" height="14"
             >
-            <span class="black">Member </span>
+            <span class="black">Slot </span>
             <span class="blue">{{ member(address).memberIndex }} </span>
             <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
           </div>
         </div>
-        <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+        <div class="title-container">
+          <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
+          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+        </div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
@@ -151,7 +169,7 @@
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
                   }"
-                  @click="updateReward()"
+                  @click="openUpdateRewardModal()"
           >
             Update Reward
           </button>
@@ -166,11 +184,10 @@
 </template>
 
 <script>
-import { getContract } from '@/utils/contracts';
-import { toBN } from 'web3-utils';
-
 import { mapState, mapGetters } from 'vuex';
 import ButtonStep from '@/components/ButtonStep.vue';
+import Modal from '@/components/Modal.vue';
+import ModalUpdateReward from '@/containers/ModalUpdateReward.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
 import CommitteeInfoVote from '@/containers/CommitteeInfoVote.vue';
@@ -178,6 +195,8 @@ import CommitteeInfoVote from '@/containers/CommitteeInfoVote.vue';
 export default {
   components: {
     'button-step': ButtonStep,
+    'modal': Modal,
+    'modal-update-reward': ModalUpdateReward,
     'committee-info': CommitteeInfo,
     'committee-info-vote': CommitteeInfoVote,
     'committee-vote': CommitteeVote,
@@ -186,23 +205,18 @@ export default {
     return {
       address: '',
       currentSelector: 0,
+      showModal: false,
     };
   },
   computed: {
     ...mapState([
       'account',
-      'confirmBlock',
       'candidates',
-      'members',
-      'launched',
-      'web3',
     ]),
     ...mapGetters([
       'candidate',
       'member',
-      'sumOfVotes',
       'sortedCandidates',
-      'minimumAmount',
       'canUpdateReward',
     ]),
   },
@@ -246,129 +260,21 @@ export default {
       this.$router.push(({ path: `/election/${this.sortedCandidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
-    async updateReward () {
-      const makePos = (v1, v2) => {
-        v1 = toBN(v1);
-        v2 = toBN(v2);
+    openUpdateRewardModal () {
+      const address = this.address;
+      const candidate = this.candidate(address);
 
-        const a = v1.mul(toBN(2).pow(toBN(128)));
-        return a.add(v2).toString();
-      };
-
-      if (!this.canUpdateReward(this.address)) {
-        return alert('no deposit for this candidate');
-      }
-
-      const candidate = this.candidate(this.address);
-      if (!candidate) {
-        console.log('bug', 'no candidate'); // eslint-disable-line
-        return;
-      }
       if (candidate.kind === 'layer2') {
-
         if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
-          alert('only candidate by Layer2 owner can update reward');
+          return alert('Only candidate by layer2 owner can update reward.');
         }
-
-        const layer2Contract = getContract('Layer2', this.web3, candidate.layer2);
-        /* check operator
-        console.log('layer2Contract', candidate, layer2Contract) ;
-        if (layer2Contract) {
-          const _operator = await layer2Contract.methods.operator().call();
-          console.log('_operator', _operator) ;
-        }
-        */
-        const [
-          costNRB,
-          NRELength,
-          currentForkNumber,
-        ] = await Promise.all([
-          layer2Contract.methods.COST_NRB().call(),
-          layer2Contract.methods.NRELength().call(),
-          layer2Contract.methods.currentFork().call(),
-        ]);
-        const fork = await layer2Contract.methods.forks(currentForkNumber).call();
-        const epochNumber = parseInt(fork.lastEpoch) + 1;
-        const startBlockNumber = parseInt(fork.lastBlock) + 1;
-        const endBlockNumber = parseInt(startBlockNumber) + parseInt(NRELength) - 1;
-
-        // pos1 = fork number * 2^128 + epoch number
-        // pos2 = start block number * 2^128 + end block number
-        const pos1 = makePos(currentForkNumber, epochNumber);
-        const pos2 = makePos(startBlockNumber, endBlockNumber);
-        const dummyBytes = '0xdb431b544b2f5468e3f771d7843d9c5df3b4edcf8bc1c599f18f0b4ea8709bc3';
-        //console.log('pos1', pos1, 'pos2', pos2, 'dummyBytes', dummyBytes, 'costNRB', costNRB) ;
-        const gasLimit = await layer2Contract.methods.submitNRE(
-          pos1,
-          pos2,
-          dummyBytes, // epochStateRoot
-          dummyBytes, // epochTransactionsRoot
-          dummyBytes, // epochReceiptsRoot
-        ).estimateGas({
-          from: this.account,
-          value: costNRB,
-        });
-
-        try {
-          await layer2Contract.methods.submitNRE(
-            pos1,
-            pos2,
-            dummyBytes, // epochStateRoot
-            dummyBytes, // epochTransactionsRoot
-            dummyBytes, // epochReceiptsRoot
-          )
-            .send({
-              from: this.account,
-              value: costNRB,
-              gasLimit: Math.floor(gasLimit * 1.2),
-            })
-            .on('transactionHash', (hash) => {
-              this.$store.commit('SET_PENDING_TX', hash);
-            })
-            .on('confirmation', async (confirmationNumber) => {
-              if (this.confirmBlock === confirmationNumber) {
-                this.$store.commit('SET_PENDING_TX', '');
-                await this.$store.dispatch('launch');
-                await this.$store.dispatch('connectEthereum', this.web3);
-              }
-            })
-            .on('receipt', () => {
-            })
-            .on('error', () => {
-              this.$store.commit('SET_PENDING_TX', '');
-            });
-        } catch (error) {
-          console.log('error', error) ;// eslint-disable-line
-        }
-
-      } else {
-        const candidateContract = getContract('Candidate', this.web3, candidate.candidateContract);
-        const gasLimit = await candidateContract.methods.updateSeigniorage()
-          .estimateGas({
-            from: this.account,
-          });
-
-        await candidateContract.methods.updateSeigniorage()
-          .send({
-            from: this.account,
-            gasLimit: Math.floor(gasLimit * 1.2),
-          })
-          .on('transactionHash', (hash) => {
-            this.$store.commit('SET_PENDING_TX', hash);
-          })
-          .on('confirmation', async (confirmationNumber) => {
-            if (this.confirmBlock === confirmationNumber) {
-              this.$store.commit('SET_PENDING_TX', '');
-              await this.$store.dispatch('launch');
-              await this.$store.dispatch('connectEthereum', this.web3);
-            }
-          })
-          .on('receipt', () => {
-          })
-          .on('error', () => {
-            this.$store.commit('SET_PENDING_TX', '');
-          });
       }
+
+      if (!this.canUpdateReward(address)) {
+        return alert('Candidate hasn\'t voted minimum amount yet.');
+      }
+
+      this.showModal = true;
     },
   },
 };
@@ -404,20 +310,6 @@ export default {
   letter-spacing: normal;
   text-align: left;
   color: #3e495c;
-}
-.title {
-  font-family: Roboto;
-  font-size: 20px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.3;
-  letter-spacing: normal;
-  text-align: left;
-  color: #3e495c;
-
-  margin-top: 8px;
-  margin-bottom: 30px;
 }
 .selector {
   display: flex;
@@ -558,8 +450,9 @@ export default {
   text-align: center;
   color: #2a72e5;
 
+  margin-top: -5px;
+
   &:hover {
-    border-radius: 4px;
     background-color: #257eee;
 
     color: #ffffff;
@@ -568,7 +461,6 @@ export default {
 }
 
 .update-btn-disabled {
-  margin-top: -10px;
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
 
@@ -581,11 +473,51 @@ export default {
   text-align: center;
   color: #86929d;
 
+  margin-top: -5px;
+
   &:hover {
     border: solid 1px #dfe4ee;
     background-color: #ffffff;
 
     color: #86929d;
+  }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+
+  margin-top: 8px;
+  margin-bottom: 30px;
+
+  word-break: break-all;
+
+  .title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.3;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+  }
+
+  .type {
+    width: 120px;
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3e495c;
+
+    margin-top: 3px;
+    margin-left: 4px;
   }
 }
 </style>

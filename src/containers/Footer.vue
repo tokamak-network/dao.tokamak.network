@@ -1,10 +1,10 @@
 <template>
   <div class="footer" :class="{ 'footer-sub': isSub() }">
     <div class="menu">
-      <span class="company" :class="{ 'company-sub': isSub() }">© 2021 Onther</span>
-      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Terms</a>
+      <span class="company" :class="{ 'company-sub': isSub() }">© 2021 Onther PTE. LTD.</span>
+      <!-- <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Terms</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Privacy Policy</a>
-      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Status</a>
+      <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Status</a> -->
     </div>
     <div class="sns-container">
       <div class="sns">

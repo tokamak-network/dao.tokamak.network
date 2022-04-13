@@ -15,12 +15,15 @@
       />
       <text-small class="member-slot"
                   :type="'A'"
-                  :label="'Member'"
+                  :label="'Slot'"
                   :value="`#${memberIndex}`"
       />
     </div>
-    <div class="title">{{ member ? member.name : '-' }}</div>
-    <div class="title-sub">{{ member ? desc : '-' }}</div>
+    <div class="title-container">
+      <div class="title">{{ member ? member.name : '-' }}</div>
+      <div class="type">{{ member ? `- ${member.kind}` : '' }}</div>
+    </div>
+    <div class="sub">{{ member ? desc : '-' }}</div>
     <text-time :type="'A'"
                :time="member ? fromNow(member.info.memberJoinedTime) : '-'"
                :is-active="true"
@@ -37,12 +40,14 @@
                        :width="'110px'"
                        :type="'primary'"
                        :disabled="!canChallenge"
+                       :status="challengeInProgress ? 'running' : ''"
                        @on-clicked="challenge()"
       />
       <election-button v-if="canRetire"
                        :name="'Retire'"
                        :width="'110px'"
                        :type="'primary'"
+                       :status="retirementInProgress ? 'running' : ''"
                        @on-clicked="retire()"
       />
     </div>
@@ -72,6 +77,12 @@ export default {
       type: Number,
       default: 0,
     },
+  },
+  data () {
+    return {
+      challengeInProgress: false,
+      retirementInProgress: false,
+    };
   },
   computed: {
     ...mapState([
@@ -145,10 +156,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', (hash) => {
+          this.challengeInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.challengeInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
             await this.$store.dispatch('launch');
@@ -175,10 +188,12 @@ export default {
           gasLimit: Math.floor(gasLimit * 1.2),
         })
         .on('transactionHash', (hash) => {
+          this.retirementInProgress = true;
           this.$store.commit('SET_PENDING_TX', hash);
         })
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
+            this.retirementInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
             await this.$store.dispatch('launch');
@@ -216,22 +231,47 @@ export default {
     }
   }
 
-  .title {
-    font-family: Roboto;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.3;
-    letter-spacing: normal;
-    text-align: left;
-    color: #3e495c;
+  .title-container {
+    display: flex;
+    align-items: center;
 
-    margin-top: 3px;
-    margin-bottom: 5px;
+    word-break: break-all;
+
+    .title {
+      font-family: Roboto;
+      font-size: 20px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.3;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      margin-top: 3px;
+      margin-bottom: 5px;
+    }
+
+    .type {
+      width: 120px;
+
+      font-family: Roboto;
+      font-size: 11px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.36;
+      letter-spacing: normal;
+      text-align: left;
+      color: #3e495c;
+
+      margin-top: 3px;
+      margin-left: 4px;
+    }
   }
 
-  .title-sub {
+
+  .sub {
     font-family: Roboto;
     font-size: 14px;
     font-weight: normal;

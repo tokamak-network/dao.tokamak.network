@@ -4,41 +4,48 @@
       <div class="filter-container">
         <div class="header">Filters</div>
         <div class="filters">
-          <dropdown class="filter"
+          <dropdown ref="filter0"
+                    class="filter"
                     :items="['All', 'Notice', 'Voting', 'Waiting Exec', 'Executed', 'Ended']"
                     :hint="'Status'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'status')"
           />
-          <dropdown class="filter"
+          <dropdown ref="filter1"
+                    class="filter"
                     :items="['All', 'Pending', 'Accept', 'Reject', 'Dismiss']"
                     :hint="'Result'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'result')"
           />
-          <dropdown class="filter"
+          <dropdown ref="filter2"
+                    class="filter"
                     :items="['All', 'Executed', 'Not Executed']"
-                    :hint="'Executed'"
+                    :hint="'Execution'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'executed')"
           />
-          <!-- <dropdown class="filter"
+          <dropdown v-if="isCandidate"
+                    ref="filter3"
+                    class="filter"
                     :items="['All', 'Yes', 'No', 'Abstain', 'Not Voted']"
-                    :hint="'Voted'"
+                    :hint="'Vote'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'voted')"
           />
-          <dropdown class="filter"
+          <dropdown v-if="account "
+                    ref="filter4"
+                    class="filter"
                     :items="['All', 'Mine']"
                     :hint="'Proposal'"
                     :button-type="'a'"
                     :selector-type="'a'"
                     @on-selected="filter($event, 'proposal')"
-          /> -->
+          />
         </div>
       </div>
       <div class="wrapper"
@@ -53,7 +60,7 @@
           />
           <hide-button v-if="!showAllAgendas && agendasFiltered.length > 5"
                        class="hide-btn"
-                       :name="'View more agendas'"
+                       :name="`View more agendas (${agendasFiltered.slice(5, agendasFiltered.length).length})`"
                        :type="'hide'"
                        @on-clicked="showAllAgendas = true;"
           />
@@ -83,6 +90,9 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <loading />
+    </div>
   </div>
 </template>
 
@@ -90,6 +100,7 @@
 import { agendaStatus, agendaResult } from '@/utils/helpers';
 import { mapGetters, mapState } from 'vuex';
 
+import Loading from '@/components/Loading.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
 import CardAgendaSlot from '@/containers/CardAgenda.vue';
@@ -100,6 +111,7 @@ import CardStatsCommittee from '@/containers/CardStatsCommittee.vue';
 
 export default {
   components: {
+    'loading': Loading,
     'dropdown': Dropdown,
     'hide-button': Button,
     'card-agenda': CardAgendaSlot,
@@ -121,12 +133,16 @@ export default {
   },
   computed: {
     ...mapState([
+      'account',
+      'blockTime',
       'launched',
       'agendas',
       'agendaVotesByCandidates',
     ]),
     ...mapGetters([
+      'isMember',
       'isCandidate',
+      'voteResult',
     ]),
     agendasFiltered () {
       return this.agendas
@@ -157,21 +173,74 @@ export default {
               return true;
             }
           }
+        })
+        .filter(agenda => {
+          let found, notVoted;
+          if (this.filterVoted !== 'All') {
+            found = this.voteResult.find(result => result.id === agenda.agendaid);
+
+            notVoted = function (agenda) {
+              if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
+                if (this.isMember) {
+                  return true;
+                }
+              }
+              if (!found) {
+                return false;
+              }
+              if (!found.result[0]) {
+                return true;
+              }
+              return false;
+            };
+          }
+
+          if (this.filterVoted === 'All') {
+            return true;
+          } else if (this.filterVoted === 'Not Voted') {
+            return notVoted(agenda);
+          } else if (this.filterVoted === 'Abstain') {
+            if (!found) {
+              return false;
+            }
+            return found.result[1] === '0' && !notVoted(agenda);
+          } else if (this.filterVoted === 'Yes') {
+            if (!found) {
+              return false;
+            }
+            return found.result[1] === '1';
+          } else if (this.filterVoted === 'No') {
+            if (!found) {
+              return false;
+            }
+            return found.result[1] === '2';
+          } else {
+            console.log('bug'); // eslint-disable-line
+            return true;
+          }
+        })
+        .filter(agenda => {
+          if (this.filterProposal === 'Mine') {
+            return agenda.creator.toLowerCase() === this.account.toLowerCase();
+          }
+          return true;
         });
-      // .filter(agenda => {
-      //   if (this.filterVoted === 'All') {
-      //     return true;
-      //   } else {
-      //     return false;
-      //   }
-      // })
-      // .filter(agenda => {
-      //   if (this.filterProposal === 'All') {
-      //     return true;
-      //   } else {
-      //     return false;
-      //   }
-      // });
+    },
+  },
+  watch: {
+    account (newAccount, oldAccount) {
+      if (newAccount !== oldAccount) {
+        for (let i = 0; i < 5; i++) {
+          if (this.$refs[`filter${i}`]) {
+            this.$refs[`filter${i}`].selectedItem = this.$refs[`filter${i}`].hint;
+          }
+        }
+        this.filterStatus = 'All';
+        this.filterResult = 'All';
+        this.filterExecuted = 'All';
+        this.filterVoted = 'All';
+        this.filterProposal = 'All';
+      }
     },
   },
   methods: {
@@ -260,6 +329,7 @@ export default {
     margin-right: 15px;
 
     .header {
+      font-family: Roboto;
       font-size: 24px;
       font-weight: normal;
       font-stretch: normal;

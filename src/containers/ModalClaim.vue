@@ -1,150 +1,78 @@
 <template>
-  <div>
-    <div v-for="(candidate) in agendaVotesByCandidates" :key="candidate.candidateContract" class="modal-claim">
-      <img src="@/assets/modal-close.svg" alt="" width="30" height="30"
-           @click="close"
-      >
-      <div v-if="agendaVotesByCandidates.length > 1" class="content">
-        <span>
-          {{ candidate.name | slice }}
-          <span class="blue">
-            {{ candidate.candidate | hexSlicer }}
-          </span>
-        </span>
-      </div>
-      <div v-if="agendaVotesByCandidates.length < 2" class="title">You can claim {{ activityReward | withComma }} TON</div>
-      <div v-else class="title">You can claim {{ candidate.claimableAmount | withComma }} TON</div>
-      <div v-if="agendaVotesByCandidates.length < 2 && canClaimValue" class="question">Do you want to continue?</div>
-      <div v-else-if="agendaVotesByCandidates.length > 1 && canClaimAmount(candidate.claimableAmount)" class="question">Do you wish to continue?</div>
-      <div v-else class="question">There is no activity fee to be paid.</div>
-
-      <div class="button">
-        <button-comp v-if="agendaVotesByCandidates.length < 2 && canClaimValue"
-                     :name="'OK'"
-                     :type="'primary'"
-                     class="left"
-                     :width="'110px'"
-                     @on-clicked="claimCandidate(candidate.candidateContract)"
-        />
-        <button-comp v-if="agendaVotesByCandidates.length > 1 && canClaimAmount(candidate.claimableAmount)"
-                     :name="'OK'"
-                     :type="'primary'"
-                     class="left"
-                     :width="'110px'"
-                     @on-clicked="claimCandidate(candidate.candidateContract)"
-        />
-        <button-comp
-          :name="'Close'"
-          :type="'vote'"
-          class="right"
-          :width="'110px'"
-          @on-clicked="close"
-        />
-      </div>
+  <div class="modal-claim">
+    <div class="label-claimable">You can claim {{ activityReward | withComma }} TON</div>
+    <div class="label">Do you want to continue?</div>
+    <div class="button-container">
+      <claim-button :name="'Claim'"
+                    :type="'primary'"
+                    :width="'110px'"
+                    class="btn1"
+                    @on-clicked="claim"
+      />
+      <close-button
+        :name="'Close'"
+        :type="'vote'"
+        :width="'110px'"
+        class="btn2"
+        @on-clicked="close"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import Button from '@/components/Button.vue';
-import { mapState } from 'vuex';
 import { getContract } from '@/utils/contracts';
-import Web3 from 'web3';
+import { mapState, mapGetters } from 'vuex';
+
+import Button from '@/components/Button.vue';
 
 export default {
   components: {
-    'button-comp': Button,
+    'claim-button': Button,
+    'close-button': Button,
   },
   computed: {
     ...mapState([
+      'account',
       'activityReward',
       'confirmBlock',
       'web3',
-      'account',
-      'agendaVotesByCandidates',
     ]),
-    canClaimValue () {
-      let amount = this.activityReward + '';
-      if (amount === null || amount.length === 0 || amount === 0 || amount === '0') return false;
-      amount = amount.replaceAll('TON', '');
-      amount = amount.replaceAll(' ', '');
-      if (amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00') {
-        return true;
-      } else return false;
-    },
+    ...mapGetters([
+      'candidateContractFromEOA',
+    ]),
   },
   methods: {
     close () {
       this.$emit('on-closed');
     },
     async claim () {
-      let web3 = this.web3;
-      if (web3 == null) web3 = new Web3(window.ethereum);
-      const daoCommitteeProxy = getContract('DAOCommitteeProxy', web3);
-      try {
-        await daoCommitteeProxy.methods.claimActivityReward().send({
+      const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
+
+      const gasLimit = await candidateContract.methods.claimActivityReward()
+        .estimateGas({
           from: this.account,
+        });
+
+      await candidateContract.methods.claimActivityReward()
+        .send({
+          from: this.account,
+          gasLimit: Math.floor(gasLimit * 1.2),
         })
-          .on('transactionHash', async (hash) => {
-            this.$store.commit('SET_PENDING_TX', hash);
-            this.close();
-          })
-          .on('confirmation', async (confirmationNumber) => {
-            if (this.confirmBlock === confirmationNumber) {
-              this.$store.commit('SET_PENDING_TX', '');
-              await this.$store.dispatch('launch');
-              await this.$store.dispatch('connectEthereum', this.web3);
-            }
-          })
-          .on('receipt', () => {
-          })
-          .on('error', () => {
+        .on('transactionHash', async (hash) => {
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
             this.$store.commit('SET_PENDING_TX', '');
-          });
-      } catch (err) {
-        //console.log('err', err); // eslint-disable-line
-      }
-    },
-    async claimCandidate (_candiateContract) {
-      const CandidateContract = getContract('Candidate', this.web3, _candiateContract);
-      if (CandidateContract != null && CandidateContract) {
-        try {
-          await CandidateContract.methods.claimActivityReward().send({
-            from: this.account,
-          })
-            .on('transactionHash', async (hash) => {
-              this.$store.commit('SET_PENDING_TX', hash);
-              this.close();
-            })
-            .on('confirmation', async (confirmationNumber) => {
-              if (this.confirmBlock === confirmationNumber) {
-                this.$store.commit('SET_PENDING_TX', '');
-                await this.$store.dispatch('launch');
-                await this.$store.dispatch('connectEthereum', this.web3);
-              }
-            })
-            .on('receipt', () => {
-            })
-            .on('error', () => {
-              this.$store.commit('SET_PENDING_TX', '');
-            });
-        } catch (err) {
-          console.log('err', err); // eslint-disable-line
-        }
-      } else {
-        alert('Can\'t find conbtract. Check the network');
-      }
-    },
-    canClaimAmount (amount) {
-      if (amount == null || amount.length === 0 || amount === 0 || amount === '0') return false;
-      else {
-        amount = amount + '';
-        amount = amount.replaceAll('TON', '');
-        amount = amount.replaceAll(' ', '');
-        if (amount !== '0.000000000000000000' && amount !== '0' && amount !== '0.00') {
-          return true;
-        } else return false;
-      }
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
+          }
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+        });
     },
   },
 };
@@ -152,53 +80,52 @@ export default {
 
 <style lang="scss" scoped>
 .modal-claim {
-  position: relative;
-  padding: 45px 50px 40px 50px;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: center;
-  > img {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  > .title {
-    display: flex;
-    flex-wrap: wrap;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
+  background-color: #ffffff;
 
+  .label-claimable {
+    font-family: Roboto;
     font-size: 24px;
-    color: #3e495c;
-
-    margin-bottom: 15px;
-
-    white-space: wrap;
-    word-break: break-all;
-  }
-  > .question {
-    font-size: 14px;
-    color: #818992;
-    margin-bottom: 25px;
-  }
-  > .button {
-    display: flex;
-    justify-content: center;
-    > .right {
-      margin-left: 15px;
-    }
-  }
-  > .content {
-    background: #f4f6f9;
-    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
     text-align: center;
     color: #3e495c;
-    padding: 20px 0 20px 0
+
+    padding-top: 45px;
+
+    margin-bottom: 15px;
   }
-  .content .blue {
-    color: #2a72e5;
+
+  .label {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: center;
+    color: #818992;
+
+    margin-bottom: 25px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+
+    padding-bottom: 40px;
+
+    .btn1 {
+      margin-right: 7.5px;
+    }
+    .btn2 {
+      margin-left: 7.5px;
+    }
   }
 }
 </style>

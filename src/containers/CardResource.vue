@@ -1,7 +1,18 @@
 <template>
   <div class="card-resource">
-    <card-container :title="'Resource'">
+    <card-container :title="'Resources'">
       <template #body>
+        <div class="resource">
+          <img src="@/assets/resources-icon.svg" alt=""
+               width="14" height="14"
+          >
+          <a class="link"
+             target="_blank" rel="noopener noreferrer"
+             href="https://docs.google.com/presentation/d/1d1YrughbLXeQafNmWrjjz2dl9IjREe_bNIckQIMFLo8/edit?usp=sharing"
+          >
+            DAO User Guide
+          </a>
+        </div>
         <div class="resource">
           <img src="@/assets/resources-icon.svg" alt=""
                width="14" height="14"
@@ -10,7 +21,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://discord.gg/SZw2WSR"
           >
-            Tokamak DAO Discussion
+            DAO Discussion (Discord)
           </a>
         </div>
         <div class="resource">
@@ -21,7 +32,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://tokamak.network"
           >
-            Tokamak Network Homepage
+            Tokamak Network
           </a>
         </div>
         <div class="resource">
@@ -30,8 +41,20 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
+             href="https://docs.tokamak.network/docs/en/guides/ton-staking/how-to-set-candidate"
           >
-            Governance FAQs (TBD)
+            Candidate Registration
+          </a>
+        </div>
+        <div class="resource">
+          <img src="@/assets/resources-icon.svg" alt=""
+               width="14" height="14"
+          >
+          <a class="link"
+             target="_blank" rel="noopener noreferrer"
+             href="https://www.notion.so/onther/FAQ-27a7fcfaed5047b895169930b5912cab"
+          >
+            Governance FAQs
           </a>
         </div>
       </template>
@@ -82,6 +105,14 @@ export default {
   padding-top: 16px;
 }
 .resource:nth-child(2) {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.resource:nth-child(3) {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.resource:nth-child(4) {
   margin-top: 16px;
   margin-bottom: 16px;
 }

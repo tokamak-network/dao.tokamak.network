@@ -14,6 +14,7 @@
            :class="{
              'with-unit': unit !== '',
              'big': big,
+             'no-unit-but-padding': forVoting,
            }"
            :readonly="readonly"
            @keypress="keypress"
@@ -53,6 +54,10 @@ export default {
       type: String,
       default: '',
     },
+    forVoting: {
+      type: Boolean,
+      default: false,
+    },
   },
   data () {
     return {
@@ -65,7 +70,7 @@ export default {
   computed: {
     inputPadding () {
       return {
-        'padding-right': this.unit !== '' ? (7 + this.unitWidth + 16) + 'px' : 0,
+        'padding-right': this.forVoting ? '80px' : (this.unit !== '' && !this.forVoting ? (7 + this.unitWidth + 16) + 'px' : 0),
       };
     },
   },
@@ -168,6 +173,7 @@ input:focus {
 .with-unit {
   text-align: right;
 }
+
 .big {
   min-height: 43px;
 }
@@ -195,5 +201,9 @@ input:focus {
   color: #3e495c;
 
   left: 16px;
+}
+
+.no-unit-but-padding {
+  text-align: right;
 }
 </style>

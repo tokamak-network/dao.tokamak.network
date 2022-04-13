@@ -18,6 +18,8 @@
             'secondary-disabled': type === 'secondary' && status === 'disabled',
             'vote-disabled': type === 'vote' && status === 'disabled',
             'voteV2-disabled': type === 'voteV2' && status === 'disabled',
+
+            'running': status === 'running',
           }"
           :style="{ width: width }"
           :disabled="status === 'disabled'"
@@ -257,5 +259,11 @@ button:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.running {
+  &:hover {
+    cursor: not-allowed;
+  }
 }
 </style>

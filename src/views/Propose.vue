@@ -46,8 +46,8 @@
           <div v-for="(contract, i) in contractsOfTypeA" :key="contract"
                class="contract-card contract-card-type-a"
                :style="[
-                 index !== -1 ? { 'height': 124+'px' } : { height: 320+'px' },
-                 index === i ? { background: '#2a72e5' } : {},
+                 index !== -1 ? { 'height': 124+'px', transition: 'height 0.5s' } : { height: 320+'px' },
+                 index === i ? { background: '#2a72e5', 'box-shadow': '0 10px 15px 0 rgba(42, 114, 229, 0.25)' } : { 'box-shadow': '0 10px 15px 0 rgba(223, 228, 238, 0.25)'},
                ]"
                @click="index=i; setCurrentContract();"
           >
@@ -71,8 +71,8 @@
           <div v-for="(contract, i) in contractsOfTypeB" :key="contract"
                class="contract-card contract-card-type-b"
                :style="[
-                 indexOfTypeB !== -1 ? { 'height': 124+'px' } : { height: 320+'px' },
-                 indexOfTypeB === i ? { background: '#f7981c' } : {},
+                 indexOfTypeB !== -1 ? { 'height': 124+'px', transition: 'height 0.5s' } : { height: 320+'px' },
+                 indexOfTypeB === i ? { background: '#f7981c', 'box-shadow': '0 10px 15px 0 rgba(247, 152, 28, 0.25)' } : { 'box-shadow': '0 10px 15px 0 rgba(223, 228, 238, 0.25)'},
                ]"
                @click="indexOfTypeB=i; setCurrentContract();"
           >
@@ -94,6 +94,12 @@
         <div class="function-container function-container-desktop"
              :style="setFunctionGridTemplateColumns"
         >
+          <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+            <box :function-name="'setSeigRates'"
+                 :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                 :type="'A'"
+            />
+          </div>
           <div v-for="func in getFunctions()" :key="func.name"
                @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
           >
@@ -135,7 +141,7 @@
         <div v-for="(contract, i) in contractsOfTypeA" :key="contract">
           <div class="contract-card contract-card-type-a"
                :style="[
-                 index === i ? { background: '#2a72e5' } : {},
+                 index === i ? { background: '#2a72e5', 'box-shadow': '0 10px 15px 0 rgba(42, 114, 229, 0.25)' } : { 'box-shadow': '0 10px 15px 0 rgba(223, 228, 238, 0.25)'},
                ]"
                @click="selectContract(i, type); setCurrentContract();"
           >
@@ -152,6 +158,12 @@
                class="function-container"
                :style="setFunctionGridTemplateColumns"
           >
+            <div v-if="index === 1" @click="openModal(); currentFunction='setSeigRates'; currentFunctionParams = setSeigRatesParams; currentFunctionExplanation = ''">
+              <box :function-name="'setSeigRates'"
+                   :status="currentFunction === 'setSeigRates' ? 'selected' : 'unselected'"
+                   :type="'A'"
+              />
+            </div>
             <div v-for="func in getFunctions()" :key="func.name"
                  @click="openModal(); currentFunction = func.name; currentFunctionParams = func.inputs; currentFunctionExplanation = func.explanation;"
             >
@@ -171,7 +183,7 @@
         <div v-for="(contract, i) in contractsOfTypeB" :key="contract">
           <div class="contract-card contract-card-type-b"
                :style="[
-                 indexOfTypeB === i ? { background: '#f7981c' } : {},
+                 indexOfTypeB === i ? { background: '#f7981c', 'box-shadow': '0 10px 15px 0 rgba(247, 152, 28, 0.25)' } : { 'box-shadow': '0 10px 15px 0 rgba(223, 228, 238, 0.25)'},
                ]"
                @click="selectContract(i, type); setCurrentContract();"
           >
@@ -636,8 +648,6 @@ export default {
       padding-top: 30px;
 
       width: 276px;
-      // height set dynamically
-      transition: height 0.5s;
 
       border-radius: 15px;
 
@@ -650,8 +660,6 @@ export default {
       }
 
       &-type-a {
-        box-shadow: 0 10px 15px 0 rgba(42, 114, 229, 0.25);
-
         &:hover {
           background: #2a72e5;
 
@@ -660,8 +668,6 @@ export default {
       }
 
       &-type-b {
-        box-shadow: 0 10px 15px 0 rgba(247, 152, 28, 0.25);
-
         &:hover {
           background: #f7981c;
 

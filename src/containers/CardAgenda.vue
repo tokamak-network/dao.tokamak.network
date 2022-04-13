@@ -5,7 +5,10 @@
            @on-closed="showModal=false"
     >
       <template #body>
-        <modal-vote :id="agenda.agendaid" @on-closed="showModal=false" />
+        <modal-vote :id="agenda.agendaid"
+                    @on-closed="showModal=false"
+                    @on-voted="onVoted"
+        />
       </template>
     </modal>
     <div class="header-container">
@@ -72,6 +75,7 @@ export default {
   data () {
     return {
       showModal: false,
+      actInProgress: false,
     };
   },
   computed: {
@@ -82,14 +86,15 @@ export default {
       'confirmBlock',
       'web3',
       'votersOfAgenda',
+      'pendingTx',
     ]),
     ...mapGetters([
       'agendaTitle',
       'agendaIdsCanVote',
       'isMember',
-      'hasVoted',
       'candidateContractFromEOA',
       'voteResult',
+      'canVoteForAgenda',
     ]),
     voteResultStyle () {
       if (this.voteResultString === 'You have not voted') {
@@ -139,25 +144,16 @@ export default {
       return this.action;
     },
     actionStatus () {
+      if (this.actInProgress) {
+        return 'running';
+      }
+
       const agenda = this.agenda;
       if (!agenda) {
         return 'disabled';
       }
       if (this.action === 'VOTE') {
-        if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
-          // when vote is not started, only member can vote.
-          return this.isMember ? '' : 'disabled';
-        } else {
-          // check if member already have voted.
-          if (this.hasVoted(agenda.agendaid)) {
-            return 'disabled';
-          }
-
-          // check if member can vote.
-          const agendaId = agenda.agendaid;
-          const found = this.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
-          return found ? '' : 'disabled';
-        }
+        return this.canVoteForAgenda(agenda.agendaid) ? '' : 'disabled';
       } else {
         return '';
       }
@@ -171,9 +167,7 @@ export default {
       if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
         return this.isMember ? 'VOTE' : '';
       } else if (agendaStatus(agenda.status) === 'VOTING' && this.blockTime <= agenda.tVotingEndTime) {
-        const agendaId = agenda.agendaid;
-        const found = this.agendaIdsCanVote.find(agendaIdCanVote => agendaIdCanVote === agendaId);
-        return found ? 'VOTE' : '';
+        return this.isMember ? 'VOTE' : '';
       } else if (agendaStatus(agenda.status) === 'WAITING_EXEC' &&
                  agendaResult(agenda.result) === 'ACCEPT' &&
                  this.blockTime >= agenda.tVotingEndTime &&
@@ -188,7 +182,17 @@ export default {
       }
     },
   },
+  watch: {
+    pendingTx (newValue) {
+      if (newValue === '') {
+        this.actInProgress = false;
+      }
+    },
+  },
   methods: {
+    onVoted () {
+      this.actInProgress = true;
+    },
     route (path) {
       this.$router.push({ path });
     },
@@ -209,10 +213,12 @@ export default {
             gasLimit: Math.floor(gasLimit * 1.2),
           })
           .on('transactionHash', (hash) => {
+            this.actInProgress = true;
             this.$store.commit('SET_PENDING_TX', hash);
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
+              this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
               await this.$store.dispatch('launch');
@@ -236,10 +242,12 @@ export default {
             gasLimit: Math.floor(gasLimit * 1.2),
           })
           .on('transactionHash', (hash) => {
+            this.actInProgress = true;
             this.$store.commit('SET_PENDING_TX', hash);
           })
           .on('confirmation', async (confirmationNumber) => {
             if (this.confirmBlock === confirmationNumber) {
+              this.actInProgress = false;
               this.$store.commit('SET_PENDING_TX', '');
 
               await this.$store.dispatch('launch');

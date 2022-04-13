@@ -1,5 +1,6 @@
 import Web3 from 'web3';
-import web3Utils from 'web3-utils';
+import { toBN } from 'web3-utils';
+import numeral from 'numeral';
 
 import {
   getCandidates,
@@ -16,6 +17,7 @@ import {
   parseAgendaBytecode,
   getContractABIFromAddress,
 } from '@/utils/contracts';
+import { agendaStatus } from '@/utils/helpers';
 import { createCurrency } from '@makerdao/currency';
 
 import Vue from 'vue';
@@ -28,7 +30,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     launched: false,
-    etherscanAddress: 'https://rinkeby.etherscan.io',
+    etherscanAddress: 'https://etherscan.io',
     pendingTx: '',
     confirmBlock: 1,
 
@@ -39,6 +41,8 @@ export default new Vuex.Store({
     blockTime: 0,
 
     tonBalance: 0,
+    wtonBalance: 0,
+    winningProbability: '',
     contractState: {},
 
     candidates: [],
@@ -113,6 +117,12 @@ export default new Vuex.Store({
     SET_TON_BALANCE (state, tonBalance) {
       state.tonBalance = tonBalance;
     },
+    SET_WTON_BALANCE (state, wtonBalance) {
+      state.wtonBalance = wtonBalance;
+    },
+    SET_WINNING_PROBABILITY (state, winningProbability) {
+      state.winningProbability = winningProbability;
+    },
     SET_CONTRACT_STATE (state, contractState) {
       state.contractState = contractState;
     },
@@ -180,8 +190,26 @@ export default new Vuex.Store({
     },
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
-      const tonBalance = await ton.methods.balanceOf(state.account).call();
+      const wton = getContract('WTON', state.web3);
+      const powerTON = getContract('PowerTON', state.web3);
+
+      const [
+        tonBalance,
+        wtonBalance,
+        power,
+        totalDeposits,
+      ] = await Promise.all([
+        ton.methods.balanceOf(state.account).call(),
+        wton.methods.balanceOf(state.account).call(),
+        powerTON.methods.powerOf(state.account).call(),
+        powerTON.methods.totalDeposits().call(),
+      ]);
+
       commit('SET_TON_BALANCE', tonBalance);
+      commit('SET_WTON_BALANCE', wtonBalance);
+
+      const winningProbability = numeral(power / totalDeposits).format('0.00%');
+      commit('SET_WINNING_PROBABILITY', winningProbability);
     },
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
@@ -246,6 +274,9 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
+      const seigManager = getContract('SeigManager', web3);
+      const layer2Registry = getContract('Layer2Registry', web3);
+
       const [
         c,
         maxMember,
@@ -267,18 +298,19 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
 
       const candidates = await Promise.all(
         c.map(async candidate => {
+          const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+
           const [
-            isRegistered, coinage,
+            isRegistered, coinage, lastCommitBlockNumber,
           ] = await Promise.all([
             layer2Registry.methods.layer2s(candidate.layer2).call(),
             seigManager.methods.coinages(candidate.layer2).call(),
+            seigManager.methods.lastCommitBlock(addr).call(),
           ]);
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
@@ -287,16 +319,20 @@ export default new Vuex.Store({
 
           const coinageContract = getContract('Coinage', web3, coinage);
           const [
-            selfVote, totalVote, info,
+            selfVote, totalVote, info, lastCommitBlock,
           ] = await Promise.all([
             coinageContract.methods.balanceOf(candidate.operator).call(),
             coinageContract.methods.totalSupply().call(),
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
+            web3.eth.getBlock(lastCommitBlockNumber),
           ]);
 
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
+          candidate.coinage = coinage;
+          candidate.lastCommitBlockNumber = lastCommitBlockNumber;
+          candidate.lastCommitAt = lastCommitBlock.timestamp;
           return candidate;
         }),
       );
@@ -461,7 +497,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -486,7 +522,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -529,7 +565,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {
@@ -848,8 +884,8 @@ export default new Vuex.Store({
       const candidate = getters.candidate(address);
       if (!candidate || !getters.minimumAmount) return false;
 
-      const minimumAmount = web3Utils.toBN(getters.minimumAmount);
-      const selfVote = web3Utils.toBN(candidate.selfVote);
+      const minimumAmount = toBN(getters.minimumAmount);
+      const selfVote = toBN(candidate.selfVote);
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
@@ -862,8 +898,21 @@ export default new Vuex.Store({
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 2) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate') {
+          // TODO: fix to issue that onChainEffects[1].name is undefined.
+          return '(Seig Manager)PowerTON contract will be changed and the PowerTON seigniorage rate will be changed.';
+        }
+      }
+      if (onChainEffects.length === 3) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
+            onChainEffects[1].name === 'setDaoSeigRate' &&
+            onChainEffects[2].name === 'setPseigRate'
+        ) {
+          return '(SeigManager)All the seigniorage rates will be changed';
+        }
+      }
       if (!onChainEffects || onChainEffects.length === 0) {
-        console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
@@ -877,13 +926,35 @@ export default new Vuex.Store({
     },
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 2) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate') {
+          return `Execution 1:
+This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
+
+Execution 2:
+Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
+        }
+      }
+      if (onChainEffects.length === 3) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
+            onChainEffects[1].name === 'setDaoSeigRate' &&
+            onChainEffects[2].name === 'setPseigRate'
+        ) {
+          return `Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
+        }
+      }
       if (!onChainEffects || onChainEffects.length === 0) {
         console.log('bug', 'no on-chain effects'); // eslint-disable-line
         return '';
       }
       const abi = getContractABIFromAddress(onChainEffects[0].target, type);
       if (!abi || abi.length === 0) {
-        console.log('bug', 'no abi'); // eslint-disable-line
         return '';
       }
 
@@ -933,17 +1004,6 @@ export default new Vuex.Store({
       if (!state.votingDetails) return [];
       return state.votingDetails.filter(v => v.agendaid === Number(agendaId));
     },
-    hasVoted: (state, getters) => (agendaId) => {
-      if (!state.votingDetails) {
-        return true;
-      }
-      const found = state.votingDetails.find(votingDetail =>
-        votingDetail.agendaid === agendaId && votingDetail.voter === getters.candidateContractFromEOA);
-      if (!found) {
-        return true;
-      }
-      return found.hasVoted;
-    },
     sortedCandidates: (state, getters) => {
       const candidates = [];
       state.members.forEach(member => {
@@ -958,10 +1018,10 @@ export default new Vuex.Store({
 
       return state.candidates.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -973,10 +1033,10 @@ export default new Vuex.Store({
 
       return state.nonmembers.sort(function (a, b) {
         a = a.vote.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.vote.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -988,10 +1048,10 @@ export default new Vuex.Store({
 
       return state.votedCandidatesFromAccount.sort(function (a, b) {
         a = a.myVotes.toString(16);
-        a = web3Utils.toBN(a);
+        a = toBN(a);
 
         b = b.myVotes.toString(16);
-        b = web3Utils.toBN(b);
+        b = toBN(b);
 
         if (a.cmp(b) === 1) return -1;
         else if (a.cmp(b) === 0) return 0;
@@ -1022,6 +1082,48 @@ export default new Vuex.Store({
         return [];
       }
       return state.votersOfAgenda.filter(result => result.voter.toLowerCase() === getters.candidateFromEOA.toLowerCase());
+    },
+    haveAlreadyVotedForAgenda: (state, getters) => (agendaId) => {
+      if (!state.votingDetails) {
+        return true;
+      }
+      const found = state.votingDetails.find(votingDetail =>
+        votingDetail.agendaid === agendaId && votingDetail.voter.toLowerCase() === getters.candidateContractFromEOA.toLowerCase(),
+      );
+      return found ? true : false;
+    },
+    canVoteForAgenda: (state, getters) => (agendaId) => {
+      if (agendaId < 0) {
+        return false;
+      }
+
+      const agenda = getters.getAgendaByID(agendaId);
+      if (agendaStatus(agenda.status) === 'NOTICE' && state.blockTime >= agenda.tNoticeEndTime) {
+        return getters.isMember;
+      } else {
+        if (getters.haveAlreadyVotedForAgenda(agendaId)) {
+          return false;
+        }
+
+        const found = agenda.voters.find(voter =>
+          voter.toLowerCase() === getters.candidateFromEOA.toLowerCase(),
+        );
+        return found ? true : false;
+      }
+    },
+    candidateName: (state) => (address) => {
+      if (!state.candidates) {
+        return '';
+      }
+
+      const found = state.candidates.find(
+        candidate => candidate.candidate.toLowerCase() === address.toLowerCase() ||
+                     candidate.candidateContract.toLowerCase() === address.toLowerCase());
+      if (found) {
+        return found.name;
+      } else {
+        return '';
+      }
     },
   },
 });

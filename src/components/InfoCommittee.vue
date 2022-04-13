@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -90,13 +92,18 @@ export default {
     },
   },
   computed: {
+    ...mapState([
+      'etherscanAddress',
+    ]),
     tooltipWidth () {
       return { width: this.width + 'px' };
     },
   },
   methods: {
-    redirect (link) {
-      if (this.type === 'url' || this.type === 'address') {
+    redirect (val) {
+      if (this.type === 'address') {
+        window.open(this.etherscanAddress + '/address/' + val, '_blank'); // eslint-disable-line
+      } else if (this.type === 'url') {
         window.open(link, '_blank'); // eslint-disable-line
       }
     },

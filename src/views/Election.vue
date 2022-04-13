@@ -34,12 +34,16 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <loading />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 
+import Loading from '@/components/Loading.vue';
 import CardMember from '@/containers/CardMember.vue';
 import CardNonmember from '@/containers/CardNonmember.vue';
 import CardMyVote from '@/containers/CardMyVote.vue';
@@ -48,6 +52,7 @@ import CardRank from '@/containers/CardRank.vue';
 
 export default {
   components: {
+    'loading': Loading,
     'card-member': CardMember,
     'card-nonmember': CardNonmember,
     'card-my-vote': CardMyVote,

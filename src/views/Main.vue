@@ -2,25 +2,34 @@
   <div class="main"
        :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
   >
-    <div class="main-logo"
-         :class="{ 'main-logo-mobile': $mq === 'mobile' }"
-    >
-      <div v-if="events.length > 0"
-           class="main-btn"
-           :class="{ 'main-btn-mobile': $mq === 'mobile' }"
-           @click="$router.push({ path: 'agenda' })"
+    <div class="main-top">
+      <div v-if="$mq === 'mobile'"
+           class="main-logo-mobile"
       >
-        <div class="count">{{ events.length }}</div>
-        <span>Committee activities</span>
-        <img src="@/assets/arrow-next-main.png" alt=""
-             width="4" height="8"
+        <div v-if="events.length > 0"
+             class="main-btn-mobile"
         >
+          <div class="count">{{ events.length }}</div>
+          <span class="label">Committee activities</span>
+        </div>
+      </div>
+      <div v-else>
+        <img class-="main-interaction"
+             style="height: 600px"
+             src="@/assets/main-interaction.gif"
+        >
+        <div v-if="events.length > 0"
+             class="main-btn"
+        >
+          <div class="count">{{ events.length }}</div>
+          <span class="label">DAO activities</span>
+        </div>
       </div>
     </div>
     <div v-if="events.length > 0 && $mq !== 'mobile'"
          class="recent-committee-activities"
     >
-      <div class="header">Recent Committee Activities</div>
+      <div class="header">Recent DAO Activities</div>
       <div v-for="event in events" :key="event.data.transactionHash" class="content">
         <div>
           Tx
@@ -62,24 +71,73 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { getRecentEvents } from '@/api';
+import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
+import { getRecentEvents, getCandidates } from '@/api';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   data () {
     return {
       events: [],
+      nameLoading: '-',
     };
   },
   computed: {
     ...mapState([
+      'candidates',
       'etherscanAddress',
     ]),
+    ...mapGetters([
+      'candidateName',
+    ]),
+    truncate () {
+      return amount => truncate(amount);
+    },
+    hexSlicer () {
+      return address => hexSlicer(address);
+    },
+    date4 () {
+      return timestamp => date4(timestamp);
+    },
   },
   async created () {
-    this.events = await getRecentEvents();
+    const [ candidates, events ] = await Promise.all([
+      getCandidates(), getRecentEvents(),
+    ]);
+
+    const filteredEvents = events.filter(event => {
+      const eventName = event.eventName;
+      if (eventName === 'Deposited' ||
+          eventName === 'WithdrawalRequested' ||
+          eventName === 'WithdrawalProcessed' ||
+          eventName === 'Comitted') {
+        const found = candidates.find(candidate => candidate.candidate.toLowerCase() === event.data.layer2.toLowerCase() ||
+                                                   candidate.candidateContract.toLowerCase() === event.data.layer2.toLowerCase());
+        return found ? true : false;
+      } else {
+        return true;
+      }
+    });
+    this.events = filteredEvents;
+    this.loading();
   },
   methods: {
+    loading () {
+      let cnt = 1;
+      const nameLoading = '-';
+      const interval = setInterval(() => {
+        if (!this.candidates || this.candidates.length === 0) {
+          this.nameLoading = nameLoading.repeat(cnt);
+          cnt++;
+
+          if (cnt === 5) {
+            cnt = 1;
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000); // 1s
+    },
     newtab (txhash) {
       window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
     },
@@ -92,10 +150,16 @@ export default {
       else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';
       else if (eventName === 'ChangedMember') return 'Committee Member Changed';
       else if (eventName === 'ChangedSlotMaximum') return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
-      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${event.data.candidate}`;
-      else if (eventName === 'OperatorRegistered') return `Operator ${event.data.candidateContract} Registered`; // TODO: OperatorRegistered -> Layer2Registered
+      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${this.candidateName(event.data.candidate) ? this.candidateName(event.data.candidate) : this.nameLoading}`;
+      else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract) ? this.candidateName(event.data.candidateContract) : this.nameLoading} Registered`;
       else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
       else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
+      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+
+      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'WithdrawalProcessed') return `${truncate(fromRay2(event.data.amount), 2)} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
+      else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
+      else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
       else {
         return '-';
         console.log('bug', 'events'); // eslint-disable-line
@@ -158,12 +222,11 @@ export default {
   width: 840px;
   height: 607px;
 
-  background: url('../assets/logo-main.png') no-repeat;
-  /* background-size: 840px; */
-  background-size: contain;
-  background-repeat: no-repeat;
-
   position: relative;
+}
+
+.main-top {
+  display: flex;
 }
 
 .main-logo-mobile {
@@ -182,65 +245,115 @@ export default {
   justify-content: center;
   align-items: center;
 
+  width: 160px;
+  height: 38px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
+  background-color: #f6f8f9;
+  position: absolute;
+  top: 488px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  .count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2a72e5;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+
+    margin-left: 16px;
+    margin-right: 12px;
+  }
+
+  .label {
+    flex: 1;
+
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #354052;
+  }
+
+  .arrow {
+    margin-right: 15px;
+  }
+}
+
+.main-btn-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 200px;
   height: 38px;
   border-radius: 25px;
   box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
   background-color: #f6f8f9;
-
   position: absolute;
-  bottom: 92px;
-
+  top: 300px;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-}
-.main-btn-mobile {
-  bottom: 0px;
-}
-.main-btn:hover {
-  cursor: pointer;
-}
 
-.count {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #2a72e5;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2a72e5;
 
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #ffffff;
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
 
-  margin-left: 9px;
-  margin-right: 12px;
-}
+    margin-left: 16px;
+    margin-right: 12px;
+  }
 
-.main-btn span {
-  flex: 1;
+  .label {
+    flex: 1;
 
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #354052;
-}
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #354052;
+  }
 
-.main-btn img {
-  margin-right: 15px;
+  .arrow {
+    margin-right: 15px;
+  }
 }
 
 .recent-committee-activities {
@@ -427,6 +540,13 @@ export default {
       margin-top: 19px;
     }
   }
-
+}
+#wrap {
+  width: 100%;
+  height: 1000px;
+}
+#canvas {
+  width: 100%;
+  height: 1080px;
 }
 </style>

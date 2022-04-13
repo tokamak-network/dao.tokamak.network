@@ -29,6 +29,7 @@ export default {
 }
 
 .card-title {
+  font-family: Roboto;
   font-size: 24px;
   font-weight: normal;
   font-stretch: normal;

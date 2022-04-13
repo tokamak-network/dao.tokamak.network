@@ -2,23 +2,23 @@
   <div class="card-vote-for-agenda">
     <modal v-if="showModal"
            :width="$mq === 'mobile' ? '90%': '786px'"
-           @on-closed="showModal=false"
+           @on-closed="showModal = false"
     >
       <template #body>
-        <modal-vote :id="id" @on-closed="showModal=false" />
+        <modal-vote :id="Number(agendaId)" @on-closed="showModal = false" />
       </template>
     </modal>
     <card-container :title="'Your Vote'">
       <template #body>
         <div class="vote-for-agenda" style="padding: 15px;">
           <div class="title" style="margin: 7px 0 22px 0;">
-            {{ agendaTitle(id) }}
+            {{ agendaTitle(agendaId) }}
           </div>
           <button-comp :name="'Vote for this Agenda'"
                        :type="'voteV2'"
-                       :status="voteStatus"
+                       :status="status"
                        :width="'100%'"
-                       @on-clicked="openModel()"
+                       @on-clicked="showModal = true;"
           />
         </div>
       </template>
@@ -32,7 +32,7 @@ import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 import ModalVote from '@/containers/ModalVote.vue';
 import { mapState, mapGetters } from 'vuex';
-import { getContractABIFromAddress, isVotableStatusOfAgenda } from '@/utils/contracts';
+import { getContractABIFromAddress } from '@/utils/contracts';
 
 export default {
   components: {
@@ -43,9 +43,8 @@ export default {
   },
   data () {
     return {
+      agendaId: -1,
       showModal: false,
-      id: Number(this.$route.params.id),
-      votableStatus: true,
     };
   },
   computed: {
@@ -58,10 +57,18 @@ export default {
       'getAgendaByID',
       'agendaOnChainEffects',
       'agendaTitle',
+      'canVoteForAgenda',
     ]),
-    voteStatus () {
-      if (this.votableStatus) return '';
-      else return 'disabled';
+    status () {
+      if (!this.account) {
+        return 'disabled';
+      }
+
+      const agenda = this.agenda;
+      if (!agenda) {
+        return 'disabled';
+      }
+      return this.canVoteForAgenda(agenda.agendaid) ? '' : 'disabled';
     },
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agenda.agendaid);
@@ -75,35 +82,16 @@ export default {
       return abi[0].title;
     },
     agenda () {
-      return this.getAgendaByID(this.$route.params.id);
+      return this.getAgendaByID(this.agendaId);
     },
   },
   watch: {
-    'checkStatus': {
+    '$route.params.id': {
       handler: async function () {
-        this.votableStatus = await isVotableStatusOfAgenda(this.$route.params.id, this.web3);
+        this.agendaId = this.$route.params.id;
       },
       deep: true,
       immediate: true,
-    },
-  },
-  methods: {
-    vote (index, address) {
-      this.$router.push({
-        path: `/agenda/${index}/${address}`,
-      });
-    },
-    async openModel () {
-      if (this.web3 == null) {
-        alert('Check Connect Wallet!');
-        return;
-      }
-      const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
-      if (!isVotableStatus) alert('This Agenda is not in a state to vote.');
-
-      const operator = [];
-      this.members.forEach(async member => operator.push(member.operator));
-      (!operator.includes(this.account.toLowerCase()) ? alert('You are not members!') : this.showModal = true);
     },
   },
 };

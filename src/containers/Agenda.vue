@@ -87,6 +87,7 @@
         </div>
         <div :class="{ 'selected': currentSelector === 3,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 3 }"
+             class="comment"
              @click="currentSelector = 3"
         >
           Comments ({{ voted }})
@@ -121,6 +122,7 @@
         </div>
         <div :class="{ 'selected': currentSelector === 3,
                        'selected-typeB': agendaType(agendaId) === 'B' && currentSelector === 3 }"
+             class="comment"
              @click="currentSelector = 3"
         >
           Comments ({{ voted }})
@@ -567,5 +569,9 @@ export default {
 
     color: #86929d;
   }
+}
+
+.comment {
+  font-family: Roboto;
 }
 </style>

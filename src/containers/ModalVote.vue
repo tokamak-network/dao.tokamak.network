@@ -5,27 +5,6 @@
          @click="close"
     >
     <div class="function">Agenda #{{ id }} Confirm Vote</div>
-    <!--<div class="content">
-      <span>
-        <span class="blue">
-          0xabc..
-        </span>
-        is
-        <span class="blue">
-          Nominated
-        </span>
-        to Committee member
-      </span>
-    </div>-->
-    <div v-if="voters.length > 1" class="select">
-      <div class="hint">CandidateContract </div>
-      <select v-model="choiceCandidate" class="dropdown">
-        <option v-for="voter in voters" :key="voter.candidateContract" :value="voter">
-          {{ voter.name }}
-        </option>
-      </select>
-    </div>
-
     <div class="select">
       <div class="hint">Yes / No / Abstain</div>
       <dropdown :items="['Yes', 'No', 'Abstain']"
@@ -55,7 +34,7 @@ import Button from '@/components/Button.vue';
 
 // import Web3 from 'web3';
 import { mapGetters, mapState } from 'vuex';
-import { getContract, isVotableStatusOfAgenda } from '@/utils/contracts';
+import { getContract } from '@/utils/contracts';
 
 export default {
   components: {
@@ -89,30 +68,11 @@ export default {
     ...mapGetters([
       'myCandidatesArrays',
       'isMembersInMyCandidatesArrays',
+      'candidateContractFromEOA',
     ]),
     findAgenda () {
       return this.agendas.find(agenda=> agenda.agendaid === this.id);
     },
-  },
-  beforeMount () {
-    const agenda = this.findAgenda;
-    if (agenda.status === 1 && this.isMembersInMyCandidatesArrays !== null && this.isMembersInMyCandidatesArrays.length > 0) {
-      this.voters = this.isMembersInMyCandidatesArrays;
-    }
-    else if (agenda.status === 2) {
-      if (agenda.voters != null && agenda.voters.length > 0) {
-        const findVoters = this.myCandidatesArrays.filter(candidate =>{
-          const voter = agenda.voters.find(voter=>voter.toLowerCase() === candidate.candidate.toLowerCase());
-          if (voter && voter.length > 0) return candidate;
-        });
-        if (findVoters != null) this.voters = findVoters;
-      }
-    }
-    if (this.voters.length > 0) {
-      this.hintVoter = this.voters[0].name;
-      this.choiceCandidate = this.voters[0] ;
-    }
-    return;
   },
   methods: {
     close () {
@@ -137,53 +97,38 @@ export default {
       return _candidateContract;
     },
     async vote () {
-      if (this.web3 == null) {
-        alert('Check Connect Wallet!');
-        return;
-      }
-      const candidateContract = this.choiceCandidate.candidateContract;
-      try {
-        if (candidateContract) {
-          const isVotableStatus = await isVotableStatusOfAgenda(this.id, this.web3);
-          if (!isVotableStatus) {
-            alert('This Agenda is not in a state to vote.');
-            this.close();
-          } else {
-            const Candidate = await getContract('Candidate', this.web3, candidateContract);
-            if (Candidate != null) {
-              await Candidate.methods.castVote(
-                this.id,
-                this.choice,
-                this.comment,
-              ).send({
-                from: this.account,
-                // gasLimit: Math.floor(gasLimit * 1.2),
-              })
-                .on('transactionHash', async (hash) => {
-                  this.$store.commit('SET_PENDING_TX', hash);
-                  this.close();
-                })
-                .on('confirmation', async (confirmationNumber) => {
-                  if (this.confirmBlock === confirmationNumber) {
-                    this.$store.commit('SET_PENDING_TX', '');
-                    await this.$store.dispatch('launch');
-                    await this.$store.dispatch('connectEthereum', this.web3);
-                  }
-                })
-                .on('receipt', () => {
-                })
-                .on('error', () => {
-                  this.$store.commit('SET_PENDING_TX', '');
-                  this.close();
-                });
-            }
+      const candidate = await getContract('Candidate', this.web3, this.candidateContractFromEOA);
+      const gasLimit = await candidate.methods.castVote(this.id, this.choice, this.comment)
+        .estimateGas({
+          from: this.account,
+        });
+
+      await candidate.methods.castVote(
+        this.id,
+        this.choice,
+        this.comment,
+      ).send({
+        from: this.account,
+        gasLimit: Math.floor(gasLimit * 1.2),
+      })
+        .on('transactionHash', async (hash) => {
+          this.$emit('on-voted');
+          this.$store.commit('SET_PENDING_TX', hash);
+          this.close();
+        })
+        .on('confirmation', async (confirmationNumber) => {
+          if (this.confirmBlock === confirmationNumber) {
+            this.$store.commit('SET_PENDING_TX', '');
+            await this.$store.dispatch('launch');
+            await this.$store.dispatch('connectEthereum', this.web3);
           }
-        } else {
-          alert('Can\'t find Candidate.');
-        }
-      } catch (err) {
-        console.log(err) ; // eslint-disable-line
-      }
+        })
+        .on('receipt', () => {
+        })
+        .on('error', () => {
+          this.$store.commit('SET_PENDING_TX', '');
+          this.close();
+        });
     },
   },
 };

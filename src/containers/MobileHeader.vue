@@ -17,7 +17,7 @@
       <div class="menu-btn" @click="route('/'); isOpen = false;">Home</div>
       <div class="menu-btn" @click="route('/election'); isOpen = false;">Election</div>
       <div class="menu-btn" @click="route('/propose'); isOpen = false;">Propose</div>
-      <div class="menu-btn" @click="route('/agenda'); isOpen = false;">Agenda</div>
+      <div class="menu-btn" @click="route('/agenda'); isOpen = false;">Committee</div>
       <div v-if="account !== '' && isCandidate"
            class="claim-btn"
            @click="showModalClaim=true;"
@@ -26,16 +26,18 @@
       </div>
     </div>
     <div class="logo">
-      <img v-if="!isSub()"
-           src="@/assets/mobile-logo.png" alt=""
-           width="105" height="30"
-           @click="route('/');"
-      >
-      <img v-else
-           src="@/assets/mobile-logo-sub.png" alt=""
-           width="105" height="30"
-           @click="route('/');"
-      >
+      <div v-if="!isSub()" class="logo-container" @click="route('/');">
+        <img src="@/assets/mobile-logo.png" alt=""
+             width="105" height="30"
+        >
+        <div class="beta beta">Beta</div>
+      </div>
+      <div v-else class="logo-container" @click="route('/');">
+        <img src="@/assets/mobile-logo-sub.png" alt=""
+             width="105" height="30"
+        >
+        <div class="beta beta-sub">Beta</div>
+      </div>
     </div>
     <div class="menu">
       <connect-wallet :is-sub="isSub()" />
@@ -112,6 +114,30 @@ export default {
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+
+  .beta {
+    font-family: Georgia;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: 1.14;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+
+    margin-top: 6px;
+    margin-left: -6px;
+
+    &-sub {
+      color: #2a72e5;
+    }
   }
 }
 
