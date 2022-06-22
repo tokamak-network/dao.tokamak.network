@@ -898,6 +898,12 @@ export default new Vuex.Store({
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 2) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate') {
+          // TODO: fix to issue that onChainEffects[1].name is undefined.
+          return '(Seig Manager)PowerTON contract will be changed and the PowerTON seigniorage rate will be changed.';
+        }
+      }
       if (onChainEffects.length === 3) {
         if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
             onChainEffects[1].name === 'setDaoSeigRate' &&
@@ -920,6 +926,18 @@ export default new Vuex.Store({
     },
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      if (onChainEffects.length === 2) {
+        if (onChainEffects[0].name === 'setPowerTONSeigRate') {
+          return `Execution 1:
+This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
+
+Execution 2:
+Currently, TON seigniorage is issued each time a Ethereum block is created.
+
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
+        }
+      }
       if (onChainEffects.length === 3) {
         if (onChainEffects[0].name === 'setPowerTONSeigRate' &&
             onChainEffects[1].name === 'setDaoSeigRate' &&
@@ -927,8 +945,8 @@ export default new Vuex.Store({
         ) {
           return `Currently, TON seigniorage is issued each time a Ethereum block is created.
 
-          Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
-          This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
+Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seignorage rewards (19%).
+This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON, DAO and staking users.`;
         }
       }
       if (!onChainEffects || onChainEffects.length === 0) {
@@ -1075,7 +1093,7 @@ export default new Vuex.Store({
       return found ? true : false;
     },
     canVoteForAgenda: (state, getters) => (agendaId) => {
-      if (!agendaId || agendaId < 0) {
+      if (agendaId < 0) {
         return false;
       }
 
@@ -1095,7 +1113,7 @@ export default new Vuex.Store({
     },
     candidateName: (state) => (address) => {
       if (!state.candidates) {
-        return '-';
+        return '';
       }
 
       const found = state.candidates.find(
@@ -1104,7 +1122,7 @@ export default new Vuex.Store({
       if (found) {
         return found.name;
       } else {
-        return '-';
+        return '';
       }
     },
   },
