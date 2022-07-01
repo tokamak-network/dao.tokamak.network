@@ -9,7 +9,7 @@ export default {
   data () {
     return {
       alert: '',
-      chainId: '0x1', // production: '0x1', develop: '0x4'
+      chainId: '0x4', // production: '0x1', develop: '0x4'
       decentChainId: '0x01',
     };
   },
@@ -35,7 +35,7 @@ export default {
         if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
         } else {
-          this.alert = 'The current network is not mainnet. Please change it to the mainnet.';
+          this.alert = 'The current network is not rinkeby. Please change it to the rinkeby.';
         }
       } else {
         const aTag = function (href, link) {
