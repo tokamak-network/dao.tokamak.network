@@ -1083,6 +1083,10 @@ const daoVaultFunctionsOfTypeB = [
 ];
 const powerTonProxyFunctionsOfTypeB = [
   {
+    'params': {
+      'aboutParam0': 'address powerton contract: New Power TON address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
     'name': 'upgradeTo',
     'title': 'PowerTON logic contract will be updated',
     'prettyName': '',
@@ -1154,7 +1158,7 @@ module.exports.getContractABI = function (want, type = 'A') {
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
     else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeB;
     else if (want === 'DAOVault') return daoVaultABIOfTypeB;
-    else if (want === 'PowerTONProxy') return powerTonProxyFunctionsOfTypeB;
+    else if (want === 'PowerTONProxy') return powerTonProxyABIOfTypeB;
     else return [];
   }
 };

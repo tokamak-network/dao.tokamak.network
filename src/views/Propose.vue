@@ -371,7 +371,7 @@ export default {
       else if (index === 5) return this.daoCommitteeProxyFunctionsOfTypeB.length;
       else if (index === 6) return this.daoCommitteeFunctionsOfTypeB.length;
       else if (index === 7) return this.daoVaultFunctionsOfTypeB.length;
-      else if (index === 8) return this.powerTonFunctionsOfTypeB.length;
+      else if (index === 8) return this.powerTonProxyFunctionsOfTypeB.length;
       else return 0;
     },
     selectContract (index, type) {
@@ -404,6 +404,7 @@ export default {
         else if (index === 5) this.currentContract = 'DAOCommitteeProxy';
         else if (index === 6) this.currentContract = 'DAOCommittee';
         else if (index === 7) this.currentContract = 'DAOVault';
+        else if (index === 8) this.currentContract = 'PowerTONProxy';
         else {
           console.log('bug', 'no type'); // eslint-disable-line
         }
