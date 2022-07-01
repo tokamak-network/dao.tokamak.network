@@ -127,7 +127,6 @@ export default {
     ]),
     aboutParam () {
       return index => {
-        console.log(this.functionName);
         if (this.functionName === 'setSeigRates') {
           if (index === 0) return 'uint256 powerTONSeigRate_: PowerTON distribution ratio (decimal: 27) 100000000000000000000000000: 10%';
           if (index === 1) return 'uint256 daoSeigRate_: DAO distribution ratio (decimal: 27) 200000000000000000000000000: 20%';
