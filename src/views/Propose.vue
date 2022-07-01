@@ -253,6 +253,7 @@ export default {
         'DAO Committee\nContract',
         // 'Candidate\n Contract',
         'DAO Vault\nContract',
+        'Power TON Proxy\nContract',
       ],
 
       currentContract: '',
@@ -274,6 +275,7 @@ export default {
       daoCommitteeFunctionsOfTypeB: [],
       // candidateFunctionsOfTypeB: [],
       daoVaultFunctionsOfTypeB: [],
+      powerTonProxyFunctionsOfTypeB: [],
 
       setSeigRatesParams: [
         { 'internalType': 'uint256', 'name': 'powerTONSeigRate_', 'type': 'uint256' },
@@ -329,6 +331,7 @@ export default {
     this.daoCommitteeFunctionsOfTypeB = getContractABI('DAOCommittee', 'B');
     // this.candidateFunctionsOfTypeB         = getContractABI('Candidate', 'B');
     this.daoVaultFunctionsOfTypeB = getContractABI('DAOVault', 'B');
+    this.powerTonProxyFunctionsOfTypeB = getContractABI('PowerTONProxy', 'B');
 
     this.width = window.innerWidth;
     window.addEventListener('resize', this.handleResize);
@@ -368,6 +371,7 @@ export default {
       else if (index === 5) return this.daoCommitteeProxyFunctionsOfTypeB.length;
       else if (index === 6) return this.daoCommitteeFunctionsOfTypeB.length;
       else if (index === 7) return this.daoVaultFunctionsOfTypeB.length;
+      else if (index === 8) return this.powerTonFunctionsOfTypeB.length;
       else return 0;
     },
     selectContract (index, type) {
@@ -505,6 +509,8 @@ export default {
           return this.daoCommitteeFunctionsOfTypeB;
         } else if (index === 7) {
           return this.daoVaultFunctionsOfTypeB;
+        } else if (index === 8) {
+          return this.powerTonProxyFunctionsOfTypeB;
         } else {
           console.log('bug', 'no type B functions'); // eslint-disable-line
           return [];

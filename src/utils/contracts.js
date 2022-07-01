@@ -19,6 +19,7 @@ const depositManager = require('../contracts/DepositManager.json');
 const ton = require('../contracts/TON.json');
 const wton = require('../contracts/WTON.json');
 const powerTON = require('../contracts/PowerTON.json');
+const powerTONProxy = require('../contracts/PowerTONProxy.json');
 const seigManager = require('../contracts/SeigManager.json');
 const daoVault = require('../contracts/DAOVault.json');
 const layer2Registry = require('../contracts/Layer2Registry.json');
@@ -33,6 +34,7 @@ const deployed = {
   'CoinageFactory': '0x5b40841eeCfB429452AB25216Afc1e1650C07747',
   'SeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
   'PowerTON': '0xd86d8950A4144D8a258930F6DD5f90CCE249E1CF',
+  'PowerTONProxy': '0x970298189050abd4dc4f119ccae14ee145ad9371',
   'DAOVault': '0x2520CD65BAa2cEEe9E6Ad6EBD3F45490C42dd303',
   'DAOAgendaManager': '0xcD4421d082752f363E1687544a09d5112cD4f484',
   'CandidateFactory': '0xE6713aF11aDB0cFD3C60e15b23E43f5548C32942',
@@ -54,6 +56,7 @@ function getContract (want, web3, address) {
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
   const PowerTON = new web3.eth.Contract(powerTON.abi, deployed.PowerTON);
+  const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
 
@@ -67,6 +70,7 @@ function getContract (want, web3, address) {
     TON,
     WTON,
     PowerTON,
+    PowerTONProxy,
     SeigManager,
     Coinage,
     Layer2Registry,
@@ -1077,6 +1081,15 @@ const daoVaultFunctionsOfTypeB = [
 'This function is used when WTON is upgraded. Enter the new WTON address in the first parameter (Param1).',
   },
 ];
+const powerTonProxyFunctionsOfTypeB = [
+  {
+    'name': 'upgradeTo',
+    'title': 'PowerTON logic contract will be updated',
+    'prettyName': '',
+    'explanation':
+      'This function sets the new address of the logic contract for PowerTONProxy to be upgraded. Enter the logic contract for PowerTONProxy address to be upgraded in the first parameter (Param1). It will be used when the PowerTON is upgraded.',
+  },
+];
 
 const depositManagerABIOfTypeA = [];
 const seigManagerABIOfTypeA = [];
@@ -1091,6 +1104,7 @@ const layer2RegistryABIOfTypeB = [];
 const daoCommitteeProxyABIOfTypeB = [];
 const daoCommitteeABIOfTypeB = [];
 const daoVaultABIOfTypeB = [];
+const powerTonProxyABIOfTypeB = [];
 
 (() => {
   const set = (functions, abis, abi) => {
@@ -1119,6 +1133,7 @@ const daoVaultABIOfTypeB = [];
   set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxyABIOfTypeB, committeeProxy.abi);
   set(daoCommitteeFunctionsOfTypeB, daoCommitteeABIOfTypeB, committee.abi);
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
+  set(powerTonProxyFunctionsOfTypeB, powerTonProxyABIOfTypeB, powerTONProxy.abi);
 })();
 
 module.exports.getContractABI = function (want, type = 'A') {
@@ -1139,6 +1154,7 @@ module.exports.getContractABI = function (want, type = 'A') {
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
     else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeB;
     else if (want === 'DAOVault') return daoVaultABIOfTypeB;
+    else if (want === 'PowerTONProxy') return powerTonProxyFunctionsOfTypeB;
     else return [];
   }
 };
@@ -1162,6 +1178,7 @@ module.exports.getContractABIFromAddress = function (address, type) {
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
+    else if (address === deployed.PowerTONProxy.toLowerCase()) return powerTonProxyABIOfTypeB;
     else return [];
   } else {
     console.log('bug', 'no type'); // eslint-disable-line
@@ -1198,6 +1215,7 @@ module.exports.getFunctionSelector = function (contract, want, type) {
     else if (contract === 'DAOCommitteeProxy') return (daoCommitteeProxyABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'DAOCommittee') return (daoCommitteeABIOfTypeB.find(f => f.name === want)).selector;
     else if (contract === 'DAOVault') return (daoVaultABIOfTypeB.find(f => f.name === want)).selector;
+    else if (contract === 'PowerTONProxy') return (powerTonProxyABIOfTypeB.find(f => f.name === want)).selector;
     else return '';
   } else {
     return '';
@@ -1299,6 +1317,9 @@ const getABIFromSelector = function (selector, type) {
     if (abi) return abi;
 
     abi = daoVaultABIOfTypeB.find(abi => abi.selector === selector);
+    if (abi) return abi;
+
+    abi = powerTonProxyABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
 
     if (!abi) {
