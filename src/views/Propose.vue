@@ -253,7 +253,7 @@ export default {
         'DAO Committee\nContract',
         // 'Candidate\n Contract',
         'DAO Vault\nContract',
-        'Power TON Proxy\nContract',
+        'PowerTON Proxy\nContract',
       ],
 
       currentContract: '',
@@ -466,6 +466,10 @@ export default {
           return this.indexOfTypeB === index ?
             require('../assets/contract-dao-vault-active-typeB.svg') :
             require('../assets/contract-dao-vault-inactive-typeB.svg');
+        case 'PowerTON Proxy\nContract':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-seig-manager-active-typeB.svg') :
+            require('../assets/contract-seig-manager-inactive-typeB.svg');
         }
       } else {
         console.log('bug', 'no contact img'); // eslint-disable-line
