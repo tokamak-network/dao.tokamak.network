@@ -552,7 +552,7 @@ export default new Vuex.Store({
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
-          agendas[i].type = agendaContents[i].type;
+          agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
@@ -898,6 +898,7 @@ export default new Vuex.Store({
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
+      console.log(onChainEffects);
       if (onChainEffects.length === 2) {
         if (onChainEffects[0].name === 'setPowerTONSeigRate') {
           // TODO: fix to issue that onChainEffects[1].name is undefined.
