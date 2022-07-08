@@ -929,7 +929,7 @@ export default new Vuex.Store({
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
       if (onChainEffects.length === 2) {
-        console.log('a');
+        // console.log(onChainEffects);
         if (onChainEffects[0].name === 'setPowerTONSeigRate') {
           return `Execution 1:
 This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
@@ -939,8 +939,22 @@ Currently, TON seigniorage is issued each time a Ethereum block is created.
 
 Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
 This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
-        } else if (onChainEffects[0].name === 'upgradeTo') {
-          console.log('a');
+        } else if (onChainEffects[0].name === 'upgradeTo' && onChainEffects[1].name === 'setInfo') {
+          return `
+Execution 1:
+This function sets the new address of the logic contract for PowerTONProxy to be upgraded. Enter the logic contract for PowerTONProxy address to be upgraded in the first parameter (Param1). It will be used when the PowerTON is upgraded. 
+
+impl: ${onChainEffects[0].values[0]}
+
+Execution 2:
+This function execute setInfo function to set the informations in PowerTON.
+
+wton: ${onChainEffects[1].values[0]}
+autocoinageSnapshot: ${onChainEffects[1].values[1]}
+seigManager: ${onChainEffects[1].values[2]}
+dividendPool: ${onChainEffects[1].values[3]}
+
+`;
         }
       }
       if (onChainEffects.length === 3) {
@@ -964,6 +978,7 @@ This function allows you to determine the ratio of the newly issued TON accumula
       }
 
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
+      console.log(abiFound.explanation);
       return abiFound.explanation;
     },
     agendaInputs: (_, getters) => (agendaId, type) => {
