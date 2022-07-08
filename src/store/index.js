@@ -556,8 +556,6 @@ export default new Vuex.Store({
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
-      console.log(parseAgendaBytecode(agendaTxs[0], agendas[0].type));
-      console.log(parseAgendaBytecode(agendaTxs[5], agendas[5].type));
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
@@ -978,7 +976,6 @@ This function allows you to determine the ratio of the newly issued TON accumula
       }
 
       const abiFound = abi.find(a => a.name === onChainEffects[0].name);
-      console.log(abiFound.explanation);
       return abiFound.explanation;
     },
     agendaInputs: (_, getters) => (agendaId, type) => {
