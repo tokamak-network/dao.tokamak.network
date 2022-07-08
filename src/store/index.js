@@ -556,6 +556,8 @@ export default new Vuex.Store({
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
+      console.log(parseAgendaBytecode(agendaTxs[0], agendas[0].type));
+      console.log(parseAgendaBytecode(agendaTxs[5], agendas[5].type));
       commit('SET_AGENDAS', agendas);
       await dispatch('setVoteAgendas');
     },
@@ -927,6 +929,7 @@ export default new Vuex.Store({
     agendaExplanation: (_, getters) => (agendaId, type) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);
       if (onChainEffects.length === 2) {
+        console.log('a');
         if (onChainEffects[0].name === 'setPowerTONSeigRate') {
           return `Execution 1:
 This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
@@ -936,6 +939,8 @@ Currently, TON seigniorage is issued each time a Ethereum block is created.
 
 Additionally issued TON will be distributed among PowerTON, DAO and staking users, excluding TON allocated for fixed seigniorage rewards (19%).
 This function allows you to determine the ratio of the newly issued TON accumulated for PowerTON.`;
+        } else if (onChainEffects[0].name === 'upgradeTo') {
+          console.log('a');
         }
       }
       if (onChainEffects.length === 3) {
