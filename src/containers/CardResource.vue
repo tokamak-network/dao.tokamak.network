@@ -21,7 +21,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://discord.gg/SZw2WSR"
           >
-            DAO Discussion (Discord)
+            DAO Discussion (Discrod)
           </a>
         </div>
         <div class="resource">
@@ -41,7 +41,7 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://docs.tokamak.network/docs/en/guides/ton-staking/how-to-set-candidate"
+             href="https://docs.tokamak.network/docs/en/guides/getting-started/how-to-set-candidate"
           >
             Candidate Registration
           </a>

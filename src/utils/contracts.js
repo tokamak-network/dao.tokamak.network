@@ -672,6 +672,8 @@ const seigManagerFunctionsOfTypeB = [
     'params': {
       'aboutParam0': 'address target: The target address from which the owner authority to be transferred by SeigManger',
       'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'address newOwner: The address to which SeigManger\'s owner authority is transferred',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
     },
     'name': 'transferOwnership',
     'title': '(Seig Manager)First parameter\'s(Param1) owner rights of Seigmanager will be transferred.',
@@ -701,7 +703,7 @@ It will be used when Seigmanager (seigniorage managing contract) is updated.`,
     'title': '(Seig Manager)PowerTON contract will be changed.',
     'prettyName': '',
     'explanation':
-'This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.',
+'This function allows you to set the new PowerTON cotntract as the first parameter (Param1). This function will be used when PowerTON is updated.',
   },
   {
     'params': {
@@ -1313,7 +1315,6 @@ const getABIFromSelector = function (selector, type) {
 module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx, type) {
-  // TODO: to fix case of using mixed type with 'A' and 'B'
   const params1 = marshalString(unmarshalString(tx.input).substring(8));
   const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
 
@@ -1330,10 +1331,7 @@ module.exports.parseAgendaBytecode = function (tx, type) {
   const onChainEffects = [];
   for (let i = 0; i < targets.length; i++) {
     const selector = commands[i].slice(0, 10);
-    let abi = getABIFromSelector(selector, type);
-    if (!abi) {
-      abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
-    }
+    const abi = getABIFromSelector(selector, type);
 
     if (!abi) {
       onChainEffects.push({

@@ -13,11 +13,9 @@ Vue.use(VueGtag, {
 });
 
 import * as filters from '@/utils/helpers';
-Object.keys(filters).forEach((key) => {
+Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]); // eslint-disable-line
 });
-
-//DAO AGENDA DEPLOY TEST
 
 Vue.config.productionTip = false;
 Vue.use(VueMq, {
@@ -31,5 +29,5 @@ Vue.use(VueMq, {
 new Vue({
   store,
   router,
-  render: (h) => h(App),
+  render: h => h(App),
 }).$mount('#app');

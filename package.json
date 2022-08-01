@@ -13,8 +13,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dompurify": "^2.2.6",
-    "eth-sig-util": "^3.0.1",
-    "ethers": "^5.1.4",
+    "ethers": "^5.0.32",
     "marked": ">=2.0.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
@@ -37,7 +36,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-vue": "^7.0.0-beta.4",
-    "node-sass": "^4.14.0",
+    "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "vue-gtag": "^1.11.0",
     "vue-template-compiler": "^2.6.11"

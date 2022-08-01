@@ -106,10 +106,9 @@
 </template>
 
 <script>
-import { withComma, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
+import { withComma, TON, WTON, marshalString, unmarshalString, padLeft, toWei, toRay } from '@/utils/helpers';
 import { getContract, stakedOfCandidateContracts, minimumAmountOfOperator } from '@/utils/contracts';
 import { toBN } from 'web3-utils';
-import { ethers } from 'ethers';
 
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
@@ -197,21 +196,18 @@ export default {
     },
     tonMax () {
       if (this.voteUnit === 'TON') {
-        const max = ethers.utils.formatUnits(this.tonBalance, 18);
         if (this.tonBalance && this.tonBalance > 0) {
-          this.$refs.tonvote.$refs.input.value = max;
+          this.$refs.tonvote.$refs.input.value = TON(this.tonBalance);
         }
       } else {
-        const max = ethers.utils.formatUnits(this.wtonBalance, 27);
         if (this.wtonBalance && this.wtonBalance > 0) {
-          this.$refs.wtonvote.$refs.input.value = max;
+          this.$refs.wtonvote.$refs.input.value = WTON(this.wtonBalance);
         }
       }
     },
     wtonMax () {
-      const max = ethers.utils.formatUnits(this.myVotes, 27);
       if (this.myVotes && this.myVotes > 0) {
-        this.$refs.tonunvote.$refs.input.value = max;
+        this.$refs.tonunvote.$refs.input.value = WTON(this.myVotes);
       }
     },
     setRevoteAmount () {
