@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fontsource/titillium-web": "^4.5.9",
     "@makerdao/currency": "^0.9.9",
     "@metamask/jazzicon": "^2.0.0",
     "axios": "^0.21.1",
