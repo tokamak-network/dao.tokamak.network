@@ -10,6 +10,7 @@ export default {
     return {
       alert: '',
       chainId: '0x4', // production: '0x1', develop: '0x4'
+      decentChainId: '0x01',
     };
   },
   computed: {
@@ -34,7 +35,7 @@ export default {
         if (chainId !== this.chainId) {
           this.alert = 'The current network is not rinkeby network. Please change it to the rinkeby network.';
         } else {
-          this.alert = '';
+          this.alert = 'The current network is not rinkeby. Please change it to the rinkeby.';
         }
       } else {
         const aTag = function (href, link) {

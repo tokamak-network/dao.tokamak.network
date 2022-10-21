@@ -165,7 +165,6 @@ export default {
       if (tonBalanceBN.lt(createAgendaFeeBN)) {
         return alert('Please check your TON amount.');
       }
-
       const nParams = Object.keys(this.$refs).length;
       if (this.params.length !== nParams) {
         console.log('bug'); // eslint-disable-line

@@ -253,6 +253,7 @@ export default {
         'DAO Committee\nContract',
         // 'Candidate\n Contract',
         'DAO Vault\nContract',
+        'PowerTON Proxy\nContract',
       ],
 
       currentContract: '',
@@ -274,6 +275,7 @@ export default {
       daoCommitteeFunctionsOfTypeB: [],
       // candidateFunctionsOfTypeB: [],
       daoVaultFunctionsOfTypeB: [],
+      powerTonProxyFunctionsOfTypeB: [],
 
       setSeigRatesParams: [
         { 'internalType': 'uint256', 'name': 'powerTONSeigRate_', 'type': 'uint256' },
@@ -329,6 +331,7 @@ export default {
     this.daoCommitteeFunctionsOfTypeB = getContractABI('DAOCommittee', 'B');
     // this.candidateFunctionsOfTypeB         = getContractABI('Candidate', 'B');
     this.daoVaultFunctionsOfTypeB = getContractABI('DAOVault', 'B');
+    this.powerTonProxyFunctionsOfTypeB = getContractABI('PowerTONProxy', 'B');
 
     this.width = window.innerWidth;
     window.addEventListener('resize', this.handleResize);
@@ -368,6 +371,7 @@ export default {
       else if (index === 5) return this.daoCommitteeProxyFunctionsOfTypeB.length;
       else if (index === 6) return this.daoCommitteeFunctionsOfTypeB.length;
       else if (index === 7) return this.daoVaultFunctionsOfTypeB.length;
+      else if (index === 8) return this.powerTonProxyFunctionsOfTypeB.length;
       else return 0;
     },
     selectContract (index, type) {
@@ -400,6 +404,7 @@ export default {
         else if (index === 5) this.currentContract = 'DAOCommitteeProxy';
         else if (index === 6) this.currentContract = 'DAOCommittee';
         else if (index === 7) this.currentContract = 'DAOVault';
+        else if (index === 8) this.currentContract = 'PowerTONProxy';
         else {
           console.log('bug', 'no type'); // eslint-disable-line
         }
@@ -461,6 +466,10 @@ export default {
           return this.indexOfTypeB === index ?
             require('../assets/contract-dao-vault-active-typeB.svg') :
             require('../assets/contract-dao-vault-inactive-typeB.svg');
+        case 'PowerTON Proxy\nContract':
+          return this.indexOfTypeB === index ?
+            require('../assets/contract-seig-manager-active-typeB.svg') :
+            require('../assets/contract-seig-manager-inactive-typeB.svg');
         }
       } else {
         console.log('bug', 'no contact img'); // eslint-disable-line
@@ -505,6 +514,8 @@ export default {
           return this.daoCommitteeFunctionsOfTypeB;
         } else if (index === 7) {
           return this.daoVaultFunctionsOfTypeB;
+        } else if (index === 8) {
+          return this.powerTonProxyFunctionsOfTypeB;
         } else {
           console.log('bug', 'no type B functions'); // eslint-disable-line
           return [];
