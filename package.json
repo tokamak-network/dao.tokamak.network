@@ -18,6 +18,7 @@
     "marked": ">=2.0.0",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
+    "sass": "^1.55.0",
     "tokamak-staking-lib": "^0.0.12",
     "vue": "^2.6.11",
     "vue-mq": "^1.0.1",
@@ -37,7 +38,6 @@
     "eslint": "^6.8.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-vue": "^7.0.0-beta.4",
-    "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "vue-gtag": "^1.11.0",
     "vue-template-compiler": "^2.6.11"
