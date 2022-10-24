@@ -56,7 +56,6 @@ export default {};
   background: #2775ff;
   color: #ffffff;
   font-weight: bold;
-  // height: 45px;
   justify-content: center;
 }
 .link {
