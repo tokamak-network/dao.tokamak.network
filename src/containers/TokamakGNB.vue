@@ -66,7 +66,6 @@ export default {};
   font-size: 15px;
   height: 45px;
   text-decoration: none;
-  // text-align: center;
   justify-content: center;
   font-family: 'Titillium Web', sans-serif;
   &:hover {
