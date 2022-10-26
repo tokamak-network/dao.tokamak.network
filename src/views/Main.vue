@@ -231,7 +231,7 @@ export default {
   box-shadow: 0 0 10px 0 rgba(215, 222, 227, 0.4);
   background-color: #f6f8f9;
   position: absolute;
-  top: 488px;
+  top: 495px;
   left: 0;
   right: 0;
   margin-left: auto;
