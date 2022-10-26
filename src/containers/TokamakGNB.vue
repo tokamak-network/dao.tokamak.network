@@ -22,21 +22,21 @@
       <div>TONStarter</div>
     </a>
     <a
-      href="https://simple.staking.tokamak.network/"
+      href="https://rinkeby.simple.staking.tokamak.network/"
       :style="{ width: '90px' }"
       class="link"
     >
       <div>Staking</div>
     </a>
     <a
-      href="https://dao.tokamak.network/#/"
+      href="https://rinkeby.dao.tokamak.network/#/"
       :style="{ width: '68px' }"
       class="link"
     >
       <div>DAO</div>
     </a>
     <a
-      href="https://swap.tokamak.network/"
+      href="https://tonswapper.vercel.app/"
       :style="{ width: '76px' }"
       class="link"
     >
