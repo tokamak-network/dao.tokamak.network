@@ -31,7 +31,7 @@
     <a
       href="https://rinkeby.dao.tokamak.network/#/"
       :style="{ width: '68px' }"
-      class="link"
+      class="active-link"
     >
       <div>DAO</div>
     </a>
@@ -69,8 +69,21 @@ export default {};
   font-family: 'Titillium Web', sans-serif;
   &:hover {
     cursor: pointer;
-    background: #ffffff;
+  }
+}
+
+.active-link {
+  background: #ffffff;
     color: #353c48;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  height: 45px;
+  text-decoration: none;
+  justify-content: center;
+  font-family: 'Titillium Web', sans-serif;
+  &:hover {
+    cursor: pointer;
   }
 }
 </style>
