@@ -101,7 +101,6 @@ import Connect from '@/components/Connect.vue';
 import Modal from '@/components/Modal.vue';
 import ModalClaim from '@/containers/ModalClaim.vue';
 import { mapGetters, mapState } from 'vuex';
-import '@fontsource/open-sans';
 
 export default {
   components: {
@@ -250,7 +249,7 @@ button:hover {
 
 .menu-item {
   /* font styles */
-  font-family: "Open Sans";
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
   font-stretch: normal;
@@ -267,7 +266,7 @@ button:hover {
 }
 
 .menu-item-sub:hover {
-  font-family: "Open Sans";
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
   font-stretch: normal;
