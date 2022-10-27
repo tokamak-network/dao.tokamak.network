@@ -56,13 +56,14 @@ export default {};
   color: #ffffff;
   font-weight: bold;
   justify-content: center;
+  height: 45px;
 }
 .link {
   color: #ffffff;
   display: flex;
   align-items: center;
   font-size: 15px;
-  height: 45px;
+  line-height: 1.53;
   text-decoration: none;
   justify-content: center;
   font-family: 'Titillium Web', sans-serif;
@@ -77,7 +78,7 @@ export default {};
   display: flex;
   align-items: center;
   font-size: 15px;
-  height: 45px;
+  line-height: 1.53;
   text-decoration: none;
   justify-content: center;
   font-family: 'Titillium Web', sans-serif;
