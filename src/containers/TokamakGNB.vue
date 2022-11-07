@@ -1,7 +1,7 @@
 <template>
   <div class="gnb">
     <a
-      href=""
+      href="https://vision-page.vercel.app/"
       :style="{ width: '100px' }"
       class="link"
     >
