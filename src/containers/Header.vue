@@ -49,48 +49,48 @@
       <div class="header-gridItem">
         <div class="menu">
           <router-link
-          :to="'/election'"
-          class="menu-item"
-          style="margin-right:60px"
-          :class="{
-            'menu-item-sub': isSub,
-            selected: $route.path.includes('election'),
-          }"
-        >
-          Election
-        </router-link>
-        <router-link
-          :to="'/propose'"
-          class="menu-item"
-          style="margin-right:60px"
-          :class="{
-            'menu-item-sub': isSub,
-            selected: $route.path.includes('propose'),
-          }"
-        >
-          Propose
-        </router-link>
-        <router-link
-          :to="'/agenda'"
-          class="menu-item"
-          :class="{
-            'menu-item-sub': isSub,
-            selected: $route.path.includes('agenda'),
-          }"
-        >
-          Committee
-        </router-link>
+            :to="'/election'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('election'),
+            }"
+          >
+            Election
+          </router-link>
+          <router-link
+            :to="'/propose'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('propose'),
+            }"
+          >
+            Propose
+          </router-link>
+          <router-link
+            :to="'/agenda'"
+            class="menu-item"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('agenda'),
+            }"
+          >
+            Committee
+          </router-link>
         </div>
       </div>
       <div class="header-gridItem" style="justify-content: flex-end;">
         <connect-wallet :is-sub="isSub" />
         <div v-if="account !== '' && isCandidate" class="container">
-        <div>
-          <button :class="{ claim: isSub }" @click="showModal = true">
-            Claim
-          </button>
+          <div>
+            <button :class="{ claim: isSub }" @click="showModal = true">
+              Claim
+            </button>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

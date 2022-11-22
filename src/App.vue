@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <alert />
-    <tokamak-gnb />
+
+    <mobile-tokamak-gnb v-if="$mq === 'mobile'" />
+    <tokamak-gnb v-else />
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
     <router-view />
@@ -18,6 +20,7 @@ import Footer from '@/containers/Footer.vue';
 import MobileHeader from '@/containers/MobileHeader.vue';
 import MobileFooter from '@/containers/MobileFooter.vue';
 import TokamakGNB from '@/containers/TokamakGNB.vue';
+import MobileTokamakGNB from '@/containers/MobileTokamakGNB.vue';
 export default {
   name: 'App',
   components: {
@@ -27,6 +30,7 @@ export default {
     'mobile-header-container': MobileHeader,
     'mobile-footer-container': MobileFooter,
     'tokamak-gnb': TokamakGNB,
+    'mobile-tokamak-gnb': MobileTokamakGNB,
   },
   data () {
     return {
