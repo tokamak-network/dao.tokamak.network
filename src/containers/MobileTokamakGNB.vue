@@ -12,12 +12,12 @@
         :key="index"
         class="gnb_mobile_menu"
         :style="[
-          menu.title === 'Tokamak Network DAO'
-            ? { minWidth: '186px' }
+         menu.title === 'Tokamak Network DAO'
+            ? { minWidth: '186px', maxWidth: '186px' }
             : menu.title === 'Tokamak Network'
-              ? { minWidth: '160px' }
+              ? { minWidth: '160px', maxWidth: '160px' }
               : menu.title === 'Simple Staking'
-                ? { minWidth: '140px' }
+                ? { minWidth: '140px', maxWidth: '140px' }
                 : {},
           menu.isFoucsed ? { fontWeight: 600 } : {},
           menu.isFoucsed ? { opacity: 1 } : { opacity: 0.25 },
@@ -25,8 +25,8 @@
           index === 0 ? { marginLeft: `${(deviceWidth- 80 - 78) / 2}px` } : {},
         ]"
         :href="menu.url"
-        @touchstart="catchTouchStart(e)"
-        @touchend="handleNavigation(e)"
+        @touchstart="(e) => catchTouchStart(e)"
+        @touchend="(e) => handleNavigation(e)"
       >
         {{ menu.title }}
       </a>
