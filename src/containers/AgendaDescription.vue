@@ -83,7 +83,7 @@ export default {
     async update () {
       const txHash = this.getAgendaByID(this.agendaId).transactionHash;
       const sig = await this.generateSig(txHash, this.account.toLowerCase());
-      await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig, this.getAgendaByID(this.agendaId).type);
+      await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig);
 
       this.edit = false;
       await this.$store.dispatch('launch');

@@ -31,6 +31,7 @@
 import Web3 from 'web3';
 import { mapState } from 'vuex';
 import jazzicon from '@metamask/jazzicon';
+import '@fontsource/titillium-web';
 
 export default {
   props: {
@@ -77,8 +78,8 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const chainId = await web3.eth.getChainId();
-          if (chainId !== 1) {
-            return alert('The current network is not mainnet. Please change it to the mainnet.');
+          if (chainId !== 4) {
+            return alert('The current network is not rinkeby network. Please change it to the rinkeby network.');
           }
 
           const accounts = await web3.eth.getAccounts();
@@ -171,7 +172,7 @@ export default {
 <style lang="scss" scoped>
 button {
   /* font styles */
-  font-family: Roboto;
+  font-family:'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: 500;
   font-stretch: normal;
@@ -215,7 +216,7 @@ button {
 
 .address {
   /* text styles */
-  font-family: Roboto;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -271,7 +272,7 @@ button {
 }
 
 .label {
-  font-family: Roboto;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

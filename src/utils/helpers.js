@@ -81,7 +81,7 @@ export function date3 (timestamp) {
 
 export function date4 (timestamp) {
   if (!timestamp) return '';
-  return moment.utc(timestamp * 1000).local().format('MMM, DD');
+  return moment.utc(timestamp * 1000).local().format('MM, DD');
 }
 
 export function votingTime (agenda) {
@@ -255,14 +255,4 @@ export function withComma (n) {
   }
 
   return n.toLocaleString('en-US', { minimumFractionDigits: 2 });
-}
-
-export function truncate (str, maxDecimalDigits) {
-  if (str.includes('.')) {
-    const parts = str.split('.'); // [ '1,234', '999999999999999999999999999' ]
-
-    const l = maxDecimalDigits - parts[1].length > 0 ? maxDecimalDigits - parts[1].length : 0;
-    return parts[0] + '.' + parts[1].slice(0, maxDecimalDigits) + '0'.repeat(l);
-  }
-  return str;
 }

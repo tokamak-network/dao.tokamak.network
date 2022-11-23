@@ -1,64 +1,95 @@
 <template>
   <div class="header" :class="{ 'header-sub': isSub }">
-    <modal v-if="showModal"
-           :width="'490px'"
-           @on-closed="showModal=false"
-    >
+    <modal v-if="showModal" :width="'490px'" @on-closed="showModal = false">
       <template #body>
-        <modal-claim @on-closed="showModal=false" />
+        <modal-claim @on-closed="showModal = false" />
       </template>
     </modal>
-    <div v-if="$mq === 'desktop'" class="logo" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
-      <div v-if="isSub" class="logo-container">
-        <img v-if="isSub" src="@/assets/logo-sub.png" alt="">
-        <div class="beta beta-sub">Beta</div>
-      </div>
-      <div v-else class="logo-container">
-        <img src="@/assets/logo.png" alt="">
-        <div class="beta">Beta</div>
-      </div>
-    </div>
-    <div v-else class="logo-tablet" @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''">
-      <div v-if="isSub" class="logo-container">
-        <img src="@/assets/mobile-logo-sub.png" alt=""
-             width="105" height="30"
+    <div class="header-grid">
+      <div class="header-gridItem">
+        <div
+          v-if="$mq === 'desktop'"
+          class="logo"
+          @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
         >
-        <div class="beta beta-sub">Beta</div>
+          <div v-if="isSub" class="logo-container">
+            <img v-if="isSub" src="@/assets/logo-sub.png" alt="" />
+            <div class="beta beta-sub">rinkeby</div>
+          </div>
+          <div v-else class="logo-container">
+            <img src="@/assets/logo.png" alt="" />
+            <div class="beta">rinkeby</div>
+          </div>
+        </div>
+        <div
+          v-else
+          class="logo-tablet"
+          @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
+        >
+          <div v-if="isSub" class="logo-container">
+            <img
+              src="@/assets/mobile-logo-sub.png"
+              alt=""
+              width="105"
+              height="30"
+            />
+            <div class="beta beta-sub">rinkeby</div>
+          </div>
+          <div v-else class="logo-container">
+            <img
+              src="@/assets/mobile-logo.png"
+              alt=""
+              width="105"
+              height="30"
+            />
+            <div class="beta">rinkeby</div>
+          </div>
+        </div>
       </div>
-      <div v-else class="logo-container">
-        <img src="@/assets/mobile-logo.png" alt=""
-             width="105" height="30"
-        >
-        <div class="beta">Beta</div>
-      </div>
-    </div>
-    <div style="display: flex; flex: 1; justify-content: flex-end;">
-      <div class="menu">
-        <router-link :to="'/election'"
-                     class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('election') }"
-        >
-          Election
-        </router-link>
-        <router-link :to="'/propose'"
-                     class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('propose') }"
-        >
-          Propose
-        </router-link>
-        <router-link :to="'/agenda'"
-                     class="menu-item" :class="{ 'menu-item-sub': isSub, selected: $route.path.includes('agenda') }"
-        >
-          Committee
-        </router-link>
-        <connect-wallet :is-sub="isSub" />
-      </div>
-      <div v-if="account!=='' && isCandidate" class="container">
-        <div>
-          <button
-            :class="{ 'claim': isSub }"
-            @click="showModal=true"
+      <div class="header-gridItem">
+        <div class="menu">
+          <router-link
+            :to="'/election'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('election'),
+            }"
           >
-            Claim
-          </button>
+            Election
+          </router-link>
+          <router-link
+            :to="'/propose'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('propose'),
+            }"
+          >
+            Propose
+          </router-link>
+          <router-link
+            :to="'/agenda'"
+            class="menu-item"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('agenda'),
+            }"
+          >
+            Committee
+          </router-link>
+        </div>
+      </div>
+      <div class="header-gridItem" style="justify-content: flex-end;">
+        <connect-wallet :is-sub="isSub" />
+        <div v-if="account !== '' && isCandidate" class="container">
+          <div>
+            <button :class="{ claim: isSub }" @click="showModal = true">
+              Claim
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +105,7 @@ import { mapGetters, mapState } from 'vuex';
 export default {
   components: {
     'connect-wallet': Connect,
-    'modal': Modal,
+    modal: Modal,
     'modal-claim': ModalClaim,
   },
   data () {
@@ -83,12 +114,8 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      'account',
-    ]),
-    ...mapGetters([
-      'isCandidate',
-    ]),
+    ...mapState(['account']),
+    ...mapGetters(['isCandidate']),
     isSub () {
       return this.$route.path !== '/';
     },
@@ -108,18 +135,29 @@ export default {
 .header {
   display: flex;
   justify-content: space-between;
-
+  flex-direction: column;
   height: 84px;
-  background: #0062c2;
-
-  padding-left: 30px;
-  padding-right: 30px;
+  background: transparent;
+  z-index: 1;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .header-sub {
   background: #fafbfc;
 }
 
+.header-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 33.33% 33.33% 33.33%;
+}
+
+.header-gridItem {
+  height: 78px;
+  display: flex;
+  align-items: center;
+}
 .logo-container {
   display: flex;
   align-items: center;
@@ -182,7 +220,7 @@ button {
   font-style: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #a6c8e9
+  color: #a6c8e9;
 }
 button:hover {
   cursor: pointer;
@@ -203,7 +241,7 @@ button:hover {
   max-width: 500px;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   z-index: 1;
@@ -211,9 +249,9 @@ button:hover {
 
 .menu-item {
   /* font styles */
-  font-family: Roboto;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
@@ -228,9 +266,9 @@ button:hover {
 }
 
 .menu-item-sub:hover {
-  font-family: Roboto;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
