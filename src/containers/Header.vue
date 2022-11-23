@@ -14,11 +14,11 @@
         >
           <div v-if="isSub" class="logo-container">
             <img v-if="isSub" src="@/assets/logo-sub.png" alt="" />
-            <div class="beta beta-sub">rinkeby</div>
+            <div class="beta beta-sub">Beta</div>
           </div>
           <div v-else class="logo-container">
             <img src="@/assets/logo.png" alt="" />
-            <div class="beta">rinkeby</div>
+            <div class="beta">Beta</div>
           </div>
         </div>
         <div
@@ -42,7 +42,7 @@
               width="105"
               height="30"
             />
-            <div class="beta">rinkeby</div>
+            <div class="beta">Beta</div>
           </div>
         </div>
       </div>
