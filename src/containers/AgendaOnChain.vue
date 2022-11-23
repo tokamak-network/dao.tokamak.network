@@ -2,7 +2,7 @@
   <div class="agenda-on-chain">
     <span>For the spell at address </span>
     <span class="target" @click="toEtherscan">{{ target }}</span><br /><br />
-    <div>{{ agendaExplanation(agendaId, type) }} </div><br />
+    <div class="explanation">{{ agendaExplanation(agendaId, type) }} </div><br />
     <div>
       <!-- for setSeigRates -->
       <div v-if="onChainEffects.length === 3">
@@ -16,6 +16,14 @@
           <span>pseigRate_: </span><span>{{ onChainEffects[2].values[0] }}</span><br />
         </div>
       </div>
+      <div v-else-if="onChainEffects.length === 2 && onChainEffects[0].name === 'setPowerTONSeigRate'">
+        <div style="margin-bottom: 6px;">
+          <span>powerTONSeigRate_: </span><span>{{ onChainEffects[0].values[0] }}</span><br />
+        </div>
+        <div style="margin-bottom: 6px;">
+          <span>powerton: </span><span>{{ onChainEffects[1].values[0] }}</span><br />
+        </div>
+      </div>
       <div v-for="(input, index) in agendaInputs(agendaId, type)" v-else :key="input.name" class="name">
         <span>{{ input.name }}: </span><span>{{ Object.values(values)[index] }}</span>
       </div>
@@ -25,7 +33,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-
 export default {
   data () {
     return {
@@ -53,13 +60,11 @@ export default {
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return '';
-
       return onChainEffects[0].target;
     },
     values () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return {};
-
       return onChainEffects[0].values;
     },
     onChainEffects () {
@@ -92,18 +97,17 @@ export default {
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-
   .target {
     color: #2a72e5;
-
     &:hover {
       cursor: pointer;
     }
   }
-
   .name {
     margin-right: 8px;
   }
-
+  .explanation {
+    white-space: pre-wrap;
+  }
 }
 </style>

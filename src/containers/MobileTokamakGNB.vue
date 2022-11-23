@@ -12,7 +12,7 @@
         :key="index"
         class="gnb_mobile_menu"
         :style="[
-         menu.title === 'Tokamak Network DAO'
+          menu.title === 'Tokamak Network DAO'
             ? { minWidth: '186px', maxWidth: '186px' }
             : menu.title === 'Tokamak Network'
               ? { minWidth: '160px', maxWidth: '160px' }

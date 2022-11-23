@@ -2,11 +2,11 @@ import axios from 'axios';
 
 function createInstance () {
   return axios.create({
-    baseURL: 'https://api-dev.tokamak.network/v1',
+    baseURL: 'https://daoapi.tokamak.network/v1',
   });
 }
 const instance = createInstance();
-const chainId = 4;
+const chainId = 1;
 
 export async function getRecentEvents () {
   const events = [
@@ -158,7 +158,7 @@ export async function getAgendaVotesByVoter (voter) {
   return res.data.datas;
 }
 
-export async function updateAgendaContents (from, txHash, contents, sig) {
+export async function updateAgendaContents (from, txHash, contents, sig, type) {
   if (!contents) {
     contents = '-';
   }
@@ -167,6 +167,7 @@ export async function updateAgendaContents (from, txHash, contents, sig) {
     contents: contents,
     account: from,
     sig: sig,
+    type: type,
   });
   return res.data;
 }
