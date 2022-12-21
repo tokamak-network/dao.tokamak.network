@@ -1,7 +1,7 @@
 <template>
   <div class="footer" :class="{ 'footer-sub': isSub() }">
     <div class="menu">
-      <span class="company" :class="{ 'company-sub': isSub() }">© 2021 Onther PTE. LTD.</span>
+      <span class="company" :class="{ 'company-sub': isSub() }">© 2021 Tokamak Network PTE. LTD.</span>
       <!-- <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Terms</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Privacy Policy</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Status</a> -->
