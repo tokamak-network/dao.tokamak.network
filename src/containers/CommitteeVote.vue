@@ -110,12 +110,10 @@ import { withComma, WTON, marshalString, unmarshalString, padLeft, toWei, toRay 
 import { getContract, stakedOfCandidateContracts, minimumAmountOfOperator } from '@/utils/contracts';
 import { toBN } from 'web3-utils';
 import { ethers } from 'ethers';
-
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/Button.vue';
 import DropdownUnit from '@/components/DropdownUnit.vue';
 import TextInput from '@/components/TextInput.vue';
-
 export default {
   components: {
     'custom-button': Button,
@@ -125,17 +123,13 @@ export default {
   data () {
     return {
       currentSelector: 0,
-
       address: '',
-
       revoteIndex: 0,
       withdrawIndex: 0,
-
       voteInProgress: false,
       revoteInProgress: false,
       unvoteInProgress: false,
       withdrawInProgress: false,
-
       voteUnit: 'TON',
     };
   },
@@ -242,7 +236,6 @@ export default {
       }
       const ton = getContract('TON', this.web3);
       const wton = getContract('WTON', this.web3);
-
       const amount = toWei(this.$refs.tonvote.$refs.input.value);
       if (String(amount) === '0') {
         return alert('Please input amount!');
@@ -253,12 +246,10 @@ export default {
       if ((toBN(amount)).cmp(toBN(this.tonBalance)) === 1) {
         return alert('Please check your TON amount!');
       }
-
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
       }
-
       if (candidate.operator.toLowerCase() === this.account.toLowerCase()) {
         const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
         const minimumAmount = await minimumAmountOfOperator(this.web3);
@@ -266,18 +257,15 @@ export default {
         const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
         const canVoteMinimunAmount = (toBN(minimumAmount)).sub(toBN(alreadyStakedAmount));
         const subAmount = (toBN(amountToRay)).sub(canVoteMinimunAmount);
-
         if (subAmount.lt(toBN(0))) {
           return alert('Candidator have to stake a minimun amount.');
         }
       }
-
       const data = await this.dataForDeposit();
       const gasLimit = await ton.methods.approveAndCall(wton._address, amount, data)
         .estimateGas({
           from: this.account,
         });
-
       await ton.methods.approveAndCall(wton._address, amount, data)
         .send({
           from: this.account,
@@ -305,7 +293,6 @@ export default {
       if (!this.account) {
         return;
       }
-
       const amount = toRay(this.$refs.wtonvote.$refs.input.value);
       if (String(amount) === '0') {
         return alert('Please input amount!');
@@ -316,34 +303,28 @@ export default {
       if ((toBN(amount)).cmp(toBN(this.wtonBalance)) === 1) {
         return alert('Please check your WTON amount!');
       }
-
       const candidate = this.candidate(this.address);
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
       }
-
       if (candidate.operator.toLowerCase() === this.account.toLowerCase()) {
         const minimumAmount = await minimumAmountOfOperator(this.web3);
         const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
         const alreadyStakedAmount = await stakedOfCandidateContracts(this.web3, candidateContract, this.account);
         const canVoteMinimunAmount = toBN(minimumAmount).sub(toBN(alreadyStakedAmount));
         const subAmount = toBN(amount).sub(canVoteMinimunAmount);
-
         if (subAmount.lt(toBN(0))) {
           return alert('Candidate have to stake a minimum amount');
         }
       }
-
       const wton = getContract('WTON', this.web3);
       const depositManager = getContract('DepositManager', this.web3);
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
       const data = this.dataForDepositWTON(candidateContract);
       const gasLimit = await wton.methods.approveAndCall(depositManager._address, amount, data)
         .estimateGas({
           from: this.account,
         });
-
       await wton.methods.approveAndCall(depositManager._address, amount, data)
         .send({
           from: this.account,
@@ -373,10 +354,8 @@ export default {
       }
       const depositManager = getContract('DepositManager', this.web3);
       const candidate = this.candidate(this.address);
-
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
       const amount = toRay(this.$refs.tonunvote.$refs.input.value);
-
       if (String(amount) === '0') {
         return alert('Please input amount!');
       }
@@ -386,12 +365,10 @@ export default {
       if ((toBN(amount)).cmp(toBN(this.myVotes)) === 1) {
         return alert('Please check your TON amount!!');
       }
-
       const gasLimit = await depositManager.methods.requestWithdrawal(candidateContract, amount)
         .estimateGas({
           from: this.account,
         });
-
       await depositManager.methods.requestWithdrawal(candidateContract, amount)
         .send({
           from: this.account,
@@ -407,7 +384,6 @@ export default {
             this.unvoteInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
-
             this.revoteIndex = 0;
             this.withdrawIndex = 0;
           }
@@ -420,17 +396,13 @@ export default {
     },
     async revote () {
       if (!this.account) return;
-
       const depositManager = getContract('DepositManager', this.web3);
-
       const candidate = this.candidate(this.address);
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
       const gasLimit = await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
         .estimateGas({
           from: this.account,
         });
-
       await depositManager.methods.redepositMulti(candidateContract, this.numCanRevote(this.address, this.revoteIndex))
         .send({
           from: this.account,
@@ -445,7 +417,6 @@ export default {
             this.revoteInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
-
             this.revoteIndex = 0;
             this.withdrawIndex = 0;
           }
@@ -460,17 +431,13 @@ export default {
       if (!this.account) {
         return;
       }
-
       const depositManager = getContract('DepositManager', this.web3);
-
       const candidate = this.candidate(this.address);
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
       const gasLimit = await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw(this.address, this.withdrawIndex), true)
         .estimateGas({
           from: this.account,
         });
-
       await depositManager.methods.processRequests(candidateContract, this.numCanWithdraw(this.address, this.withdrawIndex), true)
         .send({
           from: this.account,
@@ -485,7 +452,6 @@ export default {
             this.withdrawInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
             await this.update();
-
             this.revoteIndex = 0;
             this.withdrawIndex = 0;
           }
@@ -498,10 +464,8 @@ export default {
     },
     dataForDeposit () {
       const depositManager = getContract('DepositManager', this.web3);
-
       const candidate = this.candidate(this.address);
       const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
       const data = marshalString(
         [depositManager._address, candidateContract]
           .map(unmarshalString)
@@ -522,7 +486,6 @@ export default {
     async update () {
       await this.$store.dispatch('launch');
       await this.$store.dispatch('connectEthereum', this.web3);
-
       const candidateFound = this.candidates.find(candidate => candidate.candidateContract === this.address);
       await this.$store.dispatch('setVoters', candidateFound);
       await this.$store.dispatch('setMyVotes', this.address);
@@ -534,17 +497,14 @@ export default {
 <style lang="scss" scoped>
 .committee-vote {
   height: 410px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding-bottom: 100px;
 }
 .committee-vote .header {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -552,11 +512,9 @@ export default {
 .committee-vote .header > div {
   width: 85px;
   height: 47px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-family: Roboto;
   font-size: 14px;
   font-weight: 500;
@@ -565,16 +523,13 @@ export default {
   letter-spacing: normal;
   text-align: center;
   color: #86929d;
-
   border-bottom: solid 1px #ffffff;
-
   cursor: pointer;
 }
 .committee-vote .header > .selected {
   border-bottom: solid 1px #2a72e5;
   color: #2a72e5;
 }
-
 .committee-vote .body {
   width: 100%;
   max-width: 378px;
@@ -582,7 +537,6 @@ export default {
   border-radius: 10px;
   border: solid 1px #dfe4ee;
   background-color: #ffffff;
-
   padding: 15px;
 }
 .committee-vote .vote-container > div:nth-child(1), .committee-vote .unvote-container > div:nth-child(1) {
@@ -599,11 +553,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-top: 15px;
   margin-bottom: 15px;
 }
-
 .vote-input, .unvote-input {
   flex: 1;
 }
@@ -611,20 +563,15 @@ export default {
   width: 100px;
   margin-left: 5px;
 }
-
 .revote-input, .withdraw-input {
   margin-top: 10px;
   margin-bottom: 21px;
 }
-
 .ton-vote-container {
   flex: 1;
-
   display: flex;
   align-items: center;
-
   position: relative;
-
   .dropdown {
     position: absolute;
     right: 1px;

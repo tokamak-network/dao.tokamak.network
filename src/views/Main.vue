@@ -74,7 +74,6 @@
 import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
 import { getRecentEvents, getCandidates } from '@/api';
 import { mapState, mapGetters } from 'vuex';
-
 export default {
   data () {
     return {
@@ -104,7 +103,6 @@ export default {
     const [ candidates, events ] = await Promise.all([
       getCandidates(), getRecentEvents(),
     ]);
-
     const filteredEvents = events.filter(event => {
       const eventName = event.eventName;
       if (eventName === 'Deposited' ||
@@ -129,7 +127,6 @@ export default {
         if (!this.candidates || this.candidates.length === 0) {
           this.nameLoading = nameLoading.repeat(cnt);
           cnt++;
-
           if (cnt === 5) {
             cnt = 1;
           }
@@ -143,7 +140,6 @@ export default {
     },
     explanation (event) {
       const eventName = event.eventName;
-
       if (eventName === 'AgendaCreated') return `Agenda #${event.data.id} Created`;
       else if (eventName === 'AgendaExecuted') return `Agenda #${event.data.id} Executed`;
       else if (eventName === 'AgendaVoteCasted') return `Agenda #${event.data.id} is Voted ${this.agendaVoted(event.data.voting)}`;
@@ -155,7 +151,6 @@ export default {
       else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
       else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
       else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-
       else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
       else if (eventName === 'WithdrawalProcessed') return `${truncate(fromRay2(event.data.amount), 2)} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
       else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
@@ -167,7 +162,6 @@ export default {
     },
     agendaStatus (status) {
       status = parseInt(status);
-
       if (status === 0) return '"NONE"';
       else if (status === 1) return '"NOTICE"';
       else if (status === 2) return '"VOTING"';
@@ -181,7 +175,6 @@ export default {
     },
     agendaResult (result) {
       result = parseInt(result);
-
       if (result === 0) return '"PENDING"';
       else if (result === 1) return '"ACCEPT"';
       else if (result === 2) return '"REJECT"';
@@ -193,7 +186,6 @@ export default {
     },
     agendaVoted (voted) {
       voted = parseInt(voted);
-
       if (voted === 0) return '"ABSTAIN"';
       else if (voted === 1) return '"YES"';
       else if (voted === 2) return '"NO"';
@@ -210,41 +202,31 @@ export default {
 .main {
   /* All views must have this attribute.*/
   flex: 1;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   background: #0062c2;
 }
-
 .main-logo {
   width: 840px;
   height: 607px;
-
   position: relative;
 }
-
 .main-top {
   display: flex;
 }
-
 .main-logo-mobile {
   width: 350px;
   height: 253px;
-
   background: url('../assets/logo-main.png') no-repeat;
   background-size: contain;
   background-repeat: no-repeat;
-
   position: relative;
 }
-
 .main-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 160px;
   height: 38px;
   border-radius: 25px;
@@ -256,17 +238,14 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-
   .count {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background: #2a72e5;
-
     font-family: Roboto;
     font-size: 13px;
     font-weight: 500;
@@ -275,14 +254,11 @@ export default {
     letter-spacing: normal;
     text-align: center;
     color: #ffffff;
-
     margin-left: 16px;
     margin-right: 12px;
   }
-
   .label {
     flex: 1;
-
     font-family: Roboto;
     font-size: 13px;
     font-weight: normal;
@@ -292,17 +268,14 @@ export default {
     text-align: left;
     color: #354052;
   }
-
   .arrow {
     margin-right: 15px;
   }
 }
-
 .main-btn-mobile {
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 200px;
   height: 38px;
   border-radius: 25px;
@@ -314,17 +287,14 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-
   .count {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background: #2a72e5;
-
     font-family: Roboto;
     font-size: 13px;
     font-weight: 500;
@@ -333,14 +303,11 @@ export default {
     letter-spacing: normal;
     text-align: center;
     color: #ffffff;
-
     margin-left: 16px;
     margin-right: 12px;
   }
-
   .label {
     flex: 1;
-
     font-family: Roboto;
     font-size: 13px;
     font-weight: normal;
@@ -350,20 +317,16 @@ export default {
     text-align: left;
     color: #354052;
   }
-
   .arrow {
     margin-right: 15px;
   }
 }
-
 .recent-committee-activities {
 }
-
 .recent-committee-activities > .header {
   display: flex;
   justify-content: center;
   align-content: center;
-
   font-family: Roboto;
   font-size: 24px;
   font-weight: 500;
@@ -372,21 +335,16 @@ export default {
   letter-spacing: 0.96px;
   text-align: center;
   color: #ffffff;
-
   padding-bottom: 30px;
-
   border-bottom: dotted 1px #256dc7;
 }
 .recent-committee-activities > .content {
   display: flex;
   justify-content: content;
   align-items: center;
-
   padding-top: 18px;
   padding-bottom: 18px;
-
   border-bottom: dotted 1px #256dc7;
-
   > div {
     &:nth-child(1) {
       font-family: Roboto;
@@ -399,7 +357,6 @@ export default {
     }
     &:nth-child(2) {
       text-decoration: underline;
-
       font-family: Roboto;
       font-size: 14px;
       font-weight: normal;
@@ -407,10 +364,8 @@ export default {
       font-style: normal;
       letter-spacing: 0.56px;
       color: #8fc7fd;
-
       margin-left: 30px;
       margin-right: 35px;
-
       &:hover {
         cursor: pointer;
       }
@@ -424,7 +379,6 @@ export default {
       letter-spacing: 0.56px;
       text-align: left;
       color: #ffffff;
-
       margin-right: 64px;
     }
     &:nth-child(4) {
@@ -438,22 +392,18 @@ export default {
       color: #8fc7fd;
     }
   }
-
   .tx-hash {
     width: 90px;
   }
-
   .event {
     min-width: 480px;
     max-width: 480px;
     flex: 1;
   }
 }
-
 .recent-committee-activities-mobile {
   min-width: 100%;
   max-width: 100%;
-
   .header {
     font-family: Roboto;
     font-size: 22px;
@@ -464,26 +414,19 @@ export default {
     letter-spacing: 0.88px;
     text-align: center;
     color: #ffffff;
-
     margin-top: 163px;
     margin-bottom: 30px;
   }
-
   .content {
     min-height: 90px;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
-
     margin-left: 20px;
     margin-right: 20px;
-
     border-top: dotted 1px #256dc7;
-
     .content-container{
       display: flex;
-
       .tx-label {
         font-family: Roboto;
         font-size: 15px;
@@ -493,10 +436,8 @@ export default {
         letter-spacing: 0.6px;
         text-align: left;
         color: #ffffff;
-
         margin-right: 25px;
       }
-
       .tx-hash {
         font-family: Roboto;
         font-size: 14px;
@@ -507,14 +448,11 @@ export default {
         letter-spacing: 0.56px;
         text-align: left;
         color: #8fc7fd;
-
         flex: 1;
-
         &:hover {
           cursor: pointer;
         }
       }
-
       .time {
         font-family: Roboto;
         font-size: 10px;
@@ -525,7 +463,6 @@ export default {
         text-align: right;
         color: #8fc7fd;
       }
-
     }
     .event {
       font-family: Roboto;
@@ -536,7 +473,6 @@ export default {
       letter-spacing: 0.56px;
       text-align: left;
       color: #ffffff;
-
       margin-top: 19px;
     }
   }

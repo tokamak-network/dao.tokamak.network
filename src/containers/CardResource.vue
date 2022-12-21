@@ -21,7 +21,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://discord.gg/SZw2WSR"
           >
-            DAO Discussion (Discord)
+            DAO Discussion (Discrod)
           </a>
         </div>
         <div class="resource">

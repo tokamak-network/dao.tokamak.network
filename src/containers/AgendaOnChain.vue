@@ -33,7 +33,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-
 export default {
   data () {
     return {
@@ -61,13 +60,11 @@ export default {
     target () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return '';
-
       return onChainEffects[0].target;
     },
     values () {
       const onChainEffects = this.agendaOnChainEffects(this.agendaId);
       if (!onChainEffects || onChainEffects.length === 0) return {};
-
       return onChainEffects[0].values;
     },
     onChainEffects () {
@@ -100,19 +97,15 @@ export default {
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-
   .target {
     color: #2a72e5;
-
     &:hover {
       cursor: pointer;
     }
   }
-
   .name {
     margin-right: 8px;
   }
-
   .explanation {
     white-space: pre-wrap;
   }

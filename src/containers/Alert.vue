@@ -31,7 +31,6 @@ export default {
       if (typeof window.ethereum !== 'undefined') {
         // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-chainid-deprecated
         const chainId = await ethereum.request({ method: 'eth_chainId' });
-
         if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
         } else {
@@ -41,7 +40,6 @@ export default {
         const aTag = function (href, link) {
           return `<a target="_blank" rel="noopener noreferrer" href="${href}">${link}</a>`;
         };
-
         this.alert = `Metamask wallet is not installed. Please install it ${aTag('https://metamask.io/', 'here')}.`;
       }
     },
@@ -53,9 +51,7 @@ export default {
 .alert {
   display: flex;
   justify-content: center;
-
   border-bottom: solid 4px #2a72e5;
-
   .alert-message {
     font-family: Roboto;
     font-size: 14px;
@@ -65,7 +61,6 @@ export default {
     line-height: 1.43;
     letter-spacing: 0.42px;
     color: #304156;
-
     margin-top: 15px;
     margin-bottom: 15px;
   }

@@ -31,6 +31,7 @@
 import Web3 from 'web3';
 import { mapState } from 'vuex';
 import jazzicon from '@metamask/jazzicon';
+import '@fontsource/titillium-web';
 
 export default {
   props: {
@@ -171,7 +172,7 @@ export default {
 <style lang="scss" scoped>
 button {
   /* font styles */
-  font-family: Roboto;
+  font-family:'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: 500;
   font-stretch: normal;
@@ -215,7 +216,7 @@ button {
 
 .address {
   /* text styles */
-  font-family: Roboto;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -271,7 +272,7 @@ button {
 }
 
 .label {
-  font-family: Roboto;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
