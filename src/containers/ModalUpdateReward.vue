@@ -115,7 +115,7 @@ export default {
         .add(toBN(totalStakedAmount))
         .sub(toBN(tonBalanceOfWTON).mul(toBN(10e8)));
 
-      setNetwork('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10');
+      setNetwork('https://goerli.optimism.tokamak.network');
       const expectedSeig = calculateExpectedSeig(
         toBN(fromBlockNumber),
         toBN(toBlockNumber),

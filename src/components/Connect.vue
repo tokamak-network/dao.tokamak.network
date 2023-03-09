@@ -78,8 +78,9 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const chainId = await web3.eth.getChainId();
-          if (chainId !== 1) {
-            return alert('The current network is not mainnet. Please change it to the mainnet.');
+          console.log(chainId);
+          if (chainId !== 5050) {
+            return alert('The current network is not tokamak-goerli. Please change it to the tokamak-goerli.');
           }
 
           const accounts = await web3.eth.getAccounts();

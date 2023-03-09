@@ -298,7 +298,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
       }
 
       const candidates = await Promise.all(
@@ -497,7 +497,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -522,7 +522,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -565,7 +565,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
       }
 
       votes.forEach(async function (vote) {
