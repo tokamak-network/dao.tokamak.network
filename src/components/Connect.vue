@@ -52,7 +52,6 @@ export default {
       'launched',
       'web3',
       'pendingTx',
-
       'etherscanAddress',
     ]),
     shortAddress () {
@@ -78,7 +77,6 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const chainId = await web3.eth.getChainId();
-          console.log(chainId);
           if (chainId !== 5) {
             return alert('The current network is not goerli. Please change it to the goerli.');
           }
