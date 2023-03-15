@@ -45,8 +45,8 @@ const { wtonFunctionsOfTypeB } = require('./contractFunctions/wtonFunctions');
 
 
 const deployed = {
-  'TON': '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2',
-  'WTON': '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
+  'TON': '0x68c1F9620aeC7F2913430aD6daC1bb16D8444F00',
+  'WTON': '0xe86fCf5213C785AcF9a8BFfEeDEfA9a2199f7Da6',
   'Layer2Registry': '0x6817e1c04748eae68EBFF13216280Df1ec15ba86',
   'DepositManager': '0x0ad659558851f6ba8a8094614303F56d42f8f39A',
   'CoinageFactory': '0x09207BdB146E41dadad015aB3d835f66498b0A0c',
@@ -62,7 +62,7 @@ const deployed = {
 
 function getContract (want, web3, address) {
   if (!web3) {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
+    web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.rpc.tokamak.network'));
   }
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
@@ -471,7 +471,7 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
 
 // module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
 //   if (!web3) {
-//     web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.optimism.tokamak.network'));
+//     web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.rpc.tokamak.network'));
 //   }
 //   const block = await web3.eth.getBlock(blockNumber);
 //   this.timestamp = block.timestamp;

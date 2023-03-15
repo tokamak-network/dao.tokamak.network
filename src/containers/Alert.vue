@@ -34,7 +34,7 @@ export default {
         if (chainId === this.chainId || chainId === this.decentChainId) {
           this.alert = '';
         } else {
-          this.alert = 'The current network is not tokamak-goerli. Please change it to the tokamak-goerli.';
+          // this.alert = 'The current network is not goerli. Please change it to the goerli.';
         }
       } else {
         const aTag = function (href, link) {

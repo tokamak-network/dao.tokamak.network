@@ -79,8 +79,8 @@ export default {
 
           const chainId = await web3.eth.getChainId();
           console.log(chainId);
-          if (chainId !== 5050) {
-            return alert('The current network is not tokamak-goerli. Please change it to the tokamak-goerli.');
+          if (chainId !== 5) {
+            return alert('The current network is not goerli. Please change it to the goerli.');
           }
 
           const accounts = await web3.eth.getAccounts();
