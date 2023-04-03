@@ -145,7 +145,7 @@ export default {
         console.log('bug', 'no candidate'); // eslint-disable-line
         return;
       }
-      if (candidate.kind === 'layer2') {
+      if (candidate.kind === 'layer2' && !candidate.layer2 === '0x2000fc16911fc044130c29c1aa49d3e0b101716a') {
         const layer2Contract = getContract('Layer2', this.web3, candidate.layer2);
         const [
           costNRB,
