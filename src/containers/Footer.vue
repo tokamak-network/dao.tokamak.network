@@ -20,7 +20,7 @@
         </a>
       </div>
       <div class="sns">
-        <a href="https://github.com/Onther-Tech" target="_blank">
+        <a href="https://github.com/tokamak-network/dao.tokamak.network" target="_blank">
           <img v-if="isSub()" src="@/assets/github.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/github-white.svg" alt="" width="20" height="20">
         </a>
