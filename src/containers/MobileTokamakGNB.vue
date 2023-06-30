@@ -12,17 +12,21 @@
         :key="index"
         class="gnb_mobile_menu"
         :style="[
-          menu.title === 'Tokamak Network DAO'
-            ? { minWidth: '186px', maxWidth: '186px' }
+          menu.title === 'DAO'
+            ? { minWidth: '85px' }
             : menu.title === 'Tokamak Network'
-              ? { minWidth: '160px', maxWidth: '160px' }
-              : menu.title === 'Simple Staking'
-                ? { minWidth: '140px', maxWidth: '140px' }
-                : {},
+              ? { minWidth: '160px' }
+              : menu.title === 'Staking'
+                ? { minWidth: '95px' }
+                : menu.title === 'L2 Mainnet'
+                  ? { minWidth: '120px' }
+                  : menu.title === 'Bridge & Swap'
+                    ? { minWidth: '142px' } : menu.title === 'Launchpad'? '130px'
+                      : {},
           menu.isFoucsed ? { fontWeight: 600 } : {},
           menu.isFoucsed ? { opacity: 1 } : { opacity: 0.25 },
           index === menus.length - 1 ? { marginRight: '31%' } : {},
-          index === 0 ? { marginLeft: `${(deviceWidth- 80 - 78) / 2}px` } : {},
+          index === 0 ? { marginLeft: `${(deviceWidth - 80 - 378) / 2}px` } : {},
         ]"
         :href="menu.url"
         @touchstart="(e) => catchTouchStart(e)"
@@ -48,32 +52,32 @@ export default {
     return {
       menus: [
         {
-          title: 'Vision',
-          url: 'https://vision.tokamak.network/',
-          isFoucsed: false,
-        },
-        {
           title: 'Tokamak Network',
           url: 'https://tokamak.network/#/',
           isFoucsed: false,
         },
         {
-          title: 'Simple Staking',
-          url: 'https://simple.staking.tokamak.network/',
+          title: 'L2 Mainnet',
+          url: 'http://titan.tokamak.network/',
           isFoucsed: false,
         },
         {
-          title: 'Tokamak Network DAO',
-          url: 'https://dao.tokamak.network/#/',
+          title: 'Bridge & Swap',
+          url: 'https://bridge.tokamak.network/#/',
+          isFoucsed: false,
+        },
+        {
+          title: 'Staking',
+          url: 'https://simple.staking.tokamak.network/#/',
+          isFoucsed: false,
+        },
+        {
+          title: 'DAO',
+          url: 'https://dao.tokamak.network//',
           isFoucsed: true,
         },
         {
-          title: 'Swap',
-          url: 'https://swap.tokamak.network/',
-          isFoucsed: false,
-        },
-        {
-          title: 'TONStarter',
+          title: 'Launchpad',
           url: 'https://tonstarter.tokamak.network/',
           isFoucsed: false,
         },
@@ -211,7 +215,7 @@ export default {
   background-color: #2775ff;
   display: flex;
   touch-action: none;
-  font-family: 'Titillium Web', sans-serif;
+  font-family: "Titillium Web", sans-serif;
 }
 
 .gnb_mobile_menu_wrap {
@@ -232,5 +236,4 @@ export default {
   counter-increment: gallery-cell;
   touch-action: none;
 }
-
 </style>
