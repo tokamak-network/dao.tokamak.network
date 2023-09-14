@@ -176,6 +176,7 @@ export default {
         })
         .filter(agenda => {
           let found, notVoted;
+
           if (this.filterVoted !== 'All') {
             found = this.voteResult.find(result => result.id === agenda.agendaid);
 
