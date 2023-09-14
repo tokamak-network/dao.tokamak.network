@@ -121,7 +121,6 @@ export default {
     select (item) {
       this.selectedItem = item;
       this.fold();
-
       this.$emit('on-selected', item);
     },
   },
