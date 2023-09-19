@@ -1,71 +1,37 @@
 <template>
-  <div class="main"
-       :style="[events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {}]"
+  <div
+    class="main"
+    :style="[
+      events.length > 0 && $mq !== 'mobile' ? { 'margin-top': '-84px' } : {},
+      {
+        color: 'white',
+        display: 'flex',
+        justify: 'center',
+        align: 'center',
+        height: '100vh',
+      },
+    ]"
   >
-    <div class="main-top">
-      <div v-if="$mq === 'mobile'"
-           class="main-logo-mobile"
-      >
-        <div v-if="events.length > 0"
-             class="main-btn-mobile"
-        >
-          <div class="count">{{ events.length }}</div>
-          <span class="label">Committee activities</span>
-        </div>
-      </div>
-      <div v-else>
-        <img class-="main-interaction"
-             style="height: 600px"
-             src="@/assets/main-interaction.gif"
-        >
-        <div v-if="events.length > 0"
-             class="main-btn"
-        >
-          <div class="count">{{ events.length }}</div>
-          <span class="label">DAO activities</span>
-        </div>
-      </div>
-    </div>
-    <div v-if="events.length > 0 && $mq !== 'mobile'"
-         class="recent-committee-activities"
+    <div
+      class="temp"
+      :style="[
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          justify: 'center',
+          align: 'center',
+          height: '100%',
+          marginTop: '300px',
+          marginLeft: '30%',
+          marginRight: '30%',
+        },
+      ]"
     >
-      <div class="header">Recent DAO Activities</div>
-      <div v-for="event in events" :key="event.data.transactionHash" class="content">
-        <div>
-          Tx
-        </div>
-        <div class="tx-hash" @click="newtab(event.transactionHash)">
-          {{ event.transactionHash | hexSlicer }}
-        </div>
-        <div class="event">
-          {{ explanation(event) }}
-        </div>
-        <div>
-          {{ event.blockTimestamp | fromNow }}
-        </div>
-      </div>
-    </div>
-
-    <div v-if="events.length > 0 && $mq === 'mobile'"
-         class="recent-committee-activities-mobile"
-    >
-      <div class="header">Recent Committee Activities</div>
-      <div v-for="event in events" :key="event.data.transactionHash" class="content">
-        <div class="content-container">
-          <div class="tx-label">
-            Tx
-          </div>
-          <div class="tx-hash" @click="newtab(event.transactionHash)">
-            {{ event.transactionHash | hexSlicer }}
-          </div>
-          <div class="time">
-            {{ event.blockTimestamp | fromNow }}
-          </div>
-        </div>
-        <div class="event">
-          {{ explanation(event) }}
-        </div>
-      </div>
+      <span :style="[{ marginBottom: '20px' }]">Notice for Service Interruption</span>
+      <span>Tokamak DAO service is currently undergoing maintenance. As part of
+        this process, DAO contract is being paused to conduct safety checks.
+        Consequently, DAO-related functions such as Election, Propose, and
+        Committee may not be accessible until further notice.</span>
     </div>
   </div>
 </template>
@@ -82,35 +48,38 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      'candidates',
-      'etherscanAddress',
-    ]),
-    ...mapGetters([
-      'candidateName',
-    ]),
+    ...mapState(['candidates', 'etherscanAddress']),
+    ...mapGetters(['candidateName']),
     truncate () {
-      return amount => truncate(amount);
+      return (amount) => truncate(amount);
     },
     hexSlicer () {
-      return address => hexSlicer(address);
+      return (address) => hexSlicer(address);
     },
     date4 () {
-      return timestamp => date4(timestamp);
+      return (timestamp) => date4(timestamp);
     },
   },
   async created () {
-    const [ candidates, events ] = await Promise.all([
-      getCandidates(), getRecentEvents(),
+    const [candidates, events] = await Promise.all([
+      getCandidates(),
+      getRecentEvents(),
     ]);
-    const filteredEvents = events.filter(event => {
+    const filteredEvents = events.filter((event) => {
       const eventName = event.eventName;
-      if (eventName === 'Deposited' ||
-          eventName === 'WithdrawalRequested' ||
-          eventName === 'WithdrawalProcessed' ||
-          eventName === 'Comitted') {
-        const found = candidates.find(candidate => candidate.candidate.toLowerCase() === event.data.layer2.toLowerCase() ||
-                                                   candidate.candidateContract.toLowerCase() === event.data.layer2.toLowerCase());
+      if (
+        eventName === 'Deposited' ||
+        eventName === 'WithdrawalRequested' ||
+        eventName === 'WithdrawalProcessed' ||
+        eventName === 'Comitted'
+      ) {
+        const found = candidates.find(
+          (candidate) =>
+            candidate.candidate.toLowerCase() ===
+              event.data.layer2.toLowerCase() ||
+            candidate.candidateContract.toLowerCase() ===
+              event.data.layer2.toLowerCase(),
+        );
         return found ? true : false;
       } else {
         return true;
@@ -136,28 +105,83 @@ export default {
       }, 1000); // 1s
     },
     newtab (txhash) {
-      window.open(`${this.etherscanAddress}/tx/${txhash}`, '_blank'); // eslint-disable-line
+      window.open(`${this.etherscanAddress}/tx/${txhash}`, "_blank"); // eslint-disable-line
     },
     explanation (event) {
       const eventName = event.eventName;
-      if (eventName === 'AgendaCreated') return `Agenda #${event.data.id} Created`;
-      else if (eventName === 'AgendaExecuted') return `Agenda #${event.data.id} Executed`;
-      else if (eventName === 'AgendaVoteCasted') return `Agenda #${event.data.id} is Voted ${this.agendaVoted(event.data.voting)}`;
-      else if (eventName === 'CandidateContractCreated') return 'New Committee Candidate Created';
+      if (eventName === 'AgendaCreated')
+        return `Agenda #${event.data.id} Created`;
+      else if (eventName === 'AgendaExecuted')
+        return `Agenda #${event.data.id} Executed`;
+      else if (eventName === 'AgendaVoteCasted')
+        return `Agenda #${event.data.id} is Voted ${this.agendaVoted(
+          event.data.voting,
+        )}`;
+      else if (eventName === 'CandidateContractCreated')
+        return 'New Committee Candidate Created';
       else if (eventName === 'ChangedMember') return 'Committee Member Changed';
-      else if (eventName === 'ChangedSlotMaximum') return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
-      else if (eventName === 'ClaimedActivityReward') return `Activity Reward is Given to ${this.candidateName(event.data.candidate) ? this.candidateName(event.data.candidate) : this.nameLoading}`;
-      else if (eventName === 'Layer2Registered') return `Candidate ${this.candidateName(event.data.candidateContract) ? this.candidateName(event.data.candidateContract) : this.nameLoading} Registered`;
-      else if (eventName === 'AgendaStatusChanged') return `Agenda #${event.data.agendaID} Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
-      else if (eventName === 'AgendaResultChanged') return `Agenda #${event.data.agendaID} Result Changed to ${this.agendaResult(event.data.result)}`;
-      else if (eventName === 'Deposited') return `${hexSlicer(event.data.depositor)} voted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-      else if (eventName === 'WithdrawalRequested') return `${hexSlicer(event.data.depositor)} unvoted ${truncate(fromRay2(event.data.amount), 2)} TON to ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-      else if (eventName === 'WithdrawalProcessed') return `${truncate(fromRay2(event.data.amount), 2)} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}`;
-      else if (eventName === 'Comitted') return `${this.candidateName(event.data.layer2) ? this.candidateName(event.data.layer2) : this.nameLoading}'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
-      else if (eventName === 'RoundStart') return `PowerTON round ${event.data.round} started ${date4(event.data.startTime)} (ends ${date4(event.data.endTime)})`;
+      else if (eventName === 'ChangedSlotMaximum')
+        return `Committee Member Slot Maximum adjusted to ${event.data.slotMax}`;
+      else if (eventName === 'ClaimedActivityReward')
+        return `Activity Reward is Given to ${
+          this.candidateName(event.data.candidate)
+            ? this.candidateName(event.data.candidate)
+            : this.nameLoading
+        }`;
+      else if (eventName === 'Layer2Registered')
+        return `Candidate ${
+          this.candidateName(event.data.candidateContract)
+            ? this.candidateName(event.data.candidateContract)
+            : this.nameLoading
+        } Registered`;
+      else if (eventName === 'AgendaStatusChanged')
+        return `Agenda #${
+          event.data.agendaID
+        } Status Changed to ${this.agendaStatus(event.data.newStatus)}`;
+      else if (eventName === 'AgendaResultChanged')
+        return `Agenda #${
+          event.data.agendaID
+        } Result Changed to ${this.agendaResult(event.data.result)}`;
+      else if (eventName === 'Deposited')
+        return `${hexSlicer(event.data.depositor)} voted ${truncate(
+          fromRay2(event.data.amount),
+          2,
+        )} TON to ${
+          this.candidateName(event.data.layer2)
+            ? this.candidateName(event.data.layer2)
+            : this.nameLoading
+        }`;
+      else if (eventName === 'WithdrawalRequested')
+        return `${hexSlicer(event.data.depositor)} unvoted ${truncate(
+          fromRay2(event.data.amount),
+          2,
+        )} TON to ${
+          this.candidateName(event.data.layer2)
+            ? this.candidateName(event.data.layer2)
+            : this.nameLoading
+        }`;
+      else if (eventName === 'WithdrawalProcessed')
+        return `${truncate(
+          fromRay2(event.data.amount),
+          2,
+        )} TON is withdrawn by ${hexSlicer(event.data.depositor)} from ${
+          this.candidateName(event.data.layer2)
+            ? this.candidateName(event.data.layer2)
+            : this.nameLoading
+        }`;
+      else if (eventName === 'Comitted')
+        return `${
+          this.candidateName(event.data.layer2)
+            ? this.candidateName(event.data.layer2)
+            : this.nameLoading
+        }'s rewards are updated by ${hexSlicer(event.txInfo.from)}`;
+      else if (eventName === 'RoundStart')
+        return `PowerTON round ${event.data.round} started ${date4(
+          event.data.startTime,
+        )} (ends ${date4(event.data.endTime)})`;
       else {
         return '-';
-        console.log('bug', 'events'); // eslint-disable-line
+        console.log("bug", "events"); // eslint-disable-line
       }
     },
     agendaStatus (status) {
@@ -169,7 +193,7 @@ export default {
       else if (status === 4) return '"EXECUTED"';
       else if (status === 5) return '"ENDED"';
       else {
-        console.log('bug', 'agenda status'); // eslint-disable-line
+        console.log("bug", "agenda status"); // eslint-disable-line
         return '""';
       }
     },
@@ -180,7 +204,7 @@ export default {
       else if (result === 2) return '"REJECT"';
       else if (result === 3) return '"DISMISS"';
       else {
-        console.log('bug', 'agenda result'); // eslint-disable-line
+        console.log("bug", "agenda result"); // eslint-disable-line
         return '""';
       }
     },
@@ -190,7 +214,7 @@ export default {
       else if (voted === 1) return '"YES"';
       else if (voted === 2) return '"NO"';
       else {
-        console.log('bug', 'agenda voted'); // eslint-disable-line
+        console.log("bug", "agenda voted"); // eslint-disable-line
         return '""';
       }
     },
@@ -218,7 +242,7 @@ export default {
 .main-logo-mobile {
   width: 350px;
   height: 253px;
-  background: url('../assets/logo-main.png') no-repeat;
+  background: url("../assets/logo-main.png") no-repeat;
   background-size: contain;
   background-repeat: no-repeat;
   position: relative;
@@ -425,7 +449,7 @@ export default {
     margin-left: 20px;
     margin-right: 20px;
     border-top: dotted 1px #256dc7;
-    .content-container{
+    .content-container {
       display: flex;
       .tx-label {
         font-family: Roboto;

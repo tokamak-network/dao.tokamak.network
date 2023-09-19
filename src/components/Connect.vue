@@ -1,24 +1,19 @@
 <template>
   <div class="connect">
-    <button
-      v-if="!connectedAccount"
-      :class="{ sub: isSub }"
-      @click="connect"
-    >
+    <button v-if="!connectedAccount" :class="{ sub: isSub }" @click="connect">
       Connect Wallet
     </button>
     <div v-else style="position: relative;">
-      <div class="account"
-           :style="[pendingTx ? { 'visibility': 'hidden' } : {}]"
-      >
+      <div class="account" :style="[pendingTx ? { visibility: 'hidden' } : {}]">
         <div ref="icon" class="icon" />
         <div class="address">
           {{ shortAddress }}
         </div>
       </div>
-      <div class="pending"
-           :style="[!pendingTx ? { 'visibility': 'hidden' } : {}]"
-           @click="etherscan()"
+      <div
+        class="pending"
+        :style="[!pendingTx ? { visibility: 'hidden' } : {}]"
+        @click="etherscan()"
       >
         <div class="loader" />
         <div class="label">Tx PENDING</div>
@@ -56,7 +51,10 @@ export default {
       'etherscanAddress',
     ]),
     shortAddress () {
-      return `${this.connectedAccount.slice(0, 7)}...${this.connectedAccount.slice(-4)}`;
+      return `${this.connectedAccount.slice(
+        0,
+        7,
+      )}...${this.connectedAccount.slice(-4)}`;
     },
     iconNumber () {
       return parseInt(this.connectedAccount.slice(2, 10), 16);
@@ -79,7 +77,9 @@ export default {
 
           const chainId = await web3.eth.getChainId();
           if (chainId !== 1) {
-            return alert('The current network is not mainnet. Please change it to the mainnet.');
+            return alert(
+              'The current network is not mainnet. Please change it to the mainnet.',
+            );
           }
 
           const accounts = await web3.eth.getAccounts();
@@ -90,7 +90,7 @@ export default {
           });
 
           for (;;) {
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise((r) => setTimeout(r, 500));
             if (this.launched) break;
           }
           await this.$store.dispatch('connectEthereum', web3);
@@ -100,13 +100,15 @@ export default {
             await this.$store.dispatch('setMyVotes', candidateContractAddress);
           }
 
-          this.newBlockHeaderSubscription = web3.eth.subscribe('newBlockHeaders', (error, result) => {
-            if (error) {
-              console.log('bug', 'failed to get new block'); // eslint-disable-line
-            }
-            this.$store.commit('SET_BLOCK_TIME', result.timestamp);
-          });
-
+          this.newBlockHeaderSubscription = web3.eth.subscribe(
+            'newBlockHeaders',
+            (error, result) => {
+              if (error) {
+                console.log("bug", "failed to get new block"); // eslint-disable-line
+              }
+              this.$store.commit('SET_BLOCK_TIME', result.timestamp);
+            },
+          );
         } catch (e) {
           // User deny to connect MetaMask wallet.
         }
@@ -125,13 +127,16 @@ export default {
             });
 
             for (;;) {
-              await new Promise(r => setTimeout(r, 500));
+              await new Promise((r) => setTimeout(r, 500));
               if (this.launched) break;
             }
             await this.$store.dispatch('connectEthereum', web3);
             if (this.$route.params.address) {
               const candidateContractAddress = this.$route.params.address;
-              await this.$store.dispatch('setMyVotes', candidateContractAddress);
+              await this.$store.dispatch(
+                'setMyVotes',
+                candidateContractAddress,
+              );
             }
           }
         };
@@ -163,7 +168,7 @@ export default {
       }
     },
     etherscan () {
-      window.open(this.etherscanAddress + '/tx/' + this.pendingTx, '_blank'); // eslint-disable-line
+      window.open(this.etherscanAddress + "/tx/" + this.pendingTx, "_blank"); // eslint-disable-line
     },
   },
 };
@@ -172,7 +177,7 @@ export default {
 <style lang="scss" scoped>
 button {
   /* font styles */
-  font-family:'Titillium Web', sans-serif;
+  font-family: "Titillium Web", sans-serif;
   font-size: 14px;
   font-weight: 500;
   font-stretch: normal;
@@ -216,7 +221,7 @@ button {
 
 .address {
   /* text styles */
-  font-family: 'Titillium Web', sans-serif;
+  font-family: "Titillium Web", sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -267,12 +272,16 @@ button {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .label {
-  font-family: 'Titillium Web', sans-serif;
+  font-family: "Titillium Web", sans-serif;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

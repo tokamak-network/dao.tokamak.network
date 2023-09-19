@@ -7,7 +7,10 @@
     <mobile-header-container v-if="$mq === 'mobile'" />
     <header-container v-else />
     <router-view />
-    <mobile-footer-container v-if="$mq === 'mobile'" style="padding-top: 60px; padding-bottom: 60px;" />
+    <mobile-footer-container
+      v-if="$mq === 'mobile'"
+      style="padding-top: 60px; padding-bottom: 60px;"
+    />
     <footer-container v-else />
   </div>
 </template>
@@ -24,7 +27,7 @@ import MobileTokamakGNB from '@/containers/MobileTokamakGNB.vue';
 export default {
   name: 'App',
   components: {
-    'alert': Alert,
+    alert: Alert,
     'header-container': Header,
     'footer-container': Footer,
     'mobile-header-container': MobileHeader,
@@ -38,10 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      'account',
-      'web3',
-    ]),
+    ...mapState(['account', 'web3']),
   },
   created () {
     this.$store.dispatch('launch');
@@ -65,11 +65,15 @@ export default {
 html {
   box-sizing: border-box;
 }
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
-body { margin: 0 !important; }
+body {
+  margin: 0 !important;
+}
 
 #app {
   display: flex;

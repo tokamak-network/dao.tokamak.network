@@ -46,44 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="header-gridItem">
-        <div class="menu">
-          <router-link
-            :to="'/election'"
-            class="menu-item"
-            style="margin-right:60px"
-            :class="{
-              'menu-item-sub': isSub,
-              selected: $route.path.includes('election'),
-            }"
-          >
-            Election
-          </router-link>
-          <router-link
-            :to="'/propose'"
-            class="menu-item"
-            style="margin-right:60px"
-            :class="{
-              'menu-item-sub': isSub,
-              selected: $route.path.includes('propose'),
-            }"
-          >
-            Propose
-          </router-link>
-          <router-link
-            :to="'/agenda'"
-            class="menu-item"
-            :class="{
-              'menu-item-sub': isSub,
-              selected: $route.path.includes('agenda'),
-            }"
-          >
-            Committee
-          </router-link>
-        </div>
-      </div>
       <div class="header-gridItem" style="justify-content: flex-end;">
-        <connect-wallet :is-sub="isSub" />
         <div v-if="account !== '' && isCandidate" class="container">
           <div>
             <button :class="{ claim: isSub }" @click="showModal = true">
@@ -97,14 +60,12 @@
 </template>
 
 <script>
-import Connect from '@/components/Connect.vue';
 import Modal from '@/components/Modal.vue';
 import ModalClaim from '@/containers/ModalClaim.vue';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
-    'connect-wallet': Connect,
     modal: Modal,
     'modal-claim': ModalClaim,
   },
@@ -249,7 +210,7 @@ button:hover {
 
 .menu-item {
   /* font styles */
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
   font-weight: 600;
   font-stretch: normal;
@@ -266,7 +227,7 @@ button:hover {
 }
 
 .menu-item-sub:hover {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
   font-weight: 600;
   font-stretch: normal;
