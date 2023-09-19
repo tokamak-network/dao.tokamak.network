@@ -28,10 +28,14 @@
       ]"
     >
       <span :style="[{ marginBottom: '20px' }]">Notice for Service Interruption</span>
-      <span>Tokamak Network's DAO service is currently undergoing maintenance. As
+      <span :style="[{ marginBottom: '10px' }]">Tokamak Network's DAO service is currently undergoing maintenance. As
         part of this process, DAO contract is being paused to conduct safety
-        checks. Consequently, DAO-related functions such as Election, Propose,
-        and Committee may not be accessible until further notice.</span>
+        checks. Consequently, DAO-related functions such as Propose, and
+        Committee may not be accessible until further notice.
+      </span>
+      <span>Note that "<a href="https://dao.tokamak.network/#/election">Election</a>" page will remain accessible throughout the maintenance. Operators can
+        still use the "Update Reward" function to increase seignorage for TON
+        stakers.</span>
     </div>
   </div>
 </template>

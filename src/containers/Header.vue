@@ -7,100 +7,88 @@
     </modal>
     <div class="header-grid">
       <div class="header-gridItem">
-        <div class="menu">
-          <div
-            v-if="$mq === 'desktop'"
-            class="logo"
-            @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
-          >
-            <div v-if="isSub" class="logo-container">
-              <img v-if="isSub" src="@/assets/logo-sub.png" alt="" />
-              <div class="beta beta-sub">Beta</div>
-            </div>
-            <div v-else class="logo-container">
-              <img src="@/assets/logo.png" alt="" />
-              <div class="beta">Beta</div>
-            </div>
+        <div
+          v-if="$mq === 'desktop'"
+          class="logo"
+          @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
+        >
+          <div v-if="isSub" class="logo-container">
+            <img v-if="isSub" src="@/assets/logo-sub.png" alt="" />
+            <div class="beta beta-sub">Beta</div>
           </div>
-          <div
-            v-else
-            class="logo-tablet"
-            @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
-          >
-            <div v-if="isSub" class="logo-container">
-              <img
-                src="@/assets/mobile-logo-sub.png"
-                alt=""
-                width="105"
-                height="30"
-              />
-              <div class="beta beta-sub">rinkeby</div>
-            </div>
-            <div v-else class="logo-container">
-              <img
-                src="@/assets/mobile-logo.png"
-                alt=""
-                width="105"
-                height="30"
-              />
-              <div class="beta">Beta</div>
-            </div>
+          <div v-else class="logo-container">
+            <img src="@/assets/logo.png" alt="" />
+            <div class="beta">Beta</div>
           </div>
         </div>
         <div
-          class="header-gridItem"
-          style="justify-content: flex-end;"
-          :style="[{ marginLeft: '130px' }]"
+          v-else
+          class="logo-tablet"
+          @click="$route.path !== '/' ? $router.push({ path: '/' }) : ''"
         >
-          <div class="header-gridItem">
-            <div class="menu">
-              <router-link
-                :to="'/election'"
-                class="menu-item"
-                style="margin-right:60px"
-                :class="{
-                  'menu-item-sub': isSub,
-                  selected: $route.path.includes('election'),
-                }"
-              >
-                Election
-              </router-link>
-              <router-link
-                :to="'/'"
-                class="menu-item"
-                style="margin-right:60px"
-                :class="{
-                  'menu-item-sub': isSub,
-                  selected: $route.path.includes('propose'),
-                }"
-              >
-                Propose
-              </router-link>
-              <router-link
-                :to="'/'"
-                class="menu-item"
-                :class="{
-                  'menu-item-sub': isSub,
-                  selected: $route.path.includes('agenda'),
-                }"
-              >
-                Committee
-              </router-link>
-            </div>
+          <div v-if="isSub" class="logo-container">
+            <img
+              src="@/assets/mobile-logo-sub.png"
+              alt=""
+              width="105"
+              height="30"
+            />
+            <div class="beta beta-sub">rinkeby</div>
           </div>
-          <div
-            class="header-gridItem"
-            style="justify-content: flex-end;"
-            :style="[{ width: '100%', marginLeft: '500px' }]"
+          <div v-else class="logo-container">
+            <img
+              src="@/assets/mobile-logo.png"
+              alt=""
+              width="105"
+              height="30"
+            />
+            <div class="beta">Beta</div>
+          </div>
+        </div>
+      </div>
+      <div class="header-gridItem">
+        <div class="menu">
+          <router-link
+            :to="'/election'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('election'),
+            }"
           >
-            <connect-wallet :is-sub="isSub" />
-            <div v-if="account !== '' && isCandidate" class="container">
-              <div>
-                <button :class="{ claim: isSub }" @click="showModal = true">
-                  Claim
-                </button>
-              </div>
-            </div>
+            Election
+          </router-link>
+          <router-link
+            :to="'/'"
+            class="menu-item"
+            style="margin-right:60px"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('propose'),
+            }"
+          >
+            Propose
+          </router-link>
+          <router-link
+            :to="'/'"
+            class="menu-item"
+            :class="{
+              'menu-item-sub': isSub,
+              selected: $route.path.includes('agenda'),
+            }"
+          >
+            Committee
+          </router-link>
+        </div>
+      </div>
+      <div class="header-gridItem" style="justify-content: flex-end;">
+        <connect-wallet :is-sub="isSub" />
+        <div v-if="account !== '' && isCandidate" class="container">
+          <div>
+            <button :class="{ claim: isSub }" @click="showModal = true">
+              Claim
+            </button>
           </div>
         </div>
       </div>
