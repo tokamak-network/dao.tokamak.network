@@ -28,10 +28,10 @@
       ]"
     >
       <span :style="[{ marginBottom: '20px' }]">Notice for Service Interruption</span>
-      <span>Tokamak DAO service is currently undergoing maintenance. As part of
-        this process, DAO contract is being paused to conduct safety checks.
-        Consequently, DAO-related functions such as Election, Propose, and
-        Committee may not be accessible until further notice.</span>
+      <span>Tokamak Network's DAO service is currently undergoing maintenance. As
+        part of this process, DAO contract is being paused to conduct safety
+        checks. Consequently, DAO-related functions such as Election, Propose,
+        and Committee may not be accessible until further notice.</span>
     </div>
   </div>
 </template>
