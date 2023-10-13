@@ -33,9 +33,10 @@
         checks. Consequently, DAO-related functions such as Propose, and
         Committee may not be accessible until further notice.
       </span>
-      <span>Note that "<a href="https://dao.tokamak.network/#/election">Election</a>" page will remain accessible throughout the maintenance. Operators can
-        still use the "Update Reward" function to increase seignorage for TON
-        stakers.</span>
+      <span>Note that "
+        <a href="https://dao.tokamak.network/#/election">Election</a>
+        " page will remain accessible throughout the maintenance.
+      </span>
     </div>
   </div>
 </template>
