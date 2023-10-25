@@ -48,7 +48,7 @@
       </div>
       <div class="header-gridItem">
         <div class="menu">
-          <router-link
+          <!-- <router-link
             :to="'/election'"
             class="menu-item"
             style="margin-right:60px"
@@ -58,7 +58,7 @@
             }"
           >
             Election
-          </router-link>
+          </router-link> -->
           <router-link
             :to="'/'"
             class="menu-item"
