@@ -28,7 +28,7 @@
       ]"
     >
       <span :style="[{ marginBottom: '20px', fontWeight: 'bold' }]">Service Interruption Announcement</span>
-      <span :style="[{ marginBottom: '10px' }]">TDAO is currently undergoing maintenance. As part of this process, DAO contract is being paused for safety checks. Consequently, access to Election, Propose, and Committee tabs is temporarily unavailable until further notice. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
+      <span :style="[{ marginBottom: '10px' }]">DAO is currently undergoing maintenance. As part of this process, DAO contract is being paused for safety checks. Consequently, access to Election, Propose, and Committee tabs is temporarily unavailable until further notice. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
       </span>
       <!-- <span>Note that "
         <a href="https://dao.tokamak.network/#/election">Election</a>

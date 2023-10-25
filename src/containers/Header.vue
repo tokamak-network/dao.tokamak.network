@@ -48,8 +48,8 @@
       </div>
       <div class="header-gridItem">
         <div class="menu">
-          <!-- <router-link
-            :to="'/election'"
+          <router-link
+            :to="'/'"
             class="menu-item"
             style="margin-right:60px"
             :class="{
@@ -58,7 +58,7 @@
             }"
           >
             Election
-          </router-link> -->
+          </router-link>
           <router-link
             :to="'/'"
             class="menu-item"
