@@ -60,7 +60,7 @@
             Election
           </router-link>
           <router-link
-            :to="'/'"
+            :to="'/propose'"
             class="menu-item"
             style="margin-right:60px"
             :class="{
