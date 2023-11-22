@@ -49,7 +49,7 @@
       <div class="header-gridItem">
         <div class="menu">
           <router-link
-            :to="'/'"
+            :to="'/election'"
             class="menu-item"
             style="margin-right:60px"
             :class="{
@@ -71,7 +71,7 @@
             Propose
           </router-link>
           <router-link
-            :to="'/'"
+            :to="'/agenda'"
             class="menu-item"
             :class="{
               'menu-item-sub': isSub,
