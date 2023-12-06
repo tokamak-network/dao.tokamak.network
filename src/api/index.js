@@ -51,14 +51,14 @@ export async function getCandidates () {
   return res.data.datas;
 }
 
-export async function getMembers () {
-  const res = await instance.get('/layer2s/dao_members', {
-    params: {
-      chainId,
-    },
-  });
-  return res.data.datas;
-}
+// export async function getMembers () {
+//   const res = await instance.get('/layer2s/dao_members', {
+//     params: {
+//       chainId,
+//     },
+//   });
+//   return res.data.datas;
+// }
 
 export async function getAgendaVotes () {
   const res = await instance.get('/agendavotes', {

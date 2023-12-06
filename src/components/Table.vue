@@ -2,11 +2,11 @@
   <div class="table">
     <table>
       <tbody>
-        <tr v-for="voter in votersWithBalance" :key="voter.account">
-          <div v-if="sumOfVotes > 0 && voter.balance!=0" class="table-content">
-            <div>{{ calcPct(voter.balance, sumOfVotes) }}% </div>
-            <div>({{ voter.balance | WTON | withComma }} TON)</div>
-            <div>{{ voter.account | hexSlicer }}</div>
+        <tr v-for="voter in votersWithBalance" :key="voter.user.id">
+          <div v-if="sumOfVotes > 0 && voter.stakeOf!=0" class="table-content">
+            <div>{{ calcPct(voter.stakeOf, sumOfVotes) }}% </div>
+            <div>({{ voter.stakeOf | WTON | withComma }} TON)</div>
+            <div>{{ voter.user.id | hexSlicer }}</div>
           </div>
         </tr>
       </tbody>

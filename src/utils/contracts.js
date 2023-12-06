@@ -47,10 +47,10 @@ const { wtonFunctionsOfTypeB } = require('./contractFunctions/wtonFunctions');
 const deployed = {
   'TON': '0x2be5e8c109e2197D077D13A82dAead6a9b3433C5',
   'WTON': '0xc4A11aaf6ea915Ed7Ac194161d2fC9384F15bff2',
-  'Layer2Registry': '0x0b3E174A2170083e770D5d4Cf56774D221b7063e',
-  'DepositManager': '0x56E465f654393fa48f007Ed7346105c7195CEe43',
+  'Layer2Registry': '0x7846c2248a7b4de77e9c2bae7fbb93bfc286837b',
+  'DepositManager': '0x0b58ca72b12f01fc05f8f252e226f3e2089bd00e',
   'CoinageFactory': '0x5b40841eeCfB429452AB25216Afc1e1650C07747',
-  'SeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
+  'SeigManager': '0x0b55a0f463b6defb81c6063973763951712d0e5f',
   'PowerTON': '0xd86d8950A4144D8a258930F6DD5f90CCE249E1CF',
   'PowerTONProxy': '0x970298189050abd4dc4f119ccae14ee145ad9371',
   'DAOVault': '0x2520CD65BAa2cEEe9E6Ad6EBD3F45490C42dd303',

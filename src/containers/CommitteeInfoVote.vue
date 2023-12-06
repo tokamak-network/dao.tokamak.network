@@ -6,10 +6,10 @@
         <div class="account-info">
           <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div>
           <div v-else>{{ voter.account }}</div>
-          <div>{{ voter.balance | WTON | withComma }} TON Voted</div>
+          <div>{{ voter.stakeOf | WTON | withComma }} TON Voted</div>
         </div>
         <vote-poll class="vote-poll"
-                   :pct="calcPct(voter.balance, sumOfVotes)"
+                   :pct="calcPct(voter.stakeOf, sumOfVotes)"
                    :margin="0"
         />
       </div>
