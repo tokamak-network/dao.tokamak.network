@@ -44,7 +44,8 @@ export default {
   computed: {
     ...mapState([
       'account',
-      'launched',
+      'candidateLaunched',
+      'agendaLaunched',
       'web3',
       'pendingTx',
 
@@ -91,7 +92,7 @@ export default {
 
           for (;;) {
             await new Promise((r) => setTimeout(r, 500));
-            if (this.launched) break;
+            if (this.candidateLaunched || this.agendaLaunched) break;
           }
           await this.$store.dispatch('connectEthereum', web3);
 
@@ -128,7 +129,7 @@ export default {
 
             for (;;) {
               await new Promise((r) => setTimeout(r, 500));
-              if (this.launched) break;
+              if (this.candidateLaunched || this.agendaLaunched) break;
             }
             await this.$store.dispatch('connectEthereum', web3);
             if (this.$route.params.address) {

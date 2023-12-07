@@ -164,7 +164,7 @@ export default {
             this.challengeInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })
@@ -196,7 +196,7 @@ export default {
             this.retirementInProgress = false;
             this.$store.commit('SET_PENDING_TX', '');
 
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })

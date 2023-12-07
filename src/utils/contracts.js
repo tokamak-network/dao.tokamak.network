@@ -352,6 +352,7 @@ module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx, type) {
   // TODO: to fix case of using mixed type with 'A' and 'B'
+  console.log(tx);
   const params1 = marshalString(unmarshalString(tx.input).substring(8));
   const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
   const params2 = decodedParams1[2];

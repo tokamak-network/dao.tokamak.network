@@ -86,7 +86,7 @@ export default {
       await updateAgendaContents(this.account.toLowerCase(), txHash, this.desc, sig, this.getAgendaByID(this.agendaId).type);
 
       this.edit = false;
-      await this.$store.dispatch('launch');
+      await this.$store.dispatch('agendaLaunch');
     },
     async generateSig (txHash, from) {
       const randomvalue = await getRandomKey(from);

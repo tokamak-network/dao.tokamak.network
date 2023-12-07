@@ -44,14 +44,16 @@ export default {
     ...mapState(['account', 'web3']),
   },
   created () {
-    this.$store.dispatch('launch');
+    this.$store.dispatch('candidateLaunch');
+    this.$store.dispatch('agendaLaunch');
     // this.poll();
   },
   methods: {
     poll () {
       this.polling = setInterval(() => {
         if (this.account) {
-          this.$store.dispatch('launch');
+          this.$store.dispatch('candidateLaunch');
+          this.$store.dispatch('agendaLaunch');
           this.$store.dispatch('connectEthereum', this.web3);
         }
       }, 60000); // 1m

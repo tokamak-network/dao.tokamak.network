@@ -1,6 +1,6 @@
 <template>
   <div class="election">
-    <div v-if="launched" class="container">
+    <div v-if="candidateLaunched" class="container">
       <div class="wrapper"
            :style="[
              $mq === 'desktop' || $mq === 'tablet' ? { 'flex-direction': 'row' } : { 'flex-direction': 'column' },
@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapState([
       'account',
-      'launched',
+      'candidateLaunched',
     ]),
     ...mapGetters([
       'membersArray',

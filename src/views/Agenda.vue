@@ -1,6 +1,6 @@
 <template>
   <div class="agenda">
-    <div v-if="launched" class="container">
+    <div v-if="agendaLaunched" class="container">
       <div class="filter-container">
         <div class="header">Filters</div>
         <div class="filters">
@@ -135,7 +135,7 @@ export default {
     ...mapState([
       'account',
       'blockTime',
-      'launched',
+      'agendaLaunched',
       'agendas',
       'agendaVotesByCandidates',
     ]),

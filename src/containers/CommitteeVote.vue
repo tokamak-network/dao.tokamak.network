@@ -484,7 +484,7 @@ export default {
       return data;
     },
     async update () {
-      await this.$store.dispatch('launch');
+      await this.$store.dispatch('candidateLaunch');
       await this.$store.dispatch('connectEthereum', this.web3);
       const candidateFound = this.candidates.find(candidate => candidate.candidateContract === this.address);
       await this.$store.dispatch('setVoters', candidateFound);

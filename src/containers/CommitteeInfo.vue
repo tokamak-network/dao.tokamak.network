@@ -147,7 +147,7 @@ export default {
         .on('confirmation', async (confirmationNumber) => {
           if (this.confirmBlock === confirmationNumber) {
             this.$store.commit('SET_PENDING_TX', '');
-            await this.$store.dispatch('launch');
+            await this.$store.dispatch('candidateLaunch');
             await this.$store.dispatch('connectEthereum', this.web3);
           }
         })
@@ -173,7 +173,7 @@ export default {
       await updateCandidate(candidate.layer2.toLowerCase(), candidate.operator.toLowerCase(), sig, candidate.name, description);
       this.canEditDescription = false;
 
-      await this.$store.dispatch('launch');
+      await this.$store.dispatch('candidateLaunch');
       await this.$store.dispatch('connectEthereum', this.web3);
     },
     async generateSig (candidate) {
