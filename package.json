@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.8",
     "@fontsource/open-sans": "^4.5.13",
     "@fontsource/titillium-web": "^4.5.9",
     "@makerdao/currency": "^0.9.9",
