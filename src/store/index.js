@@ -178,12 +178,11 @@ export default new Vuex.Store({
 
         const block = await web3.eth.getBlock(blockNumber);
         commit('SET_BLOCK_TIME', block.timestamp);
-
+        await dispatch('setContractState');
         await dispatch('setBalance');
         await dispatch('setAgendas');
         await dispatch('setVotedCandidatesFromAccount');
         await dispatch('setRequests');
-        await dispatch('setContractState');
 
         await dispatch('setVoteAgendas');
         await dispatch('setAgendasCanVote');
@@ -221,6 +220,7 @@ export default new Vuex.Store({
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
       const myVotes = await candidateContract.methods.stakedOf(state.account).call();
+      // console.log('myvote', myVotes);
       commit('SET_MY_VOTES', myVotes);
     },
     async setRequests ({ state, commit }) {
@@ -250,22 +250,17 @@ export default new Vuex.Store({
     },
     async setContractState ({ state, commit }) {
       const agendaManager = getContract('DAOAgendaManager', state.web3);
-      const committeeProxy = getContract('DAOCommitteeProxy', state.web3);
+      // const committeeProxy = getContract('DAOCommitteeProxy', state.web3);
       const seigManager = getContract('SeigManager', state.web3);
-      console.log(seigManager);
-      const [
-        createAgendaFee,
-        claimableAmount,
-        minimumAmount,
-      ] = await Promise.all([
-        agendaManager.methods.createAgendaFees().call(),
-        committeeProxy.methods.getClaimableActivityReward(state.account).call(),
-        seigManager.methods.minimumAmount().call(),
-      ]);
-      console.log(minimumAmount);
+
+      const createAgendaFee = await agendaManager.methods.createAgendaFees().call();
+      // const claimableAmount = await committeeProxy.methods.getClaimableActivityReward(state.account).call();
+      const minimumAmount = await seigManager.methods.minimumAmount().call();
+      // console.log(claimableAmount);
+
       const contractState = {
         createAgendaFee,
-        claimableAmount,
+        // claimableAmount,
         minimumAmount,
       };
       commit('SET_CONTRACT_STATE', contractState);
@@ -288,7 +283,7 @@ export default new Vuex.Store({
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
-      console.log(response.data);
+
       const candi = response.data.candidates;
       const [
         // c,
@@ -423,7 +418,14 @@ export default new Vuex.Store({
 
       const promAgendaTx = [];
       const promAgendaContents = [];
-      console.log(await web3.eth.getTransaction(agendas[0].transactionHash));
+      // try {
+      //   console.log(agendas[0].transactionHash);
+
+      //   console.log('tx', await web3.eth.getTransaction(agendas[0].transactionHash));
+      // } catch (e) {
+      //   console.log(e);
+      // }
+
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
         // console.log(txHash);
@@ -438,7 +440,7 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          console.log(agendaTxs[i]);
+          // console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
@@ -583,7 +585,7 @@ export default new Vuex.Store({
               });
             });
             candidateContract.agendaVote = await getAgendaVotesByVoter(candidateContract.candidateContract);
-            console.log(candidateContract.agendaVote);
+            // console.log(candidateContract.agendaVote);
             candidateContract.countAgendaVote = candidateContract.agendaVote.length ;
             if (candidateContract.countAgendaVote > 0 && candidateContract.countCanVoteAgendas > 0)
               candidateContract.voteRates = ((candidateContract.countAgendaVote / candidateContract.countCanVoteAgendas) * 100).toFixed(2);
@@ -775,13 +777,11 @@ export default new Vuex.Store({
     },
     canUpdateReward: (_, getters) => (address) => {
       const candidate = getters.candidate(address);
-      console.log(candidate);
-      console.log(getters.minimumAmount);
       if (!candidate || !getters.minimumAmount) return false;
 
       const minimumAmount = toBN(getters.minimumAmount);
       const selfVote = toBN(candidate.selfVote);
-      console.log(selfVote, minimumAmount);
+
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {

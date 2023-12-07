@@ -352,56 +352,59 @@ module.exports.getABIFromSelector = getABIFromSelector;
 
 module.exports.parseAgendaBytecode = function (tx, type) {
   // TODO: to fix case of using mixed type with 'A' and 'B'
-  console.log(tx);
-  const params1 = marshalString(unmarshalString(tx.input).substring(8));
-  const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
-  const params2 = decodedParams1[2];
-  const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
+  try {
+    const params1 = marshalString(unmarshalString(tx.input).substring(8));
+    const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
+    const params2 = decodedParams1[2];
+    const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
 
-  const targets = decodedParams2[0];
-  const commands = decodedParams2[4];
+    const targets = decodedParams2[0];
+    const commands = decodedParams2[4];
 
-  if (targets.length !== commands.length) {
-    console.log('bug'); // eslint-disable-line
-  }
-
-  const onChainEffects = [];
-  for (let i = 0; i < targets.length; i++) {
-    const selector = commands[i].slice(0, 10);
-    let abi = getABIFromSelector(selector, type);
-    if (!abi) {
-      abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+    if (targets.length !== commands.length) {
+      console.log('bug'); // eslint-disable-line
     }
 
-    if (!abi) {
-      onChainEffects.push({
-        target: '',
-        name: '',
-        types: [],
-        bytecode: '',
+    const onChainEffects = [];
+    for (let i = 0; i < targets.length; i++) {
+      const selector = commands[i].slice(0, 10);
+      let abi = getABIFromSelector(selector, type);
+      if (!abi) {
+        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+      }
+
+      if (!abi) {
+        onChainEffects.push({
+          target: '',
+          name: '',
+          types: [],
+          bytecode: '',
+        });
+        console.log('bug', 'no abi'); // eslint-disable-line
+        continue;
+      }
+
+      const target = targets[i];
+      const name = abi.name;
+      const types = [];
+      abi.inputs.forEach(input => {
+        types.push(input.type);
       });
-      console.log('bug', 'no abi'); // eslint-disable-line
-      continue;
+      const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
+      const values = decodeParameters(types, bytecode);
+
+      const onChainEffect = {
+        target,
+        name,
+        types,
+        values,
+      };
+      onChainEffects.push(onChainEffect);
     }
-
-    const target = targets[i];
-    const name = abi.name;
-    const types = [];
-    abi.inputs.forEach(input => {
-      types.push(input.type);
-    });
-    const bytecode = marshalString(unmarshalString(commands[i]).substring(8));
-    const values = decodeParameters(types, bytecode);
-
-    const onChainEffect = {
-      target,
-      name,
-      types,
-      values,
-    };
-    onChainEffects.push(onChainEffect);
+    return onChainEffects;
+  } catch (e) {
+    console.log(e); //eslint-disable-line
   }
-  return onChainEffects;
 };
 
 module.exports.metamaskErrorMessage = function (errorString) {
