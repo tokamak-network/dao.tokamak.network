@@ -77,9 +77,9 @@ export default {
           await ethereum.request({ method: 'eth_requestAccounts' });
 
           const chainId = await web3.eth.getChainId();
-          if (chainId !== 1) {
+          if (chainId !== 11155111) {
             return alert(
-              'The current network is not mainnet. Please change it to the mainnet.',
+              'The current network is not sepolia Please change it to the sepolia',
             );
           }
 

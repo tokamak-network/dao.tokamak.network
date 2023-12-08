@@ -285,6 +285,7 @@ export default new Vuex.Store({
       });
 
       const candi = response.data.candidates;
+
       const [
         // c,
         maxMember,
@@ -306,7 +307,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       const candidates = await Promise.all(
@@ -375,7 +376,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -400,7 +401,7 @@ export default new Vuex.Store({
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -453,7 +454,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
       }
 
       votes.forEach(async function (vote) {
@@ -473,6 +474,7 @@ export default new Vuex.Store({
     },
     async setCandidateVoteRank ({ commit }) {
       const candidateVoteRank = await getCandidateVoteRank();
+      console.log(candidateVoteRank);
       commit('SET_CANDIDATE_VOTE_RANK', candidateVoteRank);
     },
     async setAgendasCanVote ({ state, commit }) {
