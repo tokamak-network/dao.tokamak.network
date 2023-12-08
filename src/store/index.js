@@ -474,7 +474,6 @@ export default new Vuex.Store({
     },
     async setCandidateVoteRank ({ commit }) {
       const candidateVoteRank = await getCandidateVoteRank();
-      console.log(candidateVoteRank);
       commit('SET_CANDIDATE_VOTE_RANK', candidateVoteRank);
     },
     async setAgendasCanVote ({ state, commit }) {
