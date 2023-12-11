@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { toBN } from 'web3-utils';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 
 import {
   // getCandidates,
@@ -197,25 +197,25 @@ export default new Vuex.Store({
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
       const wton = getContract('WTON', state.web3);
-      const powerTON = getContract('PowerTON', state.web3);
+      // const powerTON = getContract('PowerTON', state.web3);
 
       const [
         tonBalance,
         wtonBalance,
-        power,
-        totalDeposits,
+        // power,
+        // totalDeposits,
       ] = await Promise.all([
         ton.methods.balanceOf(state.account).call(),
         wton.methods.balanceOf(state.account).call(),
-        powerTON.methods.powerOf(state.account).call(),
-        powerTON.methods.totalDeposits().call(),
+        // powerTON.methods.powerOf(state.account).call(),
+        // powerTON.methods.totalDeposits().call(),
       ]);
 
       commit('SET_TON_BALANCE', tonBalance);
       commit('SET_WTON_BALANCE', wtonBalance);
 
-      const winningProbability = numeral(power / totalDeposits).format('0.00%');
-      commit('SET_WINNING_PROBABILITY', winningProbability);
+      // const winningProbability = numeral(power / totalDeposits).format('0.00%');
+      // commit('SET_WINNING_PROBABILITY', winningProbability);
     },
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
