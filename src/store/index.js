@@ -419,14 +419,10 @@ export default new Vuex.Store({
 
       const promAgendaTx = [];
       const promAgendaContents = [];
-      // try {
-      //   console.log(agendas[0].transactionHash);
 
-      //   console.log('tx', await web3.eth.getTransaction(agendas[0].transactionHash));
-      // } catch (e) {
-      //   console.log(e);
-      // }
-
+      agendas.sort(function (a, b) {
+        return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
+      });
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
         // console.log(txHash);
