@@ -21,7 +21,7 @@
     </div>
     <div class="title-container">
       <div class="title">{{ member ? member.name : '-' }}</div>
-      <div class="type">{{ member ? `- ${member.kind}` : '' }}</div>
+      <!-- <div class="type">{{ member ? `- ${member.kind}` : '' }}</div> -->
     </div>
     <div class="sub">{{ member ? desc : '-' }}</div>
     <text-time :type="'A'"
