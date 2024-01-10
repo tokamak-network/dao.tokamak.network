@@ -120,7 +120,7 @@ export default {
 
         this.expectedSeig = WTON(expectedSeig);
       } catch (e) {
-        console.log(e);
+        console.log(e); // eslint-disable-line
       }
     },
     async updateReward () {
