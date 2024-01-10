@@ -265,7 +265,7 @@ export default {
       const candidate = this.candidate(address);
 
       if (candidate.kind === 'layer2') {
-        if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
+        if (candidate.candidate.toLowerCase() !== this.account.toLowerCase()) {
           return alert('Only candidate by layer2 owner can update reward.');
         }
       }
@@ -273,7 +273,6 @@ export default {
       if (!this.canUpdateReward(address)) {
         return alert('Candidate hasn\'t voted minimum amount yet.');
       }
-
       this.showModal = true;
     },
   },

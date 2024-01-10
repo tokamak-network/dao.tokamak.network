@@ -76,60 +76,52 @@ export default {
         console.log('bug', 'no candidate'); // eslint-disable-line
         return;
       }
+      try {
+        const ton = getContract('TON', this.web3);
+        const wton = getContract('WTON', this.web3);
+        const coinage = getContract('Coinage', this.web3, candidate.coinage);
 
-      const ton = getContract('TON', this.web3);
-      const wton = getContract('WTON', this.web3);
-      const coinage = getContract('Coinage', this.web3, candidate.coinage);
-      const seigManager = getContract('SeigManager', this.web3);
-      const _tot = await seigManager.methods.tot().call();
-      const tot = getContract('Coinage', this.web3, _tot);
+        const seigManager = getContract('SeigManager', this.web3);
+        const _tot = await seigManager.methods.tot().call();
+        const tot = getContract('Coinage', this.web3, _tot);
+        const owner = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
+        const fromBlockNumber = candidate.lastCommitBlockNumber;
+        const toBlockNumber = this.blockNumber;
 
-      const owner = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-      const fromBlockNumber = candidate.lastCommitBlockNumber;
-      const toBlockNumber = this.blockNumber;
-      const [
-        userStakedAmount,
-        totalStakedAmount,
-        pseigRate,
-        commissionRate,
-        isCommissionRateNegative,
-        operatorStakedAmount,
-        totalStakedAmountOnLayer2,
+        const userStakedAmount = await coinage.methods.balanceOf(this.account).call();
+        const totalStakedAmount = await tot.methods.totalSupply().call();
+        const pseigRate = await seigManager.methods.relativeSeigRate().call();
+        const tonTotalSupply = await ton.methods.totalSupply().call();
+        const tonBalanceOfWTON = await ton.methods.balanceOf(wton._address).call();
+        const commissionRate = await seigManager.methods.commissionRates(owner).call();
+        const operatorStakedAmount = await coinage.methods.balanceOf(candidate.candidate).call();
+        const isCommissionRateNegative = await seigManager.methods.isCommissionRateNegative(owner).call();
+        const totalStakedAmountOnLayer2 = await coinage.methods.totalSupply().call();
 
-        tonTotalSupply,
-        tonBalanceOfWTON,
-      ] = await Promise.all([
-        coinage.methods.balanceOf(this.account).call(),
-        tot.methods.totalSupply().call(),
-        seigManager.methods.relativeSeigRate().call(),
-        seigManager.methods.commissionRates(owner).call(),
-        seigManager.methods.isCommissionRateNegative(owner).call(),
-        coinage.methods.balanceOf(candidate.operator).call(),
-        coinage.methods.totalSupply().call(),
+        const isOperator = this.isCandidate ? true : false;
+        const tos = (toBN(tonTotalSupply).mul(toBN(10e8)))
+          .add(toBN(totalStakedAmount))
+          .sub(toBN(tonBalanceOfWTON).mul(toBN(10e8)));
 
-        ton.methods.totalSupply().call(),
-        ton.methods.balanceOf(wton._address).call(),
-      ]);
-      const isOperator = this.isCandidate ? true : false;
-      const tos = (toBN(tonTotalSupply).mul(toBN(10e8)))
-        .add(toBN(totalStakedAmount))
-        .sub(toBN(tonBalanceOfWTON).mul(toBN(10e8)));
+        setNetwork('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10');
+        const expectedSeig = calculateExpectedSeig(
+          toBN(fromBlockNumber),
+          toBN(toBlockNumber),
+          toBN(userStakedAmount),
+          toBN(totalStakedAmount),
+          toBN(tos),
+          toBN(pseigRate),
+          toBN(commissionRate),
+          isCommissionRateNegative,
+          toBN(operatorStakedAmount),
+          toBN(totalStakedAmountOnLayer2),
+          isOperator,
+        );
 
-      setNetwork('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10');
-      const expectedSeig = calculateExpectedSeig(
-        toBN(fromBlockNumber),
-        toBN(toBlockNumber),
-        toBN(userStakedAmount),
-        toBN(totalStakedAmount),
-        tos,
-        toBN(pseigRate),
-        toBN(commissionRate),
-        isCommissionRateNegative,
-        toBN(operatorStakedAmount),
-        toBN(totalStakedAmountOnLayer2),
-        isOperator,
-      );
-      this.expectedSeig = WTON(expectedSeig);
+        this.expectedSeig = WTON(expectedSeig);
+      } catch (e) {
+        console.log(e);
+      }
     },
     async updateReward () {
       const makePos = (v1, v2) => {
