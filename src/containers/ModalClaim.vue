@@ -47,9 +47,9 @@ export default {
       this.$emit('on-closed');
     },
     async claim () {
-      console.log('aaa');
+
       const candidateContract = getContract('Candidate', this.web3, this.candidateContractFromEOA);
-      console.log(this.candidateContractFromEOA);
+
       // const gasLimit = await candidateContract.methods.claimActivityReward()
       //   .estimateGas({
       //     from: this.account,
