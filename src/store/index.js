@@ -535,7 +535,6 @@ export default new Vuex.Store({
             });
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates);
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
-
             if (candidates[0] != null) {
               activityReward = await committeeProxy.methods.getClaimableActivityReward(candidates[0].candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
@@ -661,9 +660,9 @@ export default new Vuex.Store({
       if (!account) return '';
       const myCandidateContracts = [];
       for (let i = 0; i < state.candidates.length; i++) {
-        // if (state.candidates[i].operator.toLowerCase() === account) {
-        //   myCandidateContracts.push(state.candidates[i].candidate);
-        // }
+        if (state.candidates[i].candidate.toLowerCase() === account) {
+          myCandidateContracts.push(state.candidates[i].candidate);
+        }
       }
       if (myCandidateContracts.length === 0) return '';
       else return myCandidateContracts.toString();
@@ -673,9 +672,9 @@ export default new Vuex.Store({
       if (!account) return [];
       const myCandidateContracts = [];
       for (let i = 0; i < state.candidates.length; i++) {
-        // if (state.candidates[i].operator.toLowerCase() === account) {
-        //   myCandidateContracts.push(state.candidates[i]);
-        // }
+        if (state.candidates[i].candidate.toLowerCase() === account) {
+          myCandidateContracts.push(state.candidates[i]);
+        }
       }
 
       if (myCandidateContracts.length === 0) return [];
