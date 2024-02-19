@@ -1,23 +1,23 @@
 <template>
   <div class="card-member">
     <div class="header-container">
-      <text-smallest :label="'Status'"
+      <!-- <text-smallest :label="'Status'"
                      :value="member ? 'Occupied' : 'Empty'"
                      :with-bar="true"
       />
       <text-smallest :label="'Elected'"
                      :value="member ? hexSlicer(member.layer2) : '-'"
-                     :with-bar="true"
-      />
-      <text-smallest :label="'# of Votes'"
+                     :with-bar="true" -->
+      <!-- /> -->
+      <text-smallest :label="'Total Staked'"
                      :value="member ? amountTON(member.vote) : '0 TON'"
                      :with-bar="false"
       />
-      <text-small class="member-slot"
+      <!-- <text-small class="member-slot"
                   :type="'A'"
                   :label="'Slot'"
                   :value="`#${memberIndex}`"
-      />
+      /> -->
     </div>
     <div class="title-container">
       <div class="title">{{ member ? member.name : '-' }}</div>
@@ -61,14 +61,14 @@ import { getContract } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 
 import Button from '@/components/Button.vue';
-import TextSmall from '@/components/TextSmall.vue';
+// import TextSmall from '@/components/TextSmall.vue';
 import TextSmallest from '@/components/TextSmallest.vue';
 import TextTime from '@/components/TextTime.vue';
 
 export default {
   components: {
     'election-button': Button,
-    'text-small': TextSmall,
+    // 'text-small': TextSmall,
     'text-smallest': TextSmallest,
     'text-time': TextTime,
   },
@@ -113,7 +113,7 @@ export default {
       return this.member.candidateContract === this.candidateContractFromEOA ? true : false;
     },
     desc () {
-      return `${hexSlicer(this.member.candidateContract)} was elected as a member on ${this.deployedDate(this.member.info.memberJoinedTime)}`;
+      return `${hexSlicer(this.member.candidateContract)} became a DAO committee member on ${this.deployedDate(this.member.info.memberJoinedTime)}`;
     },
     deployedDate () {
       return (timestamp) => {

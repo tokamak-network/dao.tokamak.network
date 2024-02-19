@@ -32,7 +32,7 @@
             !isSub() ? { color: '#ffffff' } : { color: '#3e495c' },
           ]"
     >
-      © 2021 Tokamak Network PTE. LTD.
+      Copyright © 2024 Tokamak Network All Rights Reserved.
     </span>
   </div>
 </template>

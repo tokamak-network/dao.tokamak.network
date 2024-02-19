@@ -1,6 +1,6 @@
 <template>
   <div class="card-vote">
-    <card-container :title="'Supporters'">
+    <card-container :title="'List of Stakers'">
       <template #body>
         <div v-if="!votersWithBalance || votersWithBalance.length === 0" class="label">
           No one voted yet

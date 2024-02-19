@@ -4,9 +4,9 @@
       <tbody>
         <tr v-for="voter in votersWithBalance" :key="voter.user.id">
           <div v-if="sumOfVotes > 0 && voter.stakeOf!=0" class="table-content">
+            <div>{{ voter.user.id | hexSlicer }}</div>
             <div>{{ calcPct(voter.stakeOf, sumOfVotes) }}% </div>
             <div>({{ voter.stakeOf | WTON | withComma }} TON)</div>
-            <div>{{ voter.user.id | hexSlicer }}</div>
           </div>
         </tr>
       </tbody>

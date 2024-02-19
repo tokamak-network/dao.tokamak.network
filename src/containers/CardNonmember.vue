@@ -1,6 +1,6 @@
 <template>
   <div class="card-nonmember" :class="{ mine: myCandidate }">
-    <div class="label"># of Votes </div>
+    <div class="label">Total Staked </div>
     <div class="amount">{{ wton(candidate.vote) | withComma }} TON</div>
     <div class="name-container">
       <div class="name">{{ candidate.name }}</div>
