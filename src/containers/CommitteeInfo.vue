@@ -20,7 +20,7 @@
                     :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;"
     />
     <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Contract' : 'Candidate Contract'" :content="candidate(address) ? candidate(address).candidateContract : '-'" :type="'address'" style="margin-top: 12px;" />
-    <info-committee :title="'Total Vote'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" style="margin-top: 12px;" />
+    <info-committee :title="'Total Staked'" :content="`${withComma(wton(totalVotesForCandidate(address)))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Last Reward Update'"
                     :content="`${candidate(address) ? date2(candidate(address).lastCommitAt) : '-'}`"
                     style="margin-top: 12px;"
