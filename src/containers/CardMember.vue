@@ -25,7 +25,7 @@
     </div>
     <div class="sub">{{ member ? desc : '-' }}</div>
     <text-time :type="'A'"
-               :time="member ? fromNow(member.info.memberJoinedTime) : '-'"
+               :time="member ? fromNow(candidate(member.candidateContract).lastCommitAt) : '-'"
                :is-active="true"
     />
     <div class="button-container">
@@ -56,7 +56,7 @@
 
 <script>
 import { toBN } from 'web3-utils';
-import { fromNow, hexSlicer, WTON, withComma } from '@/utils/helpers';
+import { fromNow, hexSlicer, WTON, withComma, date2 } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 
@@ -92,6 +92,7 @@ export default {
       'web3',
     ]),
     ...mapGetters([
+      'candidate',
       'isCandidate',
       'isMember',
       'totalVotesForCandidate',
@@ -114,6 +115,9 @@ export default {
     },
     desc () {
       return `${hexSlicer(this.member.candidateContract)} became a DAO committee member on ${this.deployedDate(this.member.info.memberJoinedTime)}`;
+    },
+    date2 () {
+      return (timestamp) => date2(timestamp);
     },
     deployedDate () {
       return (timestamp) => {

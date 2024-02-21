@@ -124,6 +124,7 @@ export default {
     ...mapGetters([
       'membersArray',
       'sortedNonmembersByVotes',
+      'candidate',
     ]),
   },
 };
