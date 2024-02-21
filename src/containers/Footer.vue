@@ -1,7 +1,7 @@
 <template>
   <div class="footer" :class="{ 'footer-sub': isSub() }">
     <div class="menu">
-      <span class="company" :class="{ 'company-sub': isSub() }">Copyright © 2024 Tokamak Network All Rights Reserved.</span>
+      <span class="company" :class="{ 'company-sub': isSub() }">Copyright © 2024 <span style="color: #1c1c1c;">Tokamak Network</span> All Rights Reserved.</span>
       <!-- <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Terms</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Privacy Policy</a>
       <a href="" target="_blank" class="clause" :class="{ 'clause-sub': isSub() }">Status</a> -->
@@ -114,7 +114,7 @@ export default {
 }
 
 .company-sub {
-  color: #3e495c;
+  color: #999999;
 }
 
 .clause {

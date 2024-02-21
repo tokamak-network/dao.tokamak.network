@@ -25,7 +25,9 @@
                     :content="`${candidate(address) ? date2(candidate(address).lastCommitAt) : '-'}`"
                     style="margin-top: 12px;"
     />
-    <div style="width: 100%; height: 18px;" />
+    <div class="bottom" style="width: 100%; margin-top: 40px">
+      The three DAO candidates with the highest amount of staked TON are eligible to become DAO committee members and can vote on DAO agendas. Users can delegate their staking power by staking their TON (or WTON) to any DAO candidates. In return, they can earn TON staking rewards.
+    </div>
     <!-- <info-committee :title="'My Vote'" :content="`${withComma(wton(myVotes))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Revotable'" :content="`${withComma(wton(canRevote(address, 0)))} TON`" style="margin-top: 12px;" />
     <info-committee :title="'Withdrawable'" :content="`${withComma(wton(canWithdraw(address, 0)))} TON`" style="margin-top: 12px;" />
@@ -248,6 +250,17 @@ export default {
   &:hover {
     cursor: pointer;
   }
+}
+
+.bottom {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #3e495c;
 }
 
 .cancel-btn {

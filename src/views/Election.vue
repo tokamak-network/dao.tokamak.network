@@ -11,12 +11,26 @@
           <div class="header-tooltip">
             <div class="header header-member">DAO Committee Members</div>
             <img
-              src="@/assets/tooltip.png" alt=""
+              src="@/assets/input_question_icon@3x.png" alt=""
               width="16" height="16"
             >
-            <div class="tooltip1">
-              <img src="@/assets/arrow-tooltip.png" alt=""
+            <div :class="[
+              $mq === 'desktop'
+                ? 'tooltip1'
+                : $mq === 'tablet'
+                  ? 'tooltip1-tablet'
+                  : 'tooltip1-mobile'
+            ]"
+            >
+              <img v-if="$mq === 'mobile'"
+                   src="@/assets/tooltip-mobile.png" alt=""
+                   width="6" height="4"
+                   style="margin-right: 85px"
+              >
+              <img v-else
+                   src="@/assets/arrow-tooltip.png" alt=""
                    width="4" height="6"
+                   style="margin-top: 30px"
               >
               <div class="tooltip-content">
                 DAO candidates with the most staked TON are eligible to serve as DAO committee members and vote on DAO agendas. Currently, there are three members.
@@ -26,15 +40,29 @@
           <card-member v-for="memberIndex in membersArray" :key="memberIndex"
                        :member-index="memberIndex"
           />
-          <div class="header-tooltip">
-            <div class="header header-nonmember">Other DAO Candidates</div>
+          <div class="header-tooltip header-tooltip-nonmember">
+            <div class="header ">Other DAO Candidates</div>
             <img
-              src="@/assets/tooltip.png" alt=""
+              src="@/assets/input_question_icon@3x.png" alt=""
               width="16" height="16"
             >
-            <div class="tooltip2">
-              <img src="@/assets/arrow-tooltip.png" alt=""
+            <div :class="[
+              $mq === 'desktop'
+                ? 'tooltip2'
+                : $mq === 'tablet'
+                  ? 'tooltip2-tablet'
+                  : 'tooltip2-mobile'
+            ]"
+            >
+              <img v-if="$mq === 'mobile'"
+                   src="@/assets/tooltip-mobile.png" alt=""
+                   width="6" height="4"
+                   style="margin-right: 85px"
+              >
+              <img v-else
+                   src="@/assets/arrow-tooltip.png" alt=""
                    width="4" height="6"
+                   style="margin-top: 25px"
               >
               <div class="tooltip-content">
                 An operator registered as a DAO candidate who has staked a minimum of 1,000.1 TON (non-withdrawable).
@@ -57,7 +85,7 @@
                  },
              ]"
         >
-          <card-my-vote v-if="account !== ''" :title="'Your Vote'" />
+          <!-- <card-my-vote v-if="account !== ''" :title="'Your Vote'" /> -->
           <!-- <card-rank :title="'Rank'" /> -->
           <card-resource />
         </div>
@@ -75,7 +103,7 @@ import { mapState, mapGetters } from 'vuex';
 import Loading from '@/components/Loading.vue';
 import CardMember from '@/containers/CardMember.vue';
 import CardNonmember from '@/containers/CardNonmember.vue';
-import CardMyVote from '@/containers/CardMyVote.vue';
+// import CardMyVote from '@/containers/CardMyVote.vue';
 import CardResource from '@/containers/CardResource.vue';
 // import CardRank from '@/containers/CardRank.vue';
 
@@ -84,7 +112,7 @@ export default {
     'loading': Loading,
     'card-member': CardMember,
     'card-nonmember': CardNonmember,
-    'card-my-vote': CardMyVote,
+    // 'card-my-vote': CardMyVote,
     // 'card-rank': CardRank,
     'card-resource': CardResource,
   },
@@ -114,6 +142,11 @@ export default {
   flex-direction: row;
   align-items: center;
   position: relative;
+  margin-bottom: 25px;
+
+  &-nonmember {
+    margin-top: 35px;
+  }
 }
 
 .header-tooltip img:hover ~ .tooltip2 {
@@ -124,12 +157,53 @@ export default {
   display: flex;
 }
 
+.header-tooltip img:hover ~ .tooltip2-tablet {
+  display: flex;
+}
+
+.header-tooltip img:hover ~ .tooltip1-tablet {
+  display: flex;
+}
+
+.header-tooltip img:hover ~ .tooltip2-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.header-tooltip img:hover ~ .tooltip1-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+
 .tooltip1 {
   display: none;
   position: absolute;
 
-  left: 38%;
-  top: 30px;
+  left: 39%;
+  top: -17px;
+  width: 300px;
+
+  z-index: 999;
+}
+.tooltip1-tablet {
+  display: none;
+  position: absolute;
+
+  left: 300px;
+  top: -17px;
+  width: 300px;
+
+  z-index: 999;
+}
+.tooltip1-mobile {
+  display: none;
+  position: absolute;
+
+  left: 80px;
+  top: 35px;
   width: 300px;
 
   z-index: 999;
@@ -138,14 +212,34 @@ export default {
   display: none;
   position: absolute;
 
-  left: 35%;
-  top: 30px;
+  left: 34%;
+  top: -12px;
+  width: 300px;
+
+  z-index: 999;
+}
+.tooltip2-tablet {
+  display: none;
+  position: absolute;
+
+  left: 270px;
+  top: -12px;
+  width: 300px;
+
+  z-index: 999;
+}
+.tooltip2-mobile {
+  display: none;
+  position: absolute;
+
+  left: 40px;
+  top: 35px;
   width: 300px;
 
   z-index: 999;
 }
 .tooltip img {
-  margin-top: 9px;
+  // margin-top: 9px;
 }
 .tooltip-content {
   max-width: 317px;
@@ -196,12 +290,10 @@ export default {
       letter-spacing: normal;
       text-align: left;
 
-      margin-bottom: 20px;
+      // margin-bottom: 20px;
       margin-right: 5px;
 
-      &-nonmember {
-        margin-top: 35px;
-      }
+
     }
 
   }

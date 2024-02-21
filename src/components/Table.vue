@@ -51,8 +51,10 @@ table td, table th {
   white-space: nowrap;
 
   margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-.table-content > div:nth-child(1), .table-content > div:nth-child(2) {
+.table-content > div:nth-child(1) {
   font-family: Roboto;
   font-size: 15px;
   font-weight: normal;
@@ -60,16 +62,16 @@ table td, table th {
   font-style: normal;
   letter-spacing: normal;
   text-align: left;
-  color: #86929d;
+  color: #2a72e5;
 
-  margin-left: 20px;
+  // margin-left: 20px;
 }
 .table-content > div:nth-child(2) {
   font-size: 12px;
 
   margin-left: 4px;
 }
-.table-content > div:nth-child(3) {
+.table-content > div:nth-child(3), .table-content > div:nth-child(2) {
   flex: 1;
 
   font-family: Roboto;
@@ -79,8 +81,8 @@ table td, table th {
   font-style: normal;
   letter-spacing: normal;
   text-align: right;
-  color: #2a72e5;
+  color: #86929d;
 
-  margin-right: 20px;
+  margin-right: 5px;
 }
 </style>
