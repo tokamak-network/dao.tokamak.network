@@ -261,8 +261,8 @@ export default {
       this.address = this.$route.params.address;
     },
     linkToStake () {
-      const address = this.address;
-      console.log(address);
+      // const address = this.address;
+      // console.log(address);
     },
     openUpdateRewardModal () {
       const address = this.address;
