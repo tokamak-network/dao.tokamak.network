@@ -313,7 +313,6 @@ export default new Vuex.Store({
       const candidates = await Promise.all(
         candi.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
           const [
             isRegistered, coinage, lastCommitBlockNumber,
           ] = await Promise.all([
@@ -335,7 +334,7 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-
+          console.log(selfVote);
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
@@ -345,7 +344,7 @@ export default new Vuex.Store({
           return candidate;
         }),
       );
-      const candidatesFiltered = candidates.filter(candidate => candidate);
+      const candidatesFiltered = candidates.filter(candidate => candidate.selfVote > 1000000000000000000000000000000);
       commit('SET_CANDIDATES', candidatesFiltered);
 
       const members = [];
