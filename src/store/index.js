@@ -15,7 +15,7 @@ import {
 import { GET_CANDIDATE } from '../../graphql/getCandidate';
 import {
   getContract,
-  parseAgendaBytecode,
+  parseAgendaBytecode, // eslint-disable-line
   getContractABIFromAddress,
 } from '@/utils/contracts';
 import { agendaStatus } from '@/utils/helpers';
@@ -285,7 +285,6 @@ export default new Vuex.Store({
       });
 
       const candi = response.data.candidates;
-
       const [
         // c,
         maxMember,
@@ -320,6 +319,7 @@ export default new Vuex.Store({
             seigManager.methods.coinages(candidate.candidateContract).call(),
             seigManager.methods.lastCommitBlock(addr).call(),
           ]);
+
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
             return false;
@@ -334,7 +334,6 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-          console.log(selfVote);
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
@@ -422,10 +421,10 @@ export default new Vuex.Store({
       agendas.sort(function (a, b) {
         return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
       });
-      console.log(agendas);
+      // console.log(agendas);
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        console.log(txHash);
+        // console.log(txHash);
         promAgendaTx.push(await web3.eth.getTransaction(txHash));
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
@@ -437,7 +436,7 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          console.log(agendaTxs[i]);
+          // console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
@@ -807,7 +806,9 @@ export default new Vuex.Store({
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
+
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
+
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi'); // eslint-disable-line
         return '';
