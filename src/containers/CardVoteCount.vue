@@ -1,15 +1,9 @@
 <template>
   <div class="card-vote-count">
-    <card-container :title="'Your Vote'">
+    <card-container :title="'Your Staked'">
       <template #body>
-        <div class="label">
-          <span>You Voted for this Candidate</span>
-          <!-- <span class="blue"> Voted </span>
-          <span>for this Slot</span> -->
-        </div>
-        <div class="divide" />
         <div class="content">
-          <span>Voted</span>
+          <span>{{ account | hexSlicer }}</span>
           <span>{{ myVotes | WTON | withComma }} TON</span>
         </div>
       </template>
@@ -20,6 +14,7 @@
 <script>
 import { mapState } from 'vuex';
 import Card from '@/components/Card.vue';
+// import { hexSlicer } from '@/utils/helpers';
 
 export default {
   components: {
@@ -34,6 +29,7 @@ export default {
   computed: {
     ...mapState([
       'myVotes',
+      'account',
     ]),
   },
   watch: {
@@ -84,7 +80,7 @@ export default {
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #86929d;
+  color: #2a72e5;
 }
 .card-vote-count .content > span:nth-child(2) {
   white-space: pre-wrap;

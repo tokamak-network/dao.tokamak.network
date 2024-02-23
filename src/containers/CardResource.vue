@@ -19,9 +19,9 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://discord.gg/SZw2WSR"
+             href="https://discord.com/invite/J4chV2zuAK"
           >
-            DAO Discussion (Discrod)
+            DAO Discussion (Discord)
           </a>
         </div>
         <div class="resource">

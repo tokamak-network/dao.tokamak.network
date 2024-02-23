@@ -29,10 +29,10 @@
     </div> -->
     <span class="company"
           :style="[
-            !isSub() ? { color: '#ffffff' } : { color: '#3e495c' },
+            !isSub() ? { color: '#999999' } : { color: '#999999' },
           ]"
     >
-      © 2021 Tokamak Network PTE. LTD.
+      Copyright © 2024 <span style="color: #1c1c1c;">Tokamak Network</span> All Rights Reserved.
     </span>
   </div>
 </template>
@@ -85,10 +85,12 @@ export default {
   font-family: Roboto;
   font-size: 14px;
   font-weight: 500;
+  width: 230px;
   font-stretch: normal;
   font-style: normal;
+  line-height: 1.36;
   letter-spacing: normal;
-  text-align: left;
+  text-align: center;
   color: #ffffff;
 
   padding-top: 20px;

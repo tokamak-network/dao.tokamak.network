@@ -20,29 +20,25 @@
       <div class="content">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
           </div>
           <div>
-            <img src="@/assets/poll-time-active-icon.svg" alt=""
-                 width="14" height="14"
-            >
-            <span class="black">Slot </span>
-            <span class="blue">{{ member(address).memberIndex }} </span>
-            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+            <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
           </div>
         </div>
         <div v-if="!account">
           <div class="title-container">
             <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
-            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+            <!-- <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div> -->
           </div>
         </div>
         <div v-else>
           <div class="title-container" style="margin-bottom: 0px;">
             <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
-            <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+            <!-- <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div> -->
           </div>
-          <button style="margin-top: 14px; margin-bottom: 30px;"
+          <button v-if="account"
+                  style="margin-top: 14px; margin-bottom: 30px;"
                   class="update-btn"
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
@@ -51,13 +47,19 @@
           >
             Update Reward
           </button>
+          <button
+            class="stake-btn"
+            @click="linkToStake()"
+          >
+            Stake
+          </button>
         </div>
         <div class="selector">
-          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Vote Breakdown
+            Stakers
           </div>
           <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
         </div>
@@ -80,35 +82,26 @@
       <div class="content-tablet">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
           </div>
           <div>
-            <img src="@/assets/poll-time-active-icon.svg" alt=""
-                 width="14" height="14"
-            >
-            <span class="black">Slot </span>
-            <span class="blue">{{ member(address).memberIndex }} </span>
-            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+            <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
           </div>
         </div>
         <div class="title-container">
           <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
-          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          <!-- <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div> -->
         </div>
         <div class="selector">
           <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">
-            Detail
+            Details
           </div>
           <div :class="{ 'selected': currentSelector === 1 }"
                style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Vote Breakdown
+            Stakers
           </div>
-          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">
-            Vote/Unvote
-          </div>
-
           <span class="space" />
           <button v-if="account"
                   class="update-btn"
@@ -119,11 +112,16 @@
           >
             Update Reward
           </button>
+          <button
+            class="stake-btn"
+            @click="linkToStake()"
+          >
+            Stake
+          </button>
         </div>
         <div class="divider" />
         <committee-info v-if="currentSelector === 0" />
         <committee-info-vote v-else-if="currentSelector === 1" />
-        <committee-vote v-else-if="currentSelector === 2" />
       </div>
     </div>
     <div v-else class="card-committee-info">
@@ -139,33 +137,29 @@
       <div class="content">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Elected at {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
           </div>
           <div>
-            <img src="@/assets/poll-time-active-icon.svg" alt=""
-                 width="14" height="14"
-            >
-            <span class="black">Slot </span>
-            <span class="blue">{{ member(address).memberIndex }} </span>
-            <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span>
+            <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
           </div>
         </div>
         <div class="title-container">
           <div class="title">{{ candidate(address) ? candidate(address).name : '-' }}</div>
-          <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div>
+          <!-- <div class="type">{{ candidate(address) ? `- ${candidate(address).kind}` : '' }}</div> -->
         </div>
         <div class="selector">
-          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Detail</div>
+          <div :class="{ 'selected': currentSelector === 0 }" @click="currentSelector = 0">Details</div>
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Vote Breakdown
+            Stakers
           </div>
-          <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
+          <!-- <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div> -->
 
           <span class="space" />
           <button v-if="account"
                   class="update-btn"
+                  style="margin-right:20px;"
                   :class="{
                     'update-btn-disabled': !canUpdateReward(address) || (candidate(address).kind === 'layer2' && candidate(address).operator.toLowerCase() !== account.toLowerCase()),
                   }"
@@ -173,11 +167,17 @@
           >
             Update Reward
           </button>
+          <button
+            class="stake-btn"
+            @click="linkToStake()"
+          >
+            Stake
+          </button>
         </div>
         <div class="divider" />
         <committee-info v-if="currentSelector === 0" />
         <committee-info-vote v-else-if="currentSelector === 1" />
-        <committee-vote v-else-if="currentSelector === 2" />
+        <!-- <committee-vote v-else-if="currentSelector === 2" /> -->
       </div>
     </div>
   </div>
@@ -260,12 +260,16 @@ export default {
       this.$router.push(({ path: `/election/${this.sortedCandidates[index].candidateContract}` }));
       this.address = this.$route.params.address;
     },
+    linkToStake () {
+      const address = this.address;
+      window.open(`https://simple.staking.tokamak.network/staking#${address}`, '_blank'); //eslint-disable-line
+    },
     openUpdateRewardModal () {
       const address = this.address;
       const candidate = this.candidate(address);
 
       if (candidate.kind === 'layer2') {
-        if (candidate.operator.toLowerCase() !== this.account.toLowerCase()) {
+        if (candidate.candidate.toLowerCase() !== this.account.toLowerCase()) {
           return alert('Only candidate by layer2 owner can update reward.');
         }
       }
@@ -273,7 +277,6 @@ export default {
       if (!this.canUpdateReward(address)) {
         return alert('Candidate hasn\'t voted minimum amount yet.');
       }
-
       this.showModal = true;
     },
   },
@@ -281,8 +284,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-committee-info {
-}
+// .card-committee-info {
+// }
 .content {
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);
@@ -429,12 +432,40 @@ export default {
 .space {
   flex: 1;
 }
+.stake-btn {
+  background-color: #257eee;
+
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+
+  width: 102px;
+  height: 25px;
+
+  border-radius: 4px;
+  border: solid 1px #257eee;
+
+  // background: #ffffff;
+
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+
+  margin-top: -5px;
+
+
+}
 
 .update-btn {
   outline: none;
 
-  width: 126px;
+  width: 102px;
   height: 25px;
+  margin-right: 10px;
 
   border-radius: 4px;
   border: solid 1px #257eee;

@@ -3,7 +3,7 @@
     <img :src="getImg()" alt=""
          width="14" height="14"
     >
-    <div class="time">{{ time }}</div>
+    <div class="time">Staking reward last updated {{ time }}</div>
   </div>
 </template>
 

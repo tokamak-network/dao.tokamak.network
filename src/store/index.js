@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { toBN } from 'web3-utils';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 
 import {
   // getCandidates,
@@ -197,25 +197,25 @@ export default new Vuex.Store({
     async setBalance ({ state, commit }) {
       const ton = getContract('TON', state.web3);
       const wton = getContract('WTON', state.web3);
-      const powerTON = getContract('PowerTON', state.web3);
+      // const powerTON = getContract('PowerTON', state.web3);
 
       const [
         tonBalance,
         wtonBalance,
-        power,
-        totalDeposits,
+        // power,
+        // totalDeposits,
       ] = await Promise.all([
         ton.methods.balanceOf(state.account).call(),
         wton.methods.balanceOf(state.account).call(),
-        powerTON.methods.powerOf(state.account).call(),
-        powerTON.methods.totalDeposits().call(),
+        // powerTON.methods.powerOf(state.account).call(),
+        // powerTON.methods.totalDeposits().call(),
       ]);
 
       commit('SET_TON_BALANCE', tonBalance);
       commit('SET_WTON_BALANCE', wtonBalance);
 
-      const winningProbability = numeral(power / totalDeposits).format('0.00%');
-      commit('SET_WINNING_PROBABILITY', winningProbability);
+      // const winningProbability = numeral(power / totalDeposits).format('0.00%');
+      // commit('SET_WINNING_PROBABILITY', winningProbability);
     },
     async setMyVotes ({ state, commit }, candidateContractAddress) {
       const candidateContract = getContract('Candidate', state.web3, candidateContractAddress);
@@ -285,6 +285,7 @@ export default new Vuex.Store({
       });
 
       const candi = response.data.candidates;
+
       const [
         // c,
         maxMember,
@@ -312,7 +313,6 @@ export default new Vuex.Store({
       const candidates = await Promise.all(
         candi.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
-
           const [
             isRegistered, coinage, lastCommitBlockNumber,
           ] = await Promise.all([
@@ -334,7 +334,7 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-
+          console.log(selfVote);
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
@@ -344,7 +344,7 @@ export default new Vuex.Store({
           return candidate;
         }),
       );
-      const candidatesFiltered = candidates.filter(candidate => candidate);
+      const candidatesFiltered = candidates.filter(candidate => candidate.selfVote > 1000000000000000000000000000000);
       commit('SET_CANDIDATES', candidatesFiltered);
 
       const members = [];
@@ -418,17 +418,14 @@ export default new Vuex.Store({
 
       const promAgendaTx = [];
       const promAgendaContents = [];
-      // try {
-      //   console.log(agendas[0].transactionHash);
 
-      //   console.log('tx', await web3.eth.getTransaction(agendas[0].transactionHash));
-      // } catch (e) {
-      //   console.log(e);
-      // }
-
+      agendas.sort(function (a, b) {
+        return a.agendaid < b.agendaid ? 1 : a.agendaid > b.agendaid ? -1 : 0;
+      });
+      console.log(agendas);
       for (let i = 0; i < agendas.length; i++) {
         const txHash = agendas[i].transactionHash;
-        // console.log(txHash);
+        console.log(txHash);
         promAgendaTx.push(await web3.eth.getTransaction(txHash));
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
@@ -440,7 +437,7 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          // console.log(agendaTxs[i]);
+          console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
         }
       }
@@ -538,7 +535,6 @@ export default new Vuex.Store({
             });
             commit('SET_VOTES_AGENDAS', agendaVotesByCandidates);
             //commit('SET_ACTIVITY_REWARD', agendaVotesByCandidates[0].claimableAmount);
-
             if (candidates[0] != null) {
               activityReward = await committeeProxy.methods.getClaimableActivityReward(candidates[0].candidate).call();
               activityReward = _TON(activityReward, 'wei').toString(18);
@@ -664,9 +660,9 @@ export default new Vuex.Store({
       if (!account) return '';
       const myCandidateContracts = [];
       for (let i = 0; i < state.candidates.length; i++) {
-        // if (state.candidates[i].operator.toLowerCase() === account) {
-        //   myCandidateContracts.push(state.candidates[i].candidate);
-        // }
+        if (state.candidates[i].candidate.toLowerCase() === account) {
+          myCandidateContracts.push(state.candidates[i].candidate);
+        }
       }
       if (myCandidateContracts.length === 0) return '';
       else return myCandidateContracts.toString();
@@ -676,9 +672,9 @@ export default new Vuex.Store({
       if (!account) return [];
       const myCandidateContracts = [];
       for (let i = 0; i < state.candidates.length; i++) {
-        // if (state.candidates[i].operator.toLowerCase() === account) {
-        //   myCandidateContracts.push(state.candidates[i]);
-        // }
+        if (state.candidates[i].candidate.toLowerCase() === account) {
+          myCandidateContracts.push(state.candidates[i]);
+        }
       }
 
       if (myCandidateContracts.length === 0) return [];

@@ -1,32 +1,32 @@
 const daoVaultFunctionsOfTypeA = [
-  {
-    'params': {
-      'aboutParam0': 'address _to: Address to which authority is granted',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
-      'exampleParam1': '1000000000000000000',
-    },
-    'name': 'approveTON',
-    'title': '(DAO Vault)Permission to transfer the TON stored in DAO Vault will be granted. ',
-    'prettyName': '',
-    'explanation':
-`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
-Through this function, you can grant permission to transfer the TON stored in DAO Vault to a specific address in a specific amount.`,
-  },
-  {
-    'params': {
-      'aboutParam0': 'address _to: Address to which authority is granted',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
-      'exampleParam1': '1000000000000000000000000000',
-    },
-    'name': 'approveWTON',
-    'title': '(DAO Vault)Permission to transfer the WTON stored in DAO Vault will be granted. ',
-    'prettyName': '',
-    'explanation':
-`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing them.
-Through this function, you can grant permission to transfer WTON stored in DAO Vault to a specific address in a specific amount.`,
-  },
+//   {
+//     'params': {
+//       'aboutParam0': 'address _to: Address to which authority is granted',
+//       'exampleParam0': '0x0000000000000000000000000000000000000000',
+//       'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
+//       'exampleParam1': '1000000000000000000',
+//     },
+//     'name': 'approveTON',
+//     'title': '(DAO Vault)Permission to transfer the TON stored in DAO Vault will be granted. ',
+//     'prettyName': '',
+//     'explanation':
+// `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
+// Through this function, you can grant permission to transfer the TON stored in DAO Vault to a specific address in a specific amount.`,
+//   },
+//   {
+//     'params': {
+//       'aboutParam0': 'address _to: Address to which authority is granted',
+//       'exampleParam0': '0x0000000000000000000000000000000000000000',
+//       'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+//       'exampleParam1': '1000000000000000000000000000',
+//     },
+//     'name': 'approveWTON',
+//     'title': '(DAO Vault)Permission to transfer the WTON stored in DAO Vault will be granted. ',
+//     'prettyName': '',
+//     'explanation':
+// `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing them.
+// Through this function, you can grant permission to transfer WTON stored in DAO Vault to a specific address in a specific amount.`,
+//   },
   {
     'params': {
       'aboutParam0': 'address _token: Token contract address',
@@ -41,34 +41,34 @@ Through this function, you can grant permission to transfer WTON stored in DAO V
     'prettyName': '',
     'explanation': 'This function allows you to grant permission to transfer specific ERC20 tokens stored in DAO Vault to a specific address in a specific amount.',
   },
-  {
-    'params': {
-      'aboutParam0': 'address _to: Address to receive withdrawal',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
-      'exampleParam1': '1000000000000000000',
-    },
-    'name': 'claimTON',
-    'title': '(DAO Vault)The transfer of the TON stored in the DAO Vault will be requested.',
-    'prettyName': '',
-    'explanation':
-`Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
-Through this function, you can request to send the TON stored in the DAO Vault to a specific address in a specific amount.`,
-  },
-  {
-    'params': {
-      'aboutParam0': 'address _to: Address to receive withdrawal',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
-      'exampleParam1': '1000000000000000000000000000',
-    },
-    'name': 'claimWTON',
-    'title': '(DAO Vault)The transfer of the WTON stored in the DAO Vault will be requested.',
-    'prettyName': '',
-    'explanation':
-`Some of the TON seigniorage generated per block is accumulated into DAO. The DAO Vault is responsible for storing the seigniorage.
-Through this function, you can request to send the WTON stored in DAO Vault to a specific address in a specific amount.`,
-  },
+  //   {
+  //     'params': {
+  //       'aboutParam0': 'address _to: Address to receive withdrawal',
+  //       'exampleParam0': '0x0000000000000000000000000000000000000000',
+  //       'aboutParam1': 'uint256 _amount: Amount (decimal: 18) 1000000000000000000: 1 TON',
+  //       'exampleParam1': '1000000000000000000',
+  //     },
+  //     'name': 'claimTON',
+  //     'title': '(DAO Vault)The transfer of the TON stored in the DAO Vault will be requested.',
+  //     'prettyName': '',
+  //     'explanation':
+  // `Some of the TON seigniorage generated per block is accumulated into DAO. DAO Vault is responsible for storing the seigniorage.
+  // Through this function, you can request to send the TON stored in the DAO Vault to a specific address in a specific amount.`,
+  //   },
+  //   {
+  //     'params': {
+  //       'aboutParam0': 'address _to: Address to receive withdrawal',
+  //       'exampleParam0': '0x0000000000000000000000000000000000000000',
+  //       'aboutParam1': 'uint256 _amount: Amount (decimal: 27) 1000000000000000000000000000: 1 WTON',
+  //       'exampleParam1': '1000000000000000000000000000',
+  //     },
+  //     'name': 'claimWTON',
+  //     'title': '(DAO Vault)The transfer of the WTON stored in the DAO Vault will be requested.',
+  //     'prettyName': '',
+  //     'explanation':
+  // `Some of the TON seigniorage generated per block is accumulated into DAO. The DAO Vault is responsible for storing the seigniorage.
+  // Through this function, you can request to send the WTON stored in DAO Vault to a specific address in a specific amount.`,
+  //   },
   {
     'params': {
       'aboutParam0': 'address _token: Token contract address',

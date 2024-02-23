@@ -250,8 +250,8 @@ export default {
       if (!candidate) {
         console.log('bug', 'no candidate'); // eslint-disable-line
       }
-      // console.log(candidate);
-      if (candidate.candidate.toLowerCase() === this.account.toLowerCase()) {
+
+      if (candidate.candidateContract.toLowerCase() === this.account.toLowerCase()) {
         const amountToRay = toRay(this.$refs.tonvote.$refs.input.value);
         const minimumAmount = await minimumAmountOfOperator(this.web3);
         const candidateContract = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;

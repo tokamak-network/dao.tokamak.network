@@ -33,7 +33,7 @@
               width="105"
               height="30"
             />
-            <div class="beta beta-sub">rinkeby</div>
+            <div class="beta beta-sub">mainnet</div>
           </div>
           <div v-else class="logo-container">
             <img
@@ -137,7 +137,7 @@ export default {
   justify-content: space-between;
   flex-direction: column;
   height: 84px;
-  background: transparent;
+  background: #0062c2;
   z-index: 1;
   padding-left: 40px;
   padding-right: 40px;
