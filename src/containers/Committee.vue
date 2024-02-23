@@ -59,7 +59,7 @@
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div>
         </div>
@@ -100,7 +100,7 @@
                style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <span class="space" />
           <button v-if="account"
@@ -152,7 +152,7 @@
           <div :class="{ 'selected': currentSelector === 1 }" style="margin-left: 35px; margin-right: 35px;"
                @click="currentSelector = 1"
           >
-            Stakers
+            Top 100 Stakers
           </div>
           <!-- <div :class="{ 'selected': currentSelector === 2 }" @click="currentSelector = 2">Vote/Unvote</div> -->
 
