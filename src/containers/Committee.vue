@@ -262,7 +262,7 @@ export default {
     },
     linkToStake () {
       const address = this.address;
-      window.open(`https://sepolia.staking.tokamak.network/staking#${address}`, '_blank');
+      window.open(`https://sepolia.staking.tokamak.network/staking#${address}`, '_blank'); //eslint-disable-line
     },
     openUpdateRewardModal () {
       const address = this.address;
@@ -284,8 +284,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-committee-info {
-}
+// .card-committee-info {
+// }
 .content {
   border-radius: 10px;
   box-shadow: 0 1px 1px 0 rgba(96, 97, 112, 0.16);

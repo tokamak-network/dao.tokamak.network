@@ -239,9 +239,9 @@ export default {
 
   z-index: 999;
 }
-.tooltip img {
-  // margin-top: 9px;
-}
+// .tooltip img {
+//   // margin-top: 9px;
+// }
 .tooltip-content {
   max-width: 317px;
   background: #353c48;
