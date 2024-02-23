@@ -803,6 +803,7 @@ export default new Vuex.Store({
           return '(SeigManager)All the seigniorage rates will be changed';
         }
       }
+
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
