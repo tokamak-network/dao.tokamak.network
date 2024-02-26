@@ -344,7 +344,9 @@ export default new Vuex.Store({
           return candidate;
         }),
       );
+
       const candidatesFiltered = candidates.filter(candidate => candidate.selfVote > 1000000000000000000000000000000);
+      console.log(candidatesFiltered); //eslint-disable-line
       commit('SET_CANDIDATES', candidatesFiltered);
 
       const members = [];
