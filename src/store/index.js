@@ -362,6 +362,9 @@ export default new Vuex.Store({
             return;
           }
         });
+        members.sort(function (a, b) {
+          return b.stakedAmount - a.stakedAmount;
+        });
 
         if (!isMember) {
           nonmembers.push(candidate);
