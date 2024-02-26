@@ -334,7 +334,6 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-          console.log(selfVote);
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
@@ -346,7 +345,7 @@ export default new Vuex.Store({
       );
 
       const candidatesFiltered = candidates.filter(candidate => candidate.selfVote > 1000000000000000000000000000000);
-      console.log(candidatesFiltered); //eslint-disable-line
+      console.log(candidatesFiltered); // eslint-disable-line
       commit('SET_CANDIDATES', candidatesFiltered);
 
       const members = [];
