@@ -3,7 +3,15 @@
     <img :src="getImg()" alt=""
          width="14" height="14"
     >
-    <div class="time">Staking reward last updated {{ time }}</div>
+    <div class="time">
+      <div
+        v-if="isAgenda === false"
+        style="margin-right: 3px"
+      >
+        Staking reward last updated
+      </div>
+      {{ time }}
+    </div>
   </div>
 </template>
 
@@ -27,6 +35,10 @@ export default {
     isActive: {
       type: Boolean,
       default: true,
+    },
+    isAgenda: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -52,7 +64,8 @@ export default {
     letter-spacing: normal;
     text-align: left;
     color: #86929d;
-
+    display: flex;
+    flex-direction: row;
     margin-left: 7px;
   }
 }
