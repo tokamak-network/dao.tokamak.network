@@ -26,6 +26,7 @@
     <text-time :type="agenda.type"
                :time="votingTime(agenda)"
                :is-active="votingTime(agenda) !== 'POLL ENDED'"
+               :is-agenda="true"
     />
     <div class="button-container">
       <agenda-button :name="'View Detail'"

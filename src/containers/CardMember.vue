@@ -27,6 +27,7 @@
     <text-time :type="'A'"
                :time="member ? fromNow(candidate(member.candidateContract).lastCommitAt) : '-'"
                :is-active="true"
+               :is-agenda="false"
     />
     <div class="button-container">
       <election-button :name="'View Detail'"
