@@ -3,22 +3,22 @@
     <div v-if="$mq === 'desktop'" class="button">
       <button-step :type="'prev'" :name="'BACK TO ALL AGENDAS'" class="back" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
-        <button-step :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
+        <button-step v-if="getAgendaPrevButtonState(agendaId)" :type="'prev'" :name="'PREVIOUS AGENDA'" class="prev" @on-clicked="prev" />
+        <button-step v-if="getAgendaNextButtonState(agendaId)" :type="'next'" :name="'NEXT AGENDA'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div v-else-if="$mq === 'tablet'" class="button-mobile">
       <button-step :type="'prev'" :name="'BACK TO ALL'" class="back" style="width: 140px;" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px;" @on-clicked="prev" />
-        <button-step :type="'next'" :name="'NEXT'" class="next" style="width: 130px;" @on-clicked="next" />
+        <button-step v-if="getAgendaPrevButtonState(agendaId)" :type="'prev'" :name="'PREVIOUS'" class="prev" style="width: 130px;" @on-clicked="prev" />
+        <button-step v-if="getAgendaNextButtonState(agendaId)" :type="'next'" :name="'NEXT'" class="next" style="width: 130px;" @on-clicked="next" />
       </div>
     </div>
     <div v-else class="button-mobile">
       <button-step :type="'prev'" :name="'BACK'" class="back" @on-clicked="back" />
       <div>
-        <button-step :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
-        <button-step :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
+        <button-step v-if="getAgendaPrevButtonState(agendaId)" :type="'prev'" :name="'PREVIOUS'" class="prev" @on-clicked="prev" />
+        <button-step v-if="getAgendaNextButtonState(agendaId)" :type="'next'" :name="'NEXT'" class="next" @on-clicked="next" />
       </div>
     </div>
     <div class="content">
@@ -173,6 +173,8 @@ export default {
       'agendaOnChainEffects',
       'agendaType',
       'agendaTitle',
+      'getAgendaPrevButtonState',
+      'getAgendaNextButtonState',
     ]),
     checkStatus () {
       const agenda = this.getAgendaByID(this.agendaId);
