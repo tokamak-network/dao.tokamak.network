@@ -492,7 +492,7 @@ export default {
         } else if (index === 2) {
           return this.daoCommitteeProxyFunctionsOfTypeA;
         } else if (index === 3) {
-          return this.daoVaultFunctionsOfTypeA;
+          return this.daoVaultFunctionsOfTypeA.filter(f => (f.name !== 'claimTON')).filter(f => f.name !== 'claimWTON');
         } else {
           console.log('bug', 'no type A functions'); // eslint-disable-line
           return [];

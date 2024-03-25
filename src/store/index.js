@@ -779,7 +779,7 @@ export default new Vuex.Store({
 
       const minimumAmount = toBN(getters.minimumAmount);
       const selfVote = toBN(candidate.selfVote);
-
+      console.log(selfVote);
       return selfVote.gte(minimumAmount);
     },
     agendaOnChainEffects: (_, getters) => (agendaId) => {
@@ -789,6 +789,15 @@ export default new Vuex.Store({
       }
 
       return agenda.onChainEffects ? agenda.onChainEffects : [];
+    },
+    getPrevButtonState: (_, getters) => (address) => {
+      const index = getters.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index === -1 || index === 0 ? false : true;
+    },
+    getNextButtonState: (_, getters) => (address) => {
+      const max = getters.sortedCandidates.length;
+      const index = getters.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(address.toLowerCase());
+      return index === -1 || index === max - 1 ? false : true;
     },
     agendaTitle: (_, getters) => (agendaId) => {
       const onChainEffects = getters.agendaOnChainEffects(agendaId);

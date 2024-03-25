@@ -25,12 +25,12 @@
           <img v-else src="@/assets/github-white.svg" alt="" width="20" height="20">
         </a>
       </div>
-      <div class="sns">
+      <!-- <div class="sns">
         <a href="https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ" target="_blank">
           <img v-if="isSub()" src="@/assets/youtube.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/youtube-white.svg" alt="" width="20" height="20">
         </a>
-      </div>
+      </div> -->
       <div class="sns">
         <a href="https://twitter.com/tokamak_network" target="_blank">
           <img v-if="isSub()" src="@/assets/twitter.svg" alt="" width="20" height="20">
@@ -38,7 +38,7 @@
         </a>
       </div>
       <div class="sns">
-        <a href="https://www.linkedin.com/company/onther-tech/" target="_blank">
+        <a href="https://www.linkedin.com/company/tokamaknetwork/" target="_blank">
           <img v-if="isSub()" src="@/assets/linkedin.svg" alt="" width="20" height="20">
           <img v-else src="@/assets/linkedin-white.svg" alt="" width="20" height="20">
         </a>

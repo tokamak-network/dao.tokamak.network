@@ -10,12 +10,12 @@
       <div v-if="candidateContractFromEOA && candidate(address).candidate.toLowerCase() === account.toLowerCase()" class="edit-btn" @click="editName();">Edit</div>
       <div v-if="canEditName && candidate(address).candidate.toLowerCase() === account.toLowerCase()" class="cancel-btn" @click="canEditName=false;">Cancle</div>
     </div>
-    <div class="container" style="margin-top: 12px;">
+    <!-- <div class="container" style="margin-top: 12px;">
       <info-committee :title="'Description'" :content="candidate(address) && !canEditDescription ? candidate(address).description : ''" :type="'description'" style="flex: 1;" />
       <input v-if="canEditDescription && candidate(address).candidate.toLowerCase() === account.toLowerCase()" ref="description" class="edit-input" type="text" :placeholder="candidate(address).description">
       <div v-if="candidateContractFromEOA && candidate(address).candidate.toLowerCase() === account.toLowerCase()" class="edit-btn" @click="editDescription();">Edit</div>
       <div v-if="canEditDescription && candidate(address).candidate.toLowerCase() === account.toLowerCase()" class="cancel-btn" @click="canEditDescription=false;">Cancle</div>
-    </div>
+    </div> -->
     <info-committee :title="$mq === 'mobile' || $mq === 'tablet' ? 'Candidate' : 'Candidate Address'"
                     :content="candidate(address) ? candidate(address).candidate : '-'" :type="'address'" style="margin-top: 12px;"
     />
