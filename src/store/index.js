@@ -448,6 +448,7 @@ export default new Vuex.Store({
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
           // console.log(agendaTxs[i]);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
+          console.log(i, 'onChainEffects ', agendas[i].onChainEffects);
         }
       }
 
@@ -867,7 +868,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
         } else if (onChainEffects[0].name === 'upgradeTo' && onChainEffects[1].name === 'setInfo') {
           return `
 Execution 1:
-This function sets the new address of the logic contract for PowerTONProxy to be upgraded. Enter the logic contract for PowerTONProxy address to be upgraded in the first parameter (Param1). It will be used when the PowerTON is upgraded. 
+This function sets the new address of the logic contract for PowerTONProxy to be upgraded. Enter the logic contract for PowerTONProxy address to be upgraded in the first parameter (Param1). It will be used when the PowerTON is upgraded.
 
 impl: ${onChainEffects[0].values[0]}
 
