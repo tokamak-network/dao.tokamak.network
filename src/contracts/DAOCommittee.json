@@ -2,6 +2,32 @@
   "contractName": "DAOCommittee",
   "abi": [
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_layer2Manager",
+          "type": "address"
+        }
+      ],
+      "name": "setLayer2Manager",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_candidateAddOnFactory",
+          "type": "address"
+        }
+      ],
+      "name": "setCandidateAddOnFactory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
