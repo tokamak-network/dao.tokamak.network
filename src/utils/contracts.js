@@ -66,8 +66,8 @@ const deployed = {
   'DAOCommitteeProxy': '0xDD9f0cCc044B0781289Ee318e5971b0139602C26',
   'OldSeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
   'OldDepositManager': '0x56E465f654393fa48f007Ed7346105c7195CEe43',
-  'L1BridgeRegistry': '0x3268e4D8276c58A806E83B3B080Cf29514A837cf',
-  'Layer2Manager': '0xab303E7CBFd19C998268e19d830770e215AbDF7F',
+  'L1BridgeRegistry': '0x17Fa32DFf4c26cf0AC65Ff6700B57a4826513Fa0',
+  'Layer2Manager': '0xC534047FFD60c151E818C4Ac5A51fFbC234A3F77',
 };
 
 
@@ -202,7 +202,10 @@ module.exports.getContractABI = function (want, type = 'A') {
   }
 };
 
-module.exports.getContractABIFromAddress = function (address, type) {
+
+module.exports.getContractABIFromAddress = getContractABIFromAddress;
+
+function getContractABIFromAddress (address, type) {
   if (!address) return [];
   address = address.toLowerCase();
 
@@ -230,10 +233,25 @@ module.exports.getContractABIFromAddress = function (address, type) {
     else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeB;
     else if (address === deployed.Layer2Manager.toLowerCase()) return layer2ManagerABIOfTypeB;
     else return [];
+  } else if (type === 'ALL') {
+    if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
+    else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
+    else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA.concat(depositManagerABIOfTypeB);
+    // else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA.concat(seigManagerABIOfTypeB);
+    // else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
+    else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA.concat(daoCommitteeProxyABIOfTypeB).concat(daoCommitteeABIOfTypeB);
+    else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
+    else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA.concat(daoVaultABIOfTypeB);
+    else if (address === deployed.PowerTONProxy.toLowerCase()) return powerTonProxyABIOfTypeB;
+    else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeA.concat(l1BridgeRegistryABIOfTypeB);
+    else if (address === deployed.Layer2Manager.toLowerCase()) return layer2ManagerABIOfTypeB;
+    else return [];
   } else {
     console.log('bug', 'no type'); // eslint-disable-line
   }
-};
+}
 
 module.exports.getContractAddress = function (target) {
   const address = deployed[target];
@@ -337,6 +355,7 @@ module.exports.decodeParameters = decodeParameters;
 
 const getABIFromSelector = function (selector, type) {
   let abi;
+  // console.log('getABIFromSelector selector:', selector, ', type: ', type);
 
   if (type === 'A') {
     abi = depositManagerABIOfTypeA.find(abi => abi.selector === selector);
@@ -402,10 +421,11 @@ module.exports.getABIFromSelector = getABIFromSelector;
 module.exports.parseAgendaBytecode = function (tx, type) {
   // TODO: to fix case of using mixed type with 'A' and 'B'
   try {
-    // console.log(tx);
     const params1 = marshalString(unmarshalString(tx.input).substring(8));
+    // approveAndCall(adddress sender, uint256 value, bytes extraData)
     const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
     const params2 = decodedParams1[2];
+    // targets, noticePeriod, votingPeriod, atomic, functionCall
     const decodedParams2 = decodeParameters(['address[]', 'uint256', 'uint256', 'bool', 'bytes[]'], params2);
 
     const targets = decodedParams2[0];
@@ -419,7 +439,11 @@ module.exports.parseAgendaBytecode = function (tx, type) {
     for (let i = 0; i < targets.length; i++) {
       const selector = commands[i].slice(0, 10);
       // console.log(targets.length, selector, type);
-      let abi = getABIFromSelector(selector, type);
+
+      // let abi = getABIFromSelector(selector, type);
+      const abis = getContractABIFromAddress(targets[i], 'ALL');
+      let abi;
+      abis.forEach(e => { if (e.selector === selector) { abi = e; } });
       if (!abi) {
         abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
       }
@@ -431,13 +455,12 @@ module.exports.parseAgendaBytecode = function (tx, type) {
           types: [],
           bytecode: '',
         });
-        console.log('bug', 'no abi'); // eslint-disable-line
+        console.log('bug 3', 'no abi'); // eslint-disable-line
         continue;
       }
 
       const target = targets[i];
       const name = abi.name;
-
       const types = [];
       abi.inputs.forEach(input => {
         types.push(input.type);
@@ -451,6 +474,7 @@ module.exports.parseAgendaBytecode = function (tx, type) {
         types,
         values,
       };
+
       onChainEffects.push(onChainEffect);
     }
     return onChainEffects;
