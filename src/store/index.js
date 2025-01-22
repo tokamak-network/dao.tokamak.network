@@ -159,7 +159,6 @@ export default new Vuex.Store({
   },
   actions: {
     async connectEthereum ({ commit, dispatch }, web3) {
-      console.log(web3);
       commit('SET_WEB3', web3);
       if (web3) {
         const [accounts, chainId, blockNumber]
