@@ -71,9 +71,8 @@ const deployed = {
 
 function getContract (want, web3, address) {
   if (!web3) {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+    web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
   }
-
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
   const Layer2 = new web3.eth.Contract(layer2.abi, address);
@@ -524,7 +523,7 @@ module.exports.minimumAmountOfOperator = async function (_web3) {
 
 // module.exports.getBlockTimeStamp = async function (blockNumber, web3) {
 //   if (!web3) {
-//     web3 = new Web3(new Web3.providers.HttpProvider('https://seplolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+//     web3 = new Web3(new Web3.providers.HttpProvider('https://seplolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
 //   }
 //   const block = await web3.eth.getBlock(blockNumber);
 //   this.timestamp = block.timestamp;

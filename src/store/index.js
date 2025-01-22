@@ -159,6 +159,7 @@ export default new Vuex.Store({
   },
   actions: {
     async connectEthereum ({ commit, dispatch }, web3) {
+      console.log(web3);
       commit('SET_WEB3', web3);
       if (web3) {
         const [accounts, chainId, blockNumber]
@@ -280,10 +281,11 @@ export default new Vuex.Store({
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
       const seigManager = getContract('SeigManager', web3);
       const layer2Registry = getContract('Layer2Registry', web3);
+      console.log('aaaaa');
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
-
+      console.log('aaaab');
       const candi = response.data.candidates;
       const [
         // c,
@@ -293,7 +295,7 @@ export default new Vuex.Store({
         daoCommitteeProxy.methods.maxMember().call(),
       ]);
       commit('SET_MAX_MEMBER', maxMember);
-
+      console.log(candi);
       const memberAddresses = [];
       for (let i = 0; i < maxMember; i++) {
         const memberAddress = await daoCommitteeProxy.methods.members(i).call();
@@ -308,9 +310,9 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
-
+      console.log('dddd');
       const candidates = await Promise.all(
         candi.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
@@ -321,12 +323,12 @@ export default new Vuex.Store({
             seigManager.methods.coinages(candidate.candidateContract).call(),
             seigManager.methods.lastCommitBlock(addr).call(),
           ]);
-
+          console.log('eeee');
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
             return false;
           }
-
+          console.log('fff');
           const coinageContract = getContract('Coinage', web3, coinage);
           const [
             selfVote, totalVote, info, lastCommitBlock,
@@ -382,7 +384,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -406,8 +408,9 @@ export default new Vuex.Store({
     },
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
+      console.log(web3);
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -462,7 +465,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
 
       votes.forEach(async function (vote) {
