@@ -246,6 +246,7 @@ export default new Vuex.Store({
         candidate.requests = requests;
         requestsByCandidate.push(candidate);
       });
+
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
     async setContractState ({ state, commit }) {
