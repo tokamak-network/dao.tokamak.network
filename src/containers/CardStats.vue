@@ -8,7 +8,7 @@
           </div> -->
           <div class="stats">
             <div class="title">Claimable TON</div>
-            <div class="content">{{ candidates[0].claimableAmount | tonFloor | withComma }} TON</div>
+            <div class="content">{{ withComma(tonFloor(candidates[0].claimableAmount)) }} TON</div>
           </div>
           <div class="stats">
             <div class="title"># of Agendas</div>
@@ -22,13 +22,13 @@
           >
             <div v-if="index > 0" class="divide" />
             <div class="container">
-              <div class="address">{{ candidate.name | slice }}... ({{ candidate.candidateContract | hexSlicer }}) </div>
+              <div class="address">{{  slice(candidate.name) }}... ({{ hexSlicer(candidate.candidateContract ) }}) </div>
               <div class="stats-container">
                 <div class="stats-label">
                   Claimable TON
                 </div>
                 <div class="stats-value">
-                  {{ candidate.claimableAmount | tonFloor | withComma }}
+                  {{   withComma(tonFloor(candidate.claimableAmount)) }}
                 </div>
               </div>
               <div class="stats-container">

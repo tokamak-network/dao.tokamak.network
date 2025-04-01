@@ -109,6 +109,7 @@ import CardVote from '@/containers/CardVote.vue';
 import CardStatsCommittee from '@/containers/CardStatsCommittee.vue';
 
 export default {
+  name: 'AgendaPage',
   components: {
     'loading': Loading,
     'dropdown': Dropdown,

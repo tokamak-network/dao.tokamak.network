@@ -39,13 +39,14 @@ export function tonFloor (input) {
   else return '0.0 TON';
 }
 
-export function hexSlicer (address = '') {
-  if (address.length < 11) {
-    return address;
+export function hexSlicer(address = '') {
+  const str = String(address);
+  if (str.length < 11) {
+    return str;
   }
-
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return `${str.slice(0, 6)}...${str.slice(-4)}`;
 }
+
 
 export function hexSlicer2 (address = '') {
   if (address.length < 11) {

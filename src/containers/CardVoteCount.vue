@@ -3,8 +3,8 @@
     <card-container :title="'Your Staked'">
       <template #body>
         <div class="content">
-          <span>{{ account | hexSlicer }}</span>
-          <span>{{ myVotes | WTON | withComma }} TON</span>
+          <span>{{ hexSlicer(account) }}</span>
+          <span>{{ withComma(wton(myVotes)) }} TON</span>
         </div>
       </template>
     </card-container>

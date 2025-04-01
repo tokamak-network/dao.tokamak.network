@@ -1,6 +1,6 @@
 <template>
   <div class="modal-claim">
-    <div class="label-claimable">You can claim {{ activityReward | withComma }} TON</div>
+    <div class="label-claimable">You can claim {{ withComma(activityReward) }} TON</div>
     <div class="label">Do you want to continue?</div>
     <div class="button-container">
       <claim-button :name="'Claim'"

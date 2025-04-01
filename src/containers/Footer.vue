@@ -137,6 +137,7 @@
 
 <script>
 export default {
+  name: 'FooterPage',
   methods: {
     isSub () {
       return this.$route.path !== '/';

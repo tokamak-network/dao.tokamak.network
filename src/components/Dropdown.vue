@@ -47,6 +47,7 @@
 
 <script>
 export default {
+  name: 'DropdownPage',
   props: {
     items: {
       type: Array,
@@ -99,7 +100,7 @@ export default {
       }
     });
   },
-  beforeDestroy () {
+  beforeUnmount () {
     document.removeEventListener('click', (event) => {
       if (!this.$el.contains(event.target)) {
         this.fold();

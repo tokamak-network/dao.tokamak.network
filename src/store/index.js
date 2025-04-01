@@ -276,8 +276,8 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
+      const seigManager = getContract('SeigManager', state.web3);
+      const layer2Registry = getContract('Layer2Registry', state.web3);
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });

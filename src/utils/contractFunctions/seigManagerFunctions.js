@@ -1,4 +1,4 @@
-const seigManagerFunctionsOfTypeA = [
+export const seigManagerFunctionsOfTypeA = [
   {
     'params': {
       'aboutParam0':
@@ -83,7 +83,7 @@ If you are staking less than the amount set in this function, you cannot commit.
   },
 ];
 
-const seigManagerFunctionsOfTypeB = [
+export const seigManagerFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address account: Address to receive authority',
@@ -320,5 +320,3 @@ Seigmanager's MInter function for WTON can be removed through this function. It 
   },
 ];
 
-module.exports.seigManagerFunctionsOfTypeA = seigManagerFunctionsOfTypeA;
-module.exports.seigManagerFunctionsOfTypeB = seigManagerFunctionsOfTypeB;

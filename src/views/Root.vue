@@ -23,6 +23,7 @@ import MetaCoin from '@/contracts/MetaCoin.json';
 import { mapState } from 'vuex';
 
 export default {
+  name: 'RootPage',
   data () {
     return {
       balance: '',
@@ -44,13 +45,14 @@ export default {
     },
     async connectMetaMask () {
       if (typeof window.ethereum !== 'undefined') {
-        const web3 = new Web3(ethereum);
+        const web3 = new Web3(window.ethereum);
         try {
-          await ethereum.request({ method: 'eth_requestAccounts' });
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
 
           this.$store.dispatch('connectEthereum', web3);
           this.$store.dispatch('setAgendas');
         } catch (e) {
+          console.log(e);
           // User deny to connect MetaMask wallet.
         }
 
@@ -66,8 +68,8 @@ export default {
           this.$store.dispatch('connectEthereum', web3);
           this.$store.dispatch('setAgendas');
         };
-        ethereum.on('accountsChanged', handleAccountsChanged);
-        ethereum.on('networkChanged', handleNetworkChanged);
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+        window.ethereum.on('networkChanged', handleNetworkChanged);
       } else {
         // MetaMask need to be installed.
       }
