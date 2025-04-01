@@ -35,6 +35,7 @@
 
 <script>
 export default {
+  name: 'BoxPage',
   props: {
     functionName: {
       type: String,

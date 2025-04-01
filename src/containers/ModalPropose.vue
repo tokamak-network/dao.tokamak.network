@@ -40,11 +40,11 @@
       <div class="description">Description</div>
       <div v-if="account" class="amount-container">
         <span>Available Amount: </span>
-        <span class="amount">{{ tonBalance | TON | withComma }}</span>
+        <span class="amount">{{  withComma(TON(tonBalance)) }}</span>
         <span> TON / </span>
 
         <span>Required Amount: </span>
-        <span class="amount">{{ createAgendaFee | TON | withComma }}</span>
+        <span class="amount">{{  withComma(TON(createAgendaFee)) }}</span>
         <span> TON</span>
       </div>
     </div>

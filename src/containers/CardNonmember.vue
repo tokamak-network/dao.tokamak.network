@@ -1,17 +1,25 @@
 <template>
   <div class="card-nonmember" :class="{ mine: myCandidate }">
-    <div class="label">Total Staked </div>
-    <div class="amount">{{ wton(candidate.vote) | withComma }} TON</div>
-    <div class="name-container">
-      <div class="name">{{ candidate.name }}</div>
+    <div :style="[
+      $mq === 'mobile' ? { display: 'flex', flexDirection: 'column'} : {display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItem: 'center'}
+    ]"
+    >
+      <div :style="{ display: 'flex', flexDirection:'row', width:'190px', alignItem: 'center', }">
+        <div class="label" :style="[ $mq === 'mobile' ? {paddingLeft: '15px'} : {marginTop: '3px'}]">Total Staked </div>
+        <div class="amount" :style="[ $mq === 'mobile' ? {} : {marginTop: '3px'}]">{{ withComma(wton(candidate.vote)) }} TON</div>
+      </div>
+      <div class="name-container" :style="[ $mq === 'mobile' ? {marginTop: '5px', marginLeft: '15px'} : {}]">
+        <div class="name">{{ candidate.name }}</div>
       <!-- <div v-if="$mq !== 'mobile'" class="type">{{ `- ${candidate.kind}` }}</div> -->
+      </div>
     </div>
+    <!-- </div> -->
     <div class="detail" @click="detail()">View Detail</div>
   </div>
 </template>
 
 <script>
-import { WTON } from '@/utils/helpers';
+import { WTON, withComma } from '@/utils/helpers';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -44,6 +52,9 @@ export default {
         path: `/election/${this.candidate.candidateContract}`,
       });
     },
+    withComma (n) {
+      return withComma(n);
+    },
   },
 };
 </script>
@@ -52,6 +63,7 @@ export default {
 .card-nonmember {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   width: 100%;
   height: 65px;
@@ -134,7 +146,7 @@ export default {
     text-align: left;
     color: #2a72e5;
 
-    margin-right: 18px;
+    margin-right: 30px;
     margin-left: 18px;
 
     &:hover {

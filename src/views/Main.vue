@@ -35,13 +35,13 @@
           Tx
         </div>
         <div class="tx-hash" @click="newtab(event.transactionHash)">
-          {{ event.transactionHash | hexSlicer }}
+          {{ hexSlicer(event.transactionHash) }}
         </div>
         <div class="event">
           {{ explanation(event) }}
         </div>
         <div>
-          {{ event.blockTimestamp | fromNow }}
+          {{ fromNow(event.blockTimestamp) }}
         </div>
       </div>
     </div>
@@ -56,10 +56,10 @@
             Tx
           </div>
           <div class="tx-hash" @click="newtab(event.transactionHash)">
-            {{ event.transactionHash | hexSlicer }}
+            {{ hexSlicer(event.transactionHash) }}
           </div>
           <div class="time">
-            {{ event.blockTimestamp | fromNow }}
+            {{ fromNow(event.blockTimestamp) }}
           </div>
         </div>
         <div class="event">
@@ -75,6 +75,7 @@ import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
 import { getRecentEvents, getCandidates } from '@/api';
 import { mapState, mapGetters } from 'vuex';
 export default {
+  name: 'MainPage',
   data () {
     return {
       events: [],

@@ -108,6 +108,7 @@ import CardResource from '@/containers/CardResource.vue';
 // import CardRank from '@/containers/CardRank.vue';
 
 export default {
+  name: 'ElectionPage',
   components: {
     'loading': Loading,
     'card-member': CardMember,
@@ -300,7 +301,7 @@ export default {
   }
 
   .card-container {
-    margin-top: 45px;
+    margin-top: 50px;
   }
 }
 </style>

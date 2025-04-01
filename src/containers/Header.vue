@@ -103,6 +103,7 @@ import ModalClaim from '@/containers/ModalClaim.vue';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
+  name: 'HeaderPage',
   components: {
     'connect-wallet': Connect,
     modal: Modal,

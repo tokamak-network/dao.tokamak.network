@@ -1,4 +1,4 @@
-const l1BridgeRegistryFunctionsOfTypeA = [
+export const l1BridgeRegistryFunctionsOfTypeA = [
   {
     'params': {
       'aboutParam0': 'address rollupConfig: the rollupConfig address',
@@ -37,7 +37,7 @@ const l1BridgeRegistryFunctionsOfTypeA = [
   },
 ];
 
-const l1BridgeRegistryFunctionsOfTypeB = [
+export const l1BridgeRegistryFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address _layer2Manager: The layer2Manager address',
@@ -169,6 +169,3 @@ It will be used when the L1 Bridge Registry is upgraded.`,
 'This feature allows you to add owners to a contract.',
   },
 ];
-
-module.exports.l1BridgeRegistryFunctionsOfTypeA = l1BridgeRegistryFunctionsOfTypeA;
-module.exports.l1BridgeRegistryFunctionsOfTypeB = l1BridgeRegistryFunctionsOfTypeB;

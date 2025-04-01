@@ -59,7 +59,7 @@ export const GET_CANDIDATE = gql`
 
 export const GET_MY_STAKED = gql`
   query GetStakedPerLayer($id: String!) {
-    userStakeds(where: { id: $id }) {
+    userStakeds(first: 1000, where: { id: $id }) {
       id
       stakedAmount
     }

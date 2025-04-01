@@ -3,7 +3,7 @@ import { toBN } from 'web3-utils';
 // import numeral from 'numeral';
 
 import {
-  getCandidates,
+  // getCandidates,
   getAgendas,
   getCandidateVoteRank,
   getAgendaContents,
@@ -255,9 +255,7 @@ export default new Vuex.Store({
       const seigManager = getContract('SeigManager', state.web3);
 
       const createAgendaFee = await agendaManager.methods.createAgendaFees().call();
-      // const claimableAmount = await committeeProxy.methods.getClaimableActivityReward(state.account).call();
       const minimumAmount = await seigManager.methods.minimumAmount().call();
-      // console.log(claimableAmount);
 
       const contractState = {
         createAgendaFee,
@@ -279,14 +277,13 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
+      const seigManager = getContract('SeigManager', state.web3);
+      const layer2Registry = getContract('Layer2Registry', state.web3);
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
       const candi = response.data.candidates;
       const [
-        // c,
         maxMember,
       ] = await Promise.all([
         // getCandidates(),
@@ -304,14 +301,14 @@ export default new Vuex.Store({
         memberAddresses.push(member);
       }
 
-      const candidatesFromAPI = await getCandidates();
-
+      // const candidatesFromAPI = await getCandidates();
+      // console.log(candidatesFromAPI);
       let web3 = state.web3;
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const candidates = await Promise.all(
-        candi.map(async candidate => {
+        candi?.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
           const [
             isRegistered, coinage, lastCommitBlockNumber,
@@ -335,8 +332,9 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-          const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
-          candidate.name = candidateFromAPI.name;
+          // const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
+          // console.log(candidate);
+          // candidate.name = candidateFromAPI.name;
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
@@ -437,6 +435,7 @@ export default new Vuex.Store({
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
+      // console.log(promAgendaTx);
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
       // console.log(agendaTxs);
@@ -450,10 +449,15 @@ export default new Vuex.Store({
         }
       }
 
-      // await agendas[4].onChainEffects.map((effect, index) => {
-      //   console.log(index, effect.name, effect.target, effect.values);
-      // });
-      commit('SET_AGENDAS', agendas);
+      const uniqueArr = agendas.filter((agenda, idx) => {
+        return (
+          agendas.findIndex((agenda1) => {
+            return agenda.agendaid === agenda1.agendaid;
+          }) === idx
+        );
+      });
+
+      commit('SET_AGENDAS', uniqueArr);
       await dispatch('setVoteAgendas');
     },
     async setVotingDetails ({ state, commit }) {
@@ -856,7 +860,6 @@ export default new Vuex.Store({
 This function allows you to set the new PowerTON contract as the first parameter (Param1). This function will be used when PowerTON is updated.
 
 Execution 2:
-Currently, TON seigniorage is issued each time a Ethereum block is created.
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`;

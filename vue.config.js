@@ -1,20 +1,26 @@
-const path = require('path');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   configureWebpack: {
-    devtool: 'source-map',
+    plugins: [
+      new ESLintPlugin({
+        extensions: ['js', 'vue'],
+        emitWarning: true,
+      }),
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      }),
+    ],
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src/'),
-      },
-    },
-    performance: {
-      hints: false,
-    },
-    optimization: {
-      splitChunks: {
-        minSize: 10000,
-        maxSize: 250000,
+      fallback: {
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        zlib: require.resolve("browserify-zlib"),
+        url: require.resolve("url/"),
+        assert: require.resolve("assert/"),
+        stream: require.resolve("stream-browserify"),
+        buffer: require.resolve("buffer/"),
       },
     },
   },

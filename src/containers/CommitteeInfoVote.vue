@@ -5,8 +5,8 @@
       <div v-for="voter in selectedVoters" :key="voter.account" class="voted-account">
         <div class="account-info">
           <!-- <div v-if="$mq === 'mobile' || $mq === 'tablet'">{{ voter.account | hexSlicer }}</div> -->
-          <div :style="{color:'#2a72e5'}">{{ voter.user.id | hexSlicer }}</div>
-          <div>{{ roundNumber(calcPct(voter.stakeOf, sumOfVotes)) }}% ({{ voter.stakeOf | WTON | withComma }} TON) </div>
+          <div :style="{color:'#2a72e5'}">{{ hexSlicer(voter.user.id) }}</div>
+          <div>{{ roundNumber(calcPct(voter.stakeOf, sumOfVotes)) }}% ({{ withComma(wton(voter.stakeOf)) }} TON) </div>
         </div>
         <vote-poll class="vote-poll"
                    :pct="calcPct(voter.stakeOf, sumOfVotes)"
@@ -23,7 +23,7 @@
       <div class="container-title">Summary</div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Total Staked</span>
-        <span class="voting-stat-content">{{ sumOfVotes | WTON | withComma }} TON</span>
+        <span class="voting-stat-content">{{ withComma(wton(sumOfVotes)) }} TON</span>
       </div>
       <div class="voting-stat-item">
         <span class="voting-stat-title">Number of Stakers</span>
@@ -37,6 +37,7 @@
 import { mapState, mapGetters } from 'vuex';
 import VotePoll from '@/components/VotePoll.vue';
 import ButtonPagination from '@/components/ButtonPagination.vue';
+import { hexSlicer, WTON, withComma } from '@/utils/helpers';
 
 export default {
   components: {
@@ -62,6 +63,9 @@ export default {
       const first = this.page * 4;
       return this.votersWithBalance ? this.votersWithBalance.slice(first, first + 4) : [];
     },
+    wton () {
+      return (amount) => !amount ? WTON(0) : WTON(amount);
+    },
     shortAddress () {
       return account => `${account.slice(0, 5)}...`;
     },
@@ -79,6 +83,13 @@ export default {
     },
   },
   methods: {
+    hexSlicer (address) {
+      return hexSlicer(address);
+    },
+    withComma (n) {
+      return withComma(n);
+    },
+    
     set (page) {
       this.page = page;
     },

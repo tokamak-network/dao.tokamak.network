@@ -20,7 +20,7 @@
       <div class="content">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{  date1(member(address).info.memberJoinedTime) }}
           </div>
           <div>
             <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
@@ -82,7 +82,7 @@
       <div class="content-tablet">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{ date1(member(address).info.memberJoinedTime) }}
           </div>
           <div>
             <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
@@ -137,7 +137,7 @@
       <div class="content">
         <div v-if="member(address)" class="timeline">
           <div class="date">
-            Became a DAO committee member on {{ member(address).info.memberJoinedTime | date1 }}
+            Became a DAO committee member on {{  date1(member(address).info.memberJoinedTime) }}
           </div>
           <div>
             <!-- <span>in Office {{ member(address).info.memberJoinedTime | fromNow }}</span> -->
@@ -191,8 +191,10 @@ import ModalUpdateReward from '@/containers/ModalUpdateReward.vue';
 import CommitteeVote from '@/containers/CommitteeVote.vue';
 import CommitteeInfo from '@/containers/CommitteeInfo.vue';
 import CommitteeInfoVote from '@/containers/CommitteeInfoVote.vue';
+import { date1 } from '@/utils/helpers';
 
 export default {
+  name: 'CommitteePage',
   components: {
     'button-step': ButtonStep,
     'modal': Modal,
@@ -221,6 +223,7 @@ export default {
       'getPrevButtonState',
       'getNextButtonState',
     ]),
+
     // prevState () {
     //   const index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
     //   console.log(index);
@@ -247,6 +250,9 @@ export default {
     },
   },
   methods: {
+    date1(n) {
+      return date1(n);
+    },
     prev () {
       let index = this.sortedCandidates.map(candidate => candidate.candidateContract.toLowerCase()).indexOf(this.address.toLowerCase());
       if (index === -1 || index === 0) {
@@ -270,7 +276,7 @@ export default {
     },
     linkToStake () {
       const address = this.address;
-      window.open(`https://sepolia.staking.tokamak.network/staking#${address}`, '_blank'); //eslint-disable-line
+      window.open(`https://simple.staking.tokamak.network/staking#${address}`, '_blank'); //eslint-disable-line
     },
     openUpdateRewardModal () {
       const address = this.address;

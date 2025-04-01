@@ -20,9 +20,11 @@
                 ? { minWidth: '95px' }
                 : menu.title === 'L2 Mainnet'
                   ? { minWidth: '120px' }
-                  : menu.title === 'Bridge & Swap'
-                    ? { minWidth: '142px' } : menu.title === 'Launchpad'? '130px'
-                      : {},
+                  : menu.title === 'L2 Mainnet'
+                    ? { minWidth: '120px' }
+                    : menu.title === 'Bridge & Swap'
+                      ? { minWidth: '142px' } : menu.title === 'Launchpad'? '130px'
+                        : {},
           menu.isFoucsed ? { fontWeight: 600 } : {},
           menu.isFoucsed ? { opacity: 1 } : { opacity: 0.25 },
           index === menus.length - 1 ? { marginRight: '31%' } : {},
@@ -62,6 +64,11 @@ export default {
           isFoucsed: false,
         },
         {
+          title: 'L2 On-Demand',
+          url: 'http://rolluphub.tokamak.network/',
+          isFoucsed: false,
+        },
+        {
           title: 'Bridge & Swap',
           url: 'https://bridge.tokamak.network/#/',
           isFoucsed: false,
@@ -75,11 +82,6 @@ export default {
           title: 'DAO',
           url: 'https://dao.tokamak.network//',
           isFoucsed: true,
-        },
-        {
-          title: 'Launchpad',
-          url: 'https://tonstarter.tokamak.network/',
-          isFoucsed: false,
         },
       ],
       width: 0,

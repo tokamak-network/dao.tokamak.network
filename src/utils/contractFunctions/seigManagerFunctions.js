@@ -1,4 +1,4 @@
-const seigManagerFunctionsOfTypeA = [
+export const seigManagerFunctionsOfTypeA = [
   {
     'params': {
       'aboutParam0':
@@ -11,7 +11,7 @@ const seigManagerFunctionsOfTypeA = [
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
@@ -28,7 +28,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
@@ -45,7 +45,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
     'prettyName': '',
     'disabled': false,
     'explanation':
-`Currently, TON seigniorage is issued each time a Ethereum block is created.
+`
 
 3.92 TON is issued as seigniorage with each block and distributed among PowerTON, DAO, and staking users. This amount stems from 19% of the initial TON supply of 50,000,000 TON, converted into a fixed annual seigniorage supply.
 This function lets you set the distribution ratio of the 3.92 TON among PowerTON, DAO, and staking users.`,
@@ -83,7 +83,7 @@ If you are staking less than the amount set in this function, you cannot commit.
   },
 ];
 
-const seigManagerFunctionsOfTypeB = [
+export const seigManagerFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address account: Address to receive authority',
@@ -138,7 +138,7 @@ const seigManagerFunctionsOfTypeB = [
       'exampleParam0': '0x0000000000000000000000000000000000000000',
     },
     'name': 'transferOwnership',
-    'title': '(Seig Manager)First parameter\'s(Param1) owner rights of Seigmanager will be transferred.',
+    'title': '(Seig Manager) First parameter\'s(Param1) owner rights of Seigmanager will be transferred.',
     'prettyName': '',
     'disabled': false,
     'explanation':
@@ -147,14 +147,14 @@ It will be used when Seigmanager (seigniorage managing contract) is updated.`,
   },
   {
     'name': 'pause',
-    'title': '(Seig Manager)Seigniorage issuance will be stopped.',
+    'title': '(Seig Manager) Seigniorage issuance will be stopped.',
     'prettyName': '',
     'disabled': false,
     'explanation': 'This function allows you to stop issuing seigniorage.',
   },
   {
     'name': 'unpause',
-    'title': '(Seig Manager)Seigniorage issuance will be resumed.',
+    'title': '(Seig Manager) Seigniorage issuance will be resumed.',
     'prettyName': '',
     'disabled': false,
     'explanation': 'This function allows you to resume issuance of seigniorage.',
@@ -165,7 +165,7 @@ It will be used when Seigmanager (seigniorage managing contract) is updated.`,
       'exampleParam0': '0x0000000000000000000000000000000000000000',
     },
     'name': 'setPowerTON',
-    'title': '(Seig Manager)PowerTON contract will be changed.',
+    'title': '(Seig Manager) PowerTON contract will be changed.',
     'prettyName': '',
     'disabled': false,
     'explanation':
@@ -320,5 +320,3 @@ Seigmanager's MInter function for WTON can be removed through this function. It 
   },
 ];
 
-module.exports.seigManagerFunctionsOfTypeA = seigManagerFunctionsOfTypeA;
-module.exports.seigManagerFunctionsOfTypeB = seigManagerFunctionsOfTypeB;

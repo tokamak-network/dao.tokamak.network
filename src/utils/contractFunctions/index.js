@@ -1,59 +1,59 @@
-const {
+import {
   daoCommitteeFunctionsOfTypeA,
   daoCommitteeFunctionsOfTypeB,
-} = require('./daoCommitteeFunctions');
+} from './daoCommitteeFunctions.js';
 
-const {
+import {
   daoCommitteeProxyFunctionsOfTypeA,
   daoCommitteeProxyFunctionsOfTypeB,
-} = require('./daoCommitteeProxyFunctions');
+} from './daoCommitteeProxyFunctions.js';
 
-const {
+import {
   daoVaultFunctionsOfTypeA,
   daoVaultFunctionsOfTypeB,
-} = require('./daoVaultFunctions');
+} from './daoVaultFunctions.js';
 
-const {
+import {
   depositManagerFunctionsOfTypeA,
   depositManagerFunctionsOfTypeB,
-} = require('./depositManagerFunctions');
+} from './depositManagerFunctions.js';
 
-const {
+import {
   layer2RegistryFunctionsOfTypeA,
   layer2RegistryFunctionsOfTypeB,
-} = require('./layer2RegistryFunctions');
+} from './layer2RegistryFunctions.js';
 
-const {
+import {
   powerTonLogicFunctionsOfTypeB,
-} = require('./powerTonLogicFunctions');
+} from './powerTonLogicFunctions.js';
 
-const {
+import {
   powerTonProxyFunctionsOfTypeB,
-} = require('./powerTonProxyFunctions');
+} from './powerTonProxyFunctions.js';
 
-const {
+import {
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
-} = require('./seigManagerFunctions');
+} from './seigManagerFunctions.js';
 
-const {
+import {
   tonFunctionsOfTypeB,
-} = require('./tonFunctions');
+} from './tonFunctions.js';
 
-const {
+import {
   wtonFunctionsOfTypeB,
-} = require('./wtonFunctions');
+} from './wtonFunctions.js';
 
-const {
+import {
   l1BridgeRegistryFunctionsOfTypeA,
   l1BridgeRegistryFunctionsOfTypeB,
-} = require('./l1BridgeRegistryFunctions');
+} from './l1BridgeRegistryFunctions.js';
 
-const {
+import {
   layer2ManagerFunctionsOfTypeB,
-} = require('./layer2ManagerFunctions');
+} from './layer2ManagerFunctions.js';
 
-module.exports = {
+export {
   daoCommitteeFunctionsOfTypeA,
   daoCommitteeFunctionsOfTypeB,
   daoCommitteeProxyFunctionsOfTypeA,

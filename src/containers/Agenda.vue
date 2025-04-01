@@ -39,7 +39,7 @@
           {{ agendaType(agendaId) }}
         </div>
         <div class="content-sub-date">
-          is Posted {{ creationTime.tCreationDate | date3 }}
+          is Posted {{ date3(creationTime.tCreationDate) }}
         </div>
         <img v-if="agendaType(agendaId) === 'A'"
              src="@/assets/poll-time-active-icon.svg" alt=""
@@ -49,7 +49,7 @@
              src="@/assets/poll-time-active-icon-typeB.svg" alt=""
              width="14" height="14"
         >
-        <span class="content-sub-spare-time"> {{ creationTime | votingTime }}</span>
+        <span class="content-sub-spare-time"> {{  votingTime(creationTime) }}</span>
       </div>
       <div v-if="$mq !== 'mobile'" class="title">{{ agendaTitle(agendaId) }}</div>
       <div v-else>
@@ -145,9 +145,11 @@ import AgendaOnChain from '@/containers/AgendaOnChain.vue';
 import AgendaDescription from '@/containers/AgendaDescription.vue';
 import { mapState, mapGetters } from 'vuex';
 import { getContractABIFromAddress, getContract } from '@/utils/contracts';
+import { date3, votingTime } from '@/utils/helpers';
 // import moment from 'moment';
 
 export default {
+  name: 'AgendaPage',
   components: {
     'button-step': ButtonStep,
     'agenda-info': AgendaInfo,
@@ -176,6 +178,9 @@ export default {
       'getAgendaPrevButtonState',
       'getAgendaNextButtonState',
     ]),
+    votingTime () {
+      return agenda => votingTime(agenda);
+    },
     checkStatus () {
       const agenda = this.getAgendaByID(this.agendaId);
       const date = new Date();
@@ -210,6 +215,9 @@ export default {
     },
   },
   methods: {
+    date3 (date) {
+      return date3(date);
+    },
     async endAgenda () {
       const DAOCommitteeProxy = getContract('DAOCommitteeProxy', this.web3);
       await DAOCommitteeProxy.methods.endAgendaVoting(Number(this.agendaId)).send({

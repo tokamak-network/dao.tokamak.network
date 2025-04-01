@@ -8,42 +8,9 @@
           >
           <a class="link"
              target="_blank" rel="noopener noreferrer"
-             href="https://docs.google.com/presentation/d/1d1YrughbLXeQafNmWrjjz2dl9IjREe_bNIckQIMFLo8/edit?usp=sharing"
+             href="https://docs.tokamak.network/home/service-guide/staking-and-dao/tokamak-network-dao"
           >
-            DAO User Guide
-          </a>
-        </div>
-        <div class="resource">
-          <img src="@/assets/resources-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <a class="link"
-             target="_blank" rel="noopener noreferrer"
-             href="https://discord.com/invite/J4chV2zuAK"
-          >
-            DAO Discussion (Discord)
-          </a>
-        </div>
-        <div class="resource">
-          <img src="@/assets/resources-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <a class="link"
-             target="_blank" rel="noopener noreferrer"
-             href="https://tokamak.network"
-          >
-            Tokamak Network
-          </a>
-        </div>
-        <div class="resource">
-          <img src="@/assets/resources-icon.svg" alt=""
-               width="14" height="14"
-          >
-          <a class="link"
-             target="_blank" rel="noopener noreferrer"
-             href="https://docs.tokamak.network/docs/en/guides/ton-staking/how-to-set-candidate"
-          >
-            Candidate Registration
+            User Guide
           </a>
         </div>
         <div class="resource">
@@ -54,7 +21,7 @@
              target="_blank" rel="noopener noreferrer"
              href="https://www.notion.so/onther/FAQ-27a7fcfaed5047b895169930b5912cab"
           >
-            Governance FAQs
+            FAQs
           </a>
         </div>
       </template>

@@ -9,6 +9,7 @@
 
 <script>
 export default {
+  name: 'CardPage',
   props: {
     title: {
       type: String,

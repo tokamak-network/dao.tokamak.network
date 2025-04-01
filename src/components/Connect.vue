@@ -29,6 +29,7 @@ import jazzicon from '@metamask/jazzicon';
 import '@fontsource/titillium-web';
 
 export default {
+  name: 'ConnectPage',
   props: {
     isSub: {
       type: Boolean,
@@ -72,14 +73,14 @@ export default {
   methods: {
     async connect () {
       if (typeof window.ethereum !== 'undefined') {
-        const web3 = new Web3(ethereum);
+        const web3 = new Web3(window.ethereum);
         try {
-          await ethereum.request({ method: 'eth_requestAccounts' });
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
 
           const chainId = await web3.eth.getChainId();
-          if (chainId !== 11155111) {
+          if (chainId !== 1) {
             return alert(
-              'The current network is not seplolia. Please change it to the seplolia',
+              'The current network is not mainnet. Please change it to the mainnet',
             );
           }
 
@@ -111,6 +112,7 @@ export default {
             },
           );
         } catch (e) {
+          console.log(e);
           // User deny to connect MetaMask wallet.
         }
 
@@ -152,8 +154,8 @@ export default {
             }
           }
         };
-        ethereum.on('accountsChanged', handleAccountsChanged);
-        ethereum.on('chainChanged', handleChainChanged); // https://docs.metamask.io/guide/ethereum-provider.html#legacy-events
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+        window.ethereum.on('chainChanged', handleChainChanged); // https://docs.metamask.io/guide/ethereum-provider.html#legacy-events
       } else {
         return alert('Please install metamsk wallet.');
       }

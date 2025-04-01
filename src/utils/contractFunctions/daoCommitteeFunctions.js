@@ -1,4 +1,4 @@
-const daoCommitteeFunctionsOfTypeB = [
+export const daoCommitteeFunctionsOfTypeB = [
   //   {
   //     'params': {
   //       'aboutParam0': 'bytes32 role: Authority to add',
@@ -208,4 +208,3 @@ const daoCommitteeFunctionsOfTypeB = [
   },
 ];
 
-module.exports.daoCommitteeFunctionsOfTypeB = daoCommitteeFunctionsOfTypeB;

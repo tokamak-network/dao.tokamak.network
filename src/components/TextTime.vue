@@ -1,13 +1,8 @@
 <template>
   <div class="text-time">
-    <img :src="getImg()" alt=""
-         width="14" height="14"
-    >
+    <img :src="getImg()" alt="" width="14" height="14" />
     <div class="time">
-      <div
-        v-if="isAgenda === false"
-        style="margin-right: 3px"
-      >
+      <div v-if="isAgenda === false" style="margin-right: 3px">
         Staking reward last updated
       </div>
       {{ time }}
@@ -16,17 +11,16 @@
 </template>
 
 <script>
+import pollTimeInactiveIcon from '../assets/poll-time-inactive-icon.svg';
+import pollTimeActiveIcon from '../assets/poll-time-active-icon.svg';
+import pollTimeActiveIconTypeB from '../assets/poll-time-active-icon-typeB.svg';
+
 export default {
   props: {
     type: {
       type: String,
       default: '',
-      validator: (value) => {
-        return [
-          'A',
-          'B',
-        ].indexOf(value) !== -1;
-      },
+      validator: (value) => ['A', 'B'].includes(value),
     },
     time: {
       type: String,
@@ -42,9 +36,9 @@ export default {
     },
   },
   methods: {
-    getImg () {
-      return !this.isActive ? require('../assets/poll-time-inactive-icon.svg') :
-        this.type === 'A' ? require('../assets/poll-time-active-icon.svg') : require('../assets/poll-time-active-icon-typeB.svg');
+    getImg() {
+      if (!this.isActive) return pollTimeInactiveIcon;
+      return this.type === 'A' ? pollTimeActiveIcon : pollTimeActiveIconTypeB;
     },
   },
 };
