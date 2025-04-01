@@ -3,7 +3,7 @@ import { toBN } from 'web3-utils';
 // import numeral from 'numeral';
 
 import {
-  getCandidates,
+  // getCandidates,
   getAgendas,
   getCandidateVoteRank,
   getAgendaContents,
@@ -303,8 +303,8 @@ export default new Vuex.Store({
         memberAddresses.push(member);
       }
 
-      const candidatesFromAPI = await getCandidates();
-
+      // const candidatesFromAPI = await getCandidates();
+      // console.log(candidatesFromAPI);
       let web3 = state.web3;
       if (!web3) {
         web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
@@ -335,8 +335,9 @@ export default new Vuex.Store({
             daoCommitteeProxy.methods.candidateInfos(candidate.candidate).call(),
             web3.eth.getBlock(lastCommitBlockNumber),
           ]);
-          const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
-          candidate.name = candidateFromAPI.name;
+          // const candidateFromAPI = candidatesFromAPI.find(candiFromAPI => candiFromAPI.candidateContract.toString() === candidate.candidateContract.toString());
+          // console.log(candidate);
+          // candidate.name = candidateFromAPI.name;
           candidate.vote = totalVote; // TODO: totalVote
           candidate.selfVote = selfVote;
           candidate.info = info;
