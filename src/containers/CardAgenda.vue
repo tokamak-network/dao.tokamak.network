@@ -22,7 +22,7 @@
       />
     </div>
     <div class="title">{{ agendaTitle(agenda.agendaid) }}</div>
-    <div class="title-sub">{{ `This agenda was made by ${shortAddress(agenda.creator)} on` }} {{ agenda.tCreationDate | date1 }}</div>
+    <div class="title-sub">{{ `This agenda was made by ${shortAddress(agenda.creator)} on` }} {{ date1(agenda.tCreationDate) }}</div>
     <text-time :type="agenda.type"
                :time="votingTime(agenda)"
                :is-active="votingTime(agenda) !== 'POLL ENDED'"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { agendaStatus, agendaResult, hexSlicer, votingTime } from '@/utils/helpers';
+import { agendaStatus, agendaResult, hexSlicer, votingTime, date1 } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import { mapGetters, mapState } from 'vuex';
 
@@ -114,6 +114,7 @@ export default {
     shortAddress () {
       return account => hexSlicer(account);
     },
+
     voteResultString () {
       if (agendaStatus(this.agenda.status) === 'NOTICE' && this.blockTime >= this.agenda.tNoticeEndTime) {
         if (this.isMember) {
@@ -191,6 +192,9 @@ export default {
     },
   },
   methods: {
+    date1 (n) {
+      return date1(n);
+    },
     onVoted () {
       this.actInProgress = true;
     },

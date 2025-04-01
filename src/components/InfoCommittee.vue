@@ -28,7 +28,7 @@
               }"
               @click="redirect(content)"
         >
-          {{ content | hexSlicer }}
+          {{ hexSlicer(content) }}
         </span>
         <span v-else
               :class="{
@@ -44,7 +44,7 @@
       </div>
       <div v-if="type === 'time' && typeof(content) === 'number'" class="content">
         <span :class="{ 'description2': type === 'time' }">
-          {{ content | date2 }}
+          {{ date2(content) }}
         </span>
       </div>
     </div>
@@ -53,6 +53,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { date2 } from '@/utils/helpers';
 
 export default {
   props: {
@@ -100,6 +101,9 @@ export default {
     },
   },
   methods: {
+    date2 (n) {
+      return date2(n);
+    },
     redirect (val) {
       if (this.type === 'address') {
         window.open(this.etherscanAddress + '/address/' + val, '_blank'); // eslint-disable-line

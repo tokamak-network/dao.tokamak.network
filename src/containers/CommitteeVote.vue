@@ -8,8 +8,8 @@
     </div>
     <div class="body">
       <div v-if="currentSelector === 0" class="vote-container">
-        <div v-if="voteUnit === 'TON'">Available Balance {{ tonBalance | TON | withComma }} TON</div>
-        <div v-else>Available Balance {{ wtonBalance | WTON | withComma }} WTON</div>
+        <div v-if="voteUnit === 'TON'">Available Balance {{ withComma(ton(tonBalance)) }} TON</div>
+        <div v-else>Available Balance {{ withComma(wton(wtonBalance)) }} WTON</div>
         <div>
           <div class="ton-vote-container">
             <text-input :ref="voteUnit === 'TON' ? 'tonvote' : 'wtonvote'"
@@ -61,7 +61,7 @@
         />
       </div>
       <div v-if="currentSelector === 2" class="unvote-container">
-        <div>Available Balance {{ myVotes | WTON | withComma }} TON</div>
+        <div>Available Balance {{ withComma(wton(myVotes)) }} TON</div>
         <div>
           <text-input ref="tonunvote"
                       class="unvote-input"

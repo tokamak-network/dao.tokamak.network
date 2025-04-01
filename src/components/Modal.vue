@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask">
+    <div class="modal-mask" v-if="true">
       <!-- @mousedown="$emit('on-closed')" -->
       <div class="modal-wrapper">
         <div class="modal-container"
@@ -19,6 +19,7 @@
 
 <script>
 export default {
+  name: "AppModal",
   props: {
     width: {
       type: String,
@@ -41,9 +42,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -53,11 +54,11 @@ export default {
 
 .modal-container {
   width: 300px;
-  margin: 0px auto;
+  margin: 0 auto;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 .mobile {
@@ -74,7 +75,6 @@ export default {
 
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
 </style>

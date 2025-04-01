@@ -6,7 +6,7 @@
     >
       <div :style="{ display: 'flex', flexDirection:'row', width:'190px', alignItem: 'center', }">
         <div class="label" :style="[ $mq === 'mobile' ? {paddingLeft: '15px'} : {marginTop: '3px'}]">Total Staked </div>
-        <div class="amount" :style="[ $mq === 'mobile' ? {} : {marginTop: '3px'}]">{{ wton(candidate.vote) | withComma }} TON</div>
+        <div class="amount" :style="[ $mq === 'mobile' ? {} : {marginTop: '3px'}]">{{ withComma(wton(candidate.vote)) }} TON</div>
       </div>
       <div class="name-container" :style="[ $mq === 'mobile' ? {marginTop: '5px', marginLeft: '15px'} : {}]">
         <div class="name">{{ candidate.name }}</div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { WTON } from '@/utils/helpers';
+import { WTON, withComma } from '@/utils/helpers';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -51,6 +51,9 @@ export default {
       this.$router.push({
         path: `/election/${this.candidate.candidateContract}`,
       });
+    },
+    withComma (n) {
+      return withComma(n);
     },
   },
 };

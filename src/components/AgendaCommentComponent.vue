@@ -1,12 +1,12 @@
 <template>
   <div class="agenda-comment">
     <div class="date">
-      {{ votedAt | date2 }}
+      {{ date2(votedAt) }}
     </div>
     <div class="vote-status">
       <span>
         <span class="blue">
-          {{ voter | hexSlicer }}
+          {{ hexSlicer(voter) }}
         </span> voted
         <span class="blue">
           {{ toResult(vote) }}
@@ -22,6 +22,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { date2, hexSlicer } from '@/utils/helpers';
 
 export default {
   props: {
@@ -53,6 +54,12 @@ export default {
     ]),
   },
   methods: {
+    date2 (n) {
+      return date2(n);
+    },
+    hexSlicer (address) {
+      return hexSlicer(address);
+    },
     toResult () {
       if (this.vote === '0') return 'Abstain';
       else if (this.vote === '1') return 'Yes';

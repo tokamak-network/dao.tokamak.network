@@ -1,7 +1,7 @@
-const layer2ManagerFunctionsOfTypeA = [
+export const layer2ManagerFunctionsOfTypeA = [
 ];
 
-const layer2ManagerFunctionsOfTypeB = [
+export const layer2ManagerFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address _l1BridgeRegistry: The l1BridgeRegistry address',
@@ -52,5 +52,3 @@ const layer2ManagerFunctionsOfTypeB = [
   },
 ];
 
-module.exports.layer2ManagerFunctionsOfTypeA = layer2ManagerFunctionsOfTypeA;
-module.exports.layer2ManagerFunctionsOfTypeB = layer2ManagerFunctionsOfTypeB;

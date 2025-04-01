@@ -1,4 +1,4 @@
-const daoVaultFunctionsOfTypeA = [
+export const daoVaultFunctionsOfTypeA = [
 //   {
 //     'params': {
 //       'aboutParam0': 'address _to: Address to which authority is granted',
@@ -92,7 +92,7 @@ const daoVaultFunctionsOfTypeA = [
   },
 ];
 
-const daoVaultFunctionsOfTypeB = [
+export const daoVaultFunctionsOfTypeB = [
   {
     'name': 'renounceOwnership',
     'title': '(Candidate)DAO\'s authority for candidate contracts will be removed.',
@@ -139,5 +139,3 @@ const daoVaultFunctionsOfTypeB = [
   },
 ];
 
-module.exports.daoVaultFunctionsOfTypeA = daoVaultFunctionsOfTypeA;
-module.exports.daoVaultFunctionsOfTypeB = daoVaultFunctionsOfTypeB;

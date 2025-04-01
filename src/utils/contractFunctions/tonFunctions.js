@@ -1,4 +1,4 @@
-const tonFunctionsOfTypeB = [
+export const tonFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address account: Address that will have the right to issue additional TON',
@@ -101,4 +101,3 @@ Enter the Sender account in Param1, the Recipient account in Param2, and the amo
   // },
 ];
 
-module.exports.tonFunctionsOfTypeB = tonFunctionsOfTypeB;

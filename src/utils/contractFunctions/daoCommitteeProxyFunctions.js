@@ -1,4 +1,4 @@
-const daoCommitteeProxyFunctionsOfTypeA = [
+export const daoCommitteeProxyFunctionsOfTypeA = [
   {
     'params': {
       'aboutParam0': 'uint256 _value: Member activity subsidy per second (decimal: 18) 1000000000000000000: 1 TON',
@@ -109,7 +109,7 @@ The actual voting period for each agenda can be set when creating an agenda, but
   },
 ];
 
-const daoCommitteeProxyFunctionsOfTypeB = [
+export const daoCommitteeProxyFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'bytes32 role: Authority to add',
@@ -224,6 +224,3 @@ It will be used when the DAO is upgraded.`,
 'Setting up functions to be used in additional logic.',
   },
 ];
-
-module.exports.daoCommitteeProxyFunctionsOfTypeA = daoCommitteeProxyFunctionsOfTypeA;
-module.exports.daoCommitteeProxyFunctionsOfTypeB = daoCommitteeProxyFunctionsOfTypeB;

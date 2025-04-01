@@ -129,4 +129,4 @@ Enter the address acount in the first parameter (Param1) and the amount to be bu
   },
 ];
 
-module.exports.wtonFunctionsOfTypeB = wtonFunctionsOfTypeB;
+export default wtonFunctionsOfTypeB;

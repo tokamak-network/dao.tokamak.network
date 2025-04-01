@@ -4,7 +4,7 @@
       You can get
       <div v-if="loading" class="dot-flashing"></div>
       <div v-else :style="{margin: '0px 6px'}">
-        {{ expectedSeig | withComma }}
+        {{  withComma(expectedSeig) }}
       </div>
       TON reward
     </div>

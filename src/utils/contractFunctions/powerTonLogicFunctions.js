@@ -1,4 +1,4 @@
-const powerTonLogicFunctionsOfTypeB = [
+export const powerTonLogicFunctionsOfTypeB = [
   {
     'name': 'setInfo',
     'title': '',
@@ -8,4 +8,3 @@ const powerTonLogicFunctionsOfTypeB = [
   },
 ];
 
-module.exports.powerTonLogicFunctionsOfTypeB = powerTonLogicFunctionsOfTypeB;

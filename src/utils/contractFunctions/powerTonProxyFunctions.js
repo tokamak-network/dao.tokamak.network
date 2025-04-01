@@ -1,4 +1,4 @@
-const powerTonProxyFunctionsOfTypeB = [
+export const powerTonProxyFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address powerton contract: New Power TON address',
@@ -13,4 +13,3 @@ const powerTonProxyFunctionsOfTypeB = [
   },
 ];
 
-module.exports.powerTonProxyFunctionsOfTypeB = powerTonProxyFunctionsOfTypeB;

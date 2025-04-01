@@ -1,4 +1,4 @@
-const layer2RegistryFunctionsOfTypeB = [
+export const layer2RegistryFunctionsOfTypeB = [
   {
     'params': {
       'aboutParam0': 'address layer2: Layer 2 contract address to slash',
@@ -25,4 +25,3 @@ const layer2RegistryFunctionsOfTypeB = [
   },
 ];
 
-module.exports.layer2RegistryFunctionsOfTypeB = layer2RegistryFunctionsOfTypeB;

@@ -254,9 +254,7 @@ export default new Vuex.Store({
       const seigManager = getContract('SeigManager', state.web3);
 
       const createAgendaFee = await agendaManager.methods.createAgendaFees().call();
-      // const claimableAmount = await committeeProxy.methods.getClaimableActivityReward(state.account).call();
       const minimumAmount = await seigManager.methods.minimumAmount().call();
-      // console.log(claimableAmount);
 
       const contractState = {
         createAgendaFee,
@@ -278,8 +276,8 @@ export default new Vuex.Store({
     },
     async setMembersAndNonmembers ({ state, commit }) {
       const daoCommitteeProxy = getContract('DAOCommitteeProxy', state.web3);
-      const seigManager = getContract('SeigManager', web3);
-      const layer2Registry = getContract('Layer2Registry', web3);
+      const seigManager = getContract('SeigManager', state.web3);
+      const layer2Registry = getContract('Layer2Registry', state.web3);
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
