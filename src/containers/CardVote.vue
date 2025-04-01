@@ -59,8 +59,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-vote {
-}
+// .card-vote {
+// }
 
 .vote-percentage-container {
   height: 126px;
