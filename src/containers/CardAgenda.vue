@@ -143,7 +143,6 @@ export default {
       }
     },
     canAction () {
-      console.log(this.action);
       return this.action;
     },
     actionStatus () {
