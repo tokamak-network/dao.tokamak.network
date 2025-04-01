@@ -254,9 +254,7 @@ export default new Vuex.Store({
       const seigManager = getContract('SeigManager', state.web3);
 
       const createAgendaFee = await agendaManager.methods.createAgendaFees().call();
-      // const claimableAmount = await committeeProxy.methods.getClaimableActivityReward(state.account).call();
       const minimumAmount = await seigManager.methods.minimumAmount().call();
-      // console.log(claimableAmount);
 
       const contractState = {
         createAgendaFee,
