@@ -154,18 +154,18 @@ export const daoCommitteeFunctionsOfTypeB = [
   // 'disabled': false,
   //   'explanation': '',
   // },
-  {
-    'params': {
-      'aboutParam0': 'uint256 _agendaID: The agenda number to finish',
-      'exampleParam0': '13',
-    },
-    'name': 'endAgendaVoting',
-    'title': '(DAO Committee)If an agenda is rejected, it will be finally closed.',
-    'prettyName': '',
-    'disabled': false,
-    'explanation':
-  'This function finally closes an agenda if the agenda is rejected.',
-  },
+  // {
+  //   'params': {
+  //     'aboutParam0': 'uint256 _agendaID: The agenda number to finish',
+  //     'exampleParam0': '13',
+  //   },
+  //   'name': 'endAgendaVoting',
+  //   'title': '(DAO Committee)If an agenda is rejected, it will be finally closed.',
+  //   'prettyName': '',
+  //   'disabled': false,
+  //   'explanation':
+  // 'This function finally closes an agenda if the agenda is rejected.',
+  // },
   {
     'params': {
       'aboutParam0': 'uint256 _agendaID: The agenda number to be changed',
