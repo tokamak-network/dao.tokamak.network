@@ -435,6 +435,7 @@ export default new Vuex.Store({
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
+      // console.log(agendas)
       // console.log(promAgendaTx);
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);

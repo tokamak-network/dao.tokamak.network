@@ -100,6 +100,30 @@ export const l1BridgeRegistryFunctionsOfTypeA = [
     'disabled': false,
     'explanation': 'Only the registered RollupConfig can be registered as CandidateAddOn. Only after being registered as CandidateAddOn can the sequencer(seigniorageReceiver) receive seigniorage.',
   },
+  {
+    'params': {
+      'aboutParam0': 'rollupConfig contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+    },
+    'name': 'rejectCandidateAddOn',
+    'title': '(L1 Bridge Registry) Stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig. ',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig. ',
+  },
+  {
+    'params': {
+      'aboutParam0': 'rollupConfig contract address',
+      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam1': 'if it is true, allow the withdrawDepositL2 function.',
+      'exampleParam1': 'true',
+    },
+    'name': 'restoreCandidateAddOn',
+    'title': '(L1 Bridge Registry) Cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': 'Cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+  },
 ];
 
 export const l1BridgeRegistryFunctionsOfTypeB = [
