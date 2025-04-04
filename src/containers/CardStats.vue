@@ -50,6 +50,7 @@
 <script>
 import Card from '@/components/Card.vue';
 import { mapState } from 'vuex';
+import { withComma, tonFloor } from '@/utils/helpers';
 
 export default {
   components: {
@@ -73,6 +74,14 @@ export default {
       'web3',
     ]),
   },
+  methods: {
+    withComma (n) {
+      return withComma(n);
+    },
+    tonFloor (n) {
+      return tonFloor(n);
+    },
+  }
 };
 </script>
 

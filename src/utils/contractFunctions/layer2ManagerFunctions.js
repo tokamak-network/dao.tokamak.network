@@ -50,5 +50,16 @@ export const layer2ManagerFunctionsOfTypeB = [
     'explanation': `Set the minimum TON deposit amount required when creating a CandidateAddOn.
      *          Due to calculating swton, it is recommended to set DepositManager's minimum deposit + 0.1 TON`,
   },
+  {
+    'params': {
+      'aboutParam0': 'the minimum initial deposit amount',
+      'exampleParam0': '1000100000000000000000',
+    },
+    'name': 'setMinimumInitialDepositAmount',
+    'title': '(Layer2 Manager) Set the minimum TON deposit amount required when creating a CandidateAddOn.',
+    'prettyName': '',
+    'disabled': false,
+    'explanation': `Due to calculating swton, it is recommended to set DepositManager's minimum deposit + 0.1 TON`,
+  },
 ];
 

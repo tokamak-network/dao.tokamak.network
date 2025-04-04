@@ -69,7 +69,7 @@
 
 <script>
 import { getContractABI, getContract, getFunctionSelector, encodeParameters, encoded, getContractAddress } from '@/utils/contracts';
-import { unmarshalString } from '@/utils/helpers';
+import { unmarshalString, withComma, TON } from '@/utils/helpers';
 import { createAgenda } from '@/api';
 import { toBN } from 'web3-utils';
 
@@ -128,7 +128,7 @@ export default {
     aboutParam () {
       return index => {
         if (this.functionName === 'setSeigRates') {
-          if (index === 0) return 'uint256 powerTONSeigRate_: PowerTON distribution ratio (decimal: 27) 100000000000000000000000000: 10%';
+          // if (index === 0) return 'uint256 powerTONSeigRate_: PowerTON distribution ratio (decimal: 27) 100000000000000000000000000: 10%';
           if (index === 1) return 'uint256 daoSeigRate_: DAO distribution ratio (decimal: 27) 200000000000000000000000000: 20%';
           if (index === 2) return 'uint256 PseigRate_: Additional seigniorage distribution ratio 300000000000000000000000000: 30%';
         }
@@ -151,8 +151,14 @@ export default {
         return abiFound.params[`exampleParam${index}`];
       };
     },
+    TON () {
+      return (amount) => !amount ? TON(0) : TON(amount);
+    },
   },
   methods: {
+    withComma (n) {
+      return withComma(n);
+    },
     tooltip (index) {
       return `${this.aboutParam(index)} \n\nex) ${this.exampleParam(index)}`;
     },

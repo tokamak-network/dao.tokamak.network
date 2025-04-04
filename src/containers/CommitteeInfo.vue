@@ -88,9 +88,9 @@ export default {
     date2 () {
       return (timestamp) => date2(timestamp);
     },
-    powerTONWinningProbability () {
-      return this.winningProbability === '' ? '0.00%' : this.winningProbability;
-    },
+    // powerTONWinningProbability () {
+    //   return this.winningProbability === '' ? '0.00%' : this.winningProbability;
+    // },
   },
   watch: {
     '$route.params.address': {

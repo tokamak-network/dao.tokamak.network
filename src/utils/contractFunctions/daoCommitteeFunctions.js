@@ -154,18 +154,18 @@ export const daoCommitteeFunctionsOfTypeB = [
   // 'disabled': false,
   //   'explanation': '',
   // },
-  {
-    'params': {
-      'aboutParam0': 'uint256 _agendaID: The agenda number to finish',
-      'exampleParam0': '13',
-    },
-    'name': 'endAgendaVoting',
-    'title': '(DAO Committee)If an agenda is rejected, it will be finally closed.',
-    'prettyName': '',
-    'disabled': false,
-    'explanation':
-  'This function finally closes an agenda if the agenda is rejected.',
-  },
+  // {
+  //   'params': {
+  //     'aboutParam0': 'uint256 _agendaID: The agenda number to finish',
+  //     'exampleParam0': '13',
+  //   },
+  //   'name': 'endAgendaVoting',
+  //   'title': '(DAO Committee)If an agenda is rejected, it will be finally closed.',
+  //   'prettyName': '',
+  //   'disabled': false,
+  //   'explanation':
+  // 'This function finally closes an agenda if the agenda is rejected.',
+  // },
   {
     'params': {
       'aboutParam0': 'uint256 _agendaID: The agenda number to be changed',
@@ -196,15 +196,16 @@ export const daoCommitteeFunctionsOfTypeB = [
   },
   {
     'params': {
-      'aboutParam0': 'address _layer2Manager: Set Layer2Manager address',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
+      'aboutParam0': 'Here is a memo briefly explaining the candidate.',
+      'exampleParam0': 'Candidate Memo',
+      'aboutParam1': 'Operator address that will operate the Candidate.',
+      'exampleParam1': '0x0000000000000000000000000000000000000000',
     },
     'name': 'setLayer2Manager',
-    'title': '(DAO Committee)Layer2Manager will be upgraded.',
+    'title': '(DAO Committee) The DAO Owner registers a Candidate for the Operator on his behalf.',
     'prettyName': '',
     'disabled': false,
-    'explanation':
-  'This function is used when Layer2Manager is upgraded. Enter the DAO contract address to be upgraded in the first parameter (Param1).',
+    'explanation': 'The DAO Owner registers a Candidate for the Operator on his behalf.',
   },
 ];
 

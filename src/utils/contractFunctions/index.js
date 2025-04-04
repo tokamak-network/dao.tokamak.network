@@ -24,14 +24,6 @@ import {
 } from './layer2RegistryFunctions.js';
 
 import {
-  powerTonLogicFunctionsOfTypeB,
-} from './powerTonLogicFunctions.js';
-
-import {
-  powerTonProxyFunctionsOfTypeB,
-} from './powerTonProxyFunctions.js';
-
-import {
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
 } from './seigManagerFunctions.js';
@@ -64,8 +56,8 @@ export {
   depositManagerFunctionsOfTypeB,
   layer2RegistryFunctionsOfTypeA,
   layer2RegistryFunctionsOfTypeB,
-  powerTonLogicFunctionsOfTypeB,
-  powerTonProxyFunctionsOfTypeB,
+  // powerTonLogicFunctionsOfTypeB,
+  // powerTonProxyFunctionsOfTypeB,
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
   tonFunctionsOfTypeB,

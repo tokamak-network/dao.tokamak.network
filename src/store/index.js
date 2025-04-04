@@ -246,6 +246,7 @@ export default new Vuex.Store({
         candidate.requests = requests;
         requestsByCandidate.push(candidate);
       });
+
       commit('SET_REQUESTS_BY_CANDIDATE', requestsByCandidate);
     },
     async setContractState ({ state, commit }) {
@@ -281,7 +282,6 @@ export default new Vuex.Store({
       const response = await apollo.query({
         query: GET_CANDIDATE,
       });
-
       const candi = response.data.candidates;
       const [
         maxMember,
@@ -305,9 +305,8 @@ export default new Vuex.Store({
       // console.log(candidatesFromAPI);
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
-
       const candidates = await Promise.all(
         candi?.map(async candidate => {
           const addr = candidate.kind === 'layer2' ? candidate.candidate : candidate.candidateContract;
@@ -380,7 +379,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -404,8 +403,9 @@ export default new Vuex.Store({
     },
     async setAgendas ({ state, commit, dispatch }) {
       let web3 = state.web3;
+
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -435,6 +435,7 @@ export default new Vuex.Store({
 
         promAgendaContents.push(getAgendaContents(agendas[i].agendaid));
       }
+      // console.log(agendas)
       // console.log(promAgendaTx);
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
@@ -444,8 +445,8 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          // console.log(agendaTxs[i]);
-          agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type);
+          if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
+          agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
       }
 
@@ -466,14 +467,15 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
 
       votes.forEach(async function (vote) {
-        const block = await web3.eth.getBlock(vote.blockNumber);
+        // const block = await web3.eth.getBlock(vote.blockNumber);
         votingDetails.push({
           agendaid: vote.agendaid,
-          timestamp: block.timestamp,
+          // timestamp: block.timestamp,
+          timestamp: 0,
           chainId: vote.chainId,
           comment: vote.comment,
           hasVoted: vote.hasVoted,
@@ -614,6 +616,7 @@ export default new Vuex.Store({
   getters: {
     getVoteResult: (state) => (agendaId, account) => {
       const voters = state.votersOfAgenda.filter(voter => String(voter.id) === String(agendaId));
+      console.log(voters)
       return voters.filter(vote => vote.voter.toLowerCase() === account.toLowerCase());
     },
     getVotersOfAgenda: (state) => (agendaId) => {
@@ -840,10 +843,10 @@ export default new Vuex.Store({
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
-
+      if (agendaId === '44') console.log(onChainEffects[0].target)
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
       if (!abi || abi.length === 0) {
-        console.log('bug', 'no abi'); // eslint-disable-line
+        console.log('bug', 'no abi for agenda Title', agendaId); // eslint-disable-line
         return '';
       }
 
@@ -911,7 +914,7 @@ This function lets you set the distribution ratio of the 3.92 TON among PowerTON
       }
       const abi = getContractABIFromAddress(onChainEffects[0].target, type);
       if (!abi || abi.length === 0) {
-        console.log('bug', 'no abi'); // eslint-disable-line
+        console.log('bug no abi in agendaInputs', agendaId); // eslint-disable-line
         return '';
       }
 

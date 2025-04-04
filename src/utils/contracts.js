@@ -22,9 +22,6 @@ import committee from '../contracts/DAOCommittee.json';
 import depositManager from '../contracts/DepositManager.json';
 import ton from '../contracts/TON.json';
 import wton from '../contracts/WTON.json';
-import powerTON from '../contracts/PowerTON.json';
-import powerTONProxy from '../contracts/PowerTONProxy.json';
-import powerTONLogic from '../contracts/PowerTONLogic.json';
 import seigManager from '../contracts/SeigManager.json';
 import daoVault from '../contracts/DAOVault.json';
 import layer2Registry from '../contracts/Layer2Registry.json';
@@ -43,8 +40,6 @@ import {
   depositManagerFunctionsOfTypeA,
   depositManagerFunctionsOfTypeB,
   layer2RegistryFunctionsOfTypeB,
-  powerTonLogicFunctionsOfTypeB,
-  powerTonProxyFunctionsOfTypeB,
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
   tonFunctionsOfTypeB,
@@ -55,33 +50,28 @@ import {
 
 import { wtonFunctionsOfTypeB } from './contractFunctions/wtonFunctions';
 
-// 배포된 계약 주소들
 const deployed = {
-  'TON': '0x2be5e8c109e2197D077D13A82dAead6a9b3433C5',
-  'WTON': '0xc4A11aaf6ea915Ed7Ac194161d2fC9384F15bff2',
-  'Layer2Registry': '0x7846c2248a7b4de77e9c2bae7fbb93bfc286837b',
-  'DepositManager': '0x0b58ca72b12f01fc05f8f252e226f3e2089bd00e',
-  'CoinageFactory': '0x5b40841eeCfB429452AB25216Afc1e1650C07747',
-  'SeigManager': '0x0b55a0f463b6defb81c6063973763951712d0e5f',
-  'PowerTON': '0xd86d8950A4144D8a258930F6DD5f90CCE249E1CF',
-  'PowerTONProxy': '0x970298189050abd4dc4f119ccae14ee145ad9371',
-  'DAOVault': '0x2520CD65BAa2cEEe9E6Ad6EBD3F45490C42dd303',
-  'DAOAgendaManager': '0xcD4421d082752f363E1687544a09d5112cD4f484',
-  'CandidateFactory': '0x9FC7100a16407eE24a79C834A56E6ECA555A5D7c',
-  'DAOCommittee': '0xd1A3fDDCCD09ceBcFCc7845dDba666B7B8e6D1fb',
-  'DAOCommitteeProxy': '0xDD9f0cCc044B0781289Ee318e5971b0139602C26',
-  'OldSeigManager': '0x710936500aC59e8551331871Cbad3D33d5e0D909',
-  'OldDepositManager': '0x56E465f654393fa48f007Ed7346105c7195CEe43',
-  'L1BridgeRegistry': '0x17Fa32DFf4c26cf0AC65Ff6700B57a4826513Fa0',
-  'Layer2Manager': '0xC534047FFD60c151E818C4Ac5A51fFbC234A3F77',
+  'TON': '0xa30fe40285b8f5c0457dbc3b7c8a280373c40044',
+  'WTON': '0x79e0d92670106c85e9067b56b8f674340dca0bbd',
+  'Layer2Registry': '0xA0a9576b437E52114aDA8b0BC4149F2F5c604581',
+  'DepositManager': '0x90ffcc7F168DceDBEF1Cb6c6eB00cA73F922956F',
+  'CoinageFactory': '0x93258413Ef2998572AB4B269b5DCb963dD35D440',
+  'SeigManager': '0x2320542ae933FbAdf8f5B97cA348c7CeDA90fAd7',
+  'PowerTON': '0x68808D5379763fA07FDb53c707100e1930900F5c',
+  'PowerTONProxy': '0xbe16830EeD019227892938Ae13C54Ec218772f48',
+  'DAOVault': '0xB9F6c9E75418D7E5a536ADe08f0218196BB3eBa4',
+  'DAOAgendaManager': '0x1444f7a8bC26a3c9001a13271D56d6fF36B44f08',
+  'CandidateFactory': '0x04e3C2B720FB8896A7f9Ea59DdcA85fD45189C7f',
+  'DAOCommittee': '0x79cfbEaCB5470bBe3B8Fe76db2A61Fc59e588C38',
+  'DAOCommitteeProxy': '0xA2101482b28E3D99ff6ced517bA41EFf4971a386',
+  'L1BridgeRegistry': '0x3268e4D8276c58A806E83B3B080Cf29514A837cf',
+  'Layer2Manager': '0xab303E7CBFd19C998268e19d830770e215AbDF7F',
 };
 
-// 계약 인스턴스를 반환하는 함수
 export function getContract(want, web3, address) {
   if (!web3) {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/27113ffbad864e8ba47c7d993a738a10'));
+    web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
   }
-
   const Coinage = new web3.eth.Contract(autoRefactorCoinage.abi, address);
   const Candidate = new web3.eth.Contract(candidate.abi, address);
   const Layer2 = new web3.eth.Contract(layer2.abi, address);
@@ -91,8 +81,6 @@ export function getContract(want, web3, address) {
   const DepositManager = new web3.eth.Contract(depositManager.abi, deployed.DepositManager);
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
-  const PowerTON = new web3.eth.Contract(powerTON.abi, deployed.PowerTON);
-  const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
   const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
@@ -108,8 +96,6 @@ export function getContract(want, web3, address) {
     DepositManager,
     TON,
     WTON,
-    PowerTON,
-    PowerTONProxy,
     SeigManager,
     Coinage,
     Layer2Registry,
@@ -125,9 +111,6 @@ export function getContract(want, web3, address) {
   }
 }
 
-// Export 관련 함수들
-
-// getContractABI 관련 변수들
 const depositManagerABIOfTypeA = [];
 const seigManagerABIOfTypeA = [];
 const daoCommitteeProxyABIOfTypeA = [];
@@ -150,7 +133,6 @@ const layer2ManagerABIOfTypeB = [];
 (() => {
   const set = (functions, abis, abi) => {
     if (!functions || !Array.isArray(functions)) {
-      // functions가 undefined이거나 배열이 아니라면 아무 작업도 하지 않습니다.
       return;
     }
     functions.forEach((func) => {
@@ -181,8 +163,6 @@ const layer2ManagerABIOfTypeB = [];
   set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxyABIOfTypeB, committeeProxy.abi);
   set(daoCommitteeFunctionsOfTypeB, daoCommitteeABIOfTypeB, committee.abi);
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
-  set(powerTonProxyFunctionsOfTypeB, powerTonProxyABIOfTypeB, powerTONProxy.abi);
-  set(powerTonLogicFunctionsOfTypeB, powerTonLogicABIOfTypeB, powerTONLogic.abi);
   set(l1BridgeRegistryFunctionsOfTypeB, l1BridgeRegistryABIOfTypeB, l1BridgeRegistry.abi);
   set(layer2ManagerFunctionsOfTypeB, layer2ManagerABIOfTypeB, layer2Manager.abi);
 })();
@@ -218,6 +198,7 @@ export function getContractABIFromAddress(address, type) {
   if (!address) return [];
   address = address.toLowerCase();
   if (type === 'A') {
+    // console.log(address, deployed.DepositManager, deployed.DepositManager.toLowerCase());
     if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
@@ -230,9 +211,9 @@ export function getContractABIFromAddress(address, type) {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
     else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
     else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
-    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    // else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeB;
-    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    // else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
     else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
@@ -335,7 +316,7 @@ const decodeParameters = function(typesArray, hexString) {
 };
 export { decodeParameters };
 
-export function getABIFromSelector(selector, type) {
+export function getABIFromSelector(selector, type, agendaId) {
   let abi;
   if (type === 'A') {
     abi = depositManagerABIOfTypeA.find(abi => abi.selector === selector);
@@ -374,14 +355,14 @@ export function getABIFromSelector(selector, type) {
     abi = layer2ManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
     if (!abi) {
-      console.log('bug');
+      console.log('bug, cannot find abi', agendaId);
     }
   } else {
     console.log('bug', 'no type');
   }
 }
 
-export function parseAgendaBytecode(tx, type) {
+export function parseAgendaBytecode(tx, type, agendaId) {
   try {
     const params1 = marshalString(unmarshalString(tx.input).substring(8));
     const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
@@ -390,14 +371,15 @@ export function parseAgendaBytecode(tx, type) {
     const targets = decodedParams2[0];
     const commands = decodedParams2[4];
     if (targets.length !== commands.length) {
-      console.log('bug');
+      console.log('bug', agendaId);
     }
     const onChainEffects = [];
     for (let i = 0; i < targets.length; i++) {
       const selector = commands[i].slice(0, 10);
-      let abi = getABIFromSelector(selector, type);
+      // if (agendaId === 44) console.log(selector, daoCommitteeProxyABIOfTypeB);
+      let abi = getABIFromSelector(selector, type, agendaId);
       if (!abi) {
-        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A', agendaId);
       }
       if (!abi) {
         onChainEffects.push({
@@ -406,7 +388,7 @@ export function parseAgendaBytecode(tx, type) {
           types: [],
           bytecode: '',
         });
-        console.log('bug', 'no abi');
+        console.log('bug', 'no abi for onchain effect', agendaId, selector);
         continue;
       }
       const target = targets[i];
@@ -488,13 +470,13 @@ export async function minimumAmountOfOperator(_web3) {
   return amount;
 }
 
-export function getABIFromSelectorWrapper(selector, type) {
-  return getABIFromSelector(selector, type);
-}
+// export function getABIFromSelectorWrapper(selector, type) {
+//   return getABIFromSelector(selector, type);
+// }
 
-export function parseAgendaBytecodeWrapper(tx, type) {
-  return parseAgendaBytecode(tx, type);
-}
+// export function parseAgendaBytecodeWrapper(tx, type) {
+//   return parseAgendaBytecode(tx, type);
+// }
 
 export function metamaskErrorMessageWrapper(errorString) {
   return metamaskErrorMessage(errorString);
