@@ -276,7 +276,6 @@ export default {
         'DAO Committee\nProxy Contract',
         'DAO Committee\nContract',
         'DAO Vault\nContract',
-        'PowerTON Proxy\nContract',
       ],
 
       currentContract: '',
