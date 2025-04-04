@@ -123,6 +123,7 @@ export default {
       }
 
       const found = this.voteResult.find(result => result.id === this.agenda.agendaid);
+
       if (found) {
         if (!found.result[0]) {
           return 'You have not voted';
@@ -165,6 +166,7 @@ export default {
       if (!agenda) {
         return '';
       }
+      // console.log(agenda)
 
       if (agendaStatus(agenda.status) === 'NOTICE' && this.blockTime >= agenda.tNoticeEndTime) {
         return this.isMember ? 'VOTE' : '';

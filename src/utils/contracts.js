@@ -22,9 +22,6 @@ import committee from '../contracts/DAOCommittee.json';
 import depositManager from '../contracts/DepositManager.json';
 import ton from '../contracts/TON.json';
 import wton from '../contracts/WTON.json';
-import powerTON from '../contracts/PowerTON.json';
-import powerTONProxy from '../contracts/PowerTONProxy.json';
-import powerTONLogic from '../contracts/PowerTONLogic.json';
 import seigManager from '../contracts/SeigManager.json';
 import daoVault from '../contracts/DAOVault.json';
 import layer2Registry from '../contracts/Layer2Registry.json';
@@ -43,8 +40,6 @@ import {
   depositManagerFunctionsOfTypeA,
   depositManagerFunctionsOfTypeB,
   layer2RegistryFunctionsOfTypeB,
-  powerTonLogicFunctionsOfTypeB,
-  powerTonProxyFunctionsOfTypeB,
   seigManagerFunctionsOfTypeA,
   seigManagerFunctionsOfTypeB,
   tonFunctionsOfTypeB,
@@ -86,8 +81,6 @@ export function getContract(want, web3, address) {
   const DepositManager = new web3.eth.Contract(depositManager.abi, deployed.DepositManager);
   const TON = new web3.eth.Contract(ton.abi, deployed.TON);
   const WTON = new web3.eth.Contract(wton.abi, deployed.WTON);
-  const PowerTON = new web3.eth.Contract(powerTON.abi, deployed.PowerTON);
-  const PowerTONProxy = new web3.eth.Contract(powerTONProxy.abi, deployed.PowerTONProxy);
   const SeigManager = new web3.eth.Contract(seigManager.abi, deployed.SeigManager);
   const Layer2Registry = new web3.eth.Contract(layer2Registry.abi, deployed.Layer2Registry);
   const Tot = new web3.eth.Contract(refactorCoinageSnapshot, address);
@@ -103,8 +96,6 @@ export function getContract(want, web3, address) {
     DepositManager,
     TON,
     WTON,
-    PowerTON,
-    PowerTONProxy,
     SeigManager,
     Coinage,
     Layer2Registry,
@@ -172,8 +163,6 @@ const layer2ManagerABIOfTypeB = [];
   set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxyABIOfTypeB, committeeProxy.abi);
   set(daoCommitteeFunctionsOfTypeB, daoCommitteeABIOfTypeB, committee.abi);
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
-  set(powerTonProxyFunctionsOfTypeB, powerTonProxyABIOfTypeB, powerTONProxy.abi);
-  set(powerTonLogicFunctionsOfTypeB, powerTonLogicABIOfTypeB, powerTONLogic.abi);
   set(l1BridgeRegistryFunctionsOfTypeB, l1BridgeRegistryABIOfTypeB, l1BridgeRegistry.abi);
   set(layer2ManagerFunctionsOfTypeB, layer2ManagerABIOfTypeB, layer2Manager.abi);
 })();
@@ -327,7 +316,7 @@ const decodeParameters = function(typesArray, hexString) {
 };
 export { decodeParameters };
 
-export function getABIFromSelector(selector, type) {
+export function getABIFromSelector(selector, type, agendaId) {
   let abi;
   if (type === 'A') {
     abi = depositManagerABIOfTypeA.find(abi => abi.selector === selector);
@@ -366,14 +355,14 @@ export function getABIFromSelector(selector, type) {
     abi = layer2ManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
     if (!abi) {
-      console.log('bug');
+      console.log('bug, cannot find abi', agendaId);
     }
   } else {
     console.log('bug', 'no type');
   }
 }
 
-export function parseAgendaBytecode(tx, type) {
+export function parseAgendaBytecode(tx, type, agendaId) {
   try {
     const params1 = marshalString(unmarshalString(tx.input).substring(8));
     const decodedParams1 = decodeParameters(['address', 'uint256', 'bytes'], params1);
@@ -382,14 +371,15 @@ export function parseAgendaBytecode(tx, type) {
     const targets = decodedParams2[0];
     const commands = decodedParams2[4];
     if (targets.length !== commands.length) {
-      console.log('bug');
+      console.log('bug', agendaId);
     }
     const onChainEffects = [];
     for (let i = 0; i < targets.length; i++) {
       const selector = commands[i].slice(0, 10);
-      let abi = getABIFromSelector(selector, type);
+      // if (agendaId === 44) console.log(selector, daoCommitteeProxyABIOfTypeB);
+      let abi = getABIFromSelector(selector, type, agendaId);
       if (!abi) {
-        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A');
+        abi = getABIFromSelector(selector, type === 'A' ? 'B' : 'A', agendaId);
       }
       if (!abi) {
         onChainEffects.push({
@@ -398,7 +388,7 @@ export function parseAgendaBytecode(tx, type) {
           types: [],
           bytecode: '',
         });
-        console.log('bug', 'no abi');
+        console.log('bug', 'no abi for onchain effect', agendaId, selector);
         continue;
       }
       const target = targets[i];
@@ -480,13 +470,13 @@ export async function minimumAmountOfOperator(_web3) {
   return amount;
 }
 
-export function getABIFromSelectorWrapper(selector, type) {
-  return getABIFromSelector(selector, type);
-}
+// export function getABIFromSelectorWrapper(selector, type) {
+//   return getABIFromSelector(selector, type);
+// }
 
-export function parseAgendaBytecodeWrapper(tx, type) {
-  return parseAgendaBytecode(tx, type);
-}
+// export function parseAgendaBytecodeWrapper(tx, type) {
+//   return parseAgendaBytecode(tx, type);
+// }
 
 export function metamaskErrorMessageWrapper(errorString) {
   return metamaskErrorMessage(errorString);
