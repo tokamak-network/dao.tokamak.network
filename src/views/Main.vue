@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { fromRay2, truncate, hexSlicer, date4 } from '@/utils/helpers';
+import { fromRay2, truncate, hexSlicer, date4, fromNow } from '@/utils/helpers';
 import { getRecentEvents, getCandidates } from '@/api';
 import { mapState, mapGetters } from 'vuex';
 export default {
@@ -121,6 +121,9 @@ export default {
     this.loading();
   },
   methods: {
+    fromNow (n) {
+      return fromNow(n);
+    },
     loading () {
       let cnt = 1;
       const nameLoading = '-';

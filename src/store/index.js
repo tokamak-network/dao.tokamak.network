@@ -305,7 +305,7 @@ export default new Vuex.Store({
       // console.log(candidatesFromAPI);
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const candidates = await Promise.all(
         candi?.map(async candidate => {
@@ -379,7 +379,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -405,7 +405,7 @@ export default new Vuex.Store({
       let web3 = state.web3;
 
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
 
@@ -445,7 +445,7 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
+          // if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
       }
@@ -467,7 +467,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
 
       votes.forEach(async function (vote) {
