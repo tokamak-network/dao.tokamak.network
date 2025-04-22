@@ -153,30 +153,30 @@ export const l1BridgeRegistryFunctionsOfTypeB = [
     'disabled': false,
     'explanation': 'This function allows you to set the seigniorage committee address(Param0).',
   },
-  {
-    'params': {
-      'aboutParam0': 'address rollupConfig: The rollup config contract address',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-    },
-    'name': 'rejectCandidateAddOn',
-    'title': '(L1 Bridge Registry)Stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig.',
-    'prettyName': '',
-    'disabled': false,
-    'explanation': 'This function allows you to stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig.',
-  },
-  {
-    'params': {
-      'aboutParam0': 'address rollupConfig: The rollup config contract address',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': 'bool rejectedL2Deposit: if it is true, allow the withdrawDepositL2 function.',
-      'exampleParam1': '0x0000000000000000000000000000000000000000',
-    },
-    'name': 'restoreCandidateAddOn',
-    'title': '(L1 Bridge Registry)Restore cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
-    'prettyName': '',
-    'disabled': false,
-    'explanation': 'This function allows you to restore cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
-  },
+  // {
+  //   'params': {
+  //     'aboutParam0': 'address rollupConfig: The rollup config contract address',
+  //     'exampleParam0': '0x0000000000000000000000000000000000000000',
+  //   },
+  //   'name': 'rejectCandidateAddOn',
+  //   'title': '(L1 Bridge Registry)Stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+  //   'prettyName': '',
+  //   'disabled': false,
+  //   'explanation': 'This function allows you to stop issuing seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+  // },
+  // {
+  //   'params': {
+  //     'aboutParam0': 'address rollupConfig: The rollup config contract address',
+  //     'exampleParam0': '0x0000000000000000000000000000000000000000',
+  //     'aboutParam1': 'bool rejectedL2Deposit: if it is true, allow the withdrawDepositL2 function.',
+  //     'exampleParam1': '0x0000000000000000000000000000000000000000',
+  //   },
+  //   'name': 'restoreCandidateAddOn',
+  //   'title': '(L1 Bridge Registry)Restore cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+  //   'prettyName': '',
+  //   'disabled': false,
+  //   'explanation': 'This function allows you to restore cancel stopping seigniorage to the layer 2 sequencer of a specific rollupConfig.',
+  // },
   {
     'params': {
       'aboutParam0': 'address rollupConfig: the rollupConfig address',
