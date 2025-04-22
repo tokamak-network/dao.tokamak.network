@@ -385,7 +385,6 @@ export default new Vuex.Store({
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
 
       const agendas = state.agendas;
-
       agendas.forEach(async function (agenda) {
         if (agenda.voters.length !== 0) {
           for (const voter of agenda.voters) {
@@ -471,11 +470,11 @@ export default new Vuex.Store({
       }
 
       votes.forEach(async function (vote) {
-        // const block = await web3.eth.getBlock(vote.blockNumber);
+        const block = await web3.eth.getBlock(vote.blockNumber);
         votingDetails.push({
           agendaid: vote.agendaid,
-          // timestamp: block.timestamp,
-          timestamp: 0,
+          timestamp: block.timestamp,
+          // timestamp: 0,
           chainId: vote.chainId,
           comment: vote.comment,
           hasVoted: vote.hasVoted,
