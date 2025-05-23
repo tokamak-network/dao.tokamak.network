@@ -98,6 +98,7 @@ export default new Vuex.Store({
       state.nonmembers = nonmembers;
     },
     SET_AGENDAS (state, agendas) {
+      // console.log(agendas)
       state.agendas = agendas;
     },
     SET_AGENDAS_CAN_VOTE (state, agendasCanVote) {
@@ -445,7 +446,7 @@ export default new Vuex.Store({
           agendas[i].contents = agendaContents[i].contents;
           agendas[i].creator = agendaContents[i].creator;
           agendas[i].type = agendaContents[i].type ? agendaContents[i].type : 'B';
-          if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
+          // if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
       }
@@ -843,8 +844,10 @@ export default new Vuex.Store({
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
-      if (agendaId === '44') console.log(onChainEffects[0].target)
+      // if (agendaId === 67) console.log(agendaId,onChainEffects[0].target, getters.agendaType(agendaId), getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId)))
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
+      
+      
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi for agenda Title', agendaId); // eslint-disable-line
         return '';

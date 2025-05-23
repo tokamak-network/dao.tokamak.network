@@ -202,14 +202,14 @@ export function getContractABIFromAddress(address, type) {
   if (!address) return [];
   address = address.toLowerCase();
   if (type === 'A') {
-    // console.log(address, deployed.DepositManager, deployed.DepositManager.toLowerCase());
+    // console.log(agendaId, address, deployed.L1BridgeRegistry.toLowerCase(), address === deployed.L1BridgeRegistry.toLowerCase());
     if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
-    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
-    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeA;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else return [];
   } else if (type === 'B') {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
@@ -363,10 +363,10 @@ export function getABIFromSelector(selector, type, agendaId) {
     abi = layer2ManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
     if (!abi) {
-      console.log('bug, cannot find abi', agendaId);
+      // console.log('bug, cannot find abi', agendaId);
     }
   } else {
-    console.log('bug', 'no type');
+    console.log('bug', 'no type', agendaId);
   }
 }
 
@@ -379,7 +379,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
     const targets = decodedParams2[0];
     const commands = decodedParams2[4];
     if (targets.length !== commands.length) {
-      console.log('bug', agendaId);
+      // console.log('bug', agendaId);
     }
     const onChainEffects = [];
     for (let i = 0; i < targets.length; i++) {
@@ -396,7 +396,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
           types: [],
           bytecode: '',
         });
-        console.log('bug', 'no abi for onchain effect', agendaId, selector);
+        // console.log('bug', 'no abi for onchain effect', agendaId, selector);
         continue;
       }
       const target = targets[i];
@@ -409,7 +409,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
     }
     return onChainEffects;
   } catch (e) {
-    console.log(e);
+    console.log(agendaId, e);
   }
 }
 
