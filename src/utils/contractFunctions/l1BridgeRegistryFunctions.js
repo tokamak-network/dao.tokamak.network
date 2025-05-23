@@ -57,34 +57,7 @@ export const l1BridgeRegistryFunctionsOfTypeA = [
     'disabled': false,
     'explanation': 'Simple Staking V2 designed an economy that issues TON seigniorage to CandidateAddOn\'s OperatorManager. The layer 2 operator(OperatorManager.manager() , Set to RollupConfig\'s unsafeBlockSigner() when registering) can claim the seigniorage stored in the OperatorManager contract. Just in case, we must have a function to stop issuing TON seigniorage to OperatorManager. A SeigniorageCommittee account was created in the L1BridgeRegistry contract. The SeigniorageCommittee can perform the function of suspending issuance of seigniorage or canceling suspension of issuance for a sequencer in a specific CandidateAddOn.',
   },
-  {
-    'params': {
-      'aboutParam0': 'Address of registrant to register',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-    },
-    'name': 'addRegistrant',
-    'title': '(L1 Bridge Registry) Add a registrant',
-    'prettyName': '',
-    'disabled': false,
-    'explanation': 'An account with registrant permission in the L1BridgeRegistry contract can register RollupConfig, which holds unique information about Layer2. Registering RollupConfig means ensuring that there are no issues in Layer2. Only the registered RollupConfig can be registered as CandidateAddOn. Only after being registered as CandidateAddOn can the sequencer(seigniorageReceiver) receive seigniorage.',
-  },
-  {
-    'params': {
-      'aboutParam0': 'the rollupConfig address',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-      'aboutParam1': '1: optimism rollup legacy version, 2: Thanos in Tokamak Rollup Hub',
-      'exampleParam1': '2',
-      'aboutParam2': 'TON address in Layer2',
-      'exampleParam2': '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
-      'aboutParam3': 'Name of Layer2',
-      'exampleParam3': 'Tokamak Layer2 ',
-    },
-    'name': 'registerRollupConfigByManager',
-    'title': '(L1 Bridge Registry) Registers a specific rollupConfig by the manager. ',
-    'prettyName': '',
-    'disabled': false,
-    'explanation': 'Only the registered RollupConfig can be registered as CandidateAddOn. Only after being registered as CandidateAddOn can the sequencer(seigniorageReceiver) receive seigniorage.',
-  },
+ 
   // {
   //   'params': {
   //     'aboutParam0': 'the rollupConfig address',
@@ -221,18 +194,18 @@ If the first Param1 value is true, the L1 Bridge Registry stops, and if it is fa
 `This function sets the new address of the L1 Bridge Registry contract to be upgraded. Enter the L1 Bridge Registry contract address to be upgraded in the first parameter (Param1).
 It will be used when the L1 Bridge Registry is upgraded.`,
   },
-  {
-    'params': {
-      'aboutParam0': 'address account: New registrant address',
-      'exampleParam0': '0x0000000000000000000000000000000000000000',
-    },
-    'name': 'addRegistrant',
-    'title': '(L1 Bridge Registry)Add an account with registration privileges.',
-    'prettyName': '',
-    'disabled': false,
-    'explanation':
-'The feature adds a new account with permission to register rollupConfig contracts to the L1 Bridge Registry contract.',
-  },
+//   {
+//     'params': {
+//       'aboutParam0': 'address account: New registrant address',
+//       'exampleParam0': '0x0000000000000000000000000000000000000000',
+//     },
+//     'name': 'addRegistrant',
+//     'title': '(L1 Bridge Registry)Add an account with registration privileges.',
+//     'prettyName': '',
+//     'disabled': false,
+//     'explanation':
+// 'The feature adds a new account with permission to register rollupConfig contracts to the L1 Bridge Registry contract.',
+//   },
   {
     'params': {
       'aboutParam0': 'address account: New manager address',
