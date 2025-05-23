@@ -409,10 +409,11 @@ export default new Vuex.Store({
         web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
+      const agendaManager = getContract('DAOAgendaManager', web3);
 
       const account = state.account;
       const agendas = await getAgendas();
-
+      
       let activityReward ;
       if (account !== '') {
         activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
@@ -441,6 +442,8 @@ export default new Vuex.Store({
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
       // console.log(agendaTxs);
+
+      // console.log(agendas[3])
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
@@ -449,7 +452,30 @@ export default new Vuex.Store({
           // if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
+        if (agendas[i].agendaid > 66) {
+          const callAgenda = await agendaManager.methods.agendas(agendas[i].agendaid).call();
+          const agendaStatus = await agendaManager.methods.getAgendaStatus(agendas[i].agendaid).call();
+          const agendaResult = await agendaManager.methods.getAgendaResult(agendas[i].agendaid).call();
+          // console.log(agendaStatus, agendaResult)
+          agendas[i].countAbstainVotes = callAgenda.countingAbstain;
+          agendas[i].countNoVotes = callAgenda.countingNo;
+          agendas[i].countYesVotes = callAgenda.countingYes;
+          agendas[i].executed = agendaResult.executed;
+          agendas[i].result = Number(agendaResult.result);
+          agendas[i].status = Number(agendaStatus);
+          agendas[i].tVotingEndTime = Number(callAgenda.votingEndTimestamp);
+          agendas[i].tExecTime = Number(callAgenda.executedTimestamp);
+          agendas[i].tExecutableLimitTimestamp = Number(callAgenda.executableLimitTimestamp);
+          agendas[i].tNoticeEndTime = Number(callAgenda.noticeEndTimestamp);
+          agendas[i].tVotingStartTime = Number(callAgenda.votingPeriodInSeconds);
+          agendas[i].countAbstainVotes = callAgenda.countingAbstain;
+        }
+
       }
+      // const sample = await agendaManager.methods.agendas(67).call()
+      // console.log(sample, sample.votingEndTimestamp)
+      // console.log(agendas[3])
+      
 
       const uniqueArr = agendas.filter((agenda, idx) => {
         return (

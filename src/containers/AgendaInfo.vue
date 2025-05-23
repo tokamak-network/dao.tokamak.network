@@ -39,9 +39,11 @@ export default {
       'agendaContents',
     ]),
     checkStatusCode () {
+      console.log(this.statusCode[this.getAgendaByID(this.agendaId).status], this.getAgendaByID(this.agendaId).status)
       return this.statusCode[this.getAgendaByID(this.agendaId).status];
     },
     checkResultCode () {
+      console.log(this.resultCode[this.getAgendaByID(this.agendaId).result], this.getAgendaByID(this.agendaId).result)
       return this.resultCode[this.getAgendaByID(this.agendaId).result];
     },
     checkVotingTime () {

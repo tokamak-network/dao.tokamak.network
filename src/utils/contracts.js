@@ -65,7 +65,7 @@ const deployed = {
   'CandidateFactory': '0x04e3C2B720FB8896A7f9Ea59DdcA85fD45189C7f',
   'DAOCommittee': '0x79cfbEaCB5470bBe3B8Fe76db2A61Fc59e588C38',
   'DAOCommitteeProxy': '0xA2101482b28E3D99ff6ced517bA41EFf4971a386',
-  'L1BridgeRegistry': '0x3268e4D8276c58A806E83B3B080Cf29514A837cf',
+  'L1BridgeRegistry': '0x2D47fa57101203855b336e9E61BC9da0A6dd0Dbc',
   'Layer2Manager': '0xab303E7CBFd19C998268e19d830770e215AbDF7F',
 };
 

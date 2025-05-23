@@ -104,6 +104,7 @@ export default {
     const [ candidates, events ] = await Promise.all([
       getCandidates(), getRecentEvents(),
     ]);
+    console.log(events)
     const filteredEvents = events.filter(event => {
       const eventName = event.eventName;
       if (eventName === 'Deposited' ||

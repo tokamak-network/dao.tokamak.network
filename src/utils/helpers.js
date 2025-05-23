@@ -123,7 +123,7 @@ export function agendaStatus (status) {
   case 5:
     return 'ENDED';
   default:
-    console.log('bug', 'no agenda status'); // eslint-disable-line
+    console.log('bug', 'no agenda status', status); // eslint-disable-line
     return '';
   }
 }
