@@ -266,6 +266,7 @@ export default {
         'Seig Manager\nContract',
         'DAO Committee\nProxy Contract',
         'DAO Vault\nContract',
+        'L1 Bridge Registry\nContract',
       ],
       contractsOfTypeB: [
         'TON\nContract',
@@ -276,6 +277,8 @@ export default {
         'DAO Committee\nProxy Contract',
         'DAO Committee\nContract',
         'DAO Vault\nContract',
+        'L1 Bridge Registry\nContract',
+        'PowerTON Proxy\nContract',
       ],
 
       currentContract: '',
@@ -287,6 +290,7 @@ export default {
       seigManagerFunctionsOfTypeA: [],
       daoCommitteeProxyFunctionsOfTypeA: [],
       daoVaultFunctionsOfTypeA: [],
+      l1BridgeRegistryFunctionsOfTypeA: [],
 
       tonFunctionsOfTypeB: [],
       wtonFunctionsOfTypeB: [],
@@ -296,6 +300,7 @@ export default {
       daoCommitteeProxyFunctionsOfTypeB: [],
       daoCommitteeFunctionsOfTypeB: [],
       daoVaultFunctionsOfTypeB: [],
+      l1BridgeRegistryFunctionsOfTypeB: [],
       powerTonProxyFunctionsOfTypeB: [],
 
       setSeigRatesParams: [
@@ -342,6 +347,7 @@ export default {
     this.seigManagerFunctionsOfTypeA = getContractABI('SeigManager', 'A');
     this.daoCommitteeProxyFunctionsOfTypeA = getContractABI('DAOCommitteeProxy', 'A');
     this.daoVaultFunctionsOfTypeA = getContractABI('DAOVault', 'A');
+    this.l1BridgeRegistryFunctionsOfTypeA = getContractABI('L1BridgeRegistry', 'A');
     this.tonFunctionsOfTypeB = getContractABI('TON', 'B');
     this.wtonFunctionsOfTypeB = getContractABI('WTON', 'B');
     this.depositManagerFunctionsOfTypeB = getContractABI('DepositManager', 'B');
@@ -377,6 +383,7 @@ export default {
       else if (index === 1) return this.seigManagerFunctionsOfTypeA.length;
       else if (index === 2) return this.daoCommitteeProxyFunctionsOfTypeA.length;
       else if (index === 3) return this.daoVaultFunctionsOfTypeA.length;
+      else if (index === 4) return this.l1BridgeRegistryFunctionsOfTypeA.length;
       else return 0;
     },
     numFunctionsOfTypeB(index) {
@@ -407,6 +414,7 @@ export default {
         else if (index === 1) this.currentContract = 'SeigManager';
         else if (index === 2) this.currentContract = 'DAOCommitteeProxy';
         else if (index === 3) this.currentContract = 'DAOVault';
+        else if (index === 4) this.currentContract = 'L1BridgeRegistry';
         else console.log('bug', 'no type');
       } else if (type === 'B') {
         if (index === 0) this.currentContract = 'TON';
@@ -433,6 +441,8 @@ export default {
           case 'DAO Committee\nProxy Contract':
             return this.index === index ? daoCommitteeProxyActive : daoCommitteeProxyInactive;
           case 'DAO Vault\nContract':
+            return this.index === index ? daoVaultActive : daoVaultInactive;
+          case 'L1 Bridge\nRegistry Contract':
             return this.index === index ? daoVaultActive : daoVaultInactive;
           default:
             console.log('bug', 'no contract img for type A');
@@ -479,6 +489,7 @@ export default {
           return this.daoVaultFunctionsOfTypeA
             .filter(f => f.name !== 'claimTON')
             .filter(f => f.name !== 'claimWTON');
+        else if (index === 4) return this.l1BridgeRegistryFunctionsOfTypeA;
         else {
           console.log('bug', 'no type A functions');
           return [];
