@@ -432,7 +432,6 @@ export default {
       }
     },
     getImg(index, contract, type) {
-      console.log(index, contract, this.index)
       if (type === 'A') {
         switch (contract) {
           case 'Deposit Manager\nContract':
