@@ -22,6 +22,7 @@
 
 <script>
 import { getContract } from '@/utils/contracts';
+import { withComma } from '@/utils/helpers';
 import { mapState, mapGetters } from 'vuex';
 
 import Button from '@/components/Button.vue';
@@ -41,10 +42,14 @@ export default {
     ...mapGetters([
       'candidateContractFromEOA',
     ]),
+    
   },
   methods: {
     close () {
       this.$emit('on-closed');
+    },
+    withComma(reward) {
+      return withComma(reward);
     },
     async claim () {
 

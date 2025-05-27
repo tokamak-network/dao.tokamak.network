@@ -18,6 +18,7 @@ import autoRefactorCoinage from '../contracts/AutoRefactorCoinage.json';
 import agendaManager from '../contracts/DAOAgendaManager.json';
 import candidate from '../contracts/Candidate.json';
 import committeeProxy from '../contracts/DAOCommitteeProxy.json';
+import committeeProxy2 from '../contracts/DAOCommitteeProxy2.json';
 import committee from '../contracts/DAOCommittee.json';
 import depositManager from '../contracts/DepositManager.json';
 import ton from '../contracts/TON.json';
@@ -125,6 +126,7 @@ const depositManagerABIOfTypeB = [];
 const seigManagerABIOfTypeB = [];
 const layer2RegistryABIOfTypeB = [];
 const daoCommitteeProxyABIOfTypeB = [];
+const daoCommitteeProxy2ABIOfTypeB = [];
 const daoCommitteeABIOfTypeB = [];
 const daoVaultABIOfTypeB = [];
 const powerTonProxyABIOfTypeB = [];
@@ -163,6 +165,7 @@ const layer2ManagerABIOfTypeB = [];
   set(seigManagerFunctionsOfTypeB, seigManagerABIOfTypeB, seigManager.abi);
   set(layer2RegistryFunctionsOfTypeB, layer2RegistryABIOfTypeB, layer2Registry.abi);
   set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxyABIOfTypeB, committeeProxy.abi);
+  set(daoCommitteeProxyFunctionsOfTypeB, daoCommitteeProxy2ABIOfTypeB, committeeProxy2.abi);
   set(daoCommitteeFunctionsOfTypeB, daoCommitteeABIOfTypeB, committee.abi);
   set(daoVaultFunctionsOfTypeB, daoVaultABIOfTypeB, daoVault.abi);
   set(l1BridgeRegistryFunctionsOfTypeB, l1BridgeRegistryABIOfTypeB, l1BridgeRegistry.abi);
@@ -186,6 +189,7 @@ export function getContractABI(want, type = 'A') {
     else if (want === 'SeigManager') return seigManagerABIOfTypeB;
     else if (want === 'Layer2Registry') return layer2RegistryABIOfTypeB;
     else if (want === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB;
+    else if (want === 'DAOCommitteeProxy2') return daoCommitteeProxy2ABIOfTypeB;
     else if (want === 'DAOCommittee') return daoCommitteeABIOfTypeB;
     else if (want === 'DAOVault') return daoVaultABIOfTypeB;
     else if (want === 'PowerTONProxy') return powerTonProxyABIOfTypeB;
@@ -200,24 +204,25 @@ export function getContractABIFromAddress(address, type) {
   if (!address) return [];
   address = address.toLowerCase();
   if (type === 'A') {
-    // console.log(address, deployed.DepositManager, deployed.DepositManager.toLowerCase());
+    // console.log(agendaId, address, deployed.L1BridgeRegistry.toLowerCase(), address === deployed.L1BridgeRegistry.toLowerCase());
     if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeA;
-    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeA;
-    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeA;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeA;
     else if (address === deployed.L1BridgeRegistry.toLowerCase()) return l1BridgeRegistryABIOfTypeA;
+    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeA;
+    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeA;
     else return [];
   } else if (type === 'B') {
     if (address === deployed.TON.toLowerCase()) return tonABIOfTypeB;
     else if (address === deployed.WTON.toLowerCase()) return wtonABIOfTypeB;
     else if (address === deployed.DepositManager.toLowerCase()) return depositManagerABIOfTypeB;
-    else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
+    // else if (address === deployed.OldDepositManager.toLowerCase()) return depositManagerABIOfTypeB;
     else if (address === deployed.SeigManager.toLowerCase()) return seigManagerABIOfTypeB;
-    else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
+    // else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
     else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
+    else if (address === deployed.DAOCommitteeProxy2.toLowerCase()) return daoCommitteeProxy2ABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
     else if (address === deployed.PowerTONProxy.toLowerCase()) return powerTonProxyABIOfTypeB;
@@ -253,6 +258,7 @@ export function getFunctionSelector(contract, want, type) {
     else if (contract === 'SeigManager') return seigManagerABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'Layer2Registry') return layer2RegistryABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB.find(f => f.name === want).selector;
+    else if (contract === 'DAOCommitteeProxy2') return daoCommitteeProxy2ABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOCommittee') return daoCommitteeABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOVault') return daoVaultABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'PowerTONProxy') return powerTonProxyABIOfTypeB.find(f => f.name === want).selector;
@@ -344,6 +350,8 @@ export function getABIFromSelector(selector, type, agendaId) {
     if (abi) return abi;
     abi = daoCommitteeProxyABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
+    abi = daoCommitteeProxy2ABIOfTypeB.find(abi => abi.selector === selector);
+    if (abi) return abi;
     abi = daoCommitteeABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
     abi = daoVaultABIOfTypeB.find(abi => abi.selector === selector);
@@ -357,10 +365,10 @@ export function getABIFromSelector(selector, type, agendaId) {
     abi = layer2ManagerABIOfTypeB.find(abi => abi.selector === selector);
     if (abi) return abi;
     if (!abi) {
-      console.log('bug, cannot find abi', agendaId);
+      // console.log('bug, cannot find abi', agendaId);
     }
   } else {
-    console.log('bug', 'no type');
+    console.log('bug', 'no type', agendaId);
   }
 }
 
@@ -373,7 +381,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
     const targets = decodedParams2[0];
     const commands = decodedParams2[4];
     if (targets.length !== commands.length) {
-      console.log('bug', agendaId);
+      // console.log('bug', agendaId);
     }
     const onChainEffects = [];
     for (let i = 0; i < targets.length; i++) {
@@ -390,7 +398,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
           types: [],
           bytecode: '',
         });
-        console.log('bug', 'no abi for onchain effect', agendaId, selector);
+        // console.log('bug', 'no abi for onchain effect', agendaId, selector);
         continue;
       }
       const target = targets[i];
@@ -403,7 +411,7 @@ export function parseAgendaBytecode(tx, type, agendaId) {
     }
     return onChainEffects;
   } catch (e) {
-    console.log(e);
+    console.log(agendaId, e);
   }
 }
 

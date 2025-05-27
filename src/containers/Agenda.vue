@@ -194,6 +194,7 @@ export default {
       return onChainEffects[0].target;
     },
     title () {
+      if (this.agendaId === 67) console.log(this.target);
       const abi = getContractABIFromAddress(this.target);
       if (!abi || abi.length === 0) return '';
       return abi[0].title;

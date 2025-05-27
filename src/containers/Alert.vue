@@ -11,7 +11,7 @@ export default {
     return {
       alert: '',
       chainId: '0x1', // production: '0x1', develop: '0xaa36a7'
-      decentChainId: '0xaa36a7',
+      decentChainId: '0x1',
     };
   },
   computed: {

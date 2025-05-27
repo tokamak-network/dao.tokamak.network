@@ -98,6 +98,7 @@ export default new Vuex.Store({
       state.nonmembers = nonmembers;
     },
     SET_AGENDAS (state, agendas) {
+      // console.log(agendas)
       state.agendas = agendas;
     },
     SET_AGENDAS_CAN_VOTE (state, agendasCanVote) {
@@ -317,7 +318,7 @@ export default new Vuex.Store({
             seigManager.methods.coinages(candidate.candidateContract).call(),
             seigManager.methods.lastCommitBlock(addr).call(),
           ]);
-
+          
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
             return false;
@@ -385,6 +386,7 @@ export default new Vuex.Store({
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
 
       const agendas = state.agendas;
+
       agendas.forEach(async function (agenda) {
         if (agenda.voters.length !== 0) {
           for (const voter of agenda.voters) {
@@ -407,10 +409,11 @@ export default new Vuex.Store({
         web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
+      const agendaManager = getContract('DAOAgendaManager', web3);
 
       const account = state.account;
       const agendas = await getAgendas();
-
+      
       let activityReward ;
       if (account !== '') {
         activityReward = await daoCommittee.methods.getClaimableActivityReward(account).call();
@@ -439,6 +442,8 @@ export default new Vuex.Store({
       const agendaTxs = await Promise.all(promAgendaTx);
       const agendaContents = await Promise.all(promAgendaContents);
       // console.log(agendaTxs);
+
+      // console.log(agendas[3])
       for (let i = 0; i < agendas.length; i++) {
         if (agendaContents[i] != null) {
           agendas[i].contents = agendaContents[i].contents;
@@ -447,7 +452,30 @@ export default new Vuex.Store({
           // if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
+        if (agendas[i].agendaid > 66) {
+          const callAgenda = await agendaManager.methods.agendas(agendas[i].agendaid).call();
+          const agendaStatus = await agendaManager.methods.getAgendaStatus(agendas[i].agendaid).call();
+          const agendaResult = await agendaManager.methods.getAgendaResult(agendas[i].agendaid).call();
+          // console.log(agendaStatus, agendaResult)
+          agendas[i].countAbstainVotes = callAgenda.countingAbstain;
+          agendas[i].countNoVotes = callAgenda.countingNo;
+          agendas[i].countYesVotes = callAgenda.countingYes;
+          agendas[i].executed = agendaResult.executed;
+          agendas[i].result = Number(agendaResult.result);
+          agendas[i].status = Number(agendaStatus);
+          agendas[i].tVotingEndTime = Number(callAgenda.votingEndTimestamp);
+          agendas[i].tExecTime = Number(callAgenda.executedTimestamp);
+          agendas[i].tExecutableLimitTimestamp = Number(callAgenda.executableLimitTimestamp);
+          agendas[i].tNoticeEndTime = Number(callAgenda.noticeEndTimestamp);
+          agendas[i].tVotingStartTime = Number(callAgenda.votingPeriodInSeconds);
+          agendas[i].countAbstainVotes = callAgenda.countingAbstain;
+        }
+
       }
+      // const sample = await agendaManager.methods.agendas(67).call()
+      // console.log(sample, sample.votingEndTimestamp)
+      // console.log(agendas[3])
+      
 
       const uniqueArr = agendas.filter((agenda, idx) => {
         return (
@@ -470,11 +498,11 @@ export default new Vuex.Store({
       }
 
       votes.forEach(async function (vote) {
-        const block = await web3.eth.getBlock(vote.blockNumber);
+        // const block = await web3.eth.getBlock(vote.blockNumber);
         votingDetails.push({
           agendaid: vote.agendaid,
-          timestamp: block.timestamp,
-          // timestamp: 0,
+          // timestamp: block.timestamp,
+          timestamp: 0,
           chainId: vote.chainId,
           comment: vote.comment,
           hasVoted: vote.hasVoted,
@@ -842,8 +870,10 @@ export default new Vuex.Store({
       if (!onChainEffects || onChainEffects.length === 0) {
         return '';
       }
-      if (agendaId === '44') console.log(onChainEffects[0].target)
+      // if (agendaId === 67) console.log(agendaId,onChainEffects[0].target, getters.agendaType(agendaId), getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId)))
       const abi = getContractABIFromAddress(onChainEffects[0].target, getters.agendaType(agendaId));
+      
+      
       if (!abi || abi.length === 0) {
         console.log('bug', 'no abi for agenda Title', agendaId); // eslint-disable-line
         return '';

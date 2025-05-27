@@ -14,7 +14,7 @@
 <script>
 import { mapState } from 'vuex';
 import Card from '@/components/Card.vue';
-// import { hexSlicer } from '@/utils/helpers';
+import { hexSlicer, withComma, WTON } from '@/utils/helpers';
 
 export default {
   components: {
@@ -31,6 +31,17 @@ export default {
       'myVotes',
       'account',
     ]),
+  },
+  methods: {
+    hexSlicer(address) {
+      return hexSlicer(address);
+    },
+    withComma(value) {
+      return withComma(value);
+    },
+    wton (amount) {
+      return !amount ? WTON(0) : WTON(amount);
+    },
   },
   watch: {
     '$route.params.address': {

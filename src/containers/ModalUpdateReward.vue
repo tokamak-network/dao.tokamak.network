@@ -30,7 +30,7 @@
 <script>
 // import { calculateExpectedSeig, setNetwork } from 'tokamak-staking-lib';
 import { toBN } from 'web3-utils';
-import { WTON, calcMaxSeigs, calcNewFactor, applyFactor, setFactor } from '@/utils/helpers';
+import { WTON, calcMaxSeigs, calcNewFactor, applyFactor, setFactor, withComma } from '@/utils/helpers';
 import { getContract } from '@/utils/contracts';
 import { mapState, mapGetters } from 'vuex';
 import { ethers } from 'ethers';
@@ -79,6 +79,9 @@ export default {
   methods: {
     close () {
       this.$emit('on-closed');
+    },
+    withComma(reward) {
+      return withComma(reward);
     },
     async calcExpectedSeig () {
       const RAY = ethers.BigNumber.from('1' + '0'.repeat(27));
