@@ -6,7 +6,7 @@
           <div v-if="sumOfVotes > 0 && voter.stakeOf!=0" class="table-content">
             <div>{{ hexSlicer(voter.user.id ) }}</div>
             <div>{{ calcPct(voter.stakeOf, sumOfVotes) }}% </div>
-            <div>({{ withComma(WTON(voter.stakeOf)) }} TON)</div>
+            <div>({{ withComma(wton(voter.stakeOf)) }} TON)</div>
           </div>
         </tr>
       </tbody>
@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { hexSlicer } from '@/utils/helpers';
+import { hexSlicer, withComma, WTON } from '@/utils/helpers';
 
 export default {
   name: 'TablePage',
@@ -28,10 +28,18 @@ export default {
     calcPct () {
       return (vote, totalVotes) => (Number(vote * 100 / totalVotes)).toFixed(2);
     },
+  },
+  methods: {
+    withComma(value) {
+      return withComma(value);
+    },
     hexSlicer (address) {
       return hexSlicer(address);
     },
-  },
+    wton (amount) {
+      return !amount ? WTON(0) : WTON(amount);
+    },
+  }
 };
 </script>
 
