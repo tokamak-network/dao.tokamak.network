@@ -266,7 +266,7 @@ export default {
         'Seig Manager\nContract',
         'DAO Committee\nProxy Contract',
         'DAO Vault\nContract',
-        'L1 Bridge Registry\nContract',
+        'Bridge Registry\nContract',
       ],
       contractsOfTypeB: [
         'TON\nContract',
@@ -277,7 +277,7 @@ export default {
         'DAO Committee\nProxy Contract',
         'DAO Committee\nContract',
         'DAO Vault\nContract',
-        'L1 Bridge Registry\nContract',
+        'Bridge Registry\nContract',
         'PowerTON Proxy\nContract',
       ],
 
@@ -432,6 +432,7 @@ export default {
       }
     },
     getImg(index, contract, type) {
+      console.log(index, contract, this.index)
       if (type === 'A') {
         switch (contract) {
           case 'Deposit Manager\nContract':
@@ -442,7 +443,7 @@ export default {
             return this.index === index ? daoCommitteeProxyActive : daoCommitteeProxyInactive;
           case 'DAO Vault\nContract':
             return this.index === index ? daoVaultActive : daoVaultInactive;
-          case 'L1 Bridge\nRegistry Contract':
+          case 'Bridge Registry\nContract':
             return this.index === index ? daoVaultActive : daoVaultInactive;
           default:
             console.log('bug', 'no contract img for type A');
@@ -468,6 +469,8 @@ export default {
             return this.indexOfTypeB === index ? daoVaultActiveTypeB : daoVaultInactiveTypeB;
           case 'PowerTON Proxy\nContract':
             return this.indexOfTypeB === index ? seigManagerActiveTypeB : seigManagerInactiveTypeB;
+          case 'Bridge Registry\nContract':
+            return this.index === index ? daoVaultActive : daoVaultInactive;
           default:
             console.log('bug', 'no contract img for type B');
             return '';
