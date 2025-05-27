@@ -452,7 +452,7 @@ export default new Vuex.Store({
           // if (i === 0) console.log(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
           agendas[i].onChainEffects = parseAgendaBytecode(agendaTxs[i], agendas[i].type, agendas[i].agendaid);
         }
-        if (agendas[i].agendaid > 66) {
+        if (agendas[i].agendaid > 13) {
           const callAgenda = await agendaManager.methods.agendas(agendas[i].agendaid).call();
           const agendaStatus = await agendaManager.methods.getAgendaStatus(agendas[i].agendaid).call();
           const agendaResult = await agendaManager.methods.getAgendaResult(agendas[i].agendaid).call();
