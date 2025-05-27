@@ -306,7 +306,7 @@ export default new Vuex.Store({
       // console.log(candidatesFromAPI);
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const candidates = await Promise.all(
         candi?.map(async candidate => {
@@ -318,7 +318,7 @@ export default new Vuex.Store({
             seigManager.methods.coinages(candidate.candidateContract).call(),
             seigManager.methods.lastCommitBlock(addr).call(),
           ]);
-
+          
           if (!isRegistered || !coinage) {
             console.log('bug', 'not registered candidate'); // eslint-disable-line
             return false;
@@ -380,7 +380,7 @@ export default new Vuex.Store({
     async setVotersOfAgenda ({ state, commit }) {
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const votersOfAgenda = [];
       const daoAgendaManager = getContract('DAOAgendaManager', web3);
@@ -406,7 +406,7 @@ export default new Vuex.Store({
       let web3 = state.web3;
 
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
       const daoCommittee = getContract('DAOCommittee', web3);
       const agendaManager = getContract('DAOAgendaManager', web3);
@@ -494,7 +494,7 @@ export default new Vuex.Store({
 
       let web3 = state.web3;
       if (!web3) {
-        web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
+        web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/fcda353fe57a4c70803274ed05d1f047'));
       }
 
       votes.forEach(async function (vote) {

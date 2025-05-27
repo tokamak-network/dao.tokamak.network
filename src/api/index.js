@@ -2,11 +2,11 @@ import axios from 'axios';
 
 function createInstance () {
   return axios.create({
-    baseURL: 'https://dev-api.dao.tokamak.network/v1',
+    baseURL: 'https://api.dao.tokamak.network/v1',
   });
 }
 const instance = createInstance();
-const chainId = 11155111;
+const chainId = 1;
 
 export async function getRecentEvents () {
   const events = [
