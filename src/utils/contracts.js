@@ -222,7 +222,7 @@ export function getContractABIFromAddress(address, type) {
     // else if (address === deployed.OldSeigManager.toLowerCase()) return seigManagerABIOfTypeB;
     else if (address === deployed.Layer2Registry.toLowerCase()) return layer2RegistryABIOfTypeB;
     else if (address === deployed.DAOCommitteeProxy.toLowerCase()) return daoCommitteeProxyABIOfTypeB;
-    else if (address === deployed.DAOCommitteeProxy2.toLowerCase()) return daoCommitteeProxy2ABIOfTypeB;
+    // else if (address === deployed.DAOCommitteeProxy2.toLowerCase()) return daoCommitteeProxy2ABIOfTypeB;
     else if (address === deployed.DAOCommittee.toLowerCase()) return daoCommitteeABIOfTypeB;
     else if (address === deployed.DAOVault.toLowerCase()) return daoVaultABIOfTypeB;
     else if (address === deployed.PowerTONProxy.toLowerCase()) return powerTonProxyABIOfTypeB;
@@ -258,7 +258,7 @@ export function getFunctionSelector(contract, want, type) {
     else if (contract === 'SeigManager') return seigManagerABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'Layer2Registry') return layer2RegistryABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOCommitteeProxy') return daoCommitteeProxyABIOfTypeB.find(f => f.name === want).selector;
-    else if (contract === 'DAOCommitteeProxy2') return daoCommitteeProxy2ABIOfTypeB.find(f => f.name === want).selector;
+    // else if (contract === 'DAOCommitteeProxy2') return daoCommitteeProxy2ABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOCommittee') return daoCommitteeABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'DAOVault') return daoVaultABIOfTypeB.find(f => f.name === want).selector;
     else if (contract === 'PowerTONProxy') return powerTonProxyABIOfTypeB.find(f => f.name === want).selector;
